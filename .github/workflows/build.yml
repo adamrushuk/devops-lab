@@ -64,3 +64,9 @@ jobs:
 
     - name: Terraform Init
       run: pwsh -command "./scripts/Init-Terraform.ps1"
+
+    - name: Terraform Plan
+      run: pwsh -command "./scripts/Plan-Terraform.ps1"
+
+    - name: Terraform Apply
+      run: pwsh -command "./scripts/Apply-Terraform.ps1"
