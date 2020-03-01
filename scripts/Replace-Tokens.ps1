@@ -5,8 +5,13 @@ param (
     $tokenSuffix = '__'
 )
 
-# Ensure any errors fail the build
+#region Vars
+# Set preferences
+$VerbosePreference = if ($env:CI_DEBUG -eq "true") { "Continue" } else { "SilentlyContinue" }
+# Ensure any PowerShell errors fail the build (try/catch wont work for non-PowerShell CLI commands)
 $ErrorActionPreference = "Stop"
+#endregion
+
 
 $message = "Replacing tokens in Environment variables"
 Write-Output "`nSTARTED: $message..."
@@ -33,11 +38,11 @@ $targetFiles = (Get-ChildItem -Path $targetFilePattern)
 foreach ($targetFile in $targetFiles) {
     foreach ($item in $envVarHash.GetEnumerator()) {
         ((Get-Content -Path $targetFile -Raw) -replace $item.key, $item.value) | Set-Content -Path $targetFile
+    }
 
-        if ($env:CI_DEBUG -eq "true") {
-            Write-Verbose "Showing content for: [$targetFile]"
-            Get-Content -Path $targetFile -Raw
-        }
+    if ($env:CI_DEBUG -eq "true") {
+        Write-Verbose "Showing content for: [$targetFile]"
+        Get-Content -Path $targetFile -Raw
     }
 }
 
