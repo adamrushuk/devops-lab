@@ -17,7 +17,14 @@ foreach ($envvar in (Get-ChildItem env:)) {
     $envVarHash.Add("$($tokenPrefix)$($envvar.Name)$($tokenSuffix)", $envvar.Value)
 }
 
-$envVarHash.GetEnumerator() | Sort-Object Name
+if ($env:CI_DEBUG -eq "true") {
+    # Write warning to workflow
+    # https://help.github.com/en/actions/reference/development-tools-for-github-actions#set-a-warning-message-warning
+    # ::warning file={name},line={line},col={col}::{message}
+    echo "::warning ::CI_DEBUG is 'true'...showing env vars which may contain sensitive information"
+
+    $envVarHash.GetEnumerator() | Sort-Object Name
+}
 
 # Get files
 $targetFiles = (Get-ChildItem -Path $targetFilePattern)
