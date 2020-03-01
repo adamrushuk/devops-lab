@@ -1,17 +1,30 @@
 # This will create an Azure resource group, Storage account and Storage container, used to store terraform remote state
 
+# Set prefs
 # Ensure any errors fail the build
 $ErrorActionPreference = "Stop"
 
-# Set prefs
 # TODO: make dynamic depending on $env:CI_DEBUG
-$VerbosePreference = "Continue"
+# $VerbosePreference = "Continue"
 
-# Resource Group
-Write-Verbose "`nSTARTED: Creating Resource Group..."
-az group create --location $env:LOCATION --name $env:TERRAFORM_STORAGE_RG
 
-Write-Verbose "FINISHED: Creating Resource Group."
+#region Resource Group
+# Update task description
+$taskMessage = "Creating Resource Group"
+Write-Verbose "STARTED: $taskMessage..."
+
+# Run CLI command
+$rgJson = az group create --location $env:LOCATION --name $env:TERRAFORM_STORAGE_RG | ConvertFrom-Json
+
+# Error handling
+if (-not $rgJson) {
+    Write-Error "ERROR: $taskMessage." -ErrorAction 'Continue'
+    throw $_
+} else {
+    $rgJson
+    Write-Verbose "FINISHED: $taskMessage."
+}
+#endregion
 
 
 #region Storage Account
@@ -20,13 +33,14 @@ $taskMessage = "Creating Storage Account"
 Write-Verbose "STARTED: $taskMessage..."
 
 # Run CLI command
-$stAccCreateJson = az storage account create --name $env:TERRAFORM_STORAGE_ACCOUNT --resource-group $env:TERRAFORM_STORAGE_RG --location $env:LOCATION --sku Standard_LRS | ConvertFrom-Json
+$stAccJson = az storage account create --name $env:TERRAFORM_STORAGE_ACCOUNT --resource-group $env:TERRAFORM_STORAGE_RG --location $env:LOCATION --sku Standard_LRS | ConvertFrom-Json
 
 # Error handling
-if (-not $stAccCreateJson) {
+if (-not $stAccJson) {
     Write-Error "ERROR: $taskMessage." -ErrorAction 'Continue'
     throw $_
 } else {
+    $stAccJson
     Write-Verbose "FINISHED: $taskMessage."
 }
 #endregion
