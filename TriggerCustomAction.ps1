@@ -6,14 +6,11 @@
     # Add GitHub Personal access token to env var
     $env:GITHUB_TOKEN = "<GITHUB_ACCESS_TOKEN>"
 
-    # Trigger inline action
-    ./TriggerCustomAction.ps1 -CustomEventAction "terraform-destroy"
-
-    # Trigger multi action
+    # Trigger delete-all action
     ./TriggerCustomAction.ps1 -CustomEventAction "delete-all"
 
-    # Trigger inline action
-    ./TriggerCustomAction.ps1 -CustomEventAction "script"
+    # Trigger terraform-destroy action
+    ./TriggerCustomAction.ps1 -CustomEventAction "terraform-destroy"
 #>
 
 [CmdletBinding()]
@@ -25,8 +22,8 @@ param(
 
     $GithubRepo = "aks-nexus-velero",
 
-    [ValidateSet("terraform-destroy", "delete-all")]
-    $CustomEventAction = "terraform-destroy"
+    [ValidateSet("delete-all", "terraform-destroy")]
+    $CustomEventAction = "delete-all"
 )
 
 # https://developer.github.com/v3/repos/#create-a-repository-dispatch-event
