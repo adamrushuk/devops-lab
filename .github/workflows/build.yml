@@ -25,8 +25,8 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   LOCATION: uksouth
-  TERRAFORM_STORAGE_ACCOUNT: "${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001"
-  TERRAFORM_STORAGE_RG: "${{ env.PREFIX }}-rg-tfstate-dev-001"
+  TERRAFORM_STORAGE_ACCOUNT: '${{env.PREFIX}}sttfstate${{env.LOCATION}}001'
+  # TERRAFORM_STORAGE_RG: ${{env.PREFIX}}-rg-tfstate-dev-001
 jobs:
   build:
 
