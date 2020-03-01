@@ -7,8 +7,8 @@ on:
   watch:
     types: [started]
   # TODO: add custom web hook to trigger builds from IFTTT or similar
-  # repository_dispatch:
-  #   types: [<custom event action>]
+  repository_dispatch:
+    types: [terraform-destroy, delete-all]
 
 
 
@@ -70,3 +70,11 @@ jobs:
 
     - name: Terraform Apply
       run: pwsh -command "./scripts/Apply-Terraform.ps1"
+
+    - name: Terraform Destroy
+      run: pwsh -command "./scripts/Destroy-Terraform.ps1"
+      if: github.event.action == 'terraform-destroy'
+
+    - name: Terraform Destroy
+      run: pwsh -command "./scripts/Delete-Storage.ps1"
+      if: github.event.action == 'delete-all'
