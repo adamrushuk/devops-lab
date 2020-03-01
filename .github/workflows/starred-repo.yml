@@ -1,0 +1,23 @@
+# https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: Build environment
+
+# name of GitHub event that triggers workflow
+# https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
+on:
+  watch:
+    types: [started]
+
+jobs:
+  build:
+
+    # always pin versions
+    runs-on: ubuntu-18.04
+
+    # only run if owner triggered action
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Starred
+      run: echo This repo was just starred
+
