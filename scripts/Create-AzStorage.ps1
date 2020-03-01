@@ -13,20 +13,23 @@ az group create --location $env:LOCATION --name $env:TERRAFORM_STORAGE_RG
 
 Write-Verbose "FINISHED: Creating Resource Group."
 
-# Storage Account
+
+#region Storage Account
+# Update task description
 $taskMessage = "Creating Storage Account"
 Write-Verbose "STARTED: $taskMessage..."
-try {
-    az storage account create --name $env:TERRAFORM_STORAGE_ACCOUNT --resource-group $env:TERRAFORM_STORAGE_RG --location $env:LOCATION --sku Standard_LRS
 
-    Write-Verbose "FINISHED: $taskMessage."
-}
-catch {
+# Run CLI command
+$stAccCreateJson = az storage account create --name $env:TERRAFORM_STORAGE_ACCOUNT --resource-group $env:TERRAFORM_STORAGE_RG --location $env:LOCATION --sku Standard_LRS | ConvertFrom-Json
+
+# Error handling
+if (-not $stAccCreateJson) {
     Write-Error "ERROR: $taskMessage." -ErrorAction 'Continue'
     throw $_
+} else {
+    Write-Verbose "FINISHED: $taskMessage."
 }
-
-
+#endregion
 
 
 # Storage Container
