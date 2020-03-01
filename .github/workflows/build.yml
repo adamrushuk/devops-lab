@@ -10,6 +10,8 @@ on:
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 env:
+  # prefix: used for some globally unique name requirements
+  PREFIX: RUSH
   # debug
   CI_DEBUG: true
   # azure creds
@@ -17,7 +19,9 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-
+  LOCATION: uksouth
+  TERRAFORM_STORAGE_ACCOUNT: ${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
+  TERRAFORM_STORAGE_RG: ${{ env.PREFIX }}-rg-tfstate-dev-001
 jobs:
   build:
 
@@ -29,7 +33,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Repo Starred
-      run: echo This repo was just starred
+
     - name: Login to Azure
       run: pwsh -command "./scripts/Login-Azure.ps1"
+
+    - name: Create Storage Account
+      run: pwsh -command "./scripts/Create-AzStorage.ps1"
