@@ -18,7 +18,7 @@ env:
   # prefix: used for some globally unique name requirements
   PREFIX: rush
   # debug
-  CI_DEBUG: false
+  CI_DEBUG: true
   # azure creds
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
