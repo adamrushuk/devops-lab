@@ -4,13 +4,13 @@ name: Build environment
 # name of GitHub event that triggers workflow
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
 on:
+  # trigger when I star my own repo
   watch:
     types: [started]
-  # TODO: add custom web hook to trigger builds from IFTTT or similar
+  # trigger via webhook
+  # https://github.com/adamrushuk/aks-nexus-velero/blob/master/TriggerCustomAction.ps1#L28
   repository_dispatch:
     types: [terraform-destroy, delete-all]
-
-
 
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
@@ -25,8 +25,8 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   LOCATION: uksouth
-
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
+
 jobs:
   build:
 
@@ -67,14 +67,17 @@ jobs:
 
     - name: Terraform Plan
       run: pwsh -command "./scripts/Plan-Terraform.ps1"
+      if: github.event.action != 'delete-all'
 
     - name: Terraform Apply
       run: pwsh -command "./scripts/Apply-Terraform.ps1"
+      if: github.event.action != 'delete-all'
 
     - name: Terraform Destroy
       run: pwsh -command "./scripts/Destroy-Terraform.ps1"
-      if: github.event.action == 'terraform-destroy'
+      # if: (github.event.action == 'terraform-destroy') || (github.event.action == 'delete-all')
+      if: github.event.action == 'delete-all'
 
-    - name: Terraform Destroy
+    - name: Delete Storage
       run: pwsh -command "./scripts/Delete-Storage.ps1"
       if: github.event.action == 'delete-all'
