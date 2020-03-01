@@ -60,6 +60,7 @@ jobs:
         AKS_RG_NAME: ${{ env.PREFIX }}-rg-aks-dev-001
         ACR_NAME: ${{ env.PREFIX }}acr001${{ env.LOCATION }}001
         AKS_CLUSTER_NAME: ${{ env.PREFIX }}-aks-001
+        TERRAFORM_STORAGE_ACCOUNT: ${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
 
     - name: Terraform Init
       run: pwsh -command "./scripts/Init-Terraform.ps1"
