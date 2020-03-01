@@ -43,17 +43,20 @@ jobs:
       run: pwsh -command "./scripts/Login-Azure.ps1"
 
     - name: Create Storage Account for Terraform state
+      run: pwsh -command "./scripts/Create-AzStorage.ps1"
       env:
         TERRAFORM_STORAGE_ACCOUNT: ${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
         TERRAFORM_STORAGE_RG: ${{ env.PREFIX }}-rg-tfstate-dev-001
-      run: pwsh -command "./scripts/Create-AzStorage.ps1"
 
     - name: Lookup Storage Key
       run: pwsh -command "./scripts/Get-StorageKey.ps1"
+      env:
+        TERRAFORM_STORAGE_ACCOUNT: ${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
+        TERRAFORM_STORAGE_RG: ${{ env.PREFIX }}-rg-tfstate-dev-001
 
     - name: Replace tokens in Terraform config files
+      run: pwsh -command "./scripts/Replace-Tokens.ps1"
       env:
         AKS_RG_NAME: ${{ env.PREFIX }}-rg-aks-dev-001
         ACR_NAME: ${{ env.PREFIX }}acr001${{ env.LOCATION }}001
         AKS_CLUSTER_NAME: ${{ env.PREFIX }}-aks-001
-      run: pwsh -command "./scripts/Replace-Tokens.ps1"
