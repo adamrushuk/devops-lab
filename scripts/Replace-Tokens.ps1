@@ -33,6 +33,11 @@ $targetFiles = (Get-ChildItem -Path $targetFilePattern)
 foreach ($targetFile in $targetFiles) {
     foreach ($item in $envVarHash.GetEnumerator()) {
         ((Get-Content -Path $targetFile -Raw) -replace $item.key, $item.value) | Set-Content -Path $targetFile
+
+        if ($env:CI_DEBUG -eq "true") {
+            Write-Verbose "Showing content for: [$targetFile]"
+            Get-Content -Path $targetFile -Raw
+        }
     }
 }
 
