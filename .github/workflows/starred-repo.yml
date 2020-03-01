@@ -1,0 +1,35 @@
+# https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: Build environment
+
+# name of GitHub event that triggers workflow
+# https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
+on:
+  watch:
+    types: [started]
+
+# global environment variables
+# https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
+env:
+  # debug
+  CI_DEBUG: true
+  # azure creds
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+jobs:
+  build:
+
+    # always pin versions
+    runs-on: ubuntu-18.04
+
+    # only run if owner triggered action
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Repo Starred
+      run: echo This repo was just starred
+    - name: Login to Azure
+      run: pwsh -command "./scripts/Login-Azure.ps1"
