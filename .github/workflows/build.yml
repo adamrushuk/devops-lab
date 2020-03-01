@@ -81,3 +81,5 @@ jobs:
     - name: Delete Storage
       run: pwsh -command "./scripts/Delete-Storage.ps1"
       if: github.event.action == 'delete-all'
+      env:
+        TERRAFORM_STORAGE_RG: ${{ env.PREFIX }}-rg-tfstate-dev-001
