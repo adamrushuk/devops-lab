@@ -3,8 +3,13 @@
 # Ensure any errors fail the build
 $ErrorActionPreference = "Stop"
 
-# DEBUG: Output environment variables
-if ($env:CI_DEBUG -eq "true") { Get-ChildItem env: | Select-Object Name, Value }
+# DEBUG
+if ($env:CI_DEBUG -eq "true") {
+    Get-ChildItem env: | Select-Object Name, Value
+    $VerbosePreference = "Continue"
+} else {
+    $VerbosePreference = "SilentlyContinue"
+}
 
 # Login to Az
 $message = "Logging in to Azure"
