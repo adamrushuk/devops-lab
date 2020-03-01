@@ -1,15 +1,12 @@
 # This will create an Azure resource group, Storage account and Storage container, used to store terraform remote state
 
-# Set prefs
-# Ensure any errors fail the build
+# Set preferences
+$VerbosePreference = if ($env:CI_DEBUG -eq "true") { "Continue" } else { "SilentlyContinue" }
+# Ensure any PowerShell errors fail the build (try/catch wont work for non-PowerShell CLI commands)
 $ErrorActionPreference = "Stop"
-
-# TODO: make dynamic depending on $env:CI_DEBUG
-# $VerbosePreference = "Continue"
 
 
 #region Resource Group
-# Update task description
 $taskMessage = "Creating Resource Group"
 Write-Verbose "STARTED: $taskMessage..."
 
@@ -27,8 +24,8 @@ if (-not $rgJson) {
 #endregion
 
 
+
 #region Storage Account
-# Update task description
 $taskMessage = "Creating Storage Account"
 Write-Verbose "STARTED: $taskMessage..."
 
@@ -46,13 +43,39 @@ if (-not $stAccJson) {
 #endregion
 
 
-# Storage Container
-Write-Verbose "`nSTARTED: Creating Storage Container..."
-az storage container create --name "terraform" --account-name $env:TERRAFORM_STORAGE_ACCOUNT
-Write-Verbose "FINISHED: Creating Storage Container."
 
-# Get latest supported AKS version
-Write-Verbose "`nSTARTED: Finding latest supported AKS version..."
+#region Storage Container
+$taskMessage = "Creating Storage Container"
+Write-Verbose "STARTED: $taskMessage..."
+
+# Run CLI command
+$stContJson = az storage container create --name "terraform" --account-name $env:TERRAFORM_STORAGE_ACCOUNT | ConvertFrom-Json
+
+# Error handling
+if (-not $stContJson) {
+    Write-Error "ERROR: $taskMessage." -ErrorAction 'Continue'
+    throw $_
+} else {
+    $stContJson
+    Write-Verbose "FINISHED: $taskMessage."
+}
+#endregion
+
+
+
+#region Get latest supported AKS version
+$taskMessage = "Finding latest supported AKS version"
+Write-Verbose "STARTED: $taskMessage..."
+
+# Run CLI command
 $latest_aks_version = $(az aks get-versions -l $env:LOCATION --query "orchestrators[-1].orchestratorVersion" -o tsv)
-Write-Verbose "Latest AKS Version: [$latest_aks_version]"
-Write-Verbose "FINISHED: Finding latest supported AKS version.`n"
+
+# Error handling
+if (-not $latest_aks_version) {
+    Write-Error "ERROR: $taskMessage." -ErrorAction 'Continue'
+    throw $_
+} else {
+    $latest_aks_version
+    Write-Verbose "FINISHED: $taskMessage."
+}
+#endregion
