@@ -25,6 +25,8 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   LOCATION: uksouth
+
+  # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
 jobs:
   build:
 
@@ -40,8 +42,11 @@ jobs:
     - name: Login to Azure
       run: pwsh -command "./scripts/Login-Azure.ps1"
 
-    - name: Create Storage Account
+    - name: Create Storage Account for Terraform state
       env:
         TERRAFORM_STORAGE_ACCOUNT: ${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
         TERRAFORM_STORAGE_RG: ${{ env.PREFIX }}-rg-tfstate-dev-001
       run: pwsh -command "./scripts/Create-AzStorage.ps1"
+
+    - name: Lookup Storage Key
+      run: pwsh -command "./scripts/Get-StorageKey.ps1"
