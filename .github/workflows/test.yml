@@ -25,12 +25,13 @@ jobs:
 
     env:
       MY_JOB_VAR: job
+      MY_WORK_JOB_VAR: ${{ env.MY_WORKFLOW_VAR }}-jobval01
 
     steps:
     # always run (as no if expression used)
     - name: Output event data
       env:
-        MY_STEP_VAR: value01
+        MY_STEP_VAR: step
       run: |
         # Get event context data
         $eventContextJson = '${{ toJson( github.event ) }}'
@@ -46,3 +47,4 @@ jobs:
         Write-Output "MY_WORKFLOW_VAR is: [$env:MY_WORKFLOW_VAR]"
         Write-Output "MY_JOB_VAR is: [$env:MY_JOB_VAR]"
         Write-Output "MY_STEP_VAR is: [$env:MY_STEP_VAR]"
+        Write-Output "MY_WORK_JOB_VAR is: [$env:MY_WORK_JOB_VAR]"
