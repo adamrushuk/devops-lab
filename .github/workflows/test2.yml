@@ -1,0 +1,34 @@
+name: test
+
+on: [push]
+
+env:
+  # this works
+  MY_WORKFLOW_VAR: work
+  # this does NOT work
+  MY_OTHER_WORKFLOW_VAR: ${{ env.MY_WORKFLOW_VAR }}-value01
+
+jobs:
+  build:
+
+    runs-on: windows-2019
+
+    env:
+      # this works
+      MY_JOB_VAR: job
+      # this does NOT work
+      MY_WORK_JOB_VAR: ${{ env.MY_WORKFLOW_VAR }}-somejob01
+
+    steps:
+    - name: Output event data
+      env:
+        MY_STEP_VAR: step
+        # this works
+        MY_OTHER_STEP_VAR: ${{ env.MY_WORKFLOW_VAR }}-somevalue01
+      run: |
+        # Env var concatenation
+        Write-Output "MY_WORKFLOW_VAR is: [$env:MY_WORKFLOW_VAR]"
+        Write-Output "MY_JOB_VAR is: [$env:MY_JOB_VAR]"
+        Write-Output "MY_STEP_VAR is: [$env:MY_STEP_VAR]"
+        Write-Output "MY_WORK_JOB_VAR is: [$env:MY_WORK_JOB_VAR]"
+        Write-Output "MY_OTHER_STEP_VAR is: [$env:MY_OTHER_STEP_VAR]"
