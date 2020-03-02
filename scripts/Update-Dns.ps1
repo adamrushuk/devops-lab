@@ -95,7 +95,7 @@ Get-GDDomainRecord -credentials $apiCredential -domain $DomainName | Out-String 
 Write-Verbose "FINISHED: $message."
 
 # Update A record
-$message = "Updating domain [$DomainName] with IP Address [$IPAddress]"
+$message = "Updating record [$RecordName] for domain [$DomainName] with IP Address [$IPAddress]"
 Write-Verbose "STARTED: $message"
 Set-GDDomainRecord -credentials $apiCredential -domain $DomainName -name $RecordName -ipaddress $IPAddress -type "A" -ttl $Ttl -Force
 Write-Verbose "FINISHED: $message"
