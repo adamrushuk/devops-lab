@@ -34,7 +34,7 @@ helm repo update
 $helmReleaseName = "nginx-ingress"
 $helmDeployedList = helm list --namespace ingress-tls --output json | ConvertFrom-Json
 
-if ($helmReleaseName -in $helmDeployedList.Name) {
+if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
     Write-Output "`nSKIPPING: [$helmReleaseName] already deployed."
 } else {
     Write-Output "`nSTARTED: Installing helm release: [$helmReleaseName]..."
