@@ -1,5 +1,11 @@
 # Deploy an AKS Ingress Controller
 
+<#
+# Testing
+$env:AKS_RG_NAME = "rush-rg-aks-dev-001"
+$env:AKS_CLUSTER_NAME = "rush-aks-001"
+#>
+
 # Setting k8s current context
 $message = "Merging AKS credentials"
 Write-Output "STARTED: $message..."
@@ -26,7 +32,7 @@ helm repo update
 
 # Check if Helm release installed already
 $helmReleaseName = "nginx-ingress"
-$helmDeployedList = helm list -n ingress-tls -o json | ConvertFrom-Json
+$helmDeployedList = helm list --namespace ingress-tls --output json | ConvertFrom-Json
 
 if ($helmReleaseName -in $helmDeployedList.Name) {
     Write-Output "`nSKIPPING: [$helmReleaseName] already deployed."
