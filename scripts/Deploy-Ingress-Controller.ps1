@@ -17,6 +17,9 @@ Write-Output "FINISHED: $message.`n"
 $message = "[HELM] Installing NGINX ingress controller"
 Write-Output "STARTED: $message..."
 
+# Helm v2 requires initialisation
+helm init
+
 # Add the official stable repository
 helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 helm repo update
