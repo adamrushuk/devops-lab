@@ -90,7 +90,7 @@ jobs:
 
     # DNS
     - name: Update DNS
-      run: pwsh -command "./scripts/Update-Dns.ps1 -AksResourceGroupName ${{ env.AKS_RG_NAME }} -AksClusterName ${{ env.AKS_CLUSTER_NAME }} -DomainName ${{ env.DNS_DOMAIN_NAME }} -HasSubDomainName:$${{ env.HAS_SUBDOMAIN }} -ApiKey ${{ secrets.API_KEY }} -ApiSecret ${{ secrets.API_SECRET }}"
+      run: pwsh -command "./scripts/Update-Dns.ps1 -AksResourceGroupName ${{ env.AKS_RG_NAME }} -AksClusterName ${{ env.AKS_CLUSTER_NAME }} -DomainName ${{ env.DNS_DOMAIN_NAME }} -HasSubDomainName:\$${{ env.HAS_SUBDOMAIN }} -ApiKey ${{ secrets.API_KEY }} -ApiSecret ${{ secrets.API_SECRET }}"
       if: github.event.action != 'delete-all'
       env:
         AKS_RG_NAME: ${{ env.PREFIX }}-rg-aks-dev-001
