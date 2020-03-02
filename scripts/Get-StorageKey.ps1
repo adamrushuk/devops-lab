@@ -26,7 +26,8 @@ if (-not $storageKey) {
     # ::set-env name={name}::{value}
     echo "::set-env name=STORAGE_KEY::$storageKey"
 
-    # mask sensitive env var value
+    # Mask sensitive env var
+    # https://help.github.com/en/actions/reference/development-tools-for-github-actions#example-masking-an-environment-variable
     $STORAGE_KEY = $storageKey
     echo "::add-mask::$STORAGE_KEY"
 
