@@ -24,7 +24,9 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  DNS_DOMAIN_NAME: aks.thehypepipe.co.uk
   LOCATION: uksouth
+  HAS_SUBDOMAIN: true
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
 
 jobs:
@@ -38,11 +40,14 @@ jobs:
     if: github.actor == github.event.repository.owner.login
 
     steps:
+    # Checkout
     - uses: actions/checkout@v2
 
+    # Login
     - name: Login to Azure
       run: pwsh -command "./scripts/Login-Azure.ps1"
 
+    # Prereqs
     - name: Create Storage Account for Terraform state
       run: pwsh -command "./scripts/Create-AzStorage.ps1"
       env:
@@ -63,6 +68,7 @@ jobs:
         AKS_CLUSTER_NAME: ${{ env.PREFIX }}-aks-001
         TERRAFORM_STORAGE_ACCOUNT: ${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
 
+    # Terraform
     - name: Terraform Init
       run: pwsh -command "./scripts/Init-Terraform.ps1"
 
@@ -74,7 +80,6 @@ jobs:
       run: pwsh -command "./scripts/Apply-Terraform.ps1"
       if: github.event.action != 'delete-all'
 
-
     # Kubernetes
     - name: Deploy Ingress Controller
       run: pwsh -command "./scripts/Deploy-Ingress-Controller.ps1"
@@ -83,8 +88,15 @@ jobs:
         AKS_RG_NAME: ${{ env.PREFIX }}-rg-aks-dev-001
         AKS_CLUSTER_NAME: ${{ env.PREFIX }}-aks-001
 
+    # DNS
+    - name: Update DNS
+      run: pwsh -command "./scripts/Update-Dns.ps1 -AksResourceGroupName ${{ env.AKS_RG_NAME }} -AksClusterName ${{ env.AKS_CLUSTER_NAME }} -DomainName ${{ env.DNS_DOMAIN_NAME }} -HasSubDomainName:\$${{ env.HAS_SUBDOMAIN }} -ApiKey ${{ secrets.API_KEY }} -ApiSecret ${{ secrets.API_SECRET }}"
+      if: github.event.action != 'delete-all'
+      env:
+        AKS_RG_NAME: ${{ env.PREFIX }}-rg-aks-dev-001
+        AKS_CLUSTER_NAME: ${{ env.PREFIX }}-aks-001
 
-    # Destroy / Delete
+    # Cleanup
     - name: Terraform Destroy
       run: pwsh -command "./scripts/Destroy-Terraform.ps1"
       # if: (github.event.action == 'terraform-destroy') || (github.event.action == 'delete-all')
