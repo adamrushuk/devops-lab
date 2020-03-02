@@ -15,7 +15,7 @@ jobs:
   build:
 
     # always pin versions
-    runs-on: ubuntu-18.04
+    runs-on: windows-2019
 
     steps:
     # always run (as no if expression used)

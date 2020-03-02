@@ -11,6 +11,9 @@
 
     # Trigger terraform-destroy action
     ./TriggerCustomAction.ps1 -CustomEventAction "terraform-destroy"
+
+    # Trigger terraform-destroy action
+    ./TriggerCustomAction.ps1 -CustomEventAction "test"
 #>
 
 [CmdletBinding()]
@@ -22,7 +25,7 @@ param(
 
     $GithubRepo = "aks-nexus-velero",
 
-    [ValidateSet("delete-all", "terraform-destroy")]
+    [ValidateSet("delete-all", "terraform-destroy", "test")]
     $CustomEventAction = "delete-all"
 )
 
