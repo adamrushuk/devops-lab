@@ -15,6 +15,7 @@ jobs:
   build:
 
     # always pin versions
+    # # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
     runs-on: windows-2019
 
     steps:
