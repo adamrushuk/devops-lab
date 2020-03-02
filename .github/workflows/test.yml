@@ -14,7 +14,7 @@ on:
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 env:
-  PREFIX: rush
+  MY_WORKFLOW_VAR: work
 
 jobs:
   build:
@@ -23,11 +23,14 @@ jobs:
     # # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
     runs-on: windows-2019
 
+    env:
+      MY_JOB_VAR: job
+
     steps:
     # always run (as no if expression used)
     - name: Output event data
       env:
-        MY_ENV_VAR: ${{ env.PREFIX }}-value01
+        MY_STEP_VAR: value01
       run: |
         # Get event context data
         $eventContextJson = '${{ toJson( github.event ) }}'
@@ -40,5 +43,6 @@ jobs:
         Write-Output "client_payload: $($eventContext.client_payload)"
 
         # Env var concatenation
-        Write-Output "Global var PREFIX is: [$env:PREFIX]"
-        Write-Output "Step var MY_ENV_VAR is: [$env:MY_ENV_VAR]"
+        Write-Output "MY_WORKFLOW_VAR is: [$env:MY_WORKFLOW_VAR]"
+        Write-Output "MY_JOB_VAR is: [$env:MY_JOB_VAR]"
+        Write-Output "MY_STEP_VAR is: [$env:MY_STEP_VAR]"
