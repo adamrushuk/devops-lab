@@ -27,7 +27,8 @@ if (-not $storageKey) {
     echo "::set-env name=STORAGE_KEY::$storageKey"
 
     # mask sensitive env var value
-    echo "::add-mask::$storageKey"
+    $STORAGE_KEY = $storageKey
+    echo "::add-mask::$STORAGE_KEY"
 
     Write-Verbose "FINISHED: $taskMessage."
 }
