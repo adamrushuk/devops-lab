@@ -25,6 +25,10 @@ if (-not $storageKey) {
     # https://help.github.com/en/actions/reference/development-tools-for-github-actions#set-an-environment-variable-set-env
     # ::set-env name={name}::{value}
     echo "::set-env name=STORAGE_KEY::$storageKey"
+
+    # mask sensitive env var value
+    echo "::add-mask::$storageKey"
+
     Write-Verbose "FINISHED: $taskMessage."
 }
 #endregion
