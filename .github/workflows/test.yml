@@ -3,13 +3,18 @@ name: Webhook
 
 # name of GitHub event that triggers workflow
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows#external-events-repository_dispatch
-on: [repository_dispatch]
+# on: [repository_dispatch]
 
 # it's possible to filter whole workflow using custom type sent, eg: from ValidateSet here:
 # https://github.com/adamrushuk/github-actions/blob/master/TriggerCustomAction.ps1#L33
-# on:
-#   repository_dispatch:
-#     types: [<custom event action>]
+on:
+  repository_dispatch:
+    types: [test]
+
+# global environment variables
+# https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
+env:
+  PREFIX: rush
 
 jobs:
   build:
@@ -21,6 +26,8 @@ jobs:
     steps:
     # always run (as no if expression used)
     - name: Output event data
+      env:
+        MY_ENV_VAR: ${{ env.PREFIX }}-value01
       run: |
         # Get event context data
         $eventContextJson = '${{ toJson( github.event ) }}'
@@ -32,3 +39,6 @@ jobs:
         Write-Output "action: $($eventContext.action)"
         Write-Output "client_payload: $($eventContext.client_payload)"
 
+        # Env var concatenation
+        Write-Output "Global var PREFIX is: [$env:PREFIX]"
+        Write-Output "Step var MY_ENV_VAR is: [$env:MY_ENV_VAR]"
