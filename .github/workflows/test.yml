@@ -1,0 +1,33 @@
+# https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: Webhook
+
+# name of GitHub event that triggers workflow
+# https://help.github.com/en/actions/reference/events-that-trigger-workflows#external-events-repository_dispatch
+on: [repository_dispatch]
+
+# it's possible to filter whole workflow using custom type sent, eg: from ValidateSet here:
+# https://github.com/adamrushuk/github-actions/blob/master/TriggerCustomAction.ps1#L33
+# on:
+#   repository_dispatch:
+#     types: [<custom event action>]
+
+jobs:
+  build:
+
+    # always pin versions
+    runs-on: ubuntu-18.04
+
+    steps:
+    # always run (as no if expression used)
+    - name: Output event data
+      run: |
+        # Get event context data
+        $eventContextJson = '${{ toJson( github.event ) }}'
+
+        # Convert to PowerShell object
+        $eventContext = $eventContextJson | ConvertFrom-Json
+
+        # Output info
+        Write-Output "action: $($eventContext.action)"
+        Write-Output "client_payload: $($eventContext.client_payload)"
+
