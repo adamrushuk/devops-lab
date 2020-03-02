@@ -28,6 +28,14 @@ env:
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
 
 jobs:
+
+  env:
+    AKS_RG_NAME: ${{ env.PREFIX }}-rg-aks-dev-001
+    ACR_NAME: ${{ env.PREFIX }}acr001${{ env.LOCATION }}001
+    AKS_CLUSTER_NAME: ${{ env.PREFIX }}-aks-001
+    TERRAFORM_STORAGE_ACCOUNT: ${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
+    TERRAFORM_STORAGE_RG: ${{ env.PREFIX }}-rg-tfstate-dev-001
+
   build:
 
     # always pin versions
@@ -35,13 +43,6 @@ jobs:
 
     # only run if owner triggered action
     if: github.actor == github.event.repository.owner.login
-
-    env:
-      AKS_RG_NAME: ${{ env.PREFIX }}-rg-aks-dev-001
-      ACR_NAME: ${{ env.PREFIX }}acr001${{ env.LOCATION }}001
-      AKS_CLUSTER_NAME: ${{ env.PREFIX }}-aks-001
-      TERRAFORM_STORAGE_ACCOUNT: ${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
-      TERRAFORM_STORAGE_RG: ${{ env.PREFIX }}-rg-tfstate-dev-001
 
     steps:
     - uses: actions/checkout@v2
