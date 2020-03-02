@@ -25,7 +25,7 @@ jobs:
 
     env:
       MY_JOB_VAR: job
-      MY_WORK_JOB_VAR: ${{ env.MY_WORKFLOW_VAR }}-jobval01
+      MY_WORK_JOB_VAR: ${{ env.MY_WORKFLOW_VAR }}
 
     steps:
     # always run (as no if expression used)
