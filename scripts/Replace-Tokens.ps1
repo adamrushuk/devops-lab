@@ -1,8 +1,11 @@
 # Replace tokens
 param (
-    $targetFilePattern = './terraform/*.tf',
-    $tokenPrefix = '__',
-    $tokenSuffix = '__'
+    $TargetFilePattern = './terraform/*.tf',
+    $TokenPrefix = '__',
+    $TokenSuffix = '__',
+
+    # WARNING: this can expose sensitive information
+    $DebugInsecure = $false
 )
 
 #region Vars
@@ -19,10 +22,10 @@ Write-Output "`nSTARTED: $message..."
 # Prepare env vars
 $envVarHash = @{ }
 foreach ($envvar in (Get-ChildItem env:)) {
-    $envVarHash.Add("$($tokenPrefix)$($envvar.Name)$($tokenSuffix)", $envvar.Value)
+    $envVarHash.Add("$($TokenPrefix)$($envvar.Name)$($TokenSuffix)", $envvar.Value)
 }
 
-if ($env:CI_DEBUG -eq "true") {
+if ($DebugInsecure -eq "true") {
     # Write warning to workflow
     # https://help.github.com/en/actions/reference/development-tools-for-github-actions#set-a-warning-message-warning
     # ::warning file={name},line={line},col={col}::{message}
@@ -32,7 +35,7 @@ if ($env:CI_DEBUG -eq "true") {
 }
 
 # Get files
-$targetFiles = (Get-ChildItem -Path $targetFilePattern)
+$targetFiles = (Get-ChildItem -Path $TargetFilePattern)
 
 # Replace tokens
 foreach ($targetFile in $targetFiles) {
@@ -40,7 +43,7 @@ foreach ($targetFile in $targetFiles) {
         ((Get-Content -Path $targetFile -Raw) -replace $item.key, $item.value) | Set-Content -Path $targetFile
     }
 
-    if ($env:CI_DEBUG -eq "true") {
+    if ($DebugInsecure -eq "true") {
         Write-Verbose "Showing content for: [$targetFile]"
         Get-Content -Path $targetFile -Raw
     }
