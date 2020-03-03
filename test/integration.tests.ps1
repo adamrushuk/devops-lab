@@ -54,7 +54,7 @@ Describe "Integration Tests" {
         }
 
         It "A request to [$testUrl] should include [$expectedContent] in the returned content" {
-            curl -k -s $testUrl | Should be $expectedContent
+            curl -k -s $testUrl | Should Match $expectedContent
         }
     }
 
@@ -83,7 +83,7 @@ Describe "Integration Tests" {
 
         # Tests
         It "Should have a [$env:CERT_API_ENVIRONMENT] SSL cert for [$hostname] issued by: [$expectedIssuerName]" {
-            $certResult.Issuer -match $expectedIssuerName | Should Be $true
+            $certResult.Issuer | Should Match $expectedIssuerName
         }
 
         # Do extra supported tests if on Windows OS
