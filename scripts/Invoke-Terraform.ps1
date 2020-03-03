@@ -16,7 +16,7 @@ $ErrorActionPreference = "Stop"
 
 #region Prep
 # Info
-gcm terraform
+Get-Command terraform | Select-Object Name, Source
 terraform version
 
 # Change into TF folder location
