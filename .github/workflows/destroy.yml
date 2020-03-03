@@ -1,0 +1,86 @@
+# https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: Build environment
+
+# name of GitHub event that triggers workflow
+# https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
+on:
+  # trigger via webhook
+  # https://github.com/adamrushuk/aks-nexus-velero/blob/master/TriggerCustomAction.ps1#L28
+  repository_dispatch:
+    types: [destroy]
+
+# global environment variables
+# https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
+env:
+  # prefix: used for some globally unique name requirements
+  PREFIX: rush
+
+  # debug
+  CI_DEBUG: true
+
+  # azure creds
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+  # other
+  CERT_API_ENVIRONMENT: staging
+  DNS_DOMAIN_NAME: aks.thehypepipe.co.uk
+  EMAIL_ADDRESS: adamrushuk+aksnexusvelero@gmail.com
+  FORCE_TEST_FAIL: false
+  HAS_SUBDOMAIN: true
+  LOCATION: uksouth
+  # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
+
+  # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
+  # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
+
+jobs:
+  build:
+
+    # always pin versions
+    # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
+    runs-on: ubuntu-18.04
+
+    # only run if owner triggered action
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+    # Checkout
+    - uses: actions/checkout@v2
+
+    # Env var concatenation
+    # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
+    - name: Concatenate env vars (Workaround)
+      run: |
+        echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
+        echo ::set-env name=ACR_NAME::${{ env.PREFIX }}acr001${{ env.LOCATION }}001
+        echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
+        echo ::set-env name=TERRAFORM_STORAGE_ACCOUNT::${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
+        echo ::set-env name=TERRAFORM_STORAGE_RG::${{ env.PREFIX }}-rg-tfstate-dev-001
+
+    # Login
+    - name: Login to Azure
+      run: pwsh -command "./scripts/Login-Azure.ps1"
+
+    # Prereqs
+    - name: Create Storage Account for Terraform state
+      run: pwsh -command "./scripts/Create-AzStorage.ps1"
+
+    - name: Lookup Storage Key
+      run: pwsh -command "./scripts/Get-StorageKey.ps1"
+
+    - name: Replace tokens in Terraform config files
+      run: pwsh -command "./scripts/Replace-Tokens.ps1"
+
+    # Terraform
+    - name: Terraform Init
+      run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command 'init'"
+
+    # Cleanup
+    - name: Terraform Destroy
+      run: pwsh -command "./scripts/Destroy-Terraform.ps1"
+
+    - name: Delete Storage
+      run: pwsh -command "./scripts/Delete-Storage.ps1"
