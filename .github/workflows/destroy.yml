@@ -65,9 +65,6 @@ jobs:
       run: pwsh -command "./scripts/Login-Azure.ps1"
 
     # Prereqs
-    - name: Create Storage Account for Terraform state
-      run: pwsh -command "./scripts/Create-AzStorage.ps1"
-
     - name: Lookup Storage Key
       run: pwsh -command "./scripts/Get-StorageKey.ps1"
 
