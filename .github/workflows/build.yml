@@ -31,6 +31,7 @@ env:
   CERT_API_ENVIRONMENT: staging
   DNS_DOMAIN_NAME: aks.thehypepipe.co.uk
   EMAIL_ADDRESS: adamrushuk+aksnexusvelero@gmail.com
+  FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true
   LOCATION: uksouth
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
@@ -106,6 +107,11 @@ jobs:
     # Kubernetes - Manifests
     - name: Deploy kubernetes manifests
       run: pwsh -command "./scripts/Deploy-Manifests.ps1"
+      if: github.event.action != 'delete-all'
+
+    # Pester tests
+    - name: Run Pester tests
+      run: pwsh -command "./scripts/Start-Test.ps1"
       if: github.event.action != 'delete-all'
 
     # Cleanup
