@@ -123,7 +123,7 @@ jobs:
       # you should probably use a version tag (v1.0.2) instead of @master
     - uses: check-run-reporter/action@v1.0.2
       env:
-          CHECK_RUN_REPORTER_LABEL: 'Unit Tests'
-          CHECK_RUN_REPORTER_REPORT: 'reports/junit/**/*.xml'
+          CHECK_RUN_REPORTER_LABEL: 'Integration Tests'
+          CHECK_RUN_REPORTER_REPORT: 'test/*-junit.xml'
           CHECK_RUN_REPORTER_TOKEN: ${{ secrets.CHECK_RUN_REPORTER_TOKEN }}
 
