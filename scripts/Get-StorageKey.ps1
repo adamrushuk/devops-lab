@@ -31,6 +31,10 @@ if (-not $storageKey) {
     $STORAGE_KEY = $storageKey
     echo "::add-mask::$STORAGE_KEY"
 
+    # also mask token format
+    $__STORAGE_KEY__ = $storageKey
+    echo "::add-mask::$__STORAGE_KEY__"
+
     Write-Verbose "FINISHED: $taskMessage."
 }
 #endregion
