@@ -1,5 +1,11 @@
-# Enable verbose output
-if ($env:CI_DEBUG -eq "true") { $VerbosePreference = "Continue" }
+# Start Pester tests
+
+#region Vars
+# Set preferences
+$VerbosePreference = if ($env:CI_DEBUG -eq "true") { "Continue" } else { "SilentlyContinue" }
+# Ensure any PowerShell errors fail the build (try/catch wont work for non-PowerShell CLI commands)
+$ErrorActionPreference = "Stop"
+#endregion
 
 Write-Verbose "Started in folder: [$(Get-Location)]"
 Write-Verbose "Changing directory to test folder..."
@@ -12,7 +18,7 @@ $taskMessage = "Installing Pester "
 Write-Verbose "STARTED: $taskMessage..."
 try {
     Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
-    Install-Module -Name "Pester" -Scope "AllUsers" -Force -Verbose
+    Install-Module -Name "Pester" -Scope "CurrentUser" -Force -Verbose
 
     Write-Verbose "FINISHED: $taskMessage."
 }
