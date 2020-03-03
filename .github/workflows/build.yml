@@ -111,6 +111,6 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v1
       with:
-        name: test
-        path: test
+        name: test results
+        path: test/pester-test-results-junit.xml
 
