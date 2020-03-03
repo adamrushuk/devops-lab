@@ -115,13 +115,9 @@ jobs:
         path: test/pester-test-results-junit.xml
 
     # Publish test results to https://www.check-run-reporter.com/
-    - uses: actions/setup-node@v1
-      with:
-          node-version: '12.x'
-    - run: npm install
-    - run: npm test
       # you should probably use a version tag (v1.0.2) instead of @master
     - uses: check-run-reporter/action@v1.0.2
+      if: always()
       env:
           CHECK_RUN_REPORTER_LABEL: 'Integration Tests'
           CHECK_RUN_REPORTER_REPORT: 'test/*-junit.xml'
