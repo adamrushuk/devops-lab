@@ -115,7 +115,7 @@ jobs:
       run: pwsh -command "./scripts/Start-Test.ps1"
 
     - name: Archive test artifacts
-      if: github.event.action != 'delete-all'
+      if: github.event.action != 'delete-all' && always()
       uses: actions/upload-artifact@v1
       with:
         name: test
