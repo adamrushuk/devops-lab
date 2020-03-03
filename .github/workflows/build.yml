@@ -17,16 +17,22 @@ on:
 env:
   # prefix: used for some globally unique name requirements
   PREFIX: rush
+
   # debug
   CI_DEBUG: true
+
   # azure creds
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+  # other
+  CERT_API_ENVIRONMENT: staging
   DNS_DOMAIN_NAME: aks.thehypepipe.co.uk
-  LOCATION: uksouth
+  EMAIL_ADDRESS: adamrushuk+aksnexusvelero@gmail.com
   HAS_SUBDOMAIN: true
+  LOCATION: uksouth
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
@@ -95,6 +101,11 @@ jobs:
     # Kubernetes - Cert-Manager
     - name: Deploy cert-manager
       run: pwsh -command "./scripts/Deploy-Cert-Manager.ps1"
+      if: github.event.action != 'delete-all'
+
+    # Kubernetes - Manifests
+    - name: Deploy kubernetes manifests
+      run: pwsh -command "./scripts/Deploy-Manifests.ps1"
       if: github.event.action != 'delete-all'
 
     # Cleanup
