@@ -79,7 +79,7 @@ jobs:
       if: github.event.action != 'delete-all'
 
     - name: Terraform Apply
-      run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command 'apply -auto-approve'"
+      run: pwsh -command "./scripts/Apply-Terraform.ps1"
       if: github.event.action != 'delete-all'
 
     # Kubernetes - Ingress
