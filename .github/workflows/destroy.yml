@@ -37,7 +37,7 @@ env:
   # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
 
 jobs:
-  build:
+  destroy:
 
     # always pin versions
     # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
