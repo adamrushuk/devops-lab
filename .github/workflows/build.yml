@@ -10,7 +10,7 @@ on:
   # trigger via webhook
   # https://github.com/adamrushuk/aks-nexus-velero/blob/master/TriggerCustomAction.ps1#L28
   repository_dispatch:
-    types: [terraform-destroy, delete-all]
+    types: [build]
 
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
@@ -82,51 +82,35 @@ jobs:
       run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command 'init'"
 
     - name: Terraform Plan
-      if: github.event.action != 'delete-all'
       run: pwsh -command "./scripts/Plan-Terraform.ps1"
 
     - name: Terraform Apply
       run: pwsh -command "./scripts/Apply-Terraform.ps1"
-      if: github.event.action != 'delete-all'
 
     # Kubernetes - Ingress
     - name: Deploy Ingress Controller
-      if: github.event.action != 'delete-all'
       run: pwsh -command "./scripts/Deploy-Ingress-Controller.ps1"
 
     # DNS
     - name: Update DNS
-      if: github.event.action != 'delete-all'
       run: pwsh -command "./scripts/Update-Dns.ps1 -AksResourceGroupName ${{ env.AKS_RG_NAME }} -AksClusterName ${{ env.AKS_CLUSTER_NAME }} -DomainName ${{ env.DNS_DOMAIN_NAME }} -HasSubDomainName:\$${{ env.HAS_SUBDOMAIN }} -ApiKey ${{ secrets.API_KEY }} -ApiSecret ${{ secrets.API_SECRET }}"
 
     # Kubernetes - Cert-Manager
     - name: Deploy cert-manager
-      if: github.event.action != 'delete-all'
       run: pwsh -command "./scripts/Deploy-Cert-Manager.ps1"
 
     # Kubernetes - Manifests
     - name: Deploy kubernetes manifests
-      if: github.event.action != 'delete-all'
       run: pwsh -command "./scripts/Deploy-Manifests.ps1"
 
     # Pester tests
     - name: Run Pester tests
-      if: github.event.action != 'delete-all'
       run: pwsh -command "./scripts/Start-Test.ps1"
 
     - name: Archive test artifacts
-      if: github.event.action != 'delete-all' && always()
+      if: always()
       uses: actions/upload-artifact@v1
       with:
         name: test
         path: test
 
-    # Cleanup
-    - name: Terraform Destroy
-      # if: (github.event.action == 'terraform-destroy') || (github.event.action == 'delete-all')
-      if: github.event.action == 'delete-all'
-      run: pwsh -command "./scripts/Destroy-Terraform.ps1"
-
-    - name: Delete Storage
-      if: github.event.action == 'delete-all'
-      run: pwsh -command "./scripts/Delete-Storage.ps1"
