@@ -116,7 +116,7 @@ jobs:
 
     # Publish test results to https://www.check-run-reporter.com/
       # you should probably use a version tag (v1.0.2) instead of @master
-    - uses: check-run-reporter/action@v1.0.2
+    - uses: check-run-reporter/action@master
       if: always()
       env:
           CHECK_RUN_REPORTER_LABEL: 'Integration Tests'
