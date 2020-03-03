@@ -4,9 +4,24 @@ if ($env:CI_DEBUG -eq "true") { $VerbosePreference = "Continue" }
 Write-Verbose "Started in folder: [$(Get-Location)]"
 Write-Verbose "Changing directory to test folder..."
 Set-Location "test"
-Write-Verbose "STARTED: pwsh test tasks in current folder: [$(Get-Location)]"
 
-# Tests
+Write-Verbose "STARTED: pwsh test task in current folder: [$(Get-Location)]"
+
+# Install Pester
+$taskMessage = "Installing Pester "
+Write-Verbose "STARTED: $taskMessage..."
+try {
+    Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
+    Install-Module -Name "Pester" -Scope "AllUsers" -Force -Verbose
+
+    Write-Verbose "FINISHED: $taskMessage."
+}
+catch {
+    Write-Error "ERROR: $taskMessage." -ErrorAction "Continue"
+    throw
+}
+
+# Run Pester
 $taskMessage = "Running Pester tests"
 Write-Verbose "STARTED: $taskMessage..."
 try {
@@ -20,4 +35,4 @@ catch {
     throw
 }
 
-Write-Verbose "FINISHED: pwsh test tasks"
+Write-Verbose "FINISHED: pwsh test task"
