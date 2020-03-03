@@ -56,9 +56,7 @@ variable "acr_sku" {
 
 # AKS
 variable "aks_dns_prefix" {
-  default = "stvagent1"
-  # TODO
-  # default = "__PREFIX__"
+  default = "__PREFIX__"
 }
 
 variable "azurerm_kubernetes_cluster_name" {
