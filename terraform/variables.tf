@@ -81,7 +81,7 @@ variable "service_principal_client_secret" {
 
 # Agent Pool
 variable "agent_pool_node_count" {
-  default = 3
+  default = 1
 }
 
 variable "agent_pool_enable_auto_scaling" {
@@ -93,7 +93,7 @@ variable "agent_pool_node_min_count" {
 }
 
 variable "agent_pool_node_max_count" {
-  default = 5
+  default = 3
 }
 
 variable "agent_pool_profile_name" {
