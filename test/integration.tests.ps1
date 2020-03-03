@@ -47,14 +47,23 @@ Describe "Integration Tests" {
         $allowedStatusCodes = @(200, 304)
         $expectedContent = "Azure Voting App"
 
+        # Request
+        $invokeWebRequestParams = @{
+            Uri                  = $testUrl
+            # ignore certificate validation, as tested below
+            SkipCertificateCheck = $true
+        }
+        $response = Invoke-WebRequest @invokeWebRequestParams
+
         # Root domain
         It "A request to [$testUrl] should return an allowed Status Code: [$($allowedStatusCodes -join ', ')]" {
-            $responseStatusCode = curl -k -s -o /dev/null -w "%{http_code}" $testUrl
-            $responseStatusCode | Should BeIn $allowedStatusCodes
+            # $responseStatusCode = curl -k -s -o /dev/null -w "%{http_code}" $testUrl
+            $response.StatusCode | Should BeIn $allowedStatusCodes
         }
 
         It "A request to [$testUrl] should include [$expectedContent] in the returned content" {
-            curl -k -s $testUrl | Should Match $expectedContent
+            # (curl -k -s $testUrl) -match $expectedContent | Should Be $true
+            $response.Content -match $expectedContent | Should Be $true
         }
     }
 
@@ -83,7 +92,7 @@ Describe "Integration Tests" {
 
         # Tests
         It "Should have a [$env:CERT_API_ENVIRONMENT] SSL cert for [$hostname] issued by: [$expectedIssuerName]" {
-            $certResult.Issuer | Should Match $expectedIssuerName
+            $certResult.Issuer -match $expectedIssuerName | Should Be $true
         }
 
         # Do extra supported tests if on Windows OS
