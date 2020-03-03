@@ -70,14 +70,14 @@ jobs:
 
     # Terraform
     - name: Terraform Init
-      run: pwsh -command "./scripts/Init-Terraform.ps1"
+      run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command init"
 
     - name: Terraform Plan
-      run: pwsh -command "./scripts/Plan-Terraform.ps1"
+      run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command plan"
       if: github.event.action != 'delete-all'
 
     - name: Terraform Apply
-      run: pwsh -command "./scripts/Apply-Terraform.ps1"
+      run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command apply"
       if: github.event.action != 'delete-all'
 
     # Kubernetes
