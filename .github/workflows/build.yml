@@ -115,11 +115,12 @@ jobs:
         path: test/pester-test-results-junit.xml
 
     # Publish test results to https://www.check-run-reporter.com/
-      # you should probably use a version tag (v1.0.2) instead of @master
-    - uses: check-run-reporter/action@master
-      if: always()
-      env:
-          CHECK_RUN_REPORTER_LABEL: 'Integration Tests'
-          CHECK_RUN_REPORTER_REPORT: 'test/*-junit.xml'
-          CHECK_RUN_REPORTER_TOKEN: ${{ secrets.CHECK_RUN_REPORTER_TOKEN }}
+    # you should probably use a version tag (v1.0.2) instead of @master
+    # WARNING: ALL env vars are passed to this Action Container
+    # - uses: check-run-reporter/action@master
+    #   if: always()
+    #   env:
+    #       CHECK_RUN_REPORTER_LABEL: 'Integration Tests'
+    #       CHECK_RUN_REPORTER_REPORT: 'test/*-junit.xml'
+    #       CHECK_RUN_REPORTER_TOKEN: ${{ secrets.CHECK_RUN_REPORTER_TOKEN }}
 
