@@ -3,3 +3,8 @@
 # aks-nexus-velero
 
 Provisions an AKS cluster, deploys Nexus Repository OSS, configures Velero backups
+
+## TODOs
+
+- [ ] Create proper README with Getting Started section - start with `Create-ServicePrinciple.ps1`.
+- [ ] 
