@@ -33,11 +33,12 @@ $taskMessage = "Selecting Subscription"
 Write-Verbose "STARTED: $taskMessage..."
 
 # Run CLI command
+# this command has no output
 az account set --subscription $env:ARM_SUBSCRIPTION_ID
 
 # Error handling
-$LASTEXITCODE
-if (!$?) {
+$currentSubscriptionId = az account show --query "{id:id}" -o tsv
+if ($currentSubscriptionId -ne $env:ARM_SUBSCRIPTION_ID) {
     Write-Error "ERROR: $taskMessage." -ErrorAction 'Continue'
     throw $_
 } else {
