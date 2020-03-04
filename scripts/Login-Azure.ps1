@@ -33,14 +33,14 @@ $taskMessage = "Selecting Subscription"
 Write-Verbose "STARTED: $taskMessage..."
 
 # Run CLI command
-$subOutputJson = az account set --subscription $env:ARM_SUBSCRIPTION_ID | ConvertFrom-Json
+az account set --subscription $env:ARM_SUBSCRIPTION_ID
 
 # Error handling
-if (-not $subOutputJson) {
+$LASTEXITCODE
+if (!$?) {
     Write-Error "ERROR: $taskMessage." -ErrorAction 'Continue'
     throw $_
 } else {
-    $subOutputJson
     Write-Verbose "FINISHED: $taskMessage."
 }
 #endregion
