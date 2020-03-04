@@ -40,20 +40,6 @@ variable "tags" {
 }
 
 
-# ACR
-variable "container_registry_name" {
-  default = "__ACR_NAME__"
-}
-
-variable "acr_admin_enabled" {
-  default = false
-}
-
-variable "acr_sku" {
-  default = "Basic"
-}
-
-
 # AKS
 variable "aks_dns_prefix" {
   default = "__PREFIX__"
@@ -109,3 +95,14 @@ variable "agent_pool_profile_os_type" {
 variable "agent_pool_profile_disk_size_gb" {
   default = 30
 }
+
+
+# Velero
+variable "velero_resource_group_name" {
+  default = "__VELERO_STORAGE_RG__"
+}
+
+variable "velero_storage_account_name" {
+  default = "__VELERO_STORAGE_ACCOUNT__"
+}
+
