@@ -1,6 +1,7 @@
 # Create a new service principle for GitHub Actions workflow
 
 # Vars
+# Create SP, eg: "github_actions_sp" | "velero_sp"
 $servicePrincipleName = "github_actions_sp"
 
 # Login to Azure

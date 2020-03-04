@@ -113,6 +113,8 @@ jobs:
     # Velero
     - name: Deploy Velero
       run: pwsh -command "./scripts/Deploy-Velero.ps1"
+      env: # Or as an environment variable
+        CREDENTIALS_VELERO: ${{ secrets.CREDENTIALS_VELERO }}
 
 
     # Pester tests
