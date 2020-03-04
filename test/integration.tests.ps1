@@ -44,7 +44,7 @@ Describe "Integration Tests" {
 
         # Vars
         $testUrl = "https://$($env:DNS_DOMAIN_NAME)"
-        $allowedStatusCodes = @(200, 304)
+        $allowedStatusCodes = @(200, 304, 503)
         $expectedContent = "Azure Voting App"
 
         # Request
@@ -54,6 +54,11 @@ Describe "Integration Tests" {
             SkipCertificateCheck = $true
         }
         $response = Invoke-WebRequest @invokeWebRequestParams
+
+        # DEBUG Output
+        if ($env:CI_DEBUG -eq "true") {
+            $response | Format-List *
+        }
 
         # Root domain
         It "A request to [$testUrl] should return an allowed Status Code: [$($allowedStatusCodes -join ', ')]" {
@@ -88,11 +93,11 @@ Describe "Integration Tests" {
         $certResult = Get-CertInfo -ComputerName $hostname -Port $port
 
         # DEBUG Output
-        if ($env:CI_DEBUG -eq "true") { $certResult | Out-String | Write-Verbose }
+        if ($env:CI_DEBUG -eq "true") { $certResult | Out-String | Format-List * }
 
         # Tests
         It "Should have a [$env:CERT_API_ENVIRONMENT] SSL cert for [$hostname] issued by: [$expectedIssuerName]" {
-            $certResult.Issuer -match $expectedIssuerName | Should Be $true
+            $certResult.Issuer -like "*$expectedIssuerName*" | Should Be $true
         }
 
         # Do extra supported tests if on Windows OS
@@ -102,7 +107,7 @@ Describe "Integration Tests" {
             $sslResult = Test-SslProtocol -ComputerName $hostname -Port $port
 
             # DEBUG Output
-            if ($env:CI_DEBUG -eq "true") { $sslResult | Out-String | Write-Verbose }
+            if ($env:CI_DEBUG -eq "true") { $sslResult | Format-List * }
 
             It "Should have Signature Algorithm of [sha256RSA]" {
                 $sslResult.SignatureAlgorithm | Should Be "sha256RSA"
