@@ -66,6 +66,5 @@ jobs:
         Write-Output "MY_WORKFLOW_VAR is: [$env:MY_WORKFLOW_VAR]"
         Write-Output "MY_JOB_VAR is: [$env:MY_JOB_VAR]"
         Write-Output "MY_STEP_VAR is: [$env:MY_STEP_VAR]"
-        Write-Output "MY_WORK_JOB_VAR is: [$env:MY_WORK_JOB_VAR]"
         Write-Output "MY_CONCATENATED_BASH_VAR is: [$env:MY_CONCATENATED_BASH_VAR]"
         Write-Output "MY_CONCATENATED_PWSH_VAR is: [$env:MY_CONCATENATED_PWSH_VAR]"
