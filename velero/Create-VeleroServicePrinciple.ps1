@@ -3,7 +3,8 @@
 
 # Vars
 $servicePrincipleName = "velero_sp"
-$veleroResourceGroupName = "rush-rg-velero-dev-001"
+# Resource group starting with "MC_"
+$veleroAksNodeResourceGroupName = az aks show --resource-group rush-rg-aks-dev-001 --name rush-aks-001 --query nodeResourceGroup -o tsv
 
 # Login to Azure
 az login
@@ -22,7 +23,7 @@ AZURE_SUBSCRIPTION_ID=$($subscription.AZURE_SUBSCRIPTION_ID)
 AZURE_TENANT_ID=$($servicePrinciple.AZURE_TENANT_ID)
 AZURE_CLIENT_ID=$($servicePrinciple.AZURE_CLIENT_ID)
 AZURE_CLIENT_SECRET=$($servicePrinciple.AZURE_CLIENT_SECRET)
-AZURE_RESOURCE_GROUP=$veleroResourceGroupName
+AZURE_RESOURCE_GROUP=$veleroAksNodeResourceGroupName
 AZURE_CLOUD_NAME=AzurePublicCloud
 "@
 

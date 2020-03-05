@@ -13,6 +13,7 @@
     - [NGINX example (without PersistentVolumes)](#nginx-example-without-persistentvolumes)
     - [NGINX example (with PersistentVolumes)](#nginx-example-with-persistentvolumes)
     - [Nexus example (with PersistentVolumes)](#nexus-example-with-persistentvolumes)
+  - [Prometheus Metrics](#prometheus-metrics)
   - [Troubleshooting](#troubleshooting)
   - [Cleanup](#cleanup)
 
@@ -30,11 +31,11 @@
 
 ```powershell
 # Vars
-$prefix = ""
-$aksClusterName = "$($prefix)-aks-ar"
-$aksClusterResourceGroupName = "$($prefix)-rg"
+$prefix = "rush"
+$aksClusterName = "$($prefix)-aks-001"
+$aksClusterResourceGroupName = "$($prefix)-rg-aks-dev-001"
 $location = "uksouth"
-$backupResourceGroupName = "$($prefix)-rg-bck"
+$backupResourceGroupName = "$($prefix)-rg-velero-dev-001"
 $snapshotResourceGroupName = "$($prefix)-rg-snap"
 $storageAccountName = "$($prefix)stbckuksouth001"
 $blobContainerName = "velero"
@@ -154,6 +155,7 @@ Write-Output "Browse to NGINX URL: $newUrl"
 velero backup create nginx-backup --include-namespaces nginx-example
 
 # Check backup
+velero backup get
 velero backup describe nginx-backup
 velero backup logs nginx-backup
 
@@ -187,7 +189,7 @@ kubectl apply -f ./velero/examples/nginx-app/with-pv.yaml
 kubectl get all,pvc,pv -n nginx-pv
 kubectl describe pod -n nginx-pv
 kubectl get events --sort-by=.metadata.creationTimestamp --namespace nginx-pv
-kubectl get events --sort-by=.metadata.creationTimestamp --namespace nginx-pv --watch
+kubectl get events --namespace nginx-pv --watch
 kubectl get deployment -n nginx-pv --watch
 # kubectl logs deployment/nginx-deployment -n nginx-pv -f -c nginx
 # kubectl logs deployment/nginx-deployment -n nginx-pv -f --all-containers
@@ -200,13 +202,19 @@ kubectl get svc -n nginx-pv -w
 $urlPv = kubectl get svc my-nginx-pv -n nginx-pv --ignore-not-found -o jsonpath="http://{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}"
 Write-Output "Browse to NGINX URL: $urlPv"
 
+# Cleanup previous attempts
+velero backup get
+velero backup delete nginx-pv-backup
+
 # Create a backup
 velero backup create nginx-pv-backup --include-namespaces nginx-pv
 
 # Check backup
 velero backup describe nginx-pv-backup
 velero backup describe nginx-pv-backup --details
-velero backup logs nginx-pv-backup
+$logOutput = velero backup logs nginx-pv-backup
+$logOutput | sls error
+$logOutput
 
 # Simulate a disaster
 kubectl get ns
@@ -225,8 +233,9 @@ kubectl delete persistentvolume/pvc-17b8832c-58ec-11ea-9ec4-6e4d21b19189 -n ngin
 velero restore create --from-backup nginx-pv-backup
 
 # Check restore
+velero restore get
 velero restore describe
-velero restore logs nginx-pv-backup-TODO
+velero restore logs nginx-pv-backup-20200305122636
 
 # Monitor restore progress
 kubectl get ns
@@ -250,7 +259,7 @@ Write-Output "Browse to new NGINX URL: $newUrlPv"
 kubectl get all,pvc,pv -n nexus-custom
 kubectl describe pod -n nexus-custom
 kubectl get events --sort-by=.metadata.creationTimestamp --namespace nexus-custom
-kubectl get events --sort-by=.metadata.creationTimestamp --namespace nexus-custom --watch
+kubectl get events --namespace nexus-custom --watch
 kubectl get sts -n nexus-custom --watch
 kubectl logs statefulset.apps/nexus -n nexus-custom -f --all-containers --since 20m
 
@@ -266,6 +275,7 @@ Write-Output "Browse to URL: $url"
 velero backup create nexus-pv-backup --include-namespaces nexus-custom
 
 # Check backup
+velero backup get
 velero backup describe nexus-pv-backup
 velero backup describe nexus-pv-backup --details
 velero backup logs nexus-pv-backup
@@ -288,6 +298,7 @@ kubectl delete persistentvolume/pvc-TODO -n nexus-custom
 velero restore create --from-backup nexus-pv-backup
 
 # Check restore
+velero restore get
 velero restore describe
 velero restore logs nexus-pv-backup-TODO
 
@@ -304,6 +315,21 @@ kubectl get svc -n nexus-custom -w
 # Open browser
 $url = kubectl get svc -n nexus-custom --ignore-not-found -o jsonpath="http://{.items[0].status.loadBalancer.ingress[0].ip}:{.items[0].spec.ports[0].port}/#browse/browse:nuget-hosted"
 Write-Output "Browse to URL: $url"
+```
+
+## Prometheus Metrics
+
+```powershell
+# Show velero resources
+kubectl get all -n velero
+kubectl describe pod -n velero
+
+# Port forward
+$podName = kubectl get pod -n velero -l app.kubernetes.io/name=velero -o jsonpath="{.items[0].metadata.name}"
+kubectl -n velero port-forward $podName 8085:8085
+
+# Show metrics
+start http://localhost:8085/metrics
 ```
 
 ## Troubleshooting
