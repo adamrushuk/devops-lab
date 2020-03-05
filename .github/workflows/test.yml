@@ -16,6 +16,9 @@ on:
 env:
   MY_WORKFLOW_VAR: work
 
+  # UNSUPPORTED: Cannot concatenante at Workflow level
+  MY_WORKFLOW_VAR2: ${{ env.MY_WORKFLOW_VAR }}-workvalue01
+
 jobs:
   build:
 
@@ -25,10 +28,17 @@ jobs:
 
     env:
       MY_JOB_VAR: job
-      MY_WORK_JOB_VAR: ${{ env.MY_WORKFLOW_VAR }}
+
+      # UNSUPPORTED: Cannot concatenante at Job level
+      # MY_WORK_JOB_VAR: ${{ env.MY_WORKFLOW_VAR }}
 
     steps:
-    # always run (as no if expression used)
+    # WORKAROUND Env var concatenation
+    # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
+    - name: Concatenate env vars (Workaround)
+      run: |
+        echo ::set-env name=MY_CONCATENATED_VAR::${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-stepvalue01
+
     - name: Output event data
       env:
         MY_STEP_VAR: step
@@ -48,3 +58,4 @@ jobs:
         Write-Output "MY_JOB_VAR is: [$env:MY_JOB_VAR]"
         Write-Output "MY_STEP_VAR is: [$env:MY_STEP_VAR]"
         Write-Output "MY_WORK_JOB_VAR is: [$env:MY_WORK_JOB_VAR]"
+        Write-Output "MY_CONCATENATED_VAR is: [$env:MY_CONCATENATED_VAR]"
