@@ -116,7 +116,8 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
         --set configuration.backupStorageLocation.config.storageAccount=$($env:VELERO_STORAGE_ACCOUNT) `
         --set configuration.volumeSnapshotLocation.config.resourceGroup=$($env:VELERO_STORAGE_RG) `
         --set credentials.secretContents.cloud=$($env:CREDENTIALS_VELERO) `
-        --set configuration.logLevel=debug
+        --set configuration.logLevel=debug `
+        --debug
 
     <#
     # Monitor deployment progress
