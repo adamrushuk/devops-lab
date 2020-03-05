@@ -65,32 +65,49 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
     # Helm v2
     # helm install -h
     # helm install [CHART] [flags]
-    helm install vmware-tanzu/velero `
-        --name velero `
-        --namespace velero `
-        --set configuration.backupStorageLocation.bucket=velero `
-        --set configuration.backupStorageLocation.config.resourceGroup=$($env:VELERO_STORAGE_RG) `
-        --set configuration.backupStorageLocation.config.storageAccount=$($env:VELERO_STORAGE_ACCOUNT) `
-        --set configuration.backupStorageLocation.name=azure `
-        --set configuration.provider=azure `
-        --set configuration.volumeSnapshotLocation.config.resourceGroup=$($env:VELERO_STORAGE_RG) `
-        --set configuration.volumeSnapshotLocation.name=azure `
-        --set credentials.secretContents.cloud=$($env:CREDENTIALS_VELERO) `
-        --set image.pullPolicy=IfNotPresent `
-        --set image.repository=velero/velero `
-        --set image.tag=v1.3.0 `
-        --set initContainers[0].image=velero/velero-plugin-for-microsoft-azure:v1.0.1 `
-        --set initContainers[0].name=velero-plugin-for-microsoft-azure `
-        --set initContainers[0].volumeMounts[0].mountPath=/target `
-        --set initContainers[0].volumeMounts[0].name=plugins
+    # helm install vmware-tanzu/velero `
+    #     --name velero `
+    #     --namespace velero `
+    #     --set configuration.backupStorageLocation.bucket=velero `
+    #     --set configuration.backupStorageLocation.config.resourceGroup=$($env:VELERO_STORAGE_RG) `
+    #     --set configuration.backupStorageLocation.config.storageAccount=$($env:VELERO_STORAGE_ACCOUNT) `
+    #     --set configuration.backupStorageLocation.name=azure `
+    #     --set configuration.provider=azure `
+    #     --set configuration.volumeSnapshotLocation.config.resourceGroup=$($env:VELERO_STORAGE_RG) `
+    #     --set configuration.volumeSnapshotLocation.name=azure `
+    #     --set credentials.secretContents.cloud=$($env:CREDENTIALS_VELERO) `
+    #     --set image.pullPolicy=IfNotPresent `
+    #     --set image.repository=velero/velero `
+    #     --set image.tag=v1.3.0 `
+    #     --set initContainers[0].image=velero/velero-plugin-for-microsoft-azure:v1.0.1 `
+    #     --set initContainers[0].name=velero-plugin-for-microsoft-azure `
+    #     --set initContainers[0].volumeMounts[0].mountPath=/target `
+    #     --set initContainers[0].volumeMounts[0].name=plugins
         # --dry-run --debug
 
     # [OPTIONAL] args
     # --set configuration.volumeSnapshotLocation.config.apiTimeout=5m `
+    # Set log-level for Velero pod. Default: info. Other options: debug, warning, error, fatal, panic.
+    # --set configuration.logLevel=debug `
 
     # [Incorrect] args (produced errors)?
     # --set configuration.backupStorageLocation.config.region=$($env:LOCATION) `
     # --set configuration.volumeSnapshotLocation.config.region=$($env:LOCATION) `
+
+
+    # Helm
+    # # OPTION 2 - YAML file
+    # https://github.com/vmware-tanzu/helm-charts/tree/master/charts/velero#option-2-yaml-file
+    # still use '--set` for dynamic values
+    helm install vmware-tanzu/velero `
+        --name velero `
+        --namespace velero `
+        --values velero-values.yaml `
+        --set configuration.backupStorageLocation.config.resourceGroup=$($env:VELERO_STORAGE_RG) `
+        --set configuration.backupStorageLocation.config.storageAccount=$($env:VELERO_STORAGE_ACCOUNT) `
+        --set configuration.volumeSnapshotLocation.config.resourceGroup=$($env:VELERO_STORAGE_RG) `
+        --set credentials.secretContents.cloud=$($env:CREDENTIALS_VELERO) `
+        --set configuration.logLevel=debug
 
     <#
     # Monitor deployment progress

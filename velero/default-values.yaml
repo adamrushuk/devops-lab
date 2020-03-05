@@ -1,5 +1,3 @@
-# https://github.com/vmware-tanzu/helm-charts/blob/master/charts/velero/values.yaml
-
 ##
 ## Configuration settings that directly affect the Velero deployment YAML.
 ##
@@ -22,13 +20,13 @@ podAnnotations: {}
 resources: {}
 
 # Init containers to add to the Velero deployment's pod spec. At least one plugin provider image is required.
-initContainers:
-- name: velero-plugin-for-microsoft-azure
-  image: velero/velero-plugin-for-microsoft-azure:v1.0.1
-  imagePullPolicy: IfNotPresent
-  volumeMounts:
-    - mountPath: /target
-      name: plugins
+initContainers: []
+  # - name: velero-plugin-for-aws
+  #   image: velero/velero-plugin-for-aws:v1.0.1
+  #   imagePullPolicy: IfNotPresent
+  #   volumeMounts:
+  #     - mountPath: /target
+  #       name: plugins
 
 # SecurityContext to use for the Velero deployment. Optional.
 # Set fsGroup for `AWS IAM Roles for Service Accounts`
@@ -74,16 +72,16 @@ metrics:
 ##
 configuration:
   # Cloud provider being used (e.g. aws, azure, gcp).
-  provider: azure
+  provider:
 
   # Parameters for the `default` BackupStorageLocation. See
   # https://velero.io/docs/v1.0.0/api-types/backupstoragelocation/
   backupStorageLocation:
     # Cloud provider where backups should be stored. Usually should
     # match `configuration.provider`. Required.
-    name: azure
+    name:
     # Bucket to store backups in. Required.
-    bucket: velero
+    bucket:
     # Prefix within bucket under which to store backups. Optional.
     prefix:
     # Additional provider-specific configuration. See link above
@@ -107,7 +105,7 @@ configuration:
   volumeSnapshotLocation:
     # Cloud provider where volume snapshots are being taken. Usually
     # should match `configuration.provider`. Required.,
-    name: azure
+    name:
     # Additional provider-specific configuration. See link above
     # for details of required/optional fields for your provider.
     config: {}
