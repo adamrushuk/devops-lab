@@ -17,7 +17,7 @@ env:
   MY_WORKFLOW_VAR: work
 
   # UNSUPPORTED: Cannot concatenante at Workflow level
-  MY_WORKFLOW_VAR2: ${{ env.MY_WORKFLOW_VAR }}-workvalue01
+  # MY_WORKFLOW_VAR2: ${{ env.MY_WORKFLOW_VAR }}-workvalue01
 
 jobs:
   build:
