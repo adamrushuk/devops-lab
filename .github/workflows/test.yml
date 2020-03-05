@@ -40,7 +40,16 @@ jobs:
       # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#using-a-specific-shell
       shell: pwsh
       run: |
-        echo ::set-env name=MY_CONCATENATED_VAR::${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-stepvalue01
+        echo ::set-env name=MY_CONCATENATED_VAR::${{ env.MY_WORKFLOW_VAR }}-stepvalue01
+
+    - name: BASH - Concatenate env vars (Workaround)
+      run: |
+        echo ::set-env name=NEW_BASH_VAR::my-new-bash-value
+
+    - name: PWSH - Concatenate env vars (Workaround)
+      shell: pwsh
+      run: |
+        echo ::set-env name=NEW_BASH_VAR::my-new-bash-value
 
     - name: Output event data
       shell: pwsh
