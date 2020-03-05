@@ -35,6 +35,13 @@ helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts
 helm repo update
 helm repo list
 
+# DEBUG
+# Troubleshooting "helm install context deadline exceeded" error
+if ($env:CI_DEBUG -eq "true") {
+    Write-Output "`nDEBUG: Showing all kubernetes resources, before installing [Velero]..."
+    kubectl get all --all-namespaces
+}
+
 # Check if Helm release installed already
 $helmReleaseName = "Velero"
 $helmDeployedList = helm list --output json | ConvertFrom-Json
@@ -44,7 +51,7 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
 } else {
     Write-Output "STARTED: Installing Helm release: [$helmReleaseName]..."
 
-<#
+    <#
     # Testing
     $env:CREDENTIALS_VELERO = (SEE ./velero/Create-VeleroServicePrinciple.ps1)
     $env:LOCATION = "uksouth"
@@ -58,7 +65,7 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
 
     kubectl get namespace
     kubectl create namespace velero
-#>
+    #>
 
     # https://github.com/vmware-tanzu/helm-charts/tree/master/charts/velero#option-1-cli-commands
 
