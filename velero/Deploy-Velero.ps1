@@ -103,11 +103,16 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
 
 
     # Helm
+    # Show latest chart version
+    helm search vmware-tanzu/velero
+
+
     # # OPTION 2 - YAML file
     # https://github.com/vmware-tanzu/helm-charts/tree/master/charts/velero#option-2-yaml-file
     # still use '--set` for dynamic values
     helm install vmware-tanzu/velero `
         --name velero `
+        --version 2.9.1 `
         --namespace velero `
         --atomic `
         --timeout 600 `
