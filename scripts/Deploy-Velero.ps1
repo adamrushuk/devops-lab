@@ -4,6 +4,7 @@
 # https://github.com/vmware-tanzu/helm-charts/issues/7
 
 # Reference
+# https://github.com/vmware-tanzu/helm-charts/tree/master/charts/velero#if-using-helm-2-tiller-cluster-admin-permissions
 # https://github.com/vmware-tanzu/helm-charts/blob/master/charts/velero/values.yaml
 # https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/blob/master/backupstoragelocation.md
 # https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/blob/master/volumesnapshotlocation.md
@@ -22,9 +23,10 @@ $message = "[HELM] Installing Velero"
 Write-Output "STARTED: $message..."
 
 # Helm 2 - Tiller config
-# kubectl create sa -n kube-system tiller
-# kubectl create clusterrolebinding tiller-cluster-admin --clusterrole cluster-admin --serviceaccount kube-system:tiller
-# helm init --service-account=tiller --wait --upgrade
+# https://github.com/vmware-tanzu/helm-charts/tree/master/charts/velero#if-using-helm-2-tiller-cluster-admin-permissions
+kubectl create sa -n kube-system tiller
+kubectl create clusterrolebinding tiller-cluster-admin --clusterrole cluster-admin --serviceaccount kube-system:tiller
+helm init --service-account=tiller --wait --upgrade
 
 # Add the Helm repository
 helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts
