@@ -94,9 +94,10 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
     kubectl get all -n velero
     kubectl describe pod -n velero
     kubectl get events --sort-by=.metadata.creationTimestamp --namespace velero
-    kubectl get events --sort-by=.metadata.creationTimestamp --namespace velero --watch
+    kubectl get events --namespace velero --watch
     kubectl get deployment -n velero --watch
     kubectl logs deployment/velero -n velero -f
+    kubectl logs deployment/velero -n velero -f | sls warning, error, unauthorized_client
 
     # Cleanup
     helm ls --all velero
