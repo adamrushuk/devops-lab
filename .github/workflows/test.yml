@@ -35,21 +35,16 @@ jobs:
     steps:
     # WORKAROUND Env var concatenation
     # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
-    - name: Concatenate env vars (Workaround)
+    - name: BASH - Concatenate env vars (Workaround)
+      run: |
+        echo ::set-env name=MY_CONCATENATED_BASH_VAR::${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-stepvalue01
+
+    - name: PWSH - Concatenate env vars (Workaround)
       # override the default bash shell, as running on ubuntu
       # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#using-a-specific-shell
       shell: pwsh
       run: |
-        echo ::set-env name=MY_CONCATENATED_VAR::${{ env.MY_WORKFLOW_VAR }}-stepvalue01
-
-    - name: BASH - Concatenate env vars (Workaround)
-      run: |
-        echo ::set-env name=NEW_BASH_VAR::my-new-bash-value
-
-    - name: PWSH - Concatenate env vars (Workaround)
-      shell: pwsh
-      run: |
-        echo ::set-env name=NEW_BASH_VAR::my-new-bash-value
+        echo "::set-env name=MY_CONCATENATED_PWSH_VAR::${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-stepvalue01"
 
     - name: Output event data
       shell: pwsh
@@ -71,4 +66,5 @@ jobs:
         Write-Output "MY_JOB_VAR is: [$env:MY_JOB_VAR]"
         Write-Output "MY_STEP_VAR is: [$env:MY_STEP_VAR]"
         Write-Output "MY_WORK_JOB_VAR is: [$env:MY_WORK_JOB_VAR]"
-        Write-Output "MY_CONCATENATED_VAR is: [$env:MY_CONCATENATED_VAR]"
+        Write-Output "MY_CONCATENATED_BASH_VAR is: [$env:MY_CONCATENATED_BASH_VAR]"
+        Write-Output "MY_CONCATENATED_PWSH_VAR is: [$env:MY_CONCATENATED_PWSH_VAR]"
