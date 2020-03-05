@@ -14,7 +14,7 @@ $ErrorActionPreference = "Stop"
 
 # Version info
 Write-Output "INFO: Velero Chart currently support Helm v2 CLI. `nTrack issue here: https://github.com/vmware-tanzu/helm-charts/issues/7"
-helm version --short
+helm version --debug
 
 
 #region Velero
