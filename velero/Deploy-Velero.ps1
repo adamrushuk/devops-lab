@@ -103,6 +103,7 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
         --name velero `
         --namespace velero `
         --atomic `
+        --timeout 600 `
         --values ./velero/velero-values.yaml `
         --set configuration.backupStorageLocation.config.resourceGroup=$($env:VELERO_STORAGE_RG) `
         --set configuration.backupStorageLocation.config.storageAccount=$($env:VELERO_STORAGE_ACCOUNT) `
