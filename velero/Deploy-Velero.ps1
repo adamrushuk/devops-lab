@@ -85,7 +85,10 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
         --set initContainers[0].volumeMounts[0].name=plugins #`
         # --dry-run --debug
 
-    # [Incorrect] args?
+    # [OPTIONAL] args
+    # --set configuration.volumeSnapshotLocation.config.apiTimeout=5m `
+
+    # [Incorrect] args (produced errors)?
     # --set configuration.backupStorageLocation.config.region=$($env:LOCATION) `
     # --set configuration.volumeSnapshotLocation.config.region=$($env:LOCATION) `
 
