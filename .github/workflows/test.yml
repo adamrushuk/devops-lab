@@ -24,7 +24,7 @@ jobs:
 
     # always pin versions
     # # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
-    runs-on: windows-2019
+    runs-on: ubuntu-18.04
 
     env:
       MY_JOB_VAR: job
@@ -36,10 +36,14 @@ jobs:
     # WORKAROUND Env var concatenation
     # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
     - name: Concatenate env vars (Workaround)
+      # override the default bash shell, as running on ubuntu
+      # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#using-a-specific-shell
+      shell: pwsh
       run: |
         echo ::set-env name=MY_CONCATENATED_VAR::${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-stepvalue01
 
     - name: Output event data
+      shell: pwsh
       env:
         MY_STEP_VAR: step
       run: |
