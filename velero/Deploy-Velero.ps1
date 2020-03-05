@@ -102,6 +102,7 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
     helm install vmware-tanzu/velero `
         --name velero `
         --namespace velero `
+        --atomic `
         --values ./velero/velero-values.yaml `
         --set configuration.backupStorageLocation.config.resourceGroup=$($env:VELERO_STORAGE_RG) `
         --set configuration.backupStorageLocation.config.storageAccount=$($env:VELERO_STORAGE_ACCOUNT) `
