@@ -9,7 +9,7 @@
   - [Install CLI](#install-cli)
   - [Install Server (CLI)](#install-server-cli)
   - [Install Server (Helm)](#install-server-helm)
-  - [Backup](#backup)
+  - [Backup / Restore](#backup--restore)
     - [NGINX example (without PersistentVolumes)](#nginx-example-without-persistentvolumes)
     - [NGINX example (with PersistentVolumes)](#nginx-example-with-persistentvolumes)
     - [Nexus example (with PersistentVolumes)](#nexus-example-with-persistentvolumes)
@@ -131,11 +131,21 @@ helm repo list
 helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts
 helm repo update
 
-# Show CLI help
+# Check chart versions
+# Show latest chart version
+helm search vmware-tanzu/velero
+
+# Show all chart version
+helm search vmware-tanzu/velero -l
+
+# Show all chart versions starting with 2.9 (eg. 2.9.x)
+helm search vmware-tanzu/velero -l -v ~2.9
+
+# Install
 helm install --namespace velero -f velero-values.yaml stable/velero
 ```
 
-## Backup
+## Backup / Restore
 
 ### NGINX example (without PersistentVolumes)
 
