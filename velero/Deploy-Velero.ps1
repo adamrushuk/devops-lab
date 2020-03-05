@@ -24,9 +24,9 @@ Write-Output "STARTED: $message..."
 
 # Helm 2 - Tiller config
 # https://github.com/vmware-tanzu/helm-charts/tree/master/charts/velero#if-using-helm-2-tiller-cluster-admin-permissions
-kubectl create sa -n kube-system tiller
-kubectl create clusterrolebinding tiller-cluster-admin --clusterrole cluster-admin --serviceaccount kube-system:tiller
-helm init --service-account=tiller --wait --upgrade
+# kubectl create sa -n kube-system tiller
+# kubectl create clusterrolebinding tiller-cluster-admin --clusterrole cluster-admin --serviceaccount kube-system:tiller
+# helm init --service-account=tiller --wait --upgrade
 
 # Add the Helm repository
 helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts

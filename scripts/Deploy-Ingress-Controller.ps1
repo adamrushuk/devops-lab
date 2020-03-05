@@ -24,7 +24,12 @@ $message = "[HELM] Installing NGINX ingress controller"
 Write-Output "STARTED: $message..."
 
 # Helm v2 requires initialisation
-helm init --wait
+# Helm 2 - Tiller config
+# helm init --wait
+kubectl create sa -n kube-system tiller
+kubectl create clusterrolebinding tiller-cluster-admin --clusterrole cluster-admin --serviceaccount kube-system:tiller
+helm init --service-account=tiller --wait
+#--upgrade
 
 # Add the official stable repository
 helm repo add stable https://kubernetes-charts.storage.googleapis.com/
