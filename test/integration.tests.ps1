@@ -93,7 +93,7 @@ Describe "Integration Tests" {
         $certResult = Get-CertInfo -ComputerName $hostname -Port $port
 
         # DEBUG Output
-        if ($env:CI_DEBUG -eq "true") { $certResult | Out-String | Format-List * }
+        if ($env:CI_DEBUG -eq "true") { $certResult | Format-Custom | Out-String | Write-Verbose }
 
         # Tests
         It "Should have a [$env:CERT_API_ENVIRONMENT] SSL cert for [$hostname] issued by: [$expectedIssuerName]" {
@@ -107,7 +107,7 @@ Describe "Integration Tests" {
             $sslResult = Test-SslProtocol -ComputerName $hostname -Port $port
 
             # DEBUG Output
-            if ($env:CI_DEBUG -eq "true") { $sslResult | Format-List * }
+            if ($env:CI_DEBUG -eq "true") { $sslResult | Format-Custom | Out-String | Write-Verbose}
 
             It "Should have Signature Algorithm of [sha256RSA]" {
                 $sslResult.SignatureAlgorithm | Should Be "sha256RSA"
