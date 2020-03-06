@@ -45,7 +45,7 @@ Describe "Integration Tests" {
         # Vars
         $testUrl = "https://$($env:DNS_DOMAIN_NAME)"
         $allowedStatusCodes = @(200, 304, 503)
-        $expectedContent = "Azure Voting App"
+        $expectedContent = "Nexus Repository Manager"
 
         # Request
         $invokeWebRequestParams = @{
