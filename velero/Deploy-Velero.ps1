@@ -1,6 +1,6 @@
 # Deploy Velero
 
-# ! WARNING HELM v3 NOT SUPPORTED!
+# ! WARNING HELM v3 NOT CURRENTLY SUPPORTED!
 # https://github.com/vmware-tanzu/helm-charts/issues/7
 
 # Reference

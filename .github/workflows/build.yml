@@ -91,6 +91,10 @@ jobs:
       run: pwsh -command "./scripts/Apply-Terraform.ps1"
 
 
+    # Helm - Init
+    - name: Deploy Ingress Controller
+      run: pwsh -command "./scripts/Init-Helm.ps1"
+
     # Kubernetes - Ingress
     - name: Deploy Ingress Controller
       run: pwsh -command "./scripts/Deploy-Ingress-Controller.ps1"
