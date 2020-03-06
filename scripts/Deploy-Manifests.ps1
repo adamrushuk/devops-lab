@@ -13,7 +13,7 @@ $ErrorActionPreference = "Stop"
 <#
     # local testing - manually add env vars
     $env:EMAIL_ADDRESS = "admin@domain.com"
-    $env:DNS_DOMAIN_NAME = "aks.thehypepipe.co.uk"
+    $env:DNS_DOMAIN_NAME = "nexus.thehypepipe.co.uk"
     $env:CERT_API_ENVIRONMENT = "staging"
 #>
 ./scripts/Replace-Tokens.ps1 -targetFilePattern './manifests/*.yml'
