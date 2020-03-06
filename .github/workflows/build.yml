@@ -28,7 +28,8 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
   # other
-  CERT_API_ENVIRONMENT: staging
+  # prod or staging
+  CERT_API_ENVIRONMENT: prod
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
   EMAIL_ADDRESS: adamrushuk+aksnexusvelero@gmail.com
   FORCE_TEST_FAIL: false
