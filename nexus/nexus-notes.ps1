@@ -3,21 +3,24 @@ throw "do not run whole script; F8 sections as required"
 
 #region Connect Kubectl
 # Vars
-$resourceGroupName = "<ResourceGroupName>"
-$aksClusterName = "<AksClusterName>"
+$prefix = "rush"
+$aksClusterName = "$($prefix)-aks-001"
+$aksClusterResourceGroupName = "$($prefix)-rg-aks-dev-001"
+
 # standard | retain | stateful (this is best to retain data across deployments)
-$manifestFolderName = "stateful"
+# $manifestFolderName = "stateful"
 
 # Get AKS k8s creds
-az aks get-credentials --resource-group $resourceGroupName --name $aksClusterName --overwrite-existing
+az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aksClusterName --overwrite-existing
 
 # Open AKS k8s dashboard
-az aks browse --resource-group $resourceGroupName --name $aksClusterName
+az aks browse --resource-group $aksClusterResourceGroupName --name $aksClusterName
 
 # Show resources
 kubectl get nodes
 kubectl get ns
 kubectl get sc
+kubectl get svc -A
 kubectl get pvc,pv
 kubectl get pods
 kubectl get all
