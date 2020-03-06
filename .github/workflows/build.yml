@@ -52,6 +52,10 @@ jobs:
     steps:
     # Checkout
     - uses: actions/checkout@v2
+      # specify different branch
+      # NOT required as I've changed the default branch to develop
+      # with:
+      #   ref: develop
 
     # Env var concatenation
     # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
