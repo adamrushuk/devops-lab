@@ -211,6 +211,7 @@ kubectl get svc -n nginx-pv -w
 # Open browser to view NGINX default page
 $urlPv = kubectl get svc my-nginx-pv -n nginx-pv --ignore-not-found -o jsonpath="http://{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}"
 Write-Output "Browse to NGINX URL: $urlPv"
+start $urlPv
 
 # Cleanup previous attempts
 velero backup get
@@ -245,13 +246,14 @@ velero restore create --from-backup nginx-pv-backup
 # Check restore
 velero restore get
 velero restore describe
-velero restore logs nginx-pv-backup-20200305122636
+velero restore logs nginx-pv-backup-20200306092349
 
 # Monitor restore progress
 kubectl get ns
 kubectl get all,pvc,pv -n nginx-pv
 kubectl describe pod -n nginx-pv
 kubectl get events --sort-by=.metadata.creationTimestamp --namespace nginx-pv
+kubectl get events --namespace nginx-pv --watch
 kubectl get deployment -n nginx-pv --watch
 # kubectl logs deployment/nginx-deployment -n nginx-pv -f -c nginx
 # kubectl logs deployment/nginx-deployment -n nginx-pv -f --all-containers
@@ -260,6 +262,7 @@ kubectl get deployment -n nginx-pv --watch
 kubectl get svc -n nginx-pv -w
 $newUrlPv = kubectl get svc my-nginx-pv -n nginx-pv --ignore-not-found -o jsonpath="http://{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}"
 Write-Output "Browse to new NGINX URL: $newUrlPv"
+start $newUrlPv
 ```
 
 ### Nexus example (with PersistentVolumes)
