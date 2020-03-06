@@ -92,7 +92,7 @@ jobs:
 
 
     # Helm - Init
-    - name: Deploy Ingress Controller
+    - name: Helm Init
       run: pwsh -command "./scripts/Init-Helm.ps1"
 
     # Kubernetes - Ingress
