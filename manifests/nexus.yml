@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nexus
+  namespace: ingress-tls
+spec:
+  serviceName: nexus
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      # Use init containers to prepare environment,
+      # like setting volume owner/permissions
+      initContainers:
+      - name: fmp-volume-permission
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ['chown','-R', '200', '/nexus-data']
+        volumeMounts:
+        - name: nexus-data
+          mountPath: /nexus-data
+      containers:
+      - name: nexus
+        image: sonatype/nexus3
+        ports:
+        - containerPort: 8081
+        # These volume mounts are persistent. They are like inline claims,
+        # but not exactly because the names need to match exactly one of
+        # the stateful pod volumes.
+        volumeMounts:
+        - name: nexus-data
+          mountPath: /nexus-data
+  # These are converted to volume claims by the controller
+  # and mounted at the paths mentioned above.
+  volumeClaimTemplates:
+  - metadata:
+      name: nexus-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: default
+      resources:
+        requests:
+          storage: 8Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus
+  namespace: ingress-tls
+spec:
+  # type: LoadBalancer
+  ports:
+  - port: 8081
+    # targetPort: 8081
+  selector:
+      app: nexus

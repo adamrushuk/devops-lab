@@ -20,6 +20,10 @@ spec:
           serviceName: azure-vote-front
           servicePort: 80
         path: /(.*)
+      - backend:
+          serviceName: nexus
+          servicePort: 8081
+        path: /nexus(/|$)(.*)
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
