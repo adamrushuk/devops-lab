@@ -62,6 +62,7 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
 # Check nginx-ingress resources
 helm list
 kubectl get all -n ingress-tls -l app=nginx-ingress
+kubectl get ing -n ingress-tls
 
 Write-Output "FINISHED: $message."
 #endregion

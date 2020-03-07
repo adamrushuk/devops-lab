@@ -52,7 +52,14 @@ kubectl apply -n ingress-tls -f ./manifests/ingress.yml
 
 <#
 # DEBUG
+kubectl get ing -A
+kubectl get ing -n ingress-tls
+kubectl describe ing -n ingress-tls
+kubectl get events --sort-by=.metadata.creationTimestamp -A
+kubectl get events -w -A
+
 kubectl delete -n ingress-tls -f ./manifests/ingress.yml
 kubectl delete -n ingress-tls -f ./manifests/azure-vote.yml
+kubectl delete ing -n ingress-tls --all
 #>
 Write-Output "FINISHED: $message."
