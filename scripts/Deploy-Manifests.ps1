@@ -43,7 +43,7 @@ kubectl apply -f ./manifests/cluster-issuer-prod.yml
 
 # Applications
 Write-Output "`nAPPLYING: Applications..."
-kubectl apply -n ingress-tls -f ./manifests/azure-vote.yml
+# kubectl apply -n ingress-tls -f ./manifests/azure-vote.yml
 kubectl apply -n ingress-tls -f ./manifests/nexus.yml
 
 # Ingress
