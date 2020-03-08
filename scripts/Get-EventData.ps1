@@ -11,5 +11,5 @@ $eventContextJson = $env:GITHUB_CONTEXT
 $eventContext = $eventContextJson | ConvertFrom-Json
 
 # Output info
-Write-Output "action: $($eventContext.action)"
-Write-Output "client_payload: $($eventContext.client_payload)"
+Write-Output "action: $($eventContext.event.action)"
+Write-Output "client_payload: $($eventContext.event.client_payload)"
