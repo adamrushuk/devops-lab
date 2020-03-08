@@ -52,10 +52,10 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
         --namespace ingress-tls `
         --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux `
         --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux `
-        --set controller.extraArgs.v=3 `
-        --set controller.config.hsts=false
+        --set controller.extraArgs.v=3
 
     # [OPTIONAL] args
+    # --set controller.config.hsts='"false"'
     # --set controller.extraArgs.v=3 `
     # --set controller.replicaCount=2 `
     # --debug --dry-run
