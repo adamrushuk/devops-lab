@@ -33,6 +33,9 @@ jobs:
       # MY_WORK_JOB_VAR: ${{ env.MY_WORKFLOW_VAR }}
 
     steps:
+    # Checkout
+    - uses: actions/checkout@v2
+
     # Show event info
     - name: Show triggered event data
       run: pwsh -command "./scripts/Get-EventData.ps1"
