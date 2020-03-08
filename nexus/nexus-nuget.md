@@ -113,6 +113,9 @@
 ```powershell
 # Find modules
 Find-Module -Repository $nugetRepoName -Verbose
+Find-Module -Name "PSGitLab" -Verbose
+Find-Module -Name "PSGitLab" -Repository $nugetRepoName -Verbose
+Find-Module -Name "PSGitLab" -Repository $nugetRepoName -Credential $cred -Verbose
 Find-Module -Repository $nugetRepoName -Credential $cred -Verbose
 
 # Show modules in Nexus repo
