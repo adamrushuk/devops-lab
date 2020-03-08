@@ -36,8 +36,10 @@ Write-Output "`nSTARTED: $message..."
 # [OPTIONAL] apply whole folder
 # kubectl apply -n ingress-tls -f ./manifests
 
+Write-Output "`nENABLE_TLS_INGRESS: [$env:ENABLE_TLS_INGRESS]"
+
 # ClusterIssuers
-if ($env:ENABLE_TLS_INGRESS) {
+if ($env:ENABLE_TLS_INGRESS -eq "true") {
     Write-Output "`nAPPLYING: ClusterIssuers..."
     kubectl apply -f ./manifests/cluster-issuer-staging.yml
     kubectl apply -f ./manifests/cluster-issuer-prod.yml
@@ -53,7 +55,7 @@ kubectl apply -n ingress-tls -f ./manifests/nexus.yml
 # Ingress
 # default to basic http
 $ingressFilename = "ingress-http.yml"
-if ($env:ENABLE_TLS_INGRESS) {
+if ($env:ENABLE_TLS_INGRESS -eq "true") {
     $ingressFilename = "ingress-tls.yml"
 }
 Write-Output "`nAPPLYING: Ingress [$ingressFilename]..."
@@ -66,6 +68,9 @@ kubectl get ing -n ingress-tls
 kubectl describe ing -n ingress-tls
 kubectl get events --sort-by=.metadata.creationTimestamp -A
 kubectl get events -w -A
+
+kubectl apply -n ingress-tls -f ./manifests/ingress-http.yml
+kubectl apply -n ingress-tls -f ./manifests/ingress-tls.yml
 
 kubectl delete -n ingress-tls -f ./manifests/ingress-tls.yml
 kubectl delete -n ingress-tls -f ./manifests/azure-vote.yml
