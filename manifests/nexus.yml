@@ -45,7 +45,7 @@ spec:
       storageClassName: default
       resources:
         requests:
-          storage: 8Gi
+          storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
