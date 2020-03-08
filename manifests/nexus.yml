@@ -45,7 +45,8 @@ spec:
       storageClassName: default
       resources:
         requests:
-          storage: 1Gi
+          # minimum is 4Gi, but 8Gi recommended during testing
+          storage: 8Gi
 ---
 apiVersion: v1
 kind: Service
