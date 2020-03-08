@@ -41,7 +41,7 @@ start https://portal.azure.com/#blade/Microsoft_Azure_Monitoring/AzureMonitoring
 cd examples/aks-helm/nexus
 kubectl create namespace ingress-tls
 # permanently save the namespace for all subsequent kubectl commands in that context
-kubectl config set-context --current --namespace=ingress-tls
+kubectl config set-context --current --namespace ingress-tls
 kubectl config -h
 kubectl get ns
 kubectl get all,pv,pvc
@@ -58,6 +58,7 @@ kubectl apply --validate -f ./manifests/$manifestFolderName
 
 # Check
 kubectl get sc,pvc,pv,all
+kubectl get events --sort-by=.metadata.creationTimestamp
 kubectl get events --sort-by=.metadata.creationTimestamp -w
 $podName = kubectl get pod -l app=nexus -o jsonpath="{.items[0].metadata.name}"
 kubectl describe pod $podName
@@ -146,15 +147,15 @@ kubectl get pod $podName --watch
 
 
 #region CLEANUP
-# [OPTIONAL] Delete only Deployment (pvc and service remains)
-kubectl delete -f ./manifests/$manifestFolderName/deployment.yml
-# Delete manifests
-kubectl delete -f ./manifests/$manifestFolderName
+# Delete manifest
+kubectl delete -f ./manifests/nexus.yml
 kubectl get events --sort-by=.metadata.creationTimestamp --watch
 
 # NOTE: Persistent Volume and Persistent Volume Claims may not be deleted
 # Get and delete Persistent Volume Claims
 kubectl get pvc,pv -A
+kubectl describe pv -A
+kubectl describe pvc -A
 kubectl delete pvc,pv -A --all
 
 # Check
