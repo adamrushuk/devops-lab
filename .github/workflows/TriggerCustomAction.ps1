@@ -36,8 +36,8 @@ $body = @{
     # used for if condition of Github Action
     event_type = $CustomEventAction
     client_payload = @{
-        my_setting1 = "foo"
-        my_setting2 = "bar"
+        source_trigger = "TriggerCustomAction.ps1"
+        source_ip = "$(Invoke-WebRequest 'https://canihazip.com/s')"
     }
 } | ConvertTo-Json
 
