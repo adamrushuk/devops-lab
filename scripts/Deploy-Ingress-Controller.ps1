@@ -52,11 +52,13 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
         --namespace ingress-tls `
         --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux `
         --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux `
-        --set controller.extraArgs.v=3
+        --set controller.extraArgs.v=3 `
+        --set controller.config.hsts=false
 
     # [OPTIONAL] args
     # --set controller.extraArgs.v=3 `
     # --set controller.replicaCount=2 `
+    # --debug --dry-run
 }
 
 # Check nginx-ingress resources
