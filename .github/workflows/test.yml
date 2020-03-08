@@ -33,6 +33,10 @@ jobs:
       # MY_WORK_JOB_VAR: ${{ env.MY_WORKFLOW_VAR }}
 
     steps:
+    # Show event info
+    - name: Show triggered event data
+      run: pwsh -command "./scripts/Get-EventData.ps1"
+
     # WORKAROUND Env var concatenation
     # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
     - name: BASH - Concatenate env vars (Workaround)
@@ -52,16 +56,6 @@ jobs:
       env:
         MY_STEP_VAR: step
       run: |
-        # Get event context data
-        $eventContextJson = '${{ toJson( github.event ) }}'
-
-        # Convert to PowerShell object
-        $eventContext = $eventContextJson | ConvertFrom-Json
-
-        # Output info
-        Write-Output "action: $($eventContext.action)"
-        Write-Output "client_payload: $($eventContext.client_payload)"
-
         # Env var concatenation
         Write-Output "MY_WORKFLOW_VAR is: [$env:MY_WORKFLOW_VAR]"
         Write-Output "MY_JOB_VAR is: [$env:MY_JOB_VAR]"
