@@ -37,9 +37,13 @@ Write-Output "`nSTARTED: $message..."
 # kubectl apply -n ingress-tls -f ./manifests
 
 # ClusterIssuers
-Write-Output "`nAPPLYING: ClusterIssuers..."
-kubectl apply -f ./manifests/cluster-issuer-staging.yml
-kubectl apply -f ./manifests/cluster-issuer-prod.yml
+if ($env:ENABLE_TLS_INGRESS) {
+    Write-Output "`nAPPLYING: ClusterIssuers..."
+    kubectl apply -f ./manifests/cluster-issuer-staging.yml
+    kubectl apply -f ./manifests/cluster-issuer-prod.yml
+} else {
+    Write-Output "`nSKIPPING: ClusterIssuers..."
+}
 
 # Applications
 Write-Output "`nAPPLYING: Applications..."
@@ -47,8 +51,13 @@ Write-Output "`nAPPLYING: Applications..."
 kubectl apply -n ingress-tls -f ./manifests/nexus.yml
 
 # Ingress
-Write-Output "`nAPPLYING: Ingress..."
-kubectl apply -n ingress-tls -f ./manifests/ingress.yml
+# default to basic http
+$ingressFilename = "ingress-http.yml"
+if ($env:ENABLE_TLS_INGRESS) {
+    $ingressFilename = "ingress-tls.yml"
+}
+Write-Output "`nAPPLYING: Ingress [$ingressFilename]..."
+kubectl apply -n ingress-tls -f ./manifests/$ingressFilename
 
 <#
 # DEBUG
@@ -58,7 +67,7 @@ kubectl describe ing -n ingress-tls
 kubectl get events --sort-by=.metadata.creationTimestamp -A
 kubectl get events -w -A
 
-kubectl delete -n ingress-tls -f ./manifests/ingress.yml
+kubectl delete -n ingress-tls -f ./manifests/ingress-tls.yml
 kubectl delete -n ingress-tls -f ./manifests/azure-vote.yml
 kubectl delete ing -n ingress-tls --all
 #>
