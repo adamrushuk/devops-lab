@@ -38,6 +38,8 @@ jobs:
 
     # Show event info
     - name: Show triggered event data
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
       run: pwsh -command "./scripts/Get-EventData.ps1"
 
     # WORKAROUND Env var concatenation
