@@ -13,6 +13,7 @@ metadata:
     nginx.org/hsts: "false"
 spec:
   rules:
+  # - host: nexus.thehypepipe.co.uk
   - host: __DNS_DOMAIN_NAME__
     http:
       paths:

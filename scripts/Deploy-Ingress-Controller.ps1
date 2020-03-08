@@ -68,3 +68,45 @@ kubectl get ing -n ingress-tls
 
 Write-Output "FINISHED: $message."
 #endregion
+
+
+#region Troubleshooting
+<#
+# * IMPORTANT
+# permanently save the namespace for all subsequent kubectl commands in that context
+kubectl config set-context --current --namespace=ingress-tls
+
+# Check the Ingress Resource Events
+$ingressControllerPodName = kubectl get pod -l component=controller -o jsonpath="{.items[0].metadata.name}"
+kubectl get ing
+kubectl get ing ingress -o yaml
+kubectl describe ing ingress
+kubectl describe ing ingress-static
+
+kubectl get svc nginx-ingress-controller
+kubectl describe pod $ingressControllerPodName
+
+kubectl get configmap -n ingress-tls
+kubectl describe configmap -n ingress-tls
+
+# Check the Ingress Controller Logs
+kubectl logs -f -l component=controller --all-containers=true
+
+# Check the NginX Configuration
+# NginX vscode extension: https://marketplace.visualstudio.com/items?itemName=raynigon.nginx-formatter
+# Search nginx.conf for location {} blocks, including "$service_name" etc
+# Ensure $namespace, $ingress_name, $service_name, and $service_port are correct
+kubectl get pods
+kubectl exec -it $ingressControllerPodName cat /etc/nginx/nginx.conf > nginx.conf
+
+# Check Stats within Controller pod
+kubectl exec -it $ingressControllerPodName /bin/bash
+curl http://localhost/nginx_status
+
+# Check if used Services Exist
+kubectl get svc --all-namespaces
+
+# Check default backend pod
+kubectl describe pods -l component=default-backend
+#>
+#endregion Troubleshooting
