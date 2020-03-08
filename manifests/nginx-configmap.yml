@@ -8,7 +8,5 @@ data:
   hsts-include-subdomains: "false"
   hsts-max-age: "1"
   hsts: "false"
-  proxy-connect-timeout:  "3600s"
-  proxy-read-timeout: "3600s"
   redirect-to-https: "false"
   ssl-redirect: "false"
