@@ -65,6 +65,10 @@ jobs:
         echo ::set-env name=TERRAFORM_STORAGE_ACCOUNT::${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
         echo ::set-env name=TERRAFORM_STORAGE_RG::${{ env.PREFIX }}-rg-tfstate-dev-001
 
+    # Show event info
+    - name: Show triggered event data
+      run: pwsh -command "./scripts/Get-EventData.ps1"
+
     # Login
     - name: Login to Azure
       run: pwsh -command "./scripts/Login-Azure.ps1"
