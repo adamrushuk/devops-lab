@@ -4,12 +4,13 @@ metadata:
   name: ingress-http
   namespace: ingress-tls
   annotations:
+    # ingress.kubernetes.io/force-ssl-redirect: "false"
+    # ingress.kubernetes.io/ssl-redirect: "false"
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    # nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-    # ingress.kubernetes.io/ssl-redirect: "false"
-    # ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.org/hsts: "false"
 spec:
   rules:
   - host: __DNS_DOMAIN_NAME__
