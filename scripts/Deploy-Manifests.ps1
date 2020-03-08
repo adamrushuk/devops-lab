@@ -74,6 +74,7 @@ kubectl get events -w -A
 
 kubectl apply -n ingress-tls -f ./manifests/ingress-http.yml
 kubectl apply -n ingress-tls -f ./manifests/ingress-tls.yml
+kubectl apply -n ingress-tls -f ./manifests/nginx-configmap.yml
 
 kubectl delete -n ingress-tls -f ./manifests/ingress-http.yml
 kubectl delete -n ingress-tls -f ./manifests/ingress-tls.yml
