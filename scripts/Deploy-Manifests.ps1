@@ -63,6 +63,9 @@ kubectl apply -n ingress-tls -f ./manifests/$ingressFilename
 
 <#
 # DEBUG
+curl -I http://nexus.thehypepipe.co.uk/
+curl -I https://nexus.thehypepipe.co.uk/
+
 kubectl get ing -A
 kubectl get ing -n ingress-tls
 kubectl describe ing -n ingress-tls
@@ -72,8 +75,12 @@ kubectl get events -w -A
 kubectl apply -n ingress-tls -f ./manifests/ingress-http.yml
 kubectl apply -n ingress-tls -f ./manifests/ingress-tls.yml
 
+kubectl delete -n ingress-tls -f ./manifests/ingress-http.yml
 kubectl delete -n ingress-tls -f ./manifests/ingress-tls.yml
-kubectl delete -n ingress-tls -f ./manifests/azure-vote.yml
 kubectl delete ing -n ingress-tls --all
+
+# Cleanup
+helm list
+helm del --purge nginx-ingress
 #>
 Write-Output "FINISHED: $message."
