@@ -53,6 +53,10 @@ Write-Output "`nAPPLYING: Applications..."
 kubectl apply -n ingress-tls -f ./manifests/nexus.yml
 
 # Ingress
+# ConfigMap - NGINX Configuration options
+# https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
+kubectl apply -n ingress-tls -f ./manifests/nginx-configmap.yml
+
 # default to basic http
 $ingressFilename = "ingress-http.yml"
 if ($env:ENABLE_TLS_INGRESS -eq "true") {
