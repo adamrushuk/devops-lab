@@ -3,6 +3,8 @@ kind: StatefulSet
 metadata:
   name: nexus
   namespace: ingress-tls
+  labels:
+    app: nexus
 spec:
   serviceName: nexus
   replicas: 1
@@ -53,6 +55,8 @@ kind: Service
 metadata:
   name: nexus
   namespace: ingress-tls
+  labels:
+    app: nexus
 spec:
   # type: LoadBalancer
   ports:
