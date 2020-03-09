@@ -1,0 +1,9 @@
+# Default values for cert-manager.
+# https://raw.githubusercontent.com/jetstack/cert-manager/release-0.13/deploy/charts/cert-manager/values.yaml
+
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+global:
+
+  # Set the verbosity of cert-manager. Range of 0 - 6 with 6 being the most verbose.
+  logLevel: 3
