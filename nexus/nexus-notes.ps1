@@ -19,14 +19,12 @@ az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aks
 az aks browse --resource-group $aksClusterResourceGroupName --name $aksClusterName
 
 # Show resources
-kubectl get nodes
-kubectl get ns
-kubectl get sc
-kubectl get svc -A
-kubectl get pvc,pv
-kubectl get pods
-kubectl get all
+# Cluster scope
+kubectl get nodes,ns,pv
+
+# Namespace scope
 kubectl get all -A
+kubectl get ingress -A
 #endregion Connect Kubectl
 
 
