@@ -45,7 +45,7 @@
     ```powershell
     # Set URL
     $nexusHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"
-    $nexusBaseUrl = "https://$nexusHost"
+    $nexusBaseUrl = "http://$nexusHost"
 
     # Sign in as admin, using auto-generated admin password from prereqs section
     start $nexusBaseUrl
@@ -68,7 +68,8 @@
 1. Register Nuget feed as a PowerShell repository:
     ```powershell
     # Vars
-    # Change admin password
+    # Use credential for if anonymous access not used
+    # Update admin password
     $cred = [PSCredential]::new("admin", (ConvertTo-SecureString "<PASSWORD>" -AsPlainText -Force))
     $nexusRepoName = "nuget-hosted"
     $nugetRepoUrl = "$nexusBaseUrl/repository/$nexusRepoName/"
@@ -85,7 +86,18 @@
     Unregister-PSRepository -Name $nugetRepoName -ErrorAction "SilentlyContinue"
     
     # Register new repo
-    Register-PSRepository -Name $nugetRepoName -SourceLocation $nugetRepoUrl -PublishLocation $nugetRepoUrl -PackageManagementProvider "nuget" -InstallationPolicy "Trusted" -Credential $cred -Verbose
+    $registerParams = @{
+        Name                      = $nugetRepoName
+        SourceLocation            = $nugetRepoUrl
+        PublishLocation           = $nugetRepoUrl
+        PackageManagementProvider = "nuget"
+        InstallationPolicy        = "Trusted"
+        Verbose                   = $true
+    }
+    Register-PSRepository @registerParams
+    
+    # Register with credential
+    Register-PSRepository @registerParams -Credential $cred
     ```
     
 ## Publish to NuGet Repo
@@ -101,8 +113,17 @@
 1. Publish PowerShell Modules to NuGet Repo:
     ```powershell
     # Publish single module
-    Publish-Module -Name "PSGitLab" -Repository $nugetRepoName -NuGetApiKey $nuGetApiKey -Verbose
-    Publish-Module -Name "PSGitLab" -Repository $nugetRepoName -NuGetApiKey $nuGetApiKey -Credential $cred -Verbose
+    $publishParams = @{
+        Name        = "PSGitLab"
+        Repository  = $nugetRepoName
+        NuGetApiKey = $nuGetApiKey
+        Credential  = $cred
+        Verbose     = $true
+    }
+    Publish-Module @publishParams
+    
+    # Publish with credential
+    Publish-Module @publishParams -Credential $cred
     
     # Publish multiple modules
     "Az.Advisor", "Az.Aks" | ForEach-Object { Publish-Module -Name $_ -Repository $nugetRepoName -NuGetApiKey $nuGetApiKey -Verbose }
