@@ -46,19 +46,26 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
 
     # helm upgrade [RELEASE] [CHART] [flags]
     # helm upgrade something ./path/to/my/chart -f my-values.yaml --install --atomic
-    helm upgrade `
-        nginx-ingress stable/nginx-ingress `
-        --install --atomic `
-        --namespace ingress-tls `
-        --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux `
-        --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux `
-        --set controller.extraArgs.v=3
+    # helm upgrade `
+    #     nginx-ingress stable/nginx-ingress `
+    #     --install --atomic `
+    #     --namespace ingress-tls `
+    #     --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux `
+    #     --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux `
+    #     --set controller.extraArgs.v=3
 
     # [OPTIONAL] args
     # --set controller.config.hsts='"false"'
     # --set controller.extraArgs.v=3 `
     # --set controller.replicaCount=2 `
     # --debug --dry-run
+
+    # helm upgrade [RELEASE] [CHART] [flags]
+    helm upgrade nginx-ingress stable/nginx-ingress `
+        --namespace ingress-tls `
+        --install --atomic `
+        -f ./nginx/nginx_values.yaml
+        # --debug --dry-run
 }
 
 # Check nginx-ingress resources
