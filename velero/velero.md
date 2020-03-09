@@ -269,23 +269,26 @@ start $newUrlPv
 
 ```powershell
 # Monitor deployment progress
-kubectl get all,pvc,pv -n nexus-custom
-kubectl describe pod -n nexus-custom
-kubectl get events --sort-by=.metadata.creationTimestamp --namespace nexus-custom
-kubectl get events --namespace nexus-custom --watch
-kubectl get sts -n nexus-custom --watch
-kubectl logs statefulset.apps/nexus -n nexus-custom -f --all-containers --since 20m
+# use splatting: https://stackoverflow.com/questions/52854092/how-to-use-powershell-splatting-for-azure-cli
+$kubeParams = "-n", "ingress-tls", "-l", "app=nexus"
+kubectl @kubeParams get all,pvc,pv
+kubectl @kubeParams describe pod
+kubectl @kubeParams describe sts
+kubectl @kubeParams get events --sort-by=.metadata.creationTimestamp
+kubectl @kubeParams get events --watch
+kubectl @kubeParams get sts --watch
+kubectl @kubeParams logs -f --all-containers --since 20m
 
-# Check resources and wait for EXTERNAL-IP
-kubectl get all,pvc,pv -n nexus-custom
-kubectl get svc -n nexus-custom -w
+# Wait for EXTERNAL-IP
+kubectl get svc nginx-ingress-controller -n ingress-tls -w
 
 # Open browser
-$url = kubectl get svc -n nexus-custom --ignore-not-found -o jsonpath="http://{.items[0].status.loadBalancer.ingress[0].ip}:{.items[0].spec.ports[0].port}/#browse/browse:nuget-hosted"
-Write-Output "Browse to URL: $url"
+$nexusHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"
+$nexusBrowseUrl = "http://$nexusHost/#browse/browse:nuget-hosted"
+start $nexusBrowseUrl
 
 # Create a backup
-velero backup create nexus-pv-backup --include-namespaces nexus-custom
+velero backup create nexus-pv-backup --include-namespaces ingress-tls -l app=nexus
 
 # Check backup
 velero backup get
@@ -295,17 +298,18 @@ velero backup logs nexus-pv-backup
 velero backup logs nexus-pv-backup | sls "error"
 
 # Simulate a disaster
-kubectl get ns
-kubectl get all,pvc,pv -n nexus-custom
-kubectl delete namespace nexus-custom
-# Wait for the namespace to be deleted
-kubectl get ns
-kubectl get all,pvc,pv -n nexus-custom
+$kubeParams = "-n", "ingress-tls", "-l", "app=nexus"
+kubectl @kubeParams get all,pvc,pv
+kubectl @kubeParams delete all,pvc
+# Wait for nexus resources to be deleted
+kubectl @kubeParams get all,pvc,pv
+kubectl get pvc,pv -A
 # pv shows as failed
-kubectl describe pv -n nexus-custom
+kubectl @kubeParams describe pv
+kubectl @kubeParams describe pvc
 # pv may be deleted, but can delete ourselves
-kubectl delete pv -n nexus-custom
-kubectl delete persistentvolume/pvc-TODO -n nexus-custom
+kubectl @kubeParams delete pv
+kubectl @kubeParams delete persistentvolume/pvc-TODO
 
 # Restore your lost resources
 velero restore create --from-backup nexus-pv-backup
@@ -314,20 +318,22 @@ velero restore create --from-backup nexus-pv-backup
 velero restore get
 velero restore describe
 velero restore logs nexus-pv-backup-TODO
+velero restore logs nexus-pv-nexus-pv-backup-20200309075403
 
 # Monitor restore progress
-kubectl get ns
-kubectl get all,pvc,pv -n nexus-custom
-kubectl describe pod -n nexus-custom
-kubectl get events --sort-by=.metadata.creationTimestamp --namespace nexus-custom
-kubectl get sts -n nexus-custom --watch
-# kubectl logs sts -n nexus-custom -f --all-containers --since 20m
+kubectl @kubeParams get all,pvc,pv
+kubectl @kubeParams describe pod
+kubectl get events --sort-by=.metadata.creationTimestamp -n ingress-tls
+kubectl @kubeParams get sts --watch
+# kubectl logs sts -f --all-containers --since 20m
 
 # Check resources and wait for EXTERNAL-IP
-kubectl get svc -n nexus-custom -w
+kubectl get svc -n ingress-tls -w
+
 # Open browser
-$url = kubectl get svc -n nexus-custom --ignore-not-found -o jsonpath="http://{.items[0].status.loadBalancer.ingress[0].ip}:{.items[0].spec.ports[0].port}/#browse/browse:nuget-hosted"
-Write-Output "Browse to URL: $url"
+$nexusHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"
+$nexusBrowseUrl = "http://$nexusHost/#browse/browse:nuget-hosted"
+start $nexusBrowseUrl
 ```
 
 ## Prometheus Metrics
