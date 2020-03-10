@@ -108,6 +108,8 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
     # # OPTION 2 - YAML file
     # https://github.com/vmware-tanzu/helm-charts/tree/master/charts/velero#option-2-yaml-file
     # still use '--set` for dynamic values
+    # TODO add splatting for dynamic usage of debug flags
+    # https://stackoverflow.com/questions/52854092/how-to-use-powershell-splatting-for-azure-cli
     helm install vmware-tanzu/velero `
         --name velero `
         --version 2.9.1 `

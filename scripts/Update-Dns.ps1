@@ -78,7 +78,7 @@ if ($HasSubDomainName.IsPresent) {
 # Init
 $message = "Installing GoDaddy PowerShell module"
 Write-Verbose "`nSTARTED: $message..."
-Install-Module -Name "Trackyon.GoDaddy"-Scope "CurrentUser" -Force
+Install-Module -Name "Trackyon.GoDaddy"-Scope "CurrentUser" -Force | Out-Null
 Write-Verbose "FINISHED: $message."
 
 # API Creds

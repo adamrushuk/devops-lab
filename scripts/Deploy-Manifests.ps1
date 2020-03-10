@@ -13,7 +13,7 @@ $ErrorActionPreference = "Stop"
 <#
     # local testing - manually add env vars
     $env:EMAIL_ADDRESS = "admin@domain.com"
-    $env:DNS_DOMAIN_NAME = "aks.thehypepipe.co.uk"
+    $env:DNS_DOMAIN_NAME = "nexus.thehypepipe.co.uk"
     $env:CERT_API_ENVIRONMENT = "staging"
 #>
 ./scripts/Replace-Tokens.ps1 -targetFilePattern './manifests/*.yml'
@@ -36,22 +36,56 @@ Write-Output "`nSTARTED: $message..."
 # [OPTIONAL] apply whole folder
 # kubectl apply -n ingress-tls -f ./manifests
 
+Write-Output "`nENABLE_TLS_INGRESS: [$env:ENABLE_TLS_INGRESS]"
+
 # ClusterIssuers
-Write-Output "`nAPPLYING: ClusterIssuers..."
-kubectl apply -f ./manifests/cluster-issuer-staging.yml
-kubectl apply -f ./manifests/cluster-issuer-prod.yml
+if ($env:ENABLE_TLS_INGRESS -eq "true") {
+    Write-Output "`nAPPLYING: ClusterIssuers..."
+    kubectl apply -f ./manifests/cluster-issuer-staging.yml
+    kubectl apply -f ./manifests/cluster-issuer-prod.yml
+} else {
+    Write-Output "`nSKIPPING: ClusterIssuers..."
+}
 
 # Applications
 Write-Output "`nAPPLYING: Applications..."
-kubectl apply -n ingress-tls -f ./manifests/azure-vote.yml
+# kubectl apply -n ingress-tls -f ./manifests/azure-vote.yml
+kubectl apply -n ingress-tls -f ./manifests/nexus.yml
 
 # Ingress
-Write-Output "`nAPPLYING: Ingress..."
-kubectl apply -n ingress-tls -f ./manifests/ingress.yml
+# ConfigMap - NGINX Configuration options
+# https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
+# kubectl apply -n ingress-tls -f ./manifests/nginx-configmap.yml
+
+# default to basic http
+$ingressFilename = "ingress-http.yml"
+if ($env:ENABLE_TLS_INGRESS -eq "true") {
+    $ingressFilename = "ingress-tls.yml"
+}
+Write-Output "`nAPPLYING: Ingress [$ingressFilename]..."
+kubectl apply -n ingress-tls -f ./manifests/$ingressFilename
 
 <#
 # DEBUG
-kubectl delete -n ingress-tls -f ./manifests/ingress.yml
-kubectl delete -n ingress-tls -f ./manifests/azure-vote.yml
+curl -I http://nexus.thehypepipe.co.uk/
+curl -I https://nexus.thehypepipe.co.uk/
+
+kubectl get ing -A
+kubectl get ing -n ingress-tls
+kubectl describe ing -n ingress-tls
+kubectl get events --sort-by=.metadata.creationTimestamp -A
+kubectl get events -w -A
+
+kubectl apply -n ingress-tls -f ./manifests/ingress-http.yml
+kubectl apply -n ingress-tls -f ./manifests/ingress-tls.yml
+kubectl apply -n ingress-tls -f ./manifests/nginx-configmap.yml
+
+kubectl delete -n ingress-tls -f ./manifests/ingress-http.yml
+kubectl delete -n ingress-tls -f ./manifests/ingress-tls.yml
+kubectl delete ing -n ingress-tls --all
+
+# Cleanup
+helm list
+helm del --purge nginx-ingress
 #>
 Write-Output "FINISHED: $message."

@@ -34,10 +34,10 @@ $uri = "https://api.github.com/repos/$GithubUserName/$GithubRepo/dispatches"
 
 $body = @{
     # used for if condition of Github Action
-    event_type = $CustomEventAction
+    event_type     = $CustomEventAction
     client_payload = @{
-        my_setting1 = "foo"
-        my_setting2 = "bar"
+        source_trigger = "TriggerCustomAction.ps1"
+        source_ip      = "$(Invoke-WebRequest 'https://canihazip.com/s')"
     }
 } | ConvertTo-Json
 
@@ -51,5 +51,15 @@ $params = @{
     URI         = $uri
     Body        = $body
 }
+<#
+    # Invoke-RestMethod only returns JSON content, but you can specify ResponseHeadersVariable
+    $response = Invoke-RestMethod @params -Verbose -ResponseHeadersVariable "restResponseHeaders"
+    $response
+    $restResponseHeaders
+#>
 
-Invoke-RestMethod @params -Verbose
+# Invoke-WebRequest includes response metadata
+$response = Invoke-WebRequest @params -Verbose
+$response
+$response.Headers | Format-Table -AutoSize
+# $response | Format-List *

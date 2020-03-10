@@ -1,0 +1,12 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: ingress-controller-leader-nginx
+  namespace: ingress-tls
+data:
+  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#hsts
+  hsts-include-subdomains: "false"
+  hsts-max-age: "1"
+  hsts: "false"
+  redirect-to-https: "false"
+  ssl-redirect: "false"
