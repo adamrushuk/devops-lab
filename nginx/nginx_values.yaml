@@ -13,8 +13,10 @@ controller:
 
   # Will add custom configuration options to Nginx https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
   config:
+    # your browser will cache the HSTS redirect if it wasn't initially disabled, but you can clear the cache:
+    # https://stackoverflow.com/questions/16154672/how-long-does-chrome-remember-a-301-redirect
     hsts-include-subdomains: "false"
-    # hsts-max-age: "1"
+    hsts-max-age: "1"
     hsts: "false"
     redirect-to-https: "false"
     ssl-redirect: "false"

@@ -25,6 +25,10 @@ kubectl get nodes,ns,pv
 # Namespace scope
 kubectl get all -A
 kubectl get ingress -A
+kubectl get configmap -A
+kubectl get configmap -A | sls nginx
+kubectl get configmap -n ingress-tls nginx-ingress-controller -o yaml
+kubectl describe configmap -n ingress-tls nginx-ingress-controller
 #endregion Connect Kubectl
 
 
