@@ -35,7 +35,10 @@ spec:
       - name: nexus
         image: sonatype/nexus3:3.21.1
         ports:
+        # http-web
         - containerPort: 8081
+        # http-docker
+        - containerPort: 8123
         # These volume mounts are persistent. They are like inline claims,
         # but not exactly because the names need to match exactly one of
         # the stateful pod volumes.
@@ -63,9 +66,10 @@ metadata:
   labels:
     app: nexus
 spec:
-  # type: LoadBalancer
   ports:
-  - port: 8081
-    # targetPort: 8081
+  - name: http-web
+    port: 8081
+  - name: http-docker
+    port: 8123
   selector:
       app: nexus
