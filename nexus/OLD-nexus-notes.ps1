@@ -40,13 +40,9 @@ kubectl describe configmap -n ingress-tls nginx-ingress-controller
 start https://portal.azure.com/#blade/Microsoft_Azure_Monitoring/AzureMonitoringBrowseBlade/containerInsights/menuId/containerInsights
 
 # Prepare
-cd examples/aks-helm/nexus
-kubectl create namespace ingress-tls
 # permanently save the namespace for all subsequent kubectl commands in that context
 kubectl config set-context --current --namespace ingress-tls
-kubectl config -h
-kubectl get ns
-kubectl get all,pv,pvc
+kubectl config current-context
 
 # Custom Storage Class
 # Show default yaml
@@ -55,8 +51,6 @@ kubectl get sc default -o yaml --export
 # Create custom storage class (with "reclaimPolicy: Retain")
 https://docs.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes
 
-# Apply manifests
-kubectl apply --validate -f ./manifests/$manifestFolderName
 
 # Check
 kubectl get sc,pvc,pv,all
