@@ -33,7 +33,7 @@ spec:
       #     mountPath: /nexus-data
       containers:
       - name: nexus
-        image: sonatype/nexus3
+        image: sonatype/nexus3:3.21.1
         ports:
         - containerPort: 8081
         # These volume mounts are persistent. They are like inline claims,
