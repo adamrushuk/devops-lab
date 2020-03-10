@@ -48,19 +48,19 @@
     $nexusBaseUrl = "http://$nexusHost"
 
     # Sign in as admin, using auto-generated admin password from prereqs section
-    start $nexusBaseUrl
+    Start-Process $nexusBaseUrl
     ```
 1. Update admin password.
 1. Enable anonymous access (to avoid using credential during repo testing)
 1. Configure NuGet repo:
     ```powershell
     # Get NuGet API token
-    start "$nexusBaseUrl/#user/nugetapitoken"
+    Start-Process "$nexusBaseUrl/#user/nugetapitoken"
     $nuGetApiKey = "<Enter NuGet API Key>"
 
     # Set NuGet API-Key Realm as "Active"
-    start https://sammart.in/post/creating-your-own-powershell-repository-with-nexus-3/
-    start "$nexusBaseUrl/#admin/security/realms"
+    Start-Process https://sammart.in/post/creating-your-own-powershell-repository-with-nexus-3/
+    Start-Process "$nexusBaseUrl/#admin/security/realms"
     ```
 
 ## Register NuGet Repo
@@ -130,21 +130,19 @@
     
     # [OPTIONAL] Use credential for if anonymous access not enabled
     Publish-Module @publishParams -Credential $cred
-    
-    # Publish multiple modules
-    "Az.Advisor", "Az.Aks" | ForEach-Object { Publish-Module -Name $_ -Repository $nugetRepoName -NuGetApiKey $nuGetApiKey -Verbose }
     ```
 
 ## List Modules in NuGet Repo
 
 ```powershell
 # Find modules
-Find-Module -Repository $nugetRepoName -Verbose
-Find-Module -Name "PSvCloud" -Verbose
-Find-Module -Name "PSvCloud" -Repository $nugetRepoName -Verbose
+Find-Module -Repository $nugetRepoName
+Find-Module -Name "PSvCloud" -Repository $nugetRepoName
+
+# [OPTIONAL] Use credential for if anonymous access not enabled
 Find-Module -Name "PSvCloud" -Repository $nugetRepoName -Credential $cred -Verbose
 Find-Module -Repository $nugetRepoName -Credential $cred -Verbose
 
 # Show modules in Nexus repo
-start "$nexusBaseUrl/#browse/browse:$nexusRepoName"
+Start-Process "$nexusBaseUrl/#browse/browse:$nexusRepoName"
 ```
