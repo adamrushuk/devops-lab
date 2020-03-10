@@ -16,16 +16,21 @@ spec:
       labels:
         app: nexus
     spec:
+      # Use securityContext instead of volume prep using init container
+      securityContext:
+        runAsUser: 200
+        runAsGroup: 2000
+        fsGroup: 2000
       # Use init containers to prepare environment,
       # like setting volume owner/permissions
-      initContainers:
-      - name: fmp-volume-permission
-        image: busybox
-        imagePullPolicy: IfNotPresent
-        command: ['chown','-R', '200', '/nexus-data']
-        volumeMounts:
-        - name: nexus-data
-          mountPath: /nexus-data
+      # initContainers:
+      # - name: fmp-volume-permission
+      #   image: busybox
+      #   imagePullPolicy: IfNotPresent
+      #   command: ['chown','-R', '200', '/nexus-data']
+      #   volumeMounts:
+      #   - name: nexus-data
+      #     mountPath: /nexus-data
       containers:
       - name: nexus
         image: sonatype/nexus3
