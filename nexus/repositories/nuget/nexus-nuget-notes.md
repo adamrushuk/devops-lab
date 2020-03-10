@@ -68,22 +68,29 @@
 1. Register Nuget feed as a PowerShell repository:
     ```powershell
     # Vars
-    # Use credential for if anonymous access not used
-    # Update admin password
-    $cred = [PSCredential]::new("admin", (ConvertTo-SecureString "<PASSWORD>" -AsPlainText -Force))
     $nexusRepoName = "nuget-hosted"
     $nugetRepoUrl = "$nexusBaseUrl/repository/$nexusRepoName/"
     $nugetRepoName = "NexusNugetRepo"
     
+    # [OPTIONAL] Use credential for if anonymous access not enabled
+    # Update admin password
+    $cred = [PSCredential]::new("admin", (ConvertTo-SecureString "<PASSWORD>" -AsPlainText -Force))
+    
+    
     # Test repo connection
     Invoke-WebRequest $nugetRepoUrl
+    
+    # [OPTIONAL] Use credential for if anonymous access not enabled
     Invoke-WebRequest $nugetRepoUrl -Credential $cred
+    
     
     # List current repos
     Get-PSRepository
     
+    
     # [OPTIONAL] Remove previous repo
     Unregister-PSRepository -Name $nugetRepoName -ErrorAction "SilentlyContinue"
+    
     
     # Register new repo
     $registerParams = @{
@@ -96,7 +103,7 @@
     }
     Register-PSRepository @registerParams
     
-    # Register with credential
+    # [OPTIONAL] Use credential for if anonymous access not enabled
     Register-PSRepository @registerParams -Credential $cred
     ```
     
@@ -114,15 +121,14 @@
     ```powershell
     # Publish single module
     $publishParams = @{
-        Name        = "PSGitLab"
+        Name        = "./nexus/repositories/nuget/PSvCloud"
         Repository  = $nugetRepoName
         NuGetApiKey = $nuGetApiKey
-        Credential  = $cred
         Verbose     = $true
     }
     Publish-Module @publishParams
     
-    # Publish with credential
+    # [OPTIONAL] Use credential for if anonymous access not enabled
     Publish-Module @publishParams -Credential $cred
     
     # Publish multiple modules
@@ -134,9 +140,9 @@
 ```powershell
 # Find modules
 Find-Module -Repository $nugetRepoName -Verbose
-Find-Module -Name "PSGitLab" -Verbose
-Find-Module -Name "PSGitLab" -Repository $nugetRepoName -Verbose
-Find-Module -Name "PSGitLab" -Repository $nugetRepoName -Credential $cred -Verbose
+Find-Module -Name "PSvCloud" -Verbose
+Find-Module -Name "PSvCloud" -Repository $nugetRepoName -Verbose
+Find-Module -Name "PSvCloud" -Repository $nugetRepoName -Credential $cred -Verbose
 Find-Module -Repository $nugetRepoName -Credential $cred -Verbose
 
 # Show modules in Nexus repo
