@@ -37,7 +37,7 @@ kubectl describe configmap -n ingress-tls nginx-ingress-controller
 # https://help.sonatype.com/repomanager3/formats/nuget-repositories
 
 # AKS Container Insights is awesome - view live data
-start https://portal.azure.com/#blade/Microsoft_Azure_Monitoring/AzureMonitoringBrowseBlade/containerInsights/menuId/containerInsights
+Start-Process https://portal.azure.com/#blade/Microsoft_Azure_Monitoring/AzureMonitoringBrowseBlade/containerInsights/menuId/containerInsights
 
 # Prepare
 # permanently save the namespace for all subsequent kubectl commands in that context
@@ -73,7 +73,7 @@ kubectl logs -f $podName
 $nexusUri = kubectl get svc nexus --ignore-not-found -o jsonpath="{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}"
 $appurl = "http://$nexusUri"
 Write-Output "Browse to app with: $appurl"
-start $appurl
+Start-Process $appurl
 
 # Connect to pod and output generated admin password
 kubectl exec -it $podName /bin/bash
@@ -91,12 +91,12 @@ ls -lah / | grep nexus
 ls -lah /nexus-data
 
 # Get NuGet API token from Nexus
-start "http://$nexusUri/#user/nugetapitoken"
+Start-Process "http://$nexusUri/#user/nugetapitoken"
 $nuGetApiKey = "<NuGetApiKey>"
 
 # Set NuGet API-Key Realm as "Active": http://<NexusHost>:8081/#admin/security/realms
-start https://sammart.in/post/creating-your-own-powershell-repository-with-nexus-3/
-start "http://$nexusUri/#admin/security/realms"
+Start-Process https://sammart.in/post/creating-your-own-powershell-repository-with-nexus-3/
+Start-Process "http://$nexusUri/#admin/security/realms"
 
 # Register Nuget feed as PowerShell repository
 $repoUrl = "http://$nexusUri/repository/nuget-hosted/"
@@ -113,7 +113,7 @@ Install-Module packagemanagement,powershellget -Verbose
 Find-Module -Repository $repoName
 
 # Show modules in Nexus repo
-start "http://$nexusUri/#browse/browse:nuget-hosted"
+Start-Process "http://$nexusUri/#browse/browse:nuget-hosted"
 #endregion Deploy Nexus
 
 
