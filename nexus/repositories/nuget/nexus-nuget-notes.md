@@ -1,7 +1,5 @@
 # Nexus NuGet Repository Notes
 
-**WARNING: This is a work in progress, and currently not complete...**
-
 ## Contents
 
 - [Nexus NuGet Repository Notes](#nexus-nuget-repository-notes)
