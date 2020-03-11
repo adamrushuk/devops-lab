@@ -8,7 +8,7 @@
   - [Configure Docker Repo](#configure-docker-repo)
   - [Configure Docker Client](#configure-docker-client)
   - [Login to Docker Repo](#login-to-docker-repo)
-  - [Push Image to Docker Repo](#push-image-to-docker-repo)
+  - [Push Images to Docker Repo](#push-images-to-docker-repo)
   - [Search Docker Repo](#search-docker-repo)
   - [Pull Image from Docker Repo](#pull-image-from-docker-repo)
 
@@ -76,34 +76,38 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 echo $adminPassword | docker login --username admin --password-stdin http://docker-nexus.thehypepipe.co.uk
 ```
 
-## Push Image to Docker Repo
+## Push Images to Docker Repo
 
-1. First, pull an example image for testing:
+1. First, pull example images for testing:
 
     ```powershell
-    # busybox is very lightweight; great for testing
+    # these are lightweight images; great for testing
     docker pull busybox
+    docker pull nginxdemos/hello
     ```
 
-1. Tag the busybox image with Nexus repo name:
+1. Tag the images with Nexus repo name:
 
     ```powershell
     # docker image tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
     docker image tag busybox docker-nexus.thehypepipe.co.uk/busybox
+    docker image tag nginxdemos/hello docker-nexus.thehypepipe.co.uk/hello
     ```
 
-1. List the tagged image:
+1. List the tagged images:
 
     ```powershell
     # docker image ls [OPTIONS] [REPOSITORY[:TAG]]
     docker image ls docker-nexus.thehypepipe.co.uk/busybox
+    docker image ls docker-nexus.thehypepipe.co.uk/hello
     ```
 
-1. Push the image:
+1. Push the images:
 
     ```powershell
     # docker image push [OPTIONS] NAME[:TAG]
     docker push docker-nexus.thehypepipe.co.uk/busybox
+    docker push docker-nexus.thehypepipe.co.uk/hello
     ```
 
 ## Search Docker Repo
@@ -116,37 +120,43 @@ Invoke-RestMethod http://docker-nexus.thehypepipe.co.uk/v2/_catalog
 
 # List tags
 Invoke-RestMethod http://docker-nexus.thehypepipe.co.uk/v2/busybox/tags/list
+Invoke-RestMethod http://docker-nexus.thehypepipe.co.uk/v2/hello/tags/list
 ```
 
 ## Pull Image from Docker Repo
 
-1. First, delete the local copy of the busybox image:
+1. First, delete the local image copies:
 
     ```powershell
-    # image currently exists
+    # images currently exist
     docker image ls docker-nexus.thehypepipe.co.uk/busybox
+    docker image ls docker-nexus.thehypepipe.co.uk/hello
 
     # docker image rm [OPTIONS] IMAGE [IMAGE...]
     docker image rm docker-nexus.thehypepipe.co.uk/busybox
+    docker image rm docker-nexus.thehypepipe.co.uk/hello
     ```
 
-1. Show image has been deleted:
+1. Show images have been deleted:
 
     ```powershell
     # docker image ls [OPTIONS] [REPOSITORY[:TAG]]
     docker image ls docker-nexus.thehypepipe.co.uk/busybox
+    docker image ls docker-nexus.thehypepipe.co.uk/hello
     ```
 
-1. Pull image from Nexus Docker repo:
+1. Pull images from Nexus Docker repo:
 
     ```powershell
     # docker image pull [OPTIONS] NAME[:TAG|@DIGEST]
     docker image pull docker-nexus.thehypepipe.co.uk/busybox
+    docker image pull docker-nexus.thehypepipe.co.uk/hello
     ```
 
-1. Show image is locally available again:
+1. Show images are locally available again:
 
     ```powershell
     # docker image ls [OPTIONS] [REPOSITORY[:TAG]]
     docker image ls docker-nexus.thehypepipe.co.uk/busybox
+    docker image ls docker-nexus.thehypepipe.co.uk/hello
     ```
