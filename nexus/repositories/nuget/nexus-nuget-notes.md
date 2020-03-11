@@ -27,7 +27,7 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
     $NuGetApiKey = "<Enter NuGet API Key>"
     ```
 
-1. Set NuGet API-Key Realm as `Active`:
+1. Move `NuGet API-Key Realm` into `Active`:
 
     ```powershell
     # Open Nexus console make Realm changes
