@@ -67,8 +67,9 @@ Follow the steps below to update AKS credentials, get the Nexus admin password, 
     $podName = kubectl get pod -n ingress-tls -l app=nexus -o jsonpath="{.items[0].metadata.name}"
 
     # Get admin password from pod
-    $adminPassword = kubectl exec -n ingress-tls -it $podName cat /nexus-data/admin.password
+    $adminPassword = kubectl exec -n ingress-tls -it $podName cat /nexus-data/admin.password | Tee-Object
     echo $adminPassword
+    $adminPassword | Set-Clipboard
 
     # [OPTIONAL] Enter pod shell, then output admin password
     kubectl exec -n ingress-tls -it $podName /bin/bash
