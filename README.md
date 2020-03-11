@@ -4,6 +4,16 @@
 
 Provisions an AKS cluster, deploys Nexus Repository OSS, configures Velero backups.
 
+## Contents
+
+- [aks-nexus-velero](#aks-nexus-velero)
+  - [Contents](#contents)
+  - [Getting Started](#getting-started)
+    - [GoDaddy DNS API Secrets](#godaddy-dns-api-secrets)
+    - [Azure Secrets](#azure-secrets)
+    - [Velero Secret](#velero-secret)
+  - [Login to Nexus Console](#login-to-nexus-console)
+
 ## Getting Started
 
 Before you start the `build` GitHub Action, you need to create the following Secrets within
@@ -31,7 +41,9 @@ Secrets:
 
 - `CREDENTIALS_VELERO`
 
-## Connect
+## Login to Nexus Console
+
+Follow the steps below to update AKS credentials, get the Nexus admin password, then login and update the password:
 
 1. Import the AKS Cluster credentials:
 
@@ -55,9 +67,25 @@ Secrets:
     $podName = kubectl get pod -n ingress-tls -l app=nexus -o jsonpath="{.items[0].metadata.name}"
 
     # Get admin password from pod
-    kubectl exec -n ingress-tls -it $podName cat /nexus-data/admin.password
+    $adminPassword = kubectl exec -n ingress-tls -it $podName cat /nexus-data/admin.password
+    echo $adminPassword
 
     # [OPTIONAL] Enter pod shell, then output admin password
     kubectl exec -n ingress-tls -it $podName /bin/bash
     echo -e "\nadmin password: \n$(cat /nexus-data/admin.password)\n"
     ```
+
+1. Open the Nexus web console
+
+    ```powershell
+    # Set URL
+    $nexusHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"
+    $nexusBaseUrl = "http://$nexusHost"
+
+    # Sign in as admin, using auto-generated admin password from prereqs section
+    Start-Process $nexusBaseUrl
+    ```
+
+1. Click `Sign in` in top right corner, then login using admin password.
+1. Update admin password.
+1. Enable anonymous access (to avoid using credential during repo testing).
