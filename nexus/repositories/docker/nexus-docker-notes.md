@@ -52,17 +52,16 @@ update ~/.docker/daemon.json and restart docker
 login
 <!-- docker login -u admin -p admin123 nexus-docker.minikube -->
 docker login -u admin -p <PASSWORD> docker-nexus.thehypepipe.co.uk
+docker login docker-nexus.thehypepipe.co.uk
 
 cat ~/.docker/config.json
 
-docker ps
+
 
 docker pull busybox
-docker image ls
 docker image tag busybox docker-nexus.thehypepipe.co.uk/busybox
+docker image ls docker-nexus.thehypepipe.co.uk/busybox
 docker push docker-nexus.thehypepipe.co.uk/busybox
-
-docker ps
 
 # search
 
