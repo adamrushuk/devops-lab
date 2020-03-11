@@ -1,7 +1,7 @@
 # Publish example PowerShell module to NuGet repository
 [CmdletBinding()]
 param (
-    [Parameter(Mandatory = $true, ParameterSetName = "ByName")]
+    [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     # Get NuGet API key from: <NEXUS_HOST>/#user/nugetapitoken
     [String] $NugetApiKey,
