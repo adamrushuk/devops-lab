@@ -72,10 +72,7 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 ## Login to Docker Repo
 
 ```powershell
-# Login without user/pass
-docker login http://docker-nexus.thehypepipe.co.uk
-
-# or, input password via STDIN
+# Input password via STDIN
 echo $adminPassword | docker login --username admin --password-stdin http://docker-nexus.thehypepipe.co.uk
 ```
 
