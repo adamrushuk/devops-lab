@@ -216,17 +216,30 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
     kubectl create namespace hello
     ```
 
-1. Add secret using existing Docker config `~/.docker/config.json`:
+1. Add secret:
 
     ```powershell
     # Add secret
-    $dockerConfigPath = (Resolve-Path ~/.docker/config.json).Path
-    kubectl create secret -n hello generic nexus-docker-credentials `
-       --from-file=.dockerconfigjson=$dockerConfigPath `
-       --type=kubernetes.io/dockerconfigjson -o yaml --dry-run
+    # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-by-providing-credentials-on-the-command-line
+    kubectl create secret docker-registry regcred `
+    --namespace hello `
+    --docker-server=$nexusDockerHost `
+    --docker-username=admin `
+    --docker-password=$adminPassword
 
-    # List secret
-    kubectl get secret -n hello
+    # [OPTIONAL] Add secret using existing Docker config `~/.docker/config.json`
+    # WARNING: credential helpers (credHelpers or credsStore) are not supported
+    # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials
+    kubectl create secret generic nexus-docker-credentials `
+        --namespace hello `
+        --from-file=.dockerconfigjson="~/.docker/config.json" `
+        --type=kubernetes.io/dockerconfigjson
+
+    # Show secret
+    kubectl get secret regcred --namespace hello --output yaml
+
+    # Inspect secret data
+    kubectl get secret regcred --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
     ```
 
 1. Apply kubernetes manifest:
@@ -234,4 +247,18 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
     ```powershell
     # Apply
     kubectl apply -f ./nexus/repositories/docker/docker-manifest.yml
+    ```
+
+1. Test deployment:
+
+    ```powershell
+    # Check resources
+    kubectl get all --namespace hello
+    kubectl describe deploy --namespace hello
+
+    # Show all pods not running
+    kubectl get pods --field-selector=status.phase!=Running --all-namespaces
+
+    # Show events
+    kubectl get events --sort-by=.metadata.creationTimestamp --namespace hello
     ```

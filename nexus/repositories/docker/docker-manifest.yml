@@ -20,7 +20,7 @@ spec:
         imagePullPolicy: Always
         name: hello
       imagePullSecrets:
-      - name: nexus-docker-credentials
+      - name: regcred
 ---
   apiVersion: v1
   kind: Service
