@@ -11,6 +11,7 @@
   - [Push Images to Docker Repo](#push-images-to-docker-repo)
   - [Search Docker Repo](#search-docker-repo)
   - [Pull Image from Docker Repo](#pull-image-from-docker-repo)
+  - [Using an Image from Nexus Docker Repo](#using-an-image-from-nexus-docker-repo)
 
 ## Prereqs
 
@@ -169,4 +170,33 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
     # docker image ls [OPTIONS] [REPOSITORY[:TAG]]
     docker image ls $nexusDockerHost/busybox
     docker image ls $nexusDockerHost/hello
+    ```
+
+## Using an Image from Nexus Docker Repo
+
+1. Add a new namespace:
+
+    ```powershell
+    # Add namespace
+    kubectl create namespace hello
+    ```
+
+1. Add secret using existing Docker config `~/.docker/config.json`:
+
+    ```powershell
+    # Add secret
+    $dockerConfigPath = (Resolve-Path ~/.docker/config.json).Path
+    kubectl create secret -n hello generic nexus-docker-credentials `
+       --from-file=.dockerconfigjson=$dockerConfigPath `
+       --type=kubernetes.io/dockerconfigjson -o yaml --dry-run
+
+    # List secret
+    kubectl get secret -n hello
+    ```
+
+1. Apply kubernetes manifest:
+
+    ```powershell
+    # Apply
+    kubectl apply -f ./nexus/repositories/docker/docker-manifest.yml
     ```
