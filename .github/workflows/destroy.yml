@@ -29,7 +29,7 @@ env:
   CERT_API_ENVIRONMENT: prod
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
   EMAIL_ADDRESS: adamrushuk+aksnexusvelero@gmail.com
-  ENABLE_TLS_INGRESS: false
+  ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true
   LOCATION: uksouth
