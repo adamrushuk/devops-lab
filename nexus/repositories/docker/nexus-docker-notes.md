@@ -57,7 +57,29 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 
 ## Configure Docker Client
 
-1. Open `~/.docker/daemon.json`.
+1. Open `~/.docker/daemon.json` or if using **docker-machine**, open `~/.docker/machine/machines/default/config.json`
+
+    ```powershell
+    # Standard config
+    code "$HOME/.docker/daemon.json"
+
+    # docker-machine client
+    code "$HOME/.docker/machine/machines/default/config.json"
+
+
+    # [OPTIONAL] docker-machine VM steps below
+    docker-machine start
+
+    # Login to docker-machine
+    docker-machine ssh
+
+    # Add config
+    vi /etc/docker/daemon.json
+
+    # Restart daemon
+    sudo /etc/init.d/docker restart
+    ```
+
 1. Enter the docker ingress FQDN to `insecure-registries`, eg:
 
     ```json
@@ -66,7 +88,20 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
     }
     ```
 
-1. Restart docker daemon.
+1. Restart docker daemon:
+
+    ```powershell
+    # Standard
+    sudo systemctl restart docker
+
+
+    # Load env vars for docker cli
+    # may need to wait a minute after starting docker-machine vm
+    & docker-machine env --shell powershell default | Invoke-Expression
+    $env:DOCKER_TLS_VERIFY = 0
+    gci env:DOCKER*
+    ```
+
 1. Confirm the Nexus Docker repo is listed with `Secure=False`:
 
     ```powershell
