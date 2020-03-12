@@ -18,6 +18,14 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 
 ## Configure Docker Repo
 
+1. Set variables:
+
+    ```powershell
+    # Set Nexus Docker vars
+    $nexusDockerHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[1].host}"
+    $nexusDockerBaseUrl = "http://$nexusDockerHost"
+    ```
+
 1. Move `Docker Bearer Token Realm` into `Active`:
 
     ```powershell
@@ -43,17 +51,17 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 
     ```powershell
     # "HTTP ERROR 400" error is expected
-    Invoke-RestMethod docker-nexus.thehypepipe.co.uk
+    Invoke-RestMethod $nexusDockerBaseUrl
     ```
 
 ## Configure Docker Client
 
 1. Open `~/.docker/daemon.json`.
-1. Enter the docker ingress FQDN to `insecure-registries`:
+1. Enter the docker ingress FQDN to `insecure-registries`, eg:
 
     ```json
     {
-      "insecure-registries": [ "docker-nexus.thehypepipe.co.uk" ]
+      "insecure-registries": [ "docker-nexus.domain.com" ]
     }
     ```
 
@@ -64,16 +72,18 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
     $dockerSysInfoJson = docker system info --format '{{json .}}' | ConvertFrom-Json
     $dockerSysInfoJson.RegistryConfig.IndexConfigs
 
-    docker-nexus.thehypepipe.co.uk
+    http://docker-nexus.domain.com
     ------------------------------
-    @{Name=docker-nexus.thehypepipe.co.uk; Mirrors=System.Object[]; Secure=False; Official=False}
+    @{Name=docker-nexus.domain.com; Mirrors=System.Object[]; Secure=False; Official=False}
     ```
 
 ## Login to Docker Repo
 
+Login to the Nexus Docker repo to add an entry to `~/.docker/config.json`:
+
 ```powershell
 # Input password via STDIN
-echo $adminPassword | docker login --username admin --password-stdin http://docker-nexus.thehypepipe.co.uk
+echo $adminPassword | docker login --username admin --password-stdin $nexusDockerBaseUrl
 ```
 
 ## Push Images to Docker Repo
@@ -90,24 +100,24 @@ echo $adminPassword | docker login --username admin --password-stdin http://dock
 
     ```powershell
     # docker image tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
-    docker image tag busybox docker-nexus.thehypepipe.co.uk/busybox
-    docker image tag nginxdemos/hello docker-nexus.thehypepipe.co.uk/hello
+    docker image tag busybox $nexusDockerHost/busybox
+    docker image tag nginxdemos/hello $nexusDockerHost/hello
     ```
 
 1. List the tagged images:
 
     ```powershell
     # docker image ls [OPTIONS] [REPOSITORY[:TAG]]
-    docker image ls docker-nexus.thehypepipe.co.uk/busybox
-    docker image ls docker-nexus.thehypepipe.co.uk/hello
+    docker image ls $nexusDockerHost/busybox
+    docker image ls $nexusDockerHost/hello
     ```
 
 1. Push the images:
 
     ```powershell
     # docker image push [OPTIONS] NAME[:TAG]
-    docker push docker-nexus.thehypepipe.co.uk/busybox
-    docker push docker-nexus.thehypepipe.co.uk/hello
+    docker push $nexusDockerHost/busybox
+    docker push $nexusDockerHost/hello
     ```
 
 ## Search Docker Repo
@@ -116,11 +126,11 @@ Search via the API:
 
 ```powershell
 # List repositories
-Invoke-RestMethod http://docker-nexus.thehypepipe.co.uk/v2/_catalog
+Invoke-RestMethod $nexusDockerBaseUrl/v2/_catalog
 
 # List tags
-Invoke-RestMethod http://docker-nexus.thehypepipe.co.uk/v2/busybox/tags/list
-Invoke-RestMethod http://docker-nexus.thehypepipe.co.uk/v2/hello/tags/list
+Invoke-RestMethod $nexusDockerBaseUrl/v2/busybox/tags/list
+Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
 ```
 
 ## Pull Image from Docker Repo
@@ -129,34 +139,34 @@ Invoke-RestMethod http://docker-nexus.thehypepipe.co.uk/v2/hello/tags/list
 
     ```powershell
     # images currently exist
-    docker image ls docker-nexus.thehypepipe.co.uk/busybox
-    docker image ls docker-nexus.thehypepipe.co.uk/hello
+    docker image ls $nexusDockerHost/busybox
+    docker image ls $nexusDockerHost/hello
 
     # docker image rm [OPTIONS] IMAGE [IMAGE...]
-    docker image rm docker-nexus.thehypepipe.co.uk/busybox
-    docker image rm docker-nexus.thehypepipe.co.uk/hello
+    docker image rm $nexusDockerHost/busybox
+    docker image rm $nexusDockerHost/hello
     ```
 
 1. Show images have been deleted:
 
     ```powershell
     # docker image ls [OPTIONS] [REPOSITORY[:TAG]]
-    docker image ls docker-nexus.thehypepipe.co.uk/busybox
-    docker image ls docker-nexus.thehypepipe.co.uk/hello
+    docker image ls $nexusDockerHost/busybox
+    docker image ls $nexusDockerHost/hello
     ```
 
 1. Pull images from Nexus Docker repo:
 
     ```powershell
     # docker image pull [OPTIONS] NAME[:TAG|@DIGEST]
-    docker image pull docker-nexus.thehypepipe.co.uk/busybox
-    docker image pull docker-nexus.thehypepipe.co.uk/hello
+    docker image pull $nexusDockerHost/busybox
+    docker image pull $nexusDockerHost/hello
     ```
 
 1. Show images are locally available again:
 
     ```powershell
     # docker image ls [OPTIONS] [REPOSITORY[:TAG]]
-    docker image ls docker-nexus.thehypepipe.co.uk/busybox
-    docker image ls docker-nexus.thehypepipe.co.uk/hello
+    docker image ls $nexusDockerHost/busybox
+    docker image ls $nexusDockerHost/hello
     ```
