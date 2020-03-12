@@ -32,12 +32,16 @@ Secrets:
 
 ### Azure Secrets
 
+<!-- TODO -->
+
 - `ARM_CLIENT_ID`
 - `ARM_CLIENT_SECRET`
 - `ARM_SUBSCRIPTION_ID`
 - `ARM_TENANT_ID`
 
 ### Velero Secret
+
+<!-- TODO -->
 
 - `CREDENTIALS_VELERO`
 
@@ -67,7 +71,7 @@ Follow the steps below to update AKS credentials, get the Nexus admin password, 
     $podName = kubectl get pod -n ingress-tls -l app=nexus -o jsonpath="{.items[0].metadata.name}"
 
     # Get admin password from pod
-    $adminPassword = kubectl exec -n ingress-tls -it $podName cat /nexus-data/admin.password | Tee-Object
+    $adminPassword = kubectl exec -n ingress-tls -it $podName cat /nexus-data/admin.password
     echo $adminPassword
     $adminPassword | Set-Clipboard
 
