@@ -85,7 +85,7 @@ Follow the steps below to update AKS credentials, get the Nexus admin password, 
     ```powershell
     # Set URL
     $nexusHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"
-    $nexusBaseUrl = "http://$nexusHost"
+    $nexusBaseUrl = "https://$nexusHost"
 
     # Sign in as admin, using auto-generated admin password from prereqs section
     Start-Process $nexusBaseUrl

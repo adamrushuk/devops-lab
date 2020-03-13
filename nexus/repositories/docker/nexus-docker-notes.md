@@ -24,7 +24,7 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
     ```powershell
     # Set Nexus Docker vars
     $nexusDockerHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[1].host}"
-    $nexusDockerBaseUrl = "http://$nexusDockerHost"
+    $nexusDockerBaseUrl = "https://$nexusDockerHost"
     ```
 
 1. Move `Docker Bearer Token Realm` into `Active`:
