@@ -11,6 +11,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.org/hsts: "false"
+    # fixes "413 Request Entity Too Large" error when pushing docker images
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
 spec:
   rules:
