@@ -9,7 +9,7 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-__CERT_API_ENVIRONMENT__
 spec:
   tls:
-  # can use multiple hosts if wildcard cert in secret
+  # can use multiple hosts with a single secret
   - hosts:
     - __DNS_DOMAIN_NAME__
     - docker-__DNS_DOMAIN_NAME__
