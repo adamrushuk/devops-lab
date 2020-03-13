@@ -44,12 +44,13 @@ curl -i -k $nexusBaseUrl
 # Use www.ssllabs.com for thorough SSL cert check
 "https://www.ssllabs.com/ssltest/analyze.html?d=$nexusBaseUrl"
 
-# openssl s_client -connect host:port -status
+# openssl s_client
+# to prevent hanging, use "echo Q | " at the start
 # openssl s_client -connect host:port -status [-showcerts]
-openssl s_client -connect https://docker-nexus.thehypepipe.co.uk | sls "CN =|error"
-openssl s_client -connect "$($nexusHost):443" | sls "CN =|error"
-openssl s_client -connect "$($nexusHost):443" -status -showcerts
-openssl s_client -connect "$($nexusHost):443" -status
+echo Q | openssl s_client -connect docker-nexus.thehypepipe.co.uk:443 | sls "CN =|error"
+echo Q | openssl s_client -connect "$($nexusHost):443" | sls "CN =|error"
+echo Q | openssl s_client -connect "$($nexusHost):443" -status -showcerts
+echo Q | openssl s_client -connect "$($nexusHost):443" -status
 
 # ! COMMON ISSUES
 # - default-backend-service will show when ingress not configured correctly or it does not have endpoints
@@ -60,6 +61,7 @@ openssl s_client -connect "$($nexusHost):443" -status
 kubectl config set-context --current --namespace=ingress-tls
 
 # Check the Ingress Resource Events
+kubectl get events -A --watch
 $ingressControllerPodName = kubectl get pod -l component=controller -o jsonpath="{.items[0].metadata.name}"
 kubectl get ing
 kubectl get ing ingress -o yaml
@@ -198,4 +200,3 @@ kubectl apply -f ./manifests/ingress.yml
 kubectl get ing -o wide
 kubectl describe ingress
 #endregion Troubleshooting
-
