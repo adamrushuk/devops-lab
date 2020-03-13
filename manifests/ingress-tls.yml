@@ -9,8 +9,10 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-__CERT_API_ENVIRONMENT__
 spec:
   tls:
+  # can use multiple hosts if wildcard cert in secret
   - hosts:
     - __DNS_DOMAIN_NAME__
+    - docker-__DNS_DOMAIN_NAME__
     secretName: tls-secret
   rules:
   # - host: nexus.thehypepipe.co.uk
