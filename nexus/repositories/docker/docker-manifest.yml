@@ -16,9 +16,11 @@ spec:
         app: hello
     spec:
       containers:
-      - image: docker-nexus.thehypepipe.co.uk/hello
+      - image: docker-__DNS_DOMAIN_NAME__/hello
         imagePullPolicy: Always
         name: hello
+        ports:
+        - containerPort: 80
       imagePullSecrets:
       - name: regcred
 ---
@@ -41,14 +43,11 @@ spec:
     namespace: hello
     annotations:
       kubernetes.io/ingress.class: nginx
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-      nginx.ingress.kubernetes.io/rewrite-target: /hello
-      nginx.ingress.kubernetes.io/ssl-redirect: "false"
       nginx.org/hsts: "false"
   spec:
     rules:
-    # http://nexus.thehypepipe.co.uk/hello
-    - host: nexus.thehypepipe.co.uk
+    # http://__DNS_DOMAIN_NAME__/hello
+    - host: __DNS_DOMAIN_NAME__
       http:
         paths:
         - backend:

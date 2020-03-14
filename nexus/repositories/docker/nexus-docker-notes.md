@@ -239,7 +239,16 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
     kubectl get secret regcred --namespace hello --output yaml
 
     # Inspect secret data
-    kubectl get secret regcred --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
+    # bash
+    kubectl get secret regcred --namespace hello --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
+
+    # powershell
+    $base64String = kubectl get secret regcred --namespace hello --output="jsonpath={.data.\.dockerconfigjson}"
+    [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($base64String))
+
+    # WIP: can we pipe to WSL?
+    kubectl get secret regcred --namespace hello --output="jsonpath={.data.\.dockerconfigjson}" | wsl.exe base64 --decode
+    kubectl get secret regcred --namespace hello --output="jsonpath={.data.\.dockerconfigjson}" | wsl.exe base64 --decode "$_"
     ```
 
 1. Apply kubernetes manifest:
@@ -253,7 +262,7 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
 
     ```powershell
     # Check resources
-    kubectl get all --namespace hello
+    kubectl get all,ing --namespace hello
     kubectl describe deploy --namespace hello
 
     # Show all pods not running
@@ -261,4 +270,7 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
 
     # Show events
     kubectl get events --sort-by=.metadata.creationTimestamp --namespace hello
+
+    # Test web output
+    curl http://nexus.thehypepipe.co.uk/hello
     ```
