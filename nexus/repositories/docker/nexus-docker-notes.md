@@ -6,7 +6,7 @@
   - [Contents](#contents)
   - [Prereqs](#prereqs)
   - [Configure Docker Repo](#configure-docker-repo)
-  - [Configure Docker Client](#configure-docker-client)
+  - [Configure Docker Client (if using insecure HTTP Ingress)](#configure-docker-client-if-using-insecure-http-ingress)
   - [Login to Docker Repo](#login-to-docker-repo)
   - [Push Images to Docker Repo](#push-images-to-docker-repo)
   - [Search Docker Repo](#search-docker-repo)
@@ -55,7 +55,9 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
     Invoke-RestMethod $nexusDockerBaseUrl
     ```
 
-## Configure Docker Client
+## Configure Docker Client (if using insecure HTTP Ingress)
+
+**NOTE:** This section is not required when using valid TLS certs (HTTPS Ingress)
 
 1. Open `~/.docker/daemon.json` or if using **docker-machine**, open `~/.docker/machine/machines/default/config.json`
 
@@ -115,7 +117,7 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 
 ## Login to Docker Repo
 
-Login to the Nexus Docker repo to add an entry to `~/.docker/config.json`:
+Login to the Nexus Docker repo (adds an entry to `~/.docker/config.json`):
 
 ```powershell
 # Input password via STDIN
@@ -209,20 +211,13 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
 
 ## Using an Image from Nexus Docker Repo
 
-1. Add a new namespace:
-
-    ```powershell
-    # Add namespace
-    kubectl create namespace hello
-    ```
-
 1. Add secret:
 
     ```powershell
     # Add secret
     # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-by-providing-credentials-on-the-command-line
     kubectl create secret docker-registry regcred `
-    --namespace hello `
+    --namespace ingress-tls `
     --docker-server=$nexusDockerHost `
     --docker-username=admin `
     --docker-password=$adminPassword
@@ -231,30 +226,31 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
     # WARNING: credential helpers (credHelpers or credsStore) are not supported
     # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials
     kubectl create secret generic nexus-docker-credentials `
-        --namespace hello `
+        --namespace ingress-tls `
         --from-file=.dockerconfigjson="~/.docker/config.json" `
         --type=kubernetes.io/dockerconfigjson
 
     # Show secret
-    kubectl get secret regcred --namespace hello --output yaml
+    kubectl get secret regcred --namespace ingress-tls --output yaml
 
     # Inspect secret data
     # bash
-    kubectl get secret regcred --namespace hello --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
+    kubectl get secret regcred --namespace ingress-tls --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
 
     # powershell
-    $base64String = kubectl get secret regcred --namespace hello --output="jsonpath={.data.\.dockerconfigjson}"
+    $base64String = kubectl get secret regcred --namespace ingress-tls --output="jsonpath={.data.\.dockerconfigjson}"
     [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($base64String))
 
     # WIP: can we pipe to WSL?
-    kubectl get secret regcred --namespace hello --output="jsonpath={.data.\.dockerconfigjson}" | wsl.exe base64 --decode
-    kubectl get secret regcred --namespace hello --output="jsonpath={.data.\.dockerconfigjson}" | wsl.exe base64 --decode "$_"
+    kubectl get secret regcred --namespace ingress-tls --output="jsonpath={.data.\.dockerconfigjson}" | wsl.exe base64 --decode
+    kubectl get secret regcred --namespace ingress-tls --output="jsonpath={.data.\.dockerconfigjson}" | wsl.exe base64 --decode "$_"
     ```
 
 1. Apply kubernetes manifest:
 
     ```powershell
     # Apply
+    kubectl delete -f ./nexus/repositories/docker/docker-manifest.yml
     kubectl apply -f ./nexus/repositories/docker/docker-manifest.yml
     ```
 
@@ -262,15 +258,40 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
 
     ```powershell
     # Check resources
-    kubectl get all,ing --namespace hello
-    kubectl describe deploy --namespace hello
+    kubectl get all,ing --namespace ingress-tls -l app=hello
+    kubectl describe deploy --namespace ingress-tls -l app=hello
 
     # Show all pods not running
     kubectl get pods --field-selector=status.phase!=Running --all-namespaces
 
     # Show events
-    kubectl get events --sort-by=.metadata.creationTimestamp --namespace hello
+    kubectl get events --sort-by=.metadata.creationTimestamp --namespace ingress-tls
 
     # Test web output
     curl http://nexus.thehypepipe.co.uk/hello
+    curl -ivk http://nexus.thehypepipe.co.uk/hello
+    ```
+
+1. [OPTIONAL] Troubleshoot:
+
+    ```powershell
+    # Enter pod shell
+    $podName = kubectl get pod -n ingress-tls -l app=hello -o jsonpath="{.items[0].metadata.name}"
+    kubectl exec -n ingress-tls -it $podName /bin/sh
+
+    # Show open ports (eg 80, 443)
+    netstat -tulpn
+
+    # Install utils (as container image uses lightweight Alpine distro)
+    apk add --update curl lynx htop
+    apk info | sort
+
+    # Get website content only
+    lynx -dump http://localhost/hello
+
+    # Get website html
+    curl http://localhost/hello
+
+    # Get website headers and html
+    curl -ivk http://localhost/hello
     ```
