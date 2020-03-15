@@ -29,7 +29,7 @@ if ($DebugInsecure -eq "true") {
     # Write warning to workflow
     # https://help.github.com/en/actions/reference/development-tools-for-github-actions#set-a-warning-message-warning
     # ::warning file={name},line={line},col={col}::{message}
-    echo "::warning ::CI_DEBUG is 'true'...showing env vars which may contain sensitive information"
+    Write-Output "::warning ::CI_DEBUG is 'true'...showing env vars which may contain sensitive information"
 
     $envVarHash.GetEnumerator() | Sort-Object Name
 }
