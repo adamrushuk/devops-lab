@@ -130,6 +130,13 @@ code ./nginx.conf
 
 # Check if used Services exist
 kubectl get svc --all-namespaces
+
+# Check Stats within Controller pod
+kubectl exec -it $ingressControllerPodName /bin/bash
+curl http://localhost/nginx_status
+
+# Check default backend pod
+kubectl describe pod --namespace ingress-tls -l component=default-backend
 ```
 
 ## Reference
