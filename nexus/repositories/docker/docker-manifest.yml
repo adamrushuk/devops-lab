@@ -28,6 +28,7 @@ spec:
   kind: Service
   metadata:
     name: hello
+    namespace: ingress-tls
     labels:
       app: hello
   spec:
@@ -46,7 +47,7 @@ spec:
       nginx.org/hsts: "false"
   spec:
     rules:
-    # http://__DNS_DOMAIN_NAME__/hello
+    # eg: http://nexus.thehypepipe.co.uk/hello
     - host: __DNS_DOMAIN_NAME__
       http:
         paths:
