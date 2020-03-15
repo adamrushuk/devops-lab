@@ -37,11 +37,17 @@ if ($DebugInsecure -eq "true") {
 # Get files
 $targetFiles = (Get-ChildItem -Path $TargetFilePattern)
 
-# Replace tokens
 foreach ($targetFile in $targetFiles) {
+    # Read content
+    $fileContent = Get-Content -Path $targetFile -Raw
+
+    # Replace tokens
     foreach ($item in $envVarHash.GetEnumerator()) {
-        ((Get-Content -Path $targetFile -Raw) -replace $item.key, $item.value) | Set-Content -Path $targetFile
+        $fileContent = $fileContent -replace $item.key, $item.value
     }
+
+    # Write content
+    $fileContent | Set-Content -Path $targetFile -NoNewline
 
     if ($DebugInsecure -eq "true") {
         Write-Verbose "Showing content for: [$targetFile]"
