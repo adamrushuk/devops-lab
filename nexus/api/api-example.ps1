@@ -23,11 +23,17 @@ $restParams = @{
 Invoke-RestMethod @restParams
 
 
-# GET example with credential
+# GET examples with credential
 $credential = [pscredential]::new($username, (ConvertTo-SecureString -String $password -AsPlainText -Force))
 
+# Endpoints
+$endpoint = "$baseUri/beta/security/users"
+$endpoint = "$baseUri/beta/repositories"
+$endpoint = "$baseUri/beta/security/realms/active"
+$endpoint = "$baseUri/beta/security/realms/available"
+
 $restParams = @{
-    Uri            = "$baseUri/beta/security/users"
+    Uri            = $endpoint
     Method         = "GET"
     Headers        = @{
         accept = "application/json"
