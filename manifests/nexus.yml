@@ -16,21 +16,29 @@ spec:
       labels:
         app: nexus
     spec:
+      # Use securityContext, instead of volume prep using init container
+      securityContext:
+        runAsUser: 200
+        runAsGroup: 2000
+        fsGroup: 2000
       # Use init containers to prepare environment,
       # like setting volume owner/permissions
-      initContainers:
-      - name: fmp-volume-permission
-        image: busybox
-        imagePullPolicy: IfNotPresent
-        command: ['chown','-R', '200', '/nexus-data']
-        volumeMounts:
-        - name: nexus-data
-          mountPath: /nexus-data
+      # initContainers:
+      # - name: fmp-volume-permission
+      #   image: busybox
+      #   imagePullPolicy: IfNotPresent
+      #   command: ['chown','-R', '200', '/nexus-data']
+      #   volumeMounts:
+      #   - name: nexus-data
+      #     mountPath: /nexus-data
       containers:
       - name: nexus
-        image: sonatype/nexus3
+        image: sonatype/nexus3:3.21.1
         ports:
+        # http-web
         - containerPort: 8081
+        # http-docker
+        - containerPort: 8123
         # These volume mounts are persistent. They are like inline claims,
         # but not exactly because the names need to match exactly one of
         # the stateful pod volumes.
@@ -58,9 +66,10 @@ metadata:
   labels:
     app: nexus
 spec:
-  # type: LoadBalancer
   ports:
-  - port: 8081
-    # targetPort: 8081
+  - name: http-web
+    port: 8081
+  - name: http-docker
+    port: 8123
   selector:
       app: nexus

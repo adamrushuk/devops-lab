@@ -65,27 +65,4 @@ if ($env:ENABLE_TLS_INGRESS -eq "true") {
 Write-Output "`nAPPLYING: Ingress [$ingressFilename]..."
 kubectl apply -n ingress-tls -f ./manifests/$ingressFilename
 
-<#
-# DEBUG
-curl -I http://nexus.thehypepipe.co.uk/
-curl -I https://nexus.thehypepipe.co.uk/
-
-kubectl get ing -A
-kubectl get ing -n ingress-tls
-kubectl describe ing -n ingress-tls
-kubectl get events --sort-by=.metadata.creationTimestamp -A
-kubectl get events -w -A
-
-kubectl apply -n ingress-tls -f ./manifests/ingress-http.yml
-kubectl apply -n ingress-tls -f ./manifests/ingress-tls.yml
-kubectl apply -n ingress-tls -f ./manifests/nginx-configmap.yml
-
-kubectl delete -n ingress-tls -f ./manifests/ingress-http.yml
-kubectl delete -n ingress-tls -f ./manifests/ingress-tls.yml
-kubectl delete ing -n ingress-tls --all
-
-# Cleanup
-helm list
-helm del --purge nginx-ingress
-#>
 Write-Output "FINISHED: $message."

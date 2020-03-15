@@ -26,7 +26,8 @@ param (
     $ApiSecret,
     $Ttl = 600, # in seconds
     $ServiceLabel = 'app=nginx-ingress',
-    $NameSpace = 'ingress-tls'
+    $NameSpace = 'ingress-tls',
+    $DockerPrefix = 'docker'
 )
 
 # Ensure verbose messages are output
@@ -94,8 +95,15 @@ Get-GDDomain -credentials $apiCredential -domain $DomainName | Out-String | Writ
 Get-GDDomainRecord -credentials $apiCredential -domain $DomainName | Out-String | Write-Verbose
 Write-Verbose "FINISHED: $message."
 
-# Update A record
-$message = "Updating record [$RecordName] for domain [$DomainName] with IP Address [$IPAddress]"
+# Update A record for nexus
+$message = "Updating nexus A record [$RecordName] for domain [$DomainName] with IP Address [$IPAddress]"
+Write-Verbose "STARTED: $message"
+Set-GDDomainRecord -credentials $apiCredential -domain $DomainName -name $RecordName -ipaddress $IPAddress -type "A" -ttl $Ttl -Force
+Write-Verbose "FINISHED: $message"
+
+# Update A record for docker
+$RecordName = "$DockerPrefix-$RecordName"
+$message = "Updating docker A record [$RecordName] for domain [$DomainName] with IP Address [$IPAddress]"
 Write-Verbose "STARTED: $message"
 Set-GDDomainRecord -credentials $apiCredential -domain $DomainName -name $RecordName -ipaddress $IPAddress -type "A" -ttl $Ttl -Force
 Write-Verbose "FINISHED: $message"

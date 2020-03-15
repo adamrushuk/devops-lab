@@ -211,7 +211,7 @@ kubectl get svc -n nginx-pv -w
 # Open browser to view NGINX default page
 $urlPv = kubectl get svc my-nginx-pv -n nginx-pv --ignore-not-found -o jsonpath="http://{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}"
 Write-Output "Browse to NGINX URL: $urlPv"
-start $urlPv
+Start-Process $urlPv
 
 # Cleanup previous attempts
 velero backup get
@@ -262,7 +262,7 @@ kubectl get deployment -n nginx-pv --watch
 kubectl get svc -n nginx-pv -w
 $newUrlPv = kubectl get svc my-nginx-pv -n nginx-pv --ignore-not-found -o jsonpath="http://{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}"
 Write-Output "Browse to new NGINX URL: $newUrlPv"
-start $newUrlPv
+Start-Process $newUrlPv
 ```
 
 ### Nexus example (with PersistentVolumes)
@@ -285,7 +285,7 @@ kubectl get svc nginx-ingress-controller -n ingress-tls -w
 # Open browser
 $nexusHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"
 $nexusBrowseUrl = "http://$nexusHost/#browse/browse:nuget-hosted"
-start $nexusBrowseUrl
+Start-Process $nexusBrowseUrl
 
 # Create a backup
 velero backup create nexus-pv-backup --include-namespaces ingress-tls -l app=nexus
@@ -333,7 +333,7 @@ kubectl get svc -n ingress-tls -w
 # Open browser
 $nexusHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"
 $nexusBrowseUrl = "http://$nexusHost/#browse/browse:nuget-hosted"
-start $nexusBrowseUrl
+Start-Process $nexusBrowseUrl
 ```
 
 ## Prometheus Metrics
@@ -348,7 +348,7 @@ $podName = kubectl get pod -n velero -l app.kubernetes.io/name=velero -o jsonpat
 kubectl -n velero port-forward $podName 8085:8085
 
 # Show metrics
-start http://localhost:8085/metrics
+Start-Process http://localhost:8085/metrics
 ```
 
 ## Troubleshooting

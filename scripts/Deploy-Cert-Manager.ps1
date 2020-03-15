@@ -32,20 +32,6 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
 } else {
     Write-Output "STARTED: Installing helm release: [$helmReleaseName]..."
 
-    # helm upgrade [RELEASE] [CHART] [flags]
-    # helm upgrade something ./path/to/my/chart -f my-values.yaml --install --atomic
-    # helm upgrade `
-    #     cert-manager jetstack/cert-manager `
-    #     --install --atomic `
-    #     --namespace ingress-tls `
-    #     --version v0.13.1
-
-    # [OPTIONAL] args
-    # --set ingressShim.defaultIssuerName=letsencrypt `
-    # --set ingressShim.defaultIssuerKind=ClusterIssuer `
-    # --set extraArgs={"--dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53"}
-
-
     # https://github.com/jetstack/cert-manager/blob/master/deploy/charts/cert-manager/values.yaml
     # helm upgrade [RELEASE] [CHART] [flags]
     helm upgrade cert-manager jetstack/cert-manager `
@@ -54,7 +40,6 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
         -f ./cert-manager/certmanager_values.yaml `
         --version v0.13.1
         # --debug --dry-run
-
 }
 
 # Verify
