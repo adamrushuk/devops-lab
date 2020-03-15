@@ -7,13 +7,15 @@ param (
     [String] $NugetApiKey,
 
     # Nexus host, eg: nexus.thehypepipe.co.uk
-    [String] $NexusHost = (kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"),
+    [String] $NexusHost = (kubectl.exe get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"),
 
-    [String] $NexusBaseUrl = "http://$NexusHost",
+    $NexusBaseUrl = "https://$NexusHost",
 
     [String] $NexusRepoName = "nuget-hosted",
 
-    [String] $NugetRepoName = "NexusNugetRepo"
+    [String] $NugetRepoName = "NexusNugetRepo",
+
+    [pscredential] $Credential
 )
 
 # Local vars
@@ -35,7 +37,10 @@ $registerParams = @{
     PublishLocation           = $NugetRepoUrl
     PackageManagementProvider = "nuget"
     InstallationPolicy        = "Trusted"
-    Verbose                   = $true
+    Verbose                   = $VerbosePreference
+}
+if ($null -ne $Credential) {
+    $registerParams.Add("Credential", $Credential)
 }
 Register-PSRepository @registerParams
 
@@ -46,10 +51,13 @@ $publishParams = @{
     NugetApiKey = $NugetApiKey
     Verbose     = $true
 }
+if ($null -ne $Credential) {
+    $publishParams.Add("Credential", $Credential)
+}
 Publish-Module @publishParams
 
 # Find modules
 Find-Module -Repository $NugetRepoName -Verbose
 
 # Show modules in Nexus repo
-Start-Process "$NexusBaseUrl/#browse/browse:$NexusRepoName"
+Write-Output "Browse to: $NexusBaseUrl/#browse/browse:$NexusRepoName"

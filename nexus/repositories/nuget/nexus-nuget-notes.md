@@ -24,7 +24,7 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
     Start-Process "$nexusBaseUrl/#user/nugetapitoken"
 
     # Assign API key
-    $NuGetApiKey = "<Enter NuGet API Key>"
+    $NuGetApiKey = "<NUGET_API_KEY>"
     ```
 
 1. Move `NuGet API-Key Realm` into `Active`:
@@ -38,23 +38,19 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 
 ### Using a Script
 
-1. Ensure NuGet API key has been assigned:
+```powershell
+# Ensure NuGet API key has been assigned
+$NuGetApiKey = "<NUGET_API_KEY>"
 
-    ```powershell
-    $NuGetApiKey = "<NUGET_API_KEY>"
-    ```
+# Enter the FQDN of the Nexus host (eg: nexus.thehypepipe.co.uk) or use kubectl
+$NexusHost = (kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}")
 
-1. Enter the FQDN of the Nexus host (eg: `nexus.thehypepipe.co.uk`) or use `kubectl`:
+# Create a credential (default admin user is fine for testing)
+$cred = [PSCredential]::new("admin", (ConvertTo-SecureString "<PASSWORD>" -AsPlainText -Force))
 
-    ```powershell
-    $NexusHost = (kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}")
-    ```
-
-1. Run the script:
-
-    ```powershell
-    ./nexus/repositories/nuget/Publish-PowerShellModule.ps1 -NugetApiKey $NuGetApiKey -NexusHost $NexusHost
-    ```
+# Run the script:
+./nexus/repositories/nuget/Publish-PowerShellModule.ps1 -NugetApiKey $NuGetApiKey -NexusHost $NexusHost -Credential $cred
+```
 
 ### Manually
 
