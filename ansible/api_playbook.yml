@@ -1,0 +1,47 @@
+# ansible-playbook ansible/api_playbook.yml
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    api_user: "admin"
+    api_password: "<NEXUS_ADMIN_PASSWORD>"
+    api_url: "https://nexus.thehypepipe.co.uk/service/rest"
+
+    anon_user_request_body:
+      enabled: "true"
+      userId: "anonymous"
+      realmName: "NexusAuthorizingRealm"
+
+  tasks:
+  - name: get users
+    uri:
+      url: "{{ api_url }}/beta/security/users/"
+      method: GET
+      user: "{{ api_user }}"
+      password: "{{ api_password }}"
+      force_basic_auth: yes
+      status_code: 200,404
+      timeout: 10
+    register: user_api_response
+
+  - name: debug
+    debug:
+      var: user_api_response
+
+  - name: allow anonymous access
+    uri:
+      url: "{{ api_url }}/internal/ui/anonymous-settings"
+      method: PUT
+      body: "{{ anon_user_request_body | to_json }}"
+      user: "{{ api_user }}"
+      password: "{{ api_password }}"
+      force_basic_auth: yes
+      status_code: 200,404
+      timeout: 10
+    register: anon_user_api_response
+
+  - name: debug
+    debug:
+      var: anon_user_api_response
