@@ -249,8 +249,11 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
 1. Apply kubernetes manifest:
 
     ```powershell
+    # Replace token
+    $env:DNS_DOMAIN_NAME = $nexusHost
+    ./scripts/Replace-Tokens.ps1 -TargetFilePattern "./nexus/repositories/docker/docker-manifest.yml"
+
     # Apply
-    kubectl delete -f ./nexus/repositories/docker/docker-manifest.yml
     kubectl apply -f ./nexus/repositories/docker/docker-manifest.yml
     ```
 
@@ -268,8 +271,12 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
     kubectl get events --sort-by=.metadata.creationTimestamp --namespace ingress-tls
 
     # Test web output
-    curl http://nexus.thehypepipe.co.uk/hello
-    curl -ivk http://nexus.thehypepipe.co.uk/hello
+    $testUrl = "$nexusBaseUrl/hello"
+    curl $testUrl
+    curl -ivk $testUrl
+
+    # Open website
+    Start-Process $testUrl
     ```
 
 1. [OPTIONAL] Troubleshoot:
