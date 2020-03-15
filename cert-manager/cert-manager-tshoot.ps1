@@ -148,8 +148,7 @@ kubectl exec -it $webhookPod sh
 # Check dns lookup
 nslookup $nexusBaseUrl
 
-# TODO WIP
-# Main issue in initial Jenkins build when running:
+# Main issue in initial build when running:
 # "kubectl apply -f ./manifests/cluster-issuer.yml --namespace ingress-tls"
 [2020-02-22T12:58:13.628Z] Error from server (InternalError): error when creating "./manifests/cluster-issuer.yml": Internal error occurred: failed calling webhook "webhook.cert-manager.io": Post https://cert-manager-webhook.ingress-tls.svc:443/mutate?timeout=30s: dial tcp 10.0.171.89:443: connect: connection refused
 
