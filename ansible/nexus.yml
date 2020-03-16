@@ -1,0 +1,49 @@
+# configure Nexus via rest api
+#
+# cd ansible
+# ansible-playbook nexus.yml --extra-vars "api_base_uri=https://nexus.thehypepipe.co.uk"
+
+# set api_password via env var
+# export API_PASSWORD=<MY_API_PASSWORD>
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    api_base_uri: ""
+    api_url: "{{ api_base_uri }}/service/rest"
+    api_user: "admin"
+    # assign password via environment variable
+    api_password: "{{ lookup('env', 'API_PASSWORD') }}"
+
+    active_realms: [
+      "NexusAuthenticatingRealm",
+      "NexusAuthorizingRealm",
+      "DockerToken",
+      "NuGetApiKey"
+    ]
+
+
+  tasks:
+
+  - name: set active realms
+    uri:
+      url: "{{ api_url }}/beta/security/realms/active"
+      method: PUT
+      body: "{{ active_realms }}"
+      body_format: json
+      user: "{{ api_user }}"
+      password: "{{ api_password }}"
+      force_basic_auth: yes
+      status_code: 200,204
+      timeout: 10
+
+  - name: User role
+    include_role:
+      name: user
+  #   vars:
+  #     # user_request_body:
+  #     #   userId: "demo_user2"
+  #     #   <all other vars required when overriding>...
+
