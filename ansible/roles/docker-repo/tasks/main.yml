@@ -1,0 +1,51 @@
+# DOCKER REPO
+- name: list repos
+  uri:
+    url: "{{ api_url }}/beta/repositories"
+    method: GET
+    user: "{{ api_user }}"
+    password: "{{ api_password }}"
+    force_basic_auth: yes
+    status_code: 200
+    timeout: 10
+  register: repositories
+
+- name: debug docker repo
+  debug:
+    var: repositories
+
+# - name: filter repo names
+#   debug:
+#     msg: "{{ repositories.json | json_query(jmesquery)}}"
+#   when: '"docker-repo" in repo_names'
+
+- name: filter repo names
+  set_fact:
+    repo_names: "{{ repositories.json| map(attribute='name') | list }}"
+
+- name: debug repo names
+  debug:
+    var: repo_names
+
+- name: docker repo found!
+  debug:
+    msg: found docker repo [{{ docker_repo_request_body.name }}]
+  when: docker_repo_request_body.name in repo_names
+
+- name: create docker repo
+  uri:
+    url: "{{ api_url }}/beta/repositories/docker/hosted"
+    method: POST
+    body: "{{ docker_repo_request_body }}"
+    body_format: json
+    user: "{{ api_user }}"
+    password: "{{ api_password }}"
+    force_basic_auth: yes
+    status_code: "201"
+    timeout: 10
+  when: docker_repo_request_body.name not in repo_names
+  register: docker_repo_api_response
+
+- name: debug
+  debug:
+    var: docker_repo_api_response

@@ -47,3 +47,6 @@
   #     #   userId: "demo_user2"
   #     #   <all other vars required when overriding>...
 
+  - name: Docker role
+    include_role:
+      name: docker-repo

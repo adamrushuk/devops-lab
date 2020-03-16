@@ -1,0 +1,11 @@
+docker_repo_request_body:
+  name: docker-repo
+  online: true
+  storage:
+    blobStoreName: default
+    strictContentTypeValidation: true
+    writePolicy: allow_once
+  docker:
+    v1Enabled: false
+    forceBasicAuth: false
+    httpPort: 8123
