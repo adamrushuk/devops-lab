@@ -1,0 +1,34 @@
+# ansible-playbook ansible/test/test_pwsh7.yml
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+  - name: Run a script
+    shell: "{{ playbook_dir }}/test_output.ps1"
+    # shell: "test_output.ps1"
+    args:
+      executable: /usr/bin/pwsh
+    register: result1
+
+  - name: Process output
+    set_fact:
+      errorDetail: "{{ result1.stdout | from_json }}"
+
+  - debug:
+      msg: "Error Category: [{{ errorDetail.Category }}], Error Activity: [{{ errorDetail.Activity }}], Error Reason: [{{ errorDetail.Reason }}] for Target [{{ errorDetail.TargetName }}]"
+
+  - name: Invoke-RestMethod via shell module
+    shell: Invoke-RestMethod -Uri 'https://httpbin.org/get' | ConvertTo-Json
+    args:
+      executable: /usr/bin/pwsh
+    register: apiRequest
+
+  - name: Process output
+    set_fact:
+      apiOutput: "{{ apiRequest.stdout | from_json }}"
+
+  - debug:
+      msg: "The User-Agent used to make the API request was: [{{ apiOutput.headers['User-Agent'] }}]"
