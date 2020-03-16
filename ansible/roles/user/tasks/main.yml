@@ -1,0 +1,55 @@
+# DEMO USER
+- name: check demo user exists
+  uri:
+    url: "{{ api_url }}/beta/security/users?userId={{ user_request_body.userId }}"
+    method: GET
+    user: "{{ api_user }}"
+    password: "{{ api_password }}"
+    force_basic_auth: yes
+    status_code: 200
+    timeout: 10
+  register: user_api_response
+
+- name: check demo debug
+  debug:
+    var: user_api_response
+
+- name: create demo user
+  uri:
+    url: "{{ api_url }}/beta/security/users"
+    method: POST
+    # headers:
+    #   Accept: application/json
+    body: "{{ user_request_body }}"
+    # automatically formats body as json, and sets the Content-Type header
+    body_format: json
+    user: "{{ api_user }}"
+    password: "{{ api_password }}"
+    force_basic_auth: yes
+    status_code: 200,204
+    timeout: 10
+  when: user_api_response.json | length == 0
+  register: demo_user_api_response
+
+- name: debug
+  debug:
+    var: demo_user_api_response
+
+
+# ANONYMOUS ACCESS
+- name: allow anonymous access
+  uri:
+    url: "{{ api_url }}/internal/ui/anonymous-settings"
+    method: PUT
+    body: "{{ anon_user_request_body }}"
+    body_format: json
+    user: "{{ api_user }}"
+    password: "{{ api_password }}"
+    force_basic_auth: yes
+    status_code: 200,204
+    timeout: 10
+  register: anon_user_api_response
+
+- name: debug
+  debug:
+    var: anon_user_api_response

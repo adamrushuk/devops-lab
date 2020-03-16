@@ -1,0 +1,32 @@
+# - import_playbook: webservers.yml
+# - import_playbook: someotherplaybook.yml
+
+# configure Nexus via rest api
+#
+# cd ansible
+# ansible-playbook site.yml --extra-vars "api_base_uri=https://nexus.thehypepipe.co.uk"
+
+# set api_password via env var
+# export API_PASSWORD=<MY_API_PASSWORD>
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    api_user: "admin"
+    # assign password via environment variable
+    api_password: "{{ lookup('env', 'API_PASSWORD') }}"
+    api_base_uri: ""
+    api_url: "{{ api_base_uri }}/service/rest"
+
+
+  tasks:
+
+  - name: User role
+    include_role:
+      name: user
+    vars:
+      # user_request_body:
+      #   userId: "demo_user2"
+      #   <all other vars required when overriding>...
