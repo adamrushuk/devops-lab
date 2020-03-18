@@ -3,11 +3,7 @@
   uri:
     url: "{{ api_url }}/beta/repositories"
     method: GET
-    user: "{{ api_user }}"
-    password: "{{ api_password }}"
-    force_basic_auth: yes
     status_code: 200
-    timeout: 10
   register: repositories
 
 - name: debug repos
@@ -32,12 +28,7 @@
     url: "{{ api_url }}/beta/repositories/docker/hosted"
     method: POST
     body: "{{ docker_repo_request_body }}"
-    body_format: json
-    user: "{{ api_user }}"
-    password: "{{ api_password }}"
-    force_basic_auth: yes
     status_code: "201"
-    timeout: 10
   when: docker_repo_request_body.name not in repo_names
   register: docker_repo_api_response
 

@@ -24,6 +24,17 @@
       "NuGetApiKey"
     ]
 
+  # DEFAULTS
+  # reduce calling the same module repeatedly with the same arguments
+  # https://docs.ansible.com/ansible/latest/user_guide/playbooks_module_defaults.html
+  module_defaults:
+    uri:
+      # automatically formats body as json, and sets the Content-Type header
+      body_format: json
+      user: "{{ api_user }}"
+      password: "{{ api_password }}"
+      force_basic_auth: yes
+      timeout: 10
 
   tasks:
 
@@ -34,12 +45,8 @@
       url: "{{ api_url }}/beta/security/realms/active"
       method: PUT
       body: "{{ active_realms }}"
-      body_format: json
-      user: "{{ api_user }}"
-      password: "{{ api_password }}"
-      force_basic_auth: yes
       status_code: 200,204
-      timeout: 10
+
 
   - name: User role
     include_role:

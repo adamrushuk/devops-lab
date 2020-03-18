@@ -33,6 +33,16 @@
       userId: "anonymous"
       realmName: "NexusAuthorizingRealm"
 
+    # DEFAULTS
+    module_defaults:
+      uri:
+        # automatically formats body as json, and sets the Content-Type header
+        body_format: json
+        user: "{{ api_user }}"
+        password: "{{ api_password }}"
+        force_basic_auth: yes
+        timeout: 10
+
   tasks:
 
   # DEMO USER
@@ -40,11 +50,7 @@
     uri:
       url: "{{ api_url }}/beta/security/users?userId={{ user_request_body.userId }}"
       method: GET
-      user: "{{ api_user }}"
-      password: "{{ api_password }}"
-      force_basic_auth: yes
       status_code: 200
-      timeout: 10
     register: user_api_response
 
   - name: check demo debug
@@ -60,11 +66,7 @@
       body: "{{ user_request_body }}"
       # automatically formats body as json, and sets the Content-Type header
       body_format: json
-      user: "{{ api_user }}"
-      password: "{{ api_password }}"
-      force_basic_auth: yes
       status_code: 200,204
-      timeout: 10
     when: user_api_response.json | length == 0
     register: demo_user_api_response
 
@@ -80,11 +82,7 @@
       method: PUT
       body: "{{ anon_user_request_body }}"
       body_format: json
-      user: "{{ api_user }}"
-      password: "{{ api_password }}"
-      force_basic_auth: yes
       status_code: 200,204
-      timeout: 10
     register: anon_user_api_response
 
   - name: debug
