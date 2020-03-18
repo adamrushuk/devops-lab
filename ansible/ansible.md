@@ -1,30 +1,33 @@
 # Ansible Notes
 
-Using Ansible for post-deployment configuration.
+Notes on using Ansible for post-deployment configuration.
 
-> **WARNING**  
+> **IMPORTANT**
 > Most of the other code examples use PowerShell and CLIs that run on *all* platforms, but as Ansible won't run on
 > Windows, Windows users will have to
 > [install Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 
 ## Contents
 
-> [!NOTE]
-> Information the user should notice even if skimming
-
 - [Ansible Notes](#ansible-notes)
   - [Contents](#contents)
   - [Prereqs](#prereqs)
+  - [Running Ansible](#running-ansible)
 
 ## Prereqs
 
-1. Import the AKS Cluster credentials:
+Before the Ansible playbook can be run, follow the steps below:
+
+1. Import the AKS Cluster credentials after updating the vars to reflect your environment:
 
     ```powershell
     # Vars
     $prefix = "rush"
     $aksClusterName = "$($prefix)-aks-001"
     $aksClusterResourceGroupName = "$($prefix)-rg-aks-dev-001"
+
+    # Login to Azure
+    az login
 
     # AKS Cluster credentials
     az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aksClusterName --overwrite-existing
@@ -47,5 +50,29 @@ Using Ansible for post-deployment configuration.
 1. Set an environment variable for the admin password:
 
     ```powershell
-    export API_PASSWORD=<MY_API_PASSWORD>
+    $env:API_PASSWORD = $adminPassword
+    ```
+
+## Running Ansible
+
+After the prereqs steps have been completed, run the Ansible Playbook:
+
+1. Move into the `ansible` folder:
+
+    ```powershell
+    cd ansible
+    ```
+
+1. Get the nexus hostname:
+
+    ```powershell
+    # Set vars
+    $nexusHost = kubectl get ingress ingress --namespace ingress-tls -o jsonpath="{.spec.rules[0].host}"
+    $nexusBaseUrl = "https://$nexusHost"
+    ```
+
+1. Run the Ansible Playbook:
+
+    ```powershell
+    ansible-playbook nexus.yml --extra-vars "api_base_uri=$nexusBaseUrl"
     ```
