@@ -2,18 +2,21 @@
 #
 # ansible-playbook ansible/api_playbook.yml --extra-vars "api_base_uri=https://nexus.thehypepipe.co.uk"
 
-# set api_password via env var
-# export API_PASSWORD=<MY_API_PASSWORD>
+# set password values via env var
+# export ADMIN_PASSWORD=<MY_ADMIN_PASSWORD>
 # ansible-playbook ansible/api_playbook.yml
 ---
 - hosts: localhost
   connection: local
   gather_facts: no
 
+  # https://docs.ansible.com/ansible/latest/user_guide/playbooks_debugger.html
+  debugger: on_failed
+
   vars:
     api_user: "admin"
     # assign password via environment variable
-    api_password: "{{ lookup('env', 'API_PASSWORD') }}"
+    admin_password: "{{ lookup('env', 'ADMIN_PASSWORD') }}"
     api_base_uri: ""
     api_url: "{{ api_base_uri }}/service/rest"
 
@@ -33,15 +36,15 @@
       userId: "anonymous"
       realmName: "NexusAuthorizingRealm"
 
-    # DEFAULTS
-    module_defaults:
-      uri:
-        # automatically formats body as json, and sets the Content-Type header
-        body_format: json
-        user: "{{ api_user }}"
-        password: "{{ api_password }}"
-        force_basic_auth: yes
-        timeout: 10
+  # DEFAULTS
+  module_defaults:
+    uri:
+      # automatically formats body as json, and sets the Content-Type header
+      body_format: json
+      user: "{{ api_user }}"
+      password: "{{ admin_password }}"
+      force_basic_auth: yes
+      timeout: 10
 
   tasks:
 
