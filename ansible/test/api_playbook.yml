@@ -3,7 +3,7 @@
 # ansible-playbook ansible/api_playbook.yml --extra-vars "api_base_uri=https://nexus.thehypepipe.co.uk"
 
 # set password values via env var
-# export ADMIN_PASSWORD=<MY_ADMIN_PASSWORD>
+# export NEW_ADMIN_PASSWORD=<MY_ADMIN_PASSWORD>
 # ansible-playbook ansible/api_playbook.yml
 ---
 - hosts: localhost
@@ -16,7 +16,7 @@
   vars:
     api_user: "admin"
     # assign password via environment variable
-    admin_password: "{{ lookup('env', 'ADMIN_PASSWORD') }}"
+    admin_password: "{{ lookup('env', 'NEW_ADMIN_PASSWORD') }}"
     api_base_uri: ""
     api_url: "{{ api_base_uri }}/service/rest"
 
