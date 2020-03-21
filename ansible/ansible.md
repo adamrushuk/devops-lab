@@ -39,6 +39,9 @@ Before the Ansible playbook can be run, follow the steps below:
     # Login to Azure
     az login
 
+    # [OPTIONAL] Install kubectl
+    az aks install-cli
+
     # AKS Cluster credentials
     az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aksClusterName --overwrite-existing
 
