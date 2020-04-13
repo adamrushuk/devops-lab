@@ -27,9 +27,9 @@ resource "helm_release" "nginx" {
 
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "update_dns" {
-  triggers = {
-    always_run = "${timestamp()}"
-  }
+  # triggers = {
+  #   always_run = "${timestamp()}"
+  # }
 
   provisioner "local-exec" {
     command = "./Update-Dns.ps1"
