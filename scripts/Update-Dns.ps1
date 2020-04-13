@@ -20,7 +20,7 @@ param (
     $TimeoutSeconds = 1800, # 1800s = 30 mins
     $RetryIntervalSeconds = 10,
     $DomainName = $env:dns_domain_name,
-    [bool]$HasSubDomainName = $env:has_subdomain,
+    $HasSubDomainName = $env:has_subdomain,
     $RecordName = "@",
     $ApiKey = $env:api_key,
     $ApiSecret = $env:api_secret,
