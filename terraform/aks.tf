@@ -77,12 +77,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
+  # service_principal block: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#client_id
   # service_principal {
   #   client_id     = var.service_principal_client_id
   #   client_secret = var.service_principal_client_secret
   # }
 
-  # managed identity: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#type-1
+  # managed identity block: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#type-1
   identity {
     type = "SystemAssigned"
   }

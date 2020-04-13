@@ -56,7 +56,9 @@ jobs:
     if: github.actor == github.event.repository.owner.login
 
     steps:
+
     # Checkout
+    # https://github.com/marketplace/actions/checkout
     - uses: actions/checkout@v2
       # specify different branch
       # NOT required as I've changed the default branch to develop
