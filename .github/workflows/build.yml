@@ -38,6 +38,10 @@ env:
   LOCATION: uksouth
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
 
+  # terraform
+  TF_VERSION: "0.12.24" # "latest" is supported
+  TF_WORKING_DIR: terraform
+
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
   # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
 
@@ -99,6 +103,38 @@ jobs:
 
     # - name: Terraform Apply
     #   run: pwsh -command "./scripts/Apply-Terraform.ps1"
+
+
+    # https://github.com/hashicorp/terraform-github-actions#usage
+    - name: Terraform Init
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_subcommand: init
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+        tf_actions_comment: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Terraform Validate
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_subcommand: validate
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+        tf_actions_comment: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Terraform Plan
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_subcommand: plan
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+        tf_actions_comment: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
     # # Helm - Init
