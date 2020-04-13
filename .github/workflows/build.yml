@@ -111,14 +111,9 @@ jobs:
       run: pwsh -command "./scripts/Apply-Terraform.ps1"
 
 
-    # # Kubernetes
-    # # Cert-Manager
-    # - name: Deploy cert-manager
-    #   run: pwsh -command "./scripts/Deploy-Cert-Manager.ps1"
-
-    # # Manifests
-    # - name: Deploy kubernetes manifests
-    #   run: pwsh -command "./scripts/Deploy-Manifests.ps1"
+    # Kubernetes
+    - name: Deploy kubernetes manifests
+      run: pwsh -command "./scripts/Deploy-Manifests.ps1"
 
     # # Velero
     # - name: Deploy Velero
