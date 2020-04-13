@@ -14,8 +14,8 @@
 
 [CmdletBinding()]
 param (
-    $AksResourceGroupName,
-    $AksClusterName,
+    $AksResourceGroupName = $env:aks_rg,
+    $AksClusterName = $env:aks_cluster_name,
     $UseAksAdmin,
     $TimeoutSeconds = 1800, # 1800s = 30 mins
     $RetryIntervalSeconds = 10,
@@ -26,7 +26,7 @@ param (
     $ApiSecret,
     $Ttl = 600, # in seconds
     $ServiceLabel = 'app=nginx-ingress',
-    $NameSpace = 'ingress-tls',
+    $NameSpace = 'ingress',
     $DockerPrefix = 'docker'
 )
 

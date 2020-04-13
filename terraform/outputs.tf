@@ -2,6 +2,10 @@
 #   value = azurerm_kubernetes_cluster.aks
 # }
 
+output "aks_credentials_command" {
+  value = "az aks get-credentials --resource-group ${azurerm_kubernetes_cluster.aks.resource_group_name} --name ${azurerm_kubernetes_cluster.aks.name} --overwrite-existing"
+}
+
 output "aks_browse_command" {
   value = "az aks browse --resource-group ${azurerm_kubernetes_cluster.aks.resource_group_name} --name ${azurerm_kubernetes_cluster.aks.name}"
 }

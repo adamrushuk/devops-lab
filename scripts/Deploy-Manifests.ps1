@@ -31,10 +31,10 @@ kubectl version --short
 $message = "Applying Kubernetes manifests"
 Write-Output "`nSTARTED: $message..."
 
-# "ingress-tls" namespace created in Deploy-Ingress-Controller.ps1
+# "ingress" namespace created in Deploy-Ingress-Controller.ps1
 
 # [OPTIONAL] apply whole folder
-# kubectl apply -n ingress-tls -f ./manifests
+# kubectl apply -n ingress -f ./manifests
 
 Write-Output "`nENABLE_TLS_INGRESS: [$env:ENABLE_TLS_INGRESS]"
 
@@ -49,20 +49,20 @@ if ($env:ENABLE_TLS_INGRESS -eq "true") {
 
 # Applications
 Write-Output "`nAPPLYING: Applications..."
-# kubectl apply -n ingress-tls -f ./manifests/azure-vote.yml
-kubectl apply -n ingress-tls -f ./manifests/nexus.yml
+# kubectl apply -n ingress -f ./manifests/azure-vote.yml
+kubectl apply -n ingress -f ./manifests/nexus.yml
 
 # Ingress
 # ConfigMap - NGINX Configuration options
 # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
-# kubectl apply -n ingress-tls -f ./manifests/nginx-configmap.yml
+# kubectl apply -n ingress -f ./manifests/nginx-configmap.yml
 
 # default to basic http
 $ingressFilename = "ingress-http.yml"
 if ($env:ENABLE_TLS_INGRESS -eq "true") {
-    $ingressFilename = "ingress-tls.yml"
+    $ingressFilename = "ingress.yml"
 }
 Write-Output "`nAPPLYING: Ingress [$ingressFilename]..."
-kubectl apply -n ingress-tls -f ./manifests/$ingressFilename
+kubectl apply -n ingress -f ./manifests/$ingressFilename
 
 Write-Output "FINISHED: $message."

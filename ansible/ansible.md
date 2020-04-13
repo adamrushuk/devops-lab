@@ -53,11 +53,11 @@ Before the Ansible playbook can be run, follow the steps below:
 
     ```powershell
     # Get pod name
-    $podName = kubectl get pod -n ingress-tls -l app=nexus -o jsonpath="{.items[0].metadata.name}"
+    $podName = kubectl get pod -n ingress -l app=nexus -o jsonpath="{.items[0].metadata.name}"
 
     # Get admin password from pod
     # NOTE: "/nexus-data/admin.password" is deleted after the admin password is changed
-    $adminPassword = kubectl exec -n ingress-tls -it $podName cat /nexus-data/admin.password
+    $adminPassword = kubectl exec -n ingress -it $podName cat /nexus-data/admin.password
     echo $adminPassword
     ```
 
@@ -82,7 +82,7 @@ After the prereqs steps have been completed, run the Ansible Playbook:
 
     ```powershell
     # Set vars
-    $nexusHost = kubectl get ingress ingress --namespace ingress-tls -o jsonpath="{.spec.rules[0].host}"
+    $nexusHost = kubectl get ingress ingress --namespace ingress -o jsonpath="{.spec.rules[0].host}"
     $nexusBaseUrl = "https://$nexusHost"
     ```
 

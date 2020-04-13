@@ -150,9 +150,9 @@ jobs:
     #   run: pwsh -command "./scripts/Deploy-Ingress-Controller.ps1"
 
 
-    # # DNS
-    # - name: Update DNS
-    #   run: pwsh -command "./scripts/Update-Dns.ps1 -AksResourceGroupName ${{ env.AKS_RG_NAME }} -AksClusterName ${{ env.AKS_CLUSTER_NAME }} -DomainName ${{ env.DNS_DOMAIN_NAME }} -HasSubDomainName:\$${{ env.HAS_SUBDOMAIN }} -ApiKey ${{ secrets.API_KEY }} -ApiSecret ${{ secrets.API_SECRET }}"
+    # DNS
+    - name: Update DNS
+      run: pwsh -command "./scripts/Update-Dns.ps1 -AksResourceGroupName ${{ env.AKS_RG_NAME }} -AksClusterName ${{ env.AKS_CLUSTER_NAME }} -DomainName ${{ env.DNS_DOMAIN_NAME }} -HasSubDomainName:\$${{ env.HAS_SUBDOMAIN }} -ApiKey ${{ secrets.API_KEY }} -ApiSecret ${{ secrets.API_SECRET }}"
 
 
     # # Kubernetes

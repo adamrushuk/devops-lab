@@ -58,7 +58,7 @@ echo Q | openssl s_client -connect "$($nexusHost):443" -status
 
 # * IMPORTANT
 # permanently save the namespace for all subsequent kubectl commands in that context
-kubectl config set-context --current --namespace=ingress-tls
+kubectl config set-context --current --namespace=ingress
 
 # Check the Ingress Resource Events
 kubectl get events -A --watch
@@ -149,8 +149,8 @@ kubectl exec -it $webhookPod sh
 nslookup $nexusBaseUrl
 
 # Main issue in initial build when running:
-# "kubectl apply -f ./manifests/cluster-issuer.yml --namespace ingress-tls"
-[2020-02-22T12:58:13.628Z] Error from server (InternalError): error when creating "./manifests/cluster-issuer.yml": Internal error occurred: failed calling webhook "webhook.cert-manager.io": Post https://cert-manager-webhook.ingress-tls.svc:443/mutate?timeout=30s: dial tcp 10.0.171.89:443: connect: connection refused
+# "kubectl apply -f ./manifests/cluster-issuer.yml --namespace ingress"
+[2020-02-22T12:58:13.628Z] Error from server (InternalError): error when creating "./manifests/cluster-issuer.yml": Internal error occurred: failed calling webhook "webhook.cert-manager.io": Post https://cert-manager-webhook.ingress.svc:443/mutate?timeout=30s: dial tcp 10.0.171.89:443: connect: connection refused
 
 # Works second attempt
 clusterissuer.cert-manager.io/letsencrypt configured

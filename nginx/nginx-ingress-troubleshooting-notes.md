@@ -26,16 +26,16 @@ kubectl get ing -A
 # check:
 # - backend service IP/port, and the endpoint IP/port in brackets
 # - endpoints DONT show as <none>
-kubectl describe ing ingress --namespace ingress-tls
-kubectl describe ing hello --namespace ingress-tls
+kubectl describe ing ingress --namespace ingress
+kubectl describe ing hello --namespace ingress
 
 
 # SERVICE
 # check:
 # - endpoints exist (these are pod IPs)
 # - Selector criteria
-kubectl describe service nexus --namespace ingress-tls
-kubectl describe service hello --namespace ingress-tls
+kubectl describe service nexus --namespace ingress
+kubectl describe service hello --namespace ingress
 kubectl describe service hello
 
 
@@ -43,19 +43,19 @@ kubectl describe service hello
 # check:
 # - Ready condition
 # - IP matches service endpoint
-kubectl get pod --namespace ingress-tls -l app=hello -o wide
+kubectl get pod --namespace ingress -l app=hello -o wide
 
 # check:
 # - labels match for service selector criteria
 # - exposed ports match between service and pod
 # - Events for errors
-kubectl describe pod --namespace ingress-tls -l app=hello
+kubectl describe pod --namespace ingress -l app=hello
 
 
 ## CONTAINER / APPLICATION
 # Enter container shell
-$appPodName = kubectl get pod -n ingress-tls -l app=hello -o jsonpath="{.items[0].metadata.name}"
-kubectl exec -n ingress-tls -it $appPodName /bin/sh
+$appPodName = kubectl get pod -n ingress -l app=hello -o jsonpath="{.items[0].metadata.name}"
+kubectl exec -n ingress -it $appPodName /bin/sh
 
 # Show listening ports (eg 80, 443)
 netstat -tulpn
@@ -103,24 +103,24 @@ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H  "Authoriz
 kubectl get ing -A
 
 # Describe ingress
-kubectl describe ing hello --namespace ingress-tls
+kubectl describe ing hello --namespace ingress
 
 
 # INGRESS CONTROLLER
 # List all pods
 # note all "nginx-ingress" pods
-kubectl get pod --namespace ingress-tls -o wide
+kubectl get pod --namespace ingress -o wide
 
 # Check the Ingress Controller Logs
-kubectl logs --namespace ingress-tls -l component=controller
+kubectl logs --namespace ingress -l component=controller
 
 
 ## NGINX CONFIGURATION
 # Get pod name
-$ingressControllerPodName = kubectl get pod --namespace ingress-tls -l component=controller -o jsonpath="{.items[0].metadata.name}"
+$ingressControllerPodName = kubectl get pod --namespace ingress -l component=controller -o jsonpath="{.items[0].metadata.name}"
 
 # Output nginx config
-kubectl exec $ingressControllerPodName --namespace ingress-tls -it  cat /etc/nginx/nginx.conf > nginx.conf
+kubectl exec $ingressControllerPodName --namespace ingress -it  cat /etc/nginx/nginx.conf > nginx.conf
 
 # Open nginx config file in vscode
 # search for hostname (eg: "nexus.thehypepipe.co.uk") and check:
@@ -136,7 +136,7 @@ kubectl exec -it $ingressControllerPodName /bin/bash
 curl http://localhost/nginx_status
 
 # Check default backend pod
-kubectl describe pod --namespace ingress-tls -l component=default-backend
+kubectl describe pod --namespace ingress -l component=default-backend
 ```
 
 ## Reference
