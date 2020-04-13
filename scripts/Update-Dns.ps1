@@ -20,7 +20,7 @@ param (
     $TimeoutSeconds = 1800, # 1800s = 30 mins
     $RetryIntervalSeconds = 10,
     $DomainName = $env:dns_domain_name,
-    [switch]$HasSubDomainName = $env:has_subdomain,
+    [bool]$HasSubDomainName = $env:has_subdomain,
     $RecordName = "@",
     $ApiKey = $env:api_key,
     $ApiSecret = $env:api_secret,
@@ -66,7 +66,7 @@ Write-Verbose "Found IP [$IPAddress]"
 
 #region DNS
 # Split subdomain
-if ($HasSubDomainName.IsPresent) {
+if ($HasSubDomainName -eq "true") {
     Write-Verbose "HasSubDomainName switch selected..."
     $DomainNameSplit = $DomainName -split "\."
     $RecordName = $DomainNameSplit[0]
