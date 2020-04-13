@@ -19,11 +19,11 @@ param (
     $UseAksAdmin,
     $TimeoutSeconds = 1800, # 1800s = 30 mins
     $RetryIntervalSeconds = 10,
-    $DomainName,
-    [switch]$HasSubDomainName,
+    $DomainName = $env:dns_domain_name,
+    [switch]$HasSubDomainName = $env:has_subdomain,
     $RecordName = "@",
-    $ApiKey,
-    $ApiSecret,
+    $ApiKey = $env:api_key,
+    $ApiSecret = $env:api_secret,
     $Ttl = 600, # in seconds
     $ServiceLabel = 'app=nginx-ingress',
     $NameSpace = 'ingress',
