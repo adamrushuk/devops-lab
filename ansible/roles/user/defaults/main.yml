@@ -1,0 +1,15 @@
+user_request_body:
+  userId: "demo_user"
+  firstName: "demo"
+  lastName: "user"
+  emailAddress: "demo_user@domain.com"
+  status: "active"
+  password: "demo"
+  roles: [
+    "nx-admin"
+  ]
+
+anon_user_request_body:
+  enabled: "true"
+  userId: "anonymous"
+  realmName: "NexusAuthorizingRealm"
