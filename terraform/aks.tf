@@ -51,6 +51,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   location            = azurerm_resource_group.aks.location
   resource_group_name = azurerm_resource_group.aks.name
   dns_prefix          = var.aks_dns_prefix
+  kubernetes_version  = var.kubernetes_version
 
   default_node_pool {
     name                = var.agent_pool_profile_name
@@ -76,10 +77,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
-  service_principal {
-    client_id     = var.service_principal_client_id
-    client_secret = var.service_principal_client_secret
-  }
+  # service_principal {
+  #   client_id     = var.service_principal_client_id
+  #   client_secret = var.service_principal_client_secret
+  # }
 
   addon_profile {
     kube_dashboard {

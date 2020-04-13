@@ -89,6 +89,10 @@ configuration:
     # Additional provider-specific configuration. See link above
     # for details of required/optional fields for your provider.
     config: {}
+    # TODO: complete below same as "$backupResourceGroupName,storageAccount=$storageAccountName" in CLI
+    # config:
+    #   resourceGroup: TODO
+    #   storageAccount: TODO
     #  region:
     #  s3ForcePathStyle:
     #  s3Url:

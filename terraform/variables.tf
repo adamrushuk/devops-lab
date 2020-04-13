@@ -41,6 +41,10 @@ variable "tags" {
 
 
 # AKS
+variable "kubernetes_version" {
+  default     = "1.15.10"
+}
+
 variable "aks_dns_prefix" {
   default = "__PREFIX__"
 }
