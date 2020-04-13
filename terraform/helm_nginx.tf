@@ -22,5 +22,5 @@ resource "helm_release" "nginx" {
   namespace  = "ingress"
   repository = data.helm_repository.stable.metadata[0].name
   version    = "1.36.0"
-  values     = ["${file("nginx/nginx_values.yaml")}"]
+  values     = ["${file("helm/nginx_values.yaml")}"]
 }
