@@ -28,7 +28,7 @@ resource "helm_release" "nginx" {
 
 resource "null_resource" "update_dns" {
   provisioner "local-exec" {
-    command = "Update-Dns.ps1"
+    command = "./Update-Dns.ps1"
     environment = {
       aks_rg           = azurerm_kubernetes_cluster.aks.resource_group_name
       aks_cluster_name = azurerm_kubernetes_cluster.aks.name
