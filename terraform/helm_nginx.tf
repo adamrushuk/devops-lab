@@ -38,7 +38,7 @@ resource "null_resource" "update_dns" {
       api_secret       = var.api_secret
     }
     interpreter = ["pwsh", "-NonInteractive", "-Command"]
-    working_dir = "${path.module}../scripts/"
+    working_dir = "${path.module}/../scripts/"
   }
   depends_on = [helm_release.nginx]
 }
