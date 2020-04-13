@@ -82,6 +82,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
   #   client_secret = var.service_principal_client_secret
   # }
 
+  # managed identity: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#type-1
+  identity {
+    type = "SystemAssigned"
+  }
+
   addon_profile {
     kube_dashboard {
       enabled = var.enable_aks_dashboard
