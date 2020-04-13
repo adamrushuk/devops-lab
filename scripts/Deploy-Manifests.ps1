@@ -60,7 +60,7 @@ kubectl apply -n ingress -f ./manifests/nexus.yml
 # default to basic http
 $ingressFilename = "ingress-http.yml"
 if ($env:ENABLE_TLS_INGRESS -eq "true") {
-    $ingressFilename = "ingress.yml"
+    $ingressFilename = "ingress-tls.yml"
 }
 Write-Output "`nAPPLYING: Ingress [$ingressFilename]..."
 kubectl apply -n ingress -f ./manifests/$ingressFilename
