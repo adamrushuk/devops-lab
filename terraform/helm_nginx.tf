@@ -25,7 +25,7 @@ resource "helm_release" "nginx" {
   values     = ["${file("helm/nginx_values.yaml")}"]
 }
 
-
+# https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "update_dns" {
   provisioner "local-exec" {
     command = "./Update-Dns.ps1"
