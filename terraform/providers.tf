@@ -9,13 +9,20 @@ terraform {
 
   # providers (pin all versions)
   required_providers {
-    azurerm    = "=2.5.0"
+    # azurerm    = "=2.5.0"
     helm       = "=1.1.1"
     kubernetes = "=1.11.1"
   }
 
   required_version = ">=0.12"
 }
+
+# must include blank features block
+provider "azurerm" {
+  version = "=2.5.0"
+  features {}
+}
+
 
 provider "kubernetes" {
   client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
