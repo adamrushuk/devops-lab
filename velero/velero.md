@@ -19,10 +19,10 @@
 
 ## TODO
 
-- [ ] Complete test backup / restore
-- [ ] Test Velero Server install using CLI
-- [ ] Troubleshoot why Velero looks in wrong AKS resource group for disks to backup
-- [ ] Test Velero Server install using Helm
+- [x] Complete test backup / restore
+- [x] Test Velero Server install using CLI
+- [x] Troubleshoot why Velero looks in wrong AKS resource group for disks to backup
+- [x] Test Velero Server install using Helm
 - [ ] Configure and test Restic for AzureFile backup support: https://velero.io/docs/v1.2.0/restic/
 
 ## Prereqs

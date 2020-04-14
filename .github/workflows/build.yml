@@ -106,6 +106,9 @@ jobs:
 
     - name: Terraform Plan
       run: pwsh -command "./scripts/Plan-Terraform.ps1"
+      env:
+        # https://www.terraform.io/docs/configuration/variables.html#environment-variables
+        TF_VAR_credentials_velero: ${{ secrets.CREDENTIALS_VELERO }}
 
     - name: Terraform Apply
       run: pwsh -command "./scripts/Apply-Terraform.ps1"

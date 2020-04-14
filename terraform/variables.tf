@@ -110,6 +110,10 @@ variable "velero_storage_account_name" {
   default = "__VELERO_STORAGE_ACCOUNT__"
 }
 
+variable "credentials_velero" {
+  default = "NOT_DEFINED"
+}
+
 
 # DNS update script vars
 variable "dns_domain_name" {
