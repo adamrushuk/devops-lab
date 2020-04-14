@@ -23,6 +23,7 @@ resource "helm_release" "nginx" {
   repository = data.helm_repository.stable.metadata[0].name
   version    = "1.36.0"
   values     = ["${file("helm/nginx_values.yaml")}"]
+  depends_on = [kubernetes_namespace.ingress]
 }
 
 # https://www.terraform.io/docs/provisioners/local-exec.html

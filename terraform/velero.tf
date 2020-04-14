@@ -47,12 +47,13 @@ resource "kubernetes_namespace" "velero" {
 }
 
 resource "helm_release" "velero" {
+  atomic     = true
   chart      = "velero"
   name       = "velero"
   namespace  = "velero"
   repository = data.helm_repository.vmware_tanzu.metadata[0].name
   values     = ["${file("helm/velero_values.yaml")}"]
-  version    = "2.9.11"
+  version    = "2.9.7"
   set {
     name  = "configuration.backupStorageLocation.config.resourceGroup"
     value = azurerm_resource_group.velero.name
@@ -73,4 +74,6 @@ resource "helm_release" "velero" {
     name  = "configuration.logLevel"
     value = "debug"
   }
+  timeout    = 600
+  depends_on = [kubernetes_namespace.velero]
 }
