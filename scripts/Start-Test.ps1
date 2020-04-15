@@ -18,7 +18,7 @@ $taskMessage = "Installing Pester "
 Write-Verbose "STARTED: $taskMessage..."
 try {
     Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
-    Install-Module -Name "Pester" -Scope "CurrentUser" -Force -Verbose:$VerbosePreference
+    Install-Module -Name "Pester" -Scope "CurrentUser" -Force -Verbose:$env:CI_DEBUG
 
     Write-Verbose "FINISHED: $taskMessage."
 }
