@@ -121,7 +121,9 @@ jobs:
 
     # Ansible
     - name: Run Ansible playbook
-      run: ./scripts/ansible.sh
+      run: |
+        chmod -R +x ./scripts/
+        ./scripts/ansible.sh
       env:
         NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
 
