@@ -119,6 +119,12 @@ jobs:
       run: pwsh -command "./scripts/Deploy-Manifests.ps1"
 
 
+    # Ansible
+    - name: Run Ansible playbook
+      run: ./scripts/ansible.sh
+      env:
+        NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
+
     # Pester tests
     - name: Run Pester tests
       run: pwsh -command "./scripts/Start-Test.ps1"
