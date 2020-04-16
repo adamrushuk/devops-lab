@@ -118,6 +118,9 @@ jobs:
     - name: Deploy kubernetes manifests
       run: pwsh -command "./scripts/Deploy-Manifests.ps1"
 
+    - name: Wait for resources to be "Ready"
+      run: ./scripts/wait.sh
+
 
     # Ansible
     - name: Run Ansible playbook

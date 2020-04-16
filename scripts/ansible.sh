@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Prepares env vars and runs Ansible Playbook
+
 # Ensure strict mode and predictable pipeline failure
 set -euo pipefail
 
