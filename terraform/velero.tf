@@ -53,7 +53,7 @@ resource "helm_release" "velero" {
   namespace  = "velero"
   repository = data.helm_repository.vmware_tanzu.metadata[0].name
   values     = ["${file("helm/velero_values.yaml")}"]
-  version    = "2.9.13"
+  version    = var.velero_chart_version
   set {
     name  = "configuration.backupStorageLocation.config.resourceGroup"
     value = azurerm_resource_group.velero.name

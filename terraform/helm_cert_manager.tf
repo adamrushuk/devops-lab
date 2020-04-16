@@ -9,7 +9,7 @@ resource "helm_release" "cert_manager" {
   name       = "cert-manager"
   namespace  = "ingress"
   repository = data.helm_repository.jetstack.metadata[0].name
-  version    = "v0.15.0-alpha.0"
+  version    = var.cert_manager_chart_version
   set {
     name  = "global.logLevel"
     value = "3"

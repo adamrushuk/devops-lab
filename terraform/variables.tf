@@ -1,3 +1,17 @@
+# Helm charts
+variable "nginx_chart_version" {
+  default = "1.36.2"
+}
+
+variable "cert_manager_chart_version" {
+  default = "v0.15.0-alpha.0"
+}
+
+variable "velero_chart_version" {
+  default = "2.9.13"
+}
+
+
 # Common
 variable "location" {
   default = "__LOCATION__"
@@ -42,7 +56,7 @@ variable "tags" {
 
 # AKS
 variable "kubernetes_version" {
-  default     = "1.15.10"
+  default = "1.15.10"
 }
 
 variable "aks_dns_prefix" {
