@@ -15,6 +15,9 @@ echo -e "FINISHED: $message.\n"
 kubectl version --short
 
 # Wait
-kubectl --namespace ingress wait pod nexus-0 --for condition=ready --timeout=5m
+pod_name="nexus-0"
+message="Waiting for Ready condition on pod: [$pod_name]"
+echo -e "\nSTARTED: $message..."
+kubectl --namespace ingress wait pod $pod_name --for condition=ready --timeout=5m
 
 echo -e "FINISHED: $message."
