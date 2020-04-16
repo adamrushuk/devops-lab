@@ -22,7 +22,7 @@ podName=$(kubectl get pod -n ingress -l app=nexus -o jsonpath="{.items[0].metada
 
 # Get admin password from pod
 # NOTE: "/nexus-data/admin.password" is deleted after the admin password is changed
-adminPassword=$(kubectl exec -n ingress -it "$podName" cat /nexus-data/admin.password)
+adminPassword=$(kubectl exec -n ingress "$podName" -- file="/nexus-data/admin.password"; if [ -e "$file" ]; then cat "$file"; else "NOT_DEFINED"; fi)
 if [ "$CI_DEBUG" == "true" ]; then
     echo "Default admin password is: [$adminPassword]"
 fi
