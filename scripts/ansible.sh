@@ -3,7 +3,7 @@
 # Prepares env vars and runs Ansible Playbook
 
 # Ensure strict mode and predictable pipeline failure
-set -euo pipefail
+set -eo pipefail
 
 #region Init
 # env vars set in GH build workflow
@@ -11,7 +11,7 @@ set -euo pipefail
 # $AKS_RG_NAME
 
 # Get AKS Cluster credentials
-az aks get-credentials --resource-group $AKS_RG_NAME --name $AKS_CLUSTER_NAME --overwrite-existing
+az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME" --overwrite-existing
 #endregion Init
 
 
@@ -22,7 +22,7 @@ podName=$(kubectl get pod -n ingress -l app=nexus -o jsonpath="{.items[0].metada
 
 # Get admin password from pod
 # NOTE: "/nexus-data/admin.password" is deleted after the admin password is changed
-adminPassword=$(kubectl exec -n ingress "$podName" -- file="/nexus-data/admin.password"; if [ -e "$file" ]; then cat "$file"; else "NOT_DEFINED"; fi)
+adminPassword=$(kubectl exec -n ingress "$podName" -- sh -c "test -f /nexus-data/admin.password && cat /nexus-data/admin.password || echo 'NOT_DEFINED'")
 if [ "$CI_DEBUG" == "true" ]; then
     echo "Default admin password is: [$adminPassword]"
 fi
@@ -34,9 +34,11 @@ export NEW_ADMIN_PASSWORD=$NEXUS_ADMIN_PASSWORD
 
 
 #region Set base url
-# TODO: use $DNS_DOMAIN_NAME and $ENABLE_TLS_INGRESS env vars to set http or https
-nexusHost=$(kubectl get ingress ingress --namespace ingress -o jsonpath="{.spec.rules[0].host}")
-nexusBaseUrl="https://$nexusHost"
+protocol="http"
+if [ "$ENABLE_TLS_INGRESS" == "true" ]; then
+    protocol="https"
+fi
+nexusBaseUrl="$protocol://$DNS_DOMAIN_NAME"
 #endregion Set base url
 
 
