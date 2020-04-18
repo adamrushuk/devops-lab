@@ -9,6 +9,7 @@
 - name: debug repos
   debug:
     var: repositories
+  when: enable_debug_output == true
 
 # - name: filter repo names
 #   debug:
@@ -22,6 +23,7 @@
 - name: debug repo names
   debug:
     var: repo_names
+  when: enable_debug_output == true
 
 - name: create docker repo
   uri:
@@ -35,3 +37,4 @@
 - name: debug create docker repo
   debug:
     var: docker_repo_api_response
+  when: enable_debug_output == true
