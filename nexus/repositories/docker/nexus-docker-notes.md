@@ -121,7 +121,7 @@ Login to the Nexus Docker repo (adds an entry to `~/.docker/config.json`):
 
 ```powershell
 # Input password via STDIN
-echo $adminPassword | docker login --username admin --password-stdin $nexusDockerBaseUrl
+echo "demo" | docker login --username demo_user --password-stdin $nexusDockerBaseUrl
 ```
 
 ## Push Images to Docker Repo
@@ -219,8 +219,8 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
     kubectl create secret docker-registry regcred `
     --namespace ingress `
     --docker-server=$nexusDockerHost `
-    --docker-username=admin `
-    --docker-password=$adminPassword
+    --docker-username=demo_user `
+    --docker-password=demo
 
     # [OPTIONAL] Add secret using existing Docker config `~/.docker/config.json`
     # WARNING: credential helpers (credHelpers or credsStore) are not supported
