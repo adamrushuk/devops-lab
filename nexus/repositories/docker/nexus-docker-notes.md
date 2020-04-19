@@ -120,8 +120,11 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 Login to the Nexus Docker repo (adds an entry to `~/.docker/config.json`):
 
 ```powershell
+# check build.yml for DEMO_USER vars
+$demoUserUsername = <DEMO_USER_USERNAME>
+$demoUserPassword = <DEMO_USER_PASSWORD>
 # Input password via STDIN
-echo "demo" | docker login --username demo_user --password-stdin $nexusDockerBaseUrl
+echo $demoUserPassword | docker login --username $demoUserUsername --password-stdin $nexusDockerBaseUrl
 ```
 
 ## Push Images to Docker Repo
@@ -219,8 +222,8 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
     kubectl create secret docker-registry regcred `
     --namespace ingress `
     --docker-server=$nexusDockerHost `
-    --docker-username=demo_user `
-    --docker-password=demo
+    --docker-username=$demoUserUsername `
+    --docker-password=$demoUserPassword
 
     # [OPTIONAL] Add secret using existing Docker config `~/.docker/config.json`
     # WARNING: credential helpers (credHelpers or credsStore) are not supported

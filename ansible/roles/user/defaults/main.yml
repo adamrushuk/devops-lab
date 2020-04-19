@@ -1,10 +1,10 @@
 user_request_body:
-  userId: "demo_user"
+  userId: "{{ demo_user_username }}"
   firstName: "demo"
   lastName: "user"
-  emailAddress: "demo_user@domain.com"
+  emailAddress: "{{ demo_user_username }}@domain.com"
   status: "active"
-  password: "demo"
+  password: "{{ demo_user_password }}"
   roles: [
     "nx-admin"
   ]
