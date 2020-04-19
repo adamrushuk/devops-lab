@@ -1,6 +1,15 @@
 ---
 # INIT
-- name: admin access check
+- name: wait for Nexus API to respond
+  uri:
+    url: "{{ api_url }}/v1/status/"
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 60
+  delay: 5
+
+- name: test admin access
   uri:
     url: "{{ api_url }}/v1/status/"
     method: GET

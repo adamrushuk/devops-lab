@@ -8,11 +8,11 @@ $ErrorActionPreference = "Stop"
 $message = "[HELM] Installing cert-manager"
 Write-Output "STARTED: $message..."
 # Install the CustomResourceDefinition resources separately
-# kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/v0.13.1/deploy/manifests/00-crds.yaml --namespace ingress-tls
+# kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/v0.13.1/deploy/manifests/00-crds.yaml --namespace ingress
 kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/v0.13.1/deploy/manifests/00-crds.yaml
 
-# Label the ingress-tls namespace to disable resource validation
-# kubectl label namespace ingress-tls certmanager.k8s.io/disable-validation=true
+# Label the ingress namespace to disable resource validation
+# kubectl label namespace ingress certmanager.k8s.io/disable-validation=true
 
 # Add the Jetstack Helm repository
 helm repo add jetstack https://charts.jetstack.io
@@ -25,7 +25,7 @@ helm repo update
 
 # Check if Helm release installed already
 $helmReleaseName = "cert-manager"
-$helmDeployedList = helm list --namespace ingress-tls --output json | ConvertFrom-Json
+$helmDeployedList = helm list --namespace ingress --output json | ConvertFrom-Json
 
 if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
     Write-Output "SKIPPING: [$helmReleaseName] already deployed."
@@ -35,7 +35,7 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
     # https://github.com/jetstack/cert-manager/blob/master/deploy/charts/cert-manager/values.yaml
     # helm upgrade [RELEASE] [CHART] [flags]
     helm upgrade cert-manager jetstack/cert-manager `
-        --namespace ingress-tls `
+        --namespace ingress `
         --install --atomic `
         -f ./cert-manager/certmanager_values.yaml `
         --version v0.13.1
@@ -44,7 +44,7 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
 
 # Verify
 # Show cert-manager pods
-kubectl get pods -l app.kubernetes.io/instance=cert-manager -o wide --namespace ingress-tls
+kubectl get pods -l app.kubernetes.io/instance=cert-manager -o wide --namespace ingress
 
 Write-Output "FINISHED: $message.`n"
 #endregion

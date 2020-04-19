@@ -4,7 +4,7 @@ docker_repo_request_body:
   storage:
     blobStoreName: default
     strictContentTypeValidation: true
-    writePolicy: allow_once
+    writePolicy: ALLOW_ONCE
   docker:
     v1Enabled: false
     forceBasicAuth: false

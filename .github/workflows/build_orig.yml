@@ -5,12 +5,12 @@ name: Build environment
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
 on:
   # trigger when I star my own repo
-  watch:
-    types: [started]
+  # watch:
+  #   types: [started]
   # trigger via webhook
   # https://github.com/adamrushuk/aks-nexus-velero/blob/master/TriggerCustomAction.ps1#L28
   repository_dispatch:
-    types: [build]
+    types: [DISABLED]
 
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
@@ -20,10 +20,6 @@ env:
 
   # debug
   CI_DEBUG: true
-
-  # api
-  API_KEY: ${{ secrets.API_KEY }}
-  API_SECRET: ${{ secrets.API_SECRET }}
 
   # azure creds
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -35,21 +31,12 @@ env:
   # prod or staging
   CERT_API_ENVIRONMENT: prod
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
-  DOCKER_FQDN: docker-nexus.thehypepipe.co.uk
-  DEMO_USER_USERNAME: demo_user
-  # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
   EMAIL_ADDRESS: adamrushuk+aksnexusvelero@gmail.com
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true
   LOCATION: uksouth
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
-
-  # terraform
-  TF_IN_AUTOMATION: "true"
-  TF_INPUT: "false"
-  TF_VERSION: "0.12.24" # "latest" is supported
-  TF_WORKING_DIR: terraform
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
   # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
@@ -65,20 +52,17 @@ jobs:
     if: github.actor == github.event.repository.owner.login
 
     steps:
-
     # Checkout
-    # https://github.com/marketplace/actions/checkout
     - uses: actions/checkout@v2
       # specify different branch
       # NOT required as I've changed the default branch to develop
       # with:
       #   ref: develop
 
-    # Init tasks - inc Env var concatenation
+    # Env var concatenation
     # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
-    - name: Init tasks - inc Env var concatenation (Workaround)
+    - name: Concatenate env vars (Workaround)
       run: |
-        chmod -R +x ./scripts/
         echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
         echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
         echo ::set-env name=TERRAFORM_STORAGE_ACCOUNT::${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
@@ -112,40 +96,75 @@ jobs:
 
     - name: Terraform Plan
       run: pwsh -command "./scripts/Plan-Terraform.ps1"
-      env:
-        # https://www.terraform.io/docs/configuration/variables.html#environment-variables
-        TF_VAR_credentials_velero: ${{ secrets.CREDENTIALS_VELERO }}
 
     - name: Terraform Apply
       run: pwsh -command "./scripts/Apply-Terraform.ps1"
 
 
+    # Terraform - GitHub Actions
+    # # https://github.com/hashicorp/terraform-github-actions#usage
+    # - name: Terraform Init
+    #   uses: hashicorp/terraform-github-actions@v0.8.0
+    #   with:
+    #     tf_actions_subcommand: init
+    #     tf_actions_version: ${{ env.TF_VERSION }}
+    #     tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+
+    # - name: Terraform Validate
+    #   uses: hashicorp/terraform-github-actions@v0.8.0
+    #   with:
+    #     tf_actions_subcommand: validate
+    #     tf_actions_version: ${{ env.TF_VERSION }}
+    #     tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+
+    # - name: Terraform Plan
+    #   uses: hashicorp/terraform-github-actions@v0.8.0
+    #   with:
+    #     tf_actions_comment: true
+    #     tf_actions_subcommand: plan
+    #     tf_actions_version: ${{ env.TF_VERSION }}
+    #     tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+    #   env:
+    #     # (Optional) The GitHub API token used to post comments to pull requests.
+    #     # Not required if the tf_actions_comment input is set to false
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # - name: Terraform Apply
+    #   uses: hashicorp/terraform-github-actions@v0.8.0
+    #   with:
+    #     tf_actions_subcommand: apply
+    #     tf_actions_version: ${{ env.TF_VERSION }}
+    #     tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+
+
+    # Helm - Init
+    - name: Helm Init
+      run: pwsh -command "./scripts/Init-Helm.ps1"
+
+    # Kubernetes - Ingress
+    - name: Deploy Ingress Controller
+      run: pwsh -command "./scripts/Deploy-Ingress-Controller.ps1"
+
+
+    # DNS
+    - name: Update DNS
+      run: pwsh -command "./scripts/Update-Dns.ps1 -AksResourceGroupName ${{ env.AKS_RG_NAME }} -AksClusterName ${{ env.AKS_CLUSTER_NAME }} -DomainName ${{ env.DNS_DOMAIN_NAME }} -HasSubDomainName:\$${{ env.HAS_SUBDOMAIN }} -ApiKey ${{ secrets.API_KEY }} -ApiSecret ${{ secrets.API_SECRET }}"
+
+
     # Kubernetes
+    # Cert-Manager
+    - name: Deploy cert-manager
+      run: pwsh -command "./scripts/Deploy-Cert-Manager.ps1"
+
+    # Manifests
     - name: Deploy kubernetes manifests
       run: pwsh -command "./scripts/Deploy-Manifests.ps1"
 
-    - name: Wait for resources to be "Ready"
-      run: ./scripts/wait.sh
-
-
-    # Ansible
-    - name: Run Ansible playbook
-      run: ./scripts/ansible.sh
-      env:
-        NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
-        DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
-
-
-    # Docker
-    - name: Docker repo login
-      uses: Azure/docker-login@v1
-      with:
-        login-server: ${{ env.DOCKER_FQDN }}
-        username: ${{ env.DEMO_USER_USERNAME }}
-        password: ${{ secrets.DEMO_USER_PASSWORD }}
-
-    - name: Push images to Docker repo
-      run: ./scripts/push_docker_images.sh
+    # Velero
+    - name: Deploy Velero
+      run: pwsh -command "./velero/Deploy-Velero.ps1"
+      env: # Or as an environment variable
+        CREDENTIALS_VELERO: ${{ secrets.CREDENTIALS_VELERO }}
 
 
     # Pester tests
@@ -158,3 +177,14 @@ jobs:
       with:
         name: test results
         path: test/pester-test-results-junit.xml
+
+
+    # Publish test results to https://www.check-run-reporter.com/
+    # you should probably use a version tag (v1.0.2) instead of @master
+    # WARNING: ALL env vars are passed to this Action Container
+    # - uses: check-run-reporter/action@master
+    #   if: always()
+    #   env:
+    #       CHECK_RUN_REPORTER_LABEL: 'Integration Tests'
+    #       CHECK_RUN_REPORTER_REPORT: 'test/*-junit.xml'
+    #       CHECK_RUN_REPORTER_TOKEN: ${{ secrets.CHECK_RUN_REPORTER_TOKEN }}

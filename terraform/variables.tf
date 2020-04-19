@@ -1,3 +1,17 @@
+# Helm charts
+variable "nginx_chart_version" {
+  default = "1.36.2"
+}
+
+variable "cert_manager_chart_version" {
+  default = "v0.15.0-alpha.0"
+}
+
+variable "velero_chart_version" {
+  default = "2.9.13"
+}
+
+
 # Common
 variable "location" {
   default = "__LOCATION__"
@@ -41,6 +55,10 @@ variable "tags" {
 
 
 # AKS
+variable "kubernetes_version" {
+  default = "1.15.10"
+}
+
 variable "aks_dns_prefix" {
   default = "__PREFIX__"
 }
@@ -106,3 +124,24 @@ variable "velero_storage_account_name" {
   default = "__VELERO_STORAGE_ACCOUNT__"
 }
 
+variable "credentials_velero" {
+  default = "NOT_DEFINED"
+}
+
+
+# DNS update script vars
+variable "dns_domain_name" {
+  default = "__DNS_DOMAIN_NAME__"
+}
+
+variable "has_subdomain" {
+  default = "__HAS_SUBDOMAIN__"
+}
+
+variable "api_key" {
+  default = "__API_KEY__"
+}
+
+variable "api_secret" {
+  default = "__API_SECRET__"
+}

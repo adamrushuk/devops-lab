@@ -120,8 +120,11 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 Login to the Nexus Docker repo (adds an entry to `~/.docker/config.json`):
 
 ```powershell
+# check build.yml for DEMO_USER vars
+$demoUserUsername = <DEMO_USER_USERNAME>
+$demoUserPassword = <DEMO_USER_PASSWORD>
 # Input password via STDIN
-echo $adminPassword | docker login --username admin --password-stdin $nexusDockerBaseUrl
+echo $demoUserPassword | docker login --username $demoUserUsername --password-stdin $nexusDockerBaseUrl
 ```
 
 ## Push Images to Docker Repo
@@ -217,33 +220,33 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
     # Add secret
     # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-by-providing-credentials-on-the-command-line
     kubectl create secret docker-registry regcred `
-    --namespace ingress-tls `
+    --namespace ingress `
     --docker-server=$nexusDockerHost `
-    --docker-username=admin `
-    --docker-password=$adminPassword
+    --docker-username=$demoUserUsername `
+    --docker-password=$demoUserPassword
 
     # [OPTIONAL] Add secret using existing Docker config `~/.docker/config.json`
     # WARNING: credential helpers (credHelpers or credsStore) are not supported
     # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials
     kubectl create secret generic nexus-docker-credentials `
-        --namespace ingress-tls `
+        --namespace ingress `
         --from-file=.dockerconfigjson="~/.docker/config.json" `
         --type=kubernetes.io/dockerconfigjson
 
     # Show secret
-    kubectl get secret regcred --namespace ingress-tls --output yaml
+    kubectl get secret regcred --namespace ingress --output yaml
 
     # Inspect secret data
     # bash
-    kubectl get secret regcred --namespace ingress-tls --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
+    kubectl get secret regcred --namespace ingress --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
 
     # powershell
-    $base64String = kubectl get secret regcred --namespace ingress-tls --output="jsonpath={.data.\.dockerconfigjson}"
+    $base64String = kubectl get secret regcred --namespace ingress --output="jsonpath={.data.\.dockerconfigjson}"
     [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($base64String))
 
     # WIP: can we pipe to WSL?
-    kubectl get secret regcred --namespace ingress-tls --output="jsonpath={.data.\.dockerconfigjson}" | wsl.exe base64 --decode
-    kubectl get secret regcred --namespace ingress-tls --output="jsonpath={.data.\.dockerconfigjson}" | wsl.exe base64 --decode "$_"
+    kubectl get secret regcred --namespace ingress --output="jsonpath={.data.\.dockerconfigjson}" | wsl.exe base64 --decode
+    kubectl get secret regcred --namespace ingress --output="jsonpath={.data.\.dockerconfigjson}" | wsl.exe base64 --decode "$_"
     ```
 
 1. Apply kubernetes manifest:
@@ -261,14 +264,14 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
 
     ```powershell
     # Check resources
-    kubectl get all,ing --namespace ingress-tls -l app=hello
-    kubectl describe deploy --namespace ingress-tls -l app=hello
+    kubectl get all,ing --namespace ingress -l app=hello
+    kubectl describe deploy --namespace ingress -l app=hello
 
     # Show all pods not running
     kubectl get pods --field-selector=status.phase!=Running --all-namespaces
 
     # Show events
-    kubectl get events --sort-by=.metadata.creationTimestamp --namespace ingress-tls
+    kubectl get events --sort-by=.metadata.creationTimestamp --namespace ingress
 
     # Test web output
     $testUrl = "$nexusBaseUrl/hello"
@@ -283,8 +286,8 @@ Invoke-RestMethod $nexusDockerBaseUrl/v2/hello/tags/list
 
     ```powershell
     # Enter pod shell
-    $podName = kubectl get pod -n ingress-tls -l app=hello -o jsonpath="{.items[0].metadata.name}"
-    kubectl exec -n ingress-tls -it $podName /bin/sh
+    $podName = kubectl get pod -n ingress -l app=hello -o jsonpath="{.items[0].metadata.name}"
+    kubectl exec -n ingress -it $podName /bin/sh
 
     # Show open ports (eg 80, 443)
     netstat -tulpn

@@ -14,19 +14,19 @@
 
 [CmdletBinding()]
 param (
-    $AksResourceGroupName,
-    $AksClusterName,
+    $AksResourceGroupName = $env:aks_rg,
+    $AksClusterName = $env:aks_cluster_name,
     $UseAksAdmin,
     $TimeoutSeconds = 1800, # 1800s = 30 mins
     $RetryIntervalSeconds = 10,
-    $DomainName,
-    [switch]$HasSubDomainName,
+    $DomainName = $env:dns_domain_name,
+    $HasSubDomainName = $env:has_subdomain,
     $RecordName = "@",
-    $ApiKey,
-    $ApiSecret,
+    $ApiKey = $env:api_key,
+    $ApiSecret = $env:api_secret,
     $Ttl = 600, # in seconds
     $ServiceLabel = 'app=nginx-ingress',
-    $NameSpace = 'ingress-tls',
+    $NameSpace = 'ingress',
     $DockerPrefix = 'docker'
 )
 
@@ -66,7 +66,7 @@ Write-Verbose "Found IP [$IPAddress]"
 
 #region DNS
 # Split subdomain
-if ($HasSubDomainName.IsPresent) {
+if ($HasSubDomainName -eq "true") {
     Write-Verbose "HasSubDomainName switch selected..."
     $DomainNameSplit = $DomainName -split "\."
     $RecordName = $DomainNameSplit[0]

@@ -4,7 +4,7 @@ metadata:
   labels:
     app: hello
   name: hello
-  namespace: ingress-tls
+  namespace: ingress
 spec:
   replicas: 1
   selector:
@@ -28,7 +28,7 @@ spec:
   kind: Service
   metadata:
     name: hello
-    namespace: ingress-tls
+    namespace: ingress
     labels:
       app: hello
   spec:
@@ -41,7 +41,7 @@ spec:
   kind: Ingress
   metadata:
     name: hello
-    namespace: ingress-tls
+    namespace: ingress
     annotations:
       kubernetes.io/ingress.class: nginx
       nginx.org/hsts: "false"

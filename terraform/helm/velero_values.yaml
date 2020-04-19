@@ -8,7 +8,8 @@
 # enabling restic). Required.
 image:
   repository: velero/velero
-  tag: v1.3.0
+  tag: v1.3.1
+  digest: sha256:0c74f1d552ef25a4227e582f4c0e6b3db3402abe196595ee9442ceeb43b99696
   pullPolicy: IfNotPresent
 
 # Annotations to add to the Velero deployment's pod template. Optional.
@@ -23,12 +24,12 @@ resources: {}
 
 # Init containers to add to the Velero deployment's pod spec. At least one plugin provider image is required.
 initContainers:
-- name: velero-plugin-for-microsoft-azure
-  image: velero/velero-plugin-for-microsoft-azure:v1.0.1
-  imagePullPolicy: IfNotPresent
-  volumeMounts:
-    - mountPath: /target
-      name: plugins
+  - name: velero-plugin-for-microsoft-azure
+    image: velero/velero-plugin-for-microsoft-azure:v1.0.1
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
 
 # SecurityContext to use for the Velero deployment. Optional.
 # Set fsGroup for `AWS IAM Roles for Service Accounts`
@@ -63,6 +64,9 @@ metrics:
     enabled: false
     additionalLabels: {}
 
+# Install CRDs as a templates. Enabled by default.
+installCRDs: true
+
 ##
 ## End of deployment-related settings.
 ##
@@ -89,10 +93,6 @@ configuration:
     # Additional provider-specific configuration. See link above
     # for details of required/optional fields for your provider.
     config: {}
-    # TODO: complete below same as "$backupResourceGroupName,storageAccount=$storageAccountName" in CLI
-    # config:
-    #   resourceGroup: TODO
-    #   storageAccount: TODO
     #  region:
     #  s3ForcePathStyle:
     #  s3Url:
@@ -233,7 +233,7 @@ schedules: {}
 #       velero.io/plugin-config: ""
 #       velero.io/restic: RestoreItemAction
 #     data:
-#       image: gcr.io/heptio-images/velero-restic-restore-help
+#       image: velero/velero-restic-restore-helper:v1.3.1
 configMaps: {}
 
 ##

@@ -4,6 +4,7 @@
     # Examples
 
     # Add GitHub Personal access token to env var
+
     $env:GITHUB_TOKEN = "<GITHUB_ACCESS_TOKEN>"
 
     # Trigger test action
@@ -18,6 +19,10 @@
 
 [CmdletBinding()]
 param(
+    # Generate a Personal access token
+    # workflow perms are pre-selected:
+    # https://github.com/settings/tokens/new?scopes=repo,read:user,user:email,write:repo_hook
+
     # Personal Access Token stored as environment variable
     $GithubToken = $env:GITHUB_TOKEN,
 

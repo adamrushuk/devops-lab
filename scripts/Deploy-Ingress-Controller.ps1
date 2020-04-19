@@ -24,7 +24,7 @@ helm repo update
 
 # Check if Helm release installed already
 $helmReleaseName = "nginx-ingress"
-$helmDeployedList = helm list --namespace ingress-tls --output json | ConvertFrom-Json
+$helmDeployedList = helm list --namespace ingress --output json | ConvertFrom-Json
 
 if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
     Write-Output "`nSKIPPING: [$helmReleaseName] already deployed."
@@ -33,7 +33,7 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
 
     # helm upgrade [RELEASE] [CHART] [flags]
     helm upgrade nginx-ingress stable/nginx-ingress `
-        --namespace ingress-tls `
+        --namespace ingress `
         --install --atomic `
         -f ./nginx/nginx_values.yaml
         # --debug --dry-run
@@ -41,8 +41,8 @@ if ($helmReleaseName -in $helmDeployedList.Releases.Name) {
 
 # Check nginx-ingress resources
 helm list
-kubectl get all -n ingress-tls -l app=nginx-ingress
-kubectl get ing -n ingress-tls
+kubectl get all -n ingress -l app=nginx-ingress
+kubectl get ing -n ingress
 
 Write-Output "FINISHED: $message."
 #endregion

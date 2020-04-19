@@ -19,10 +19,10 @@
 
 ## TODO
 
-- [ ] Complete test backup / restore
-- [ ] Test Velero Server install using CLI
-- [ ] Troubleshoot why Velero looks in wrong AKS resource group for disks to backup
-- [ ] Test Velero Server install using Helm
+- [x] Complete test backup / restore
+- [x] Test Velero Server install using CLI
+- [x] Troubleshoot why Velero looks in wrong AKS resource group for disks to backup
+- [x] Test Velero Server install using Helm
 - [ ] Configure and test Restic for AzureFile backup support: https://velero.io/docs/v1.2.0/restic/
 
 ## Prereqs
@@ -270,7 +270,7 @@ Start-Process $newUrlPv
 ```powershell
 # Monitor deployment progress
 # use splatting: https://stackoverflow.com/questions/52854092/how-to-use-powershell-splatting-for-azure-cli
-$kubeParams = "-n", "ingress-tls", "-l", "app=nexus"
+$kubeParams = "-n", "ingress", "-l", "app=nexus"
 kubectl @kubeParams get all,pvc,pv
 kubectl @kubeParams describe pod
 kubectl @kubeParams describe sts
@@ -280,7 +280,7 @@ kubectl @kubeParams get sts --watch
 kubectl @kubeParams logs -f --all-containers --since 20m
 
 # Wait for EXTERNAL-IP
-kubectl get svc nginx-ingress-controller -n ingress-tls -w
+kubectl get svc nginx-ingress-controller -n ingress -w
 
 # Open browser
 $nexusHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"
@@ -288,7 +288,7 @@ $nexusBrowseUrl = "http://$nexusHost/#browse/browse:nuget-hosted"
 Start-Process $nexusBrowseUrl
 
 # Create a backup
-velero backup create nexus-pv-backup --include-namespaces ingress-tls -l app=nexus
+velero backup create nexus-pv-backup --include-namespaces ingress -l app=nexus
 
 # Check backup
 velero backup get
@@ -298,7 +298,7 @@ velero backup logs nexus-pv-backup
 velero backup logs nexus-pv-backup | sls "error"
 
 # Simulate a disaster
-$kubeParams = "-n", "ingress-tls", "-l", "app=nexus"
+$kubeParams = "-n", "ingress", "-l", "app=nexus"
 kubectl @kubeParams get all,pvc,pv
 kubectl @kubeParams delete all,pvc
 # Wait for nexus resources to be deleted
@@ -323,12 +323,12 @@ velero restore logs nexus-pv-nexus-pv-backup-20200309075403
 # Monitor restore progress
 kubectl @kubeParams get all,pvc,pv
 kubectl @kubeParams describe pod
-kubectl get events --sort-by=.metadata.creationTimestamp -n ingress-tls
+kubectl get events --sort-by=.metadata.creationTimestamp -n ingress
 kubectl @kubeParams get sts --watch
 # kubectl logs sts -f --all-containers --since 20m
 
 # Check resources and wait for EXTERNAL-IP
-kubectl get svc -n ingress-tls -w
+kubectl get svc -n ingress -w
 
 # Open browser
 $nexusHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"
