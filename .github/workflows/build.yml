@@ -43,6 +43,8 @@ env:
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
 
   # terraform
+  TF_IN_AUTOMATION: "true"
+  TF_INPUT: "false"
   TF_VERSION: "0.12.24" # "latest" is supported
   TF_WORKING_DIR: terraform
 
