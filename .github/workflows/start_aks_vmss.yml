@@ -1,9 +1,9 @@
-name: Deallocate AKS VMSS
+name: Start AKS VMSS
 
 on:
   repository_dispatch:
     # name of GitHub event that triggers workflow
-    types: [deallocate_vmss]
+    types: [start_vmss]
 
 # global environment variables
 env:
@@ -20,7 +20,7 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
 jobs:
-  deallocate_vmss:
+  start_vmss:
     runs-on: ubuntu-18.04
 
     # only run if owner triggered action
@@ -51,6 +51,6 @@ jobs:
     - name: Login to Azure
       run: pwsh -command "./scripts/Login-Azure.ps1"
 
-    # Deallocate
-    - name: Deallocate AKS VMSS
-      run: ./scripts/deallocate_aks_vmss.sh
+    # Start
+    - name: Start AKS VMSS
+      run: ./scripts/start_aks_vmss.sh
