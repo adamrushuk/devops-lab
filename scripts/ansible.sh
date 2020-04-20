@@ -3,7 +3,8 @@
 # Prepares env vars and runs Ansible Playbook
 
 # Ensure strict mode and predictable pipeline failure
-set -eo pipefail
+set -euo pipefail
+trap "echo 'error: Script failed: see failed command above'" ERR
 
 #region Init
 # env vars set in GH build workflow
