@@ -30,6 +30,6 @@ else
     echo -e "\nSKIPPING: $message...they already exist in repo."
 
     # List tags
-    curl "$DOCKER_FQDN/v2/busybox/tags/list"
-    curl "$DOCKER_FQDN/v2/hello/tags/list"
+    curl -s "$DOCKER_FQDN/v2/busybox/tags/list"
+    curl -s "$DOCKER_FQDN/v2/hello/tags/list"
 fi
