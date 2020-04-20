@@ -19,7 +19,7 @@ env:
   PREFIX: rush
 
   # debug
-  CI_DEBUG: true
+  CI_DEBUG: false
 
   # api
   API_KEY: ${{ secrets.API_KEY }}
