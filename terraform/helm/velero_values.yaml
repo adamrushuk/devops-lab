@@ -220,10 +220,21 @@ restic:
 #   mybackup:
 #     schedule: "0 0 * * *"
 #     template:
-#       ttl: "240h"
+#       ttl: "24h"
 #       includedNamespaces:
 #        - foo
 schedules: {}
+# schedules:
+#   mybackup:
+#     # run every day at midnight
+#     schedule: "0 0 * * *"
+#     template:
+#       storageLocation: "azure"
+#       # retain backups for 2 days
+#       ttl: "48h"
+#       # only backup "ingress" namespace
+#       includedNamespaces:
+#        - ingress
 
 # Velero ConfigMaps.
 # Eg:
