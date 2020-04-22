@@ -74,4 +74,4 @@ jobs:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       uses: pullreminders/slack-action@v1.0.9
       with:
-        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[${{ env.GITHUB_ACTOR }}] triggered [${{ env.GITHUB_EVENT_NAME }}] event in [${{ env.GITHUB_REPOSITORY }}] repo \"}'
+        args: "{\"channel\":\"C012ZQHT9A4\",\"text\":\"[${{ env.GITHUB_ACTOR }}] triggered [${{ env.GITHUB_EVENT_NAME }}] event in [${{ env.GITHUB_REPOSITORY }}] repo \"}"
