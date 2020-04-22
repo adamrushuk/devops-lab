@@ -55,7 +55,7 @@ jobs:
       # pwsh requires double quotes when setting env vars
       run: |
         echo "::set-env name=MY_CONCATENATED_PWSH_VAR::${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-pwsh-stepvalue01"
-        echo "::set-env name=SLACK_JSON::{\"channel\":\"C012ZQHT9A4\",\"text\":\"[${{ env.GITHUB_ACTOR }}] triggered [${{ env.GITHUB_EVENT_NAME }}] event in [${{ env.GITHUB_REPOSITORY }}] repo \"}
+        echo "::set-env name=SLACK_JSON::{\"channel\":\"C012ZQHT9A4\",\"text\":\"$env:GITHUB_ACTOR] triggered $env:GITHUB_EVENT_NAME] event in $env:GITHUB_REPOSITORY] repo \"}"
 
     - name: Output event data
       shell: pwsh
