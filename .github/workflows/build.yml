@@ -160,3 +160,12 @@ jobs:
       with:
         name: test results
         path: test/pester-test-results-junit.xml
+
+
+    # Notify
+    - name: Notify slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: pullreminders/slack-action@v1.0.9
+      with:
+        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"Build complete for ${{ env.GITHUB_REPOSITORY }} \"}'
