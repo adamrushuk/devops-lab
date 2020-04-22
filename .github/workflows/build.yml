@@ -168,4 +168,5 @@ jobs:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       uses: pullreminders/slack-action@v1.0.9
       with:
-        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"Build complete for ${{ env.GITHUB_REPOSITORY }} \"}'
+        # env var concatenation not supported atm, so hard-code messages
+        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Build complete\"}'
