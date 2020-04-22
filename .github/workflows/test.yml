@@ -55,6 +55,7 @@ jobs:
       # pwsh requires double quotes when setting env vars
       run: |
         echo "::set-env name=MY_CONCATENATED_PWSH_VAR::${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-pwsh-stepvalue01"
+        echo "::set-env name=SLACK_JSON::{\"channel\":\"C012ZQHT9A4\",\"text\":\"[${{ env.GITHUB_ACTOR }}] triggered [${{ env.GITHUB_EVENT_NAME }}] event in [${{ env.GITHUB_REPOSITORY }}] repo \"}
 
     - name: Output event data
       shell: pwsh
@@ -67,6 +68,7 @@ jobs:
         Write-Output "MY_STEP_VAR is: [$env:MY_STEP_VAR]"
         Write-Output "MY_CONCATENATED_BASH_VAR is: [$env:MY_CONCATENATED_BASH_VAR]"
         Write-Output "MY_CONCATENATED_PWSH_VAR is: [$env:MY_CONCATENATED_PWSH_VAR]"
+        Write-Output "SLACK_JSON is: [$env:SLACK_JSON]"
 
     # Notify
     - name: Notify slack
@@ -74,4 +76,4 @@ jobs:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       uses: pullreminders/slack-action@v1.0.9
       with:
-        args: "{\"channel\":\"C012ZQHT9A4\",\"text\":\"[${{ env.GITHUB_ACTOR }}] triggered [${{ env.GITHUB_EVENT_NAME }}] event in [${{ env.GITHUB_REPOSITORY }}] repo \"}"
+        args: ${{ env.SLACK_JSON }}
