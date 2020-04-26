@@ -97,7 +97,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
     oms_agent {
       enabled                    = var.aks_container_insights_enabled
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.aks[0].id
+      log_analytics_workspace_id = var.aks_container_insights_enabled ? azurerm_log_analytics_workspace.aks[0].id : null
     }
   }
 
