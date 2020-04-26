@@ -9,6 +9,8 @@
     - result.status == 200
   retries: 60
   delay: 5
+  module_defaults:
+    uri: {}
 
 - name: test admin access
   uri:
