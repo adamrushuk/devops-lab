@@ -109,17 +109,56 @@ jobs:
 
 
     # Terraform
+    # - name: Terraform Init
+    #   run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command 'init'"
+
+    # - name: Terraform Plan
+    #   run: pwsh -command "./scripts/Plan-Terraform.ps1"
+    #   env:
+    #     # https://www.terraform.io/docs/configuration/variables.html#environment-variables
+    #     TF_VAR_credentials_velero: ${{ secrets.CREDENTIALS_VELERO }}
+
+    # - name: Terraform Apply
+    #   run: pwsh -command "./scripts/Apply-Terraform.ps1"
+
+
+    # https://github.com/hashicorp/terraform-github-actions#usage
     - name: Terraform Init
-      run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command 'init'"
+      uses: hashicorp/terraform-github-actions@v0.8.0
+      with:
+        tf_actions_subcommand: init
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+
+    - name: Terraform Validate
+      uses: hashicorp/terraform-github-actions@v0.8.0
+      with:
+        tf_actions_subcommand: validate
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
 
     - name: Terraform Plan
-      run: pwsh -command "./scripts/Plan-Terraform.ps1"
+      uses: hashicorp/terraform-github-actions@v0.8.0
+      with:
+        tf_actions_comment: true
+        tf_actions_subcommand: plan
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
       env:
-        # https://www.terraform.io/docs/configuration/variables.html#environment-variables
+        # (Optional) The GitHub API token used to post comments to pull requests.
+        # Not required if the tf_actions_comment input is set to false
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TF_VAR_credentials_velero: ${{ secrets.CREDENTIALS_VELERO }}
 
     - name: Terraform Apply
-      run: pwsh -command "./scripts/Apply-Terraform.ps1"
+      uses: hashicorp/terraform-github-actions@v0.8.0
+      with:
+        tf_actions_subcommand: apply
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+
+
+
 
 
     # Kubernetes
