@@ -138,6 +138,7 @@ jobs:
         tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
 
     - name: Terraform Plan
+      id: tf_plan
       uses: hashicorp/terraform-github-actions@v0.8.0
       with:
         tf_actions_comment: true
@@ -150,14 +151,18 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TF_VAR_credentials_velero: ${{ secrets.CREDENTIALS_VELERO }}
 
+    # TODO: cannot use as PowerShell is not installed on the terraform-github-actions container
+    # - name: Terraform Apply
+    #   uses: hashicorp/terraform-github-actions@v0.8.0
+    #   with:
+    #     tf_actions_subcommand: apply
+    #     tf_actions_version: ${{ env.TF_VERSION }}
+    #     tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+    #   if: steps.tf_plan.outputs.tf_actions_plan_has_changes == "true"
+
     - name: Terraform Apply
-      uses: hashicorp/terraform-github-actions@v0.8.0
-      with:
-        tf_actions_subcommand: apply
-        tf_actions_version: ${{ env.TF_VERSION }}
-        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
-
-
+      run: pwsh -command "./scripts/Apply-Terraform.ps1"
+      if: steps.tf_plan.outputs.tf_actions_plan_has_changes == "true"
 
 
 
@@ -194,12 +199,11 @@ jobs:
       run: pwsh -command "./scripts/Start-Test.ps1"
 
     - name: Archive test artifacts
-      if: always()
       uses: actions/upload-artifact@v1
       with:
         name: test results
         path: test/pester-test-results-junit.xml
-
+      if: always()
 
     # Notify
     - name: Notify slack
