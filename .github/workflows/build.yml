@@ -161,7 +161,7 @@ jobs:
     #   if: steps.tf_plan.outputs.tf_actions_plan_has_changes
 
     - name: Terraform Apply
-      run: pwsh -command "./scripts/Apply-Terraform.ps1"
+      run: ./scripts/terraform_apply.sh
       if: steps.tf_plan.outputs.tf_actions_plan_has_changes
 
 
