@@ -158,11 +158,11 @@ jobs:
     #     tf_actions_subcommand: apply
     #     tf_actions_version: ${{ env.TF_VERSION }}
     #     tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
-    #   if: steps.tf_plan.outputs.tf_actions_plan_has_changes
+    #   if: steps.tf_plan.outputs.tf_actions_plan_has_changes == true
 
     - name: Terraform Apply
       run: ./scripts/terraform_apply.sh
-      if: steps.tf_plan.outputs.tf_actions_plan_has_changes
+      if: steps.tf_plan.outputs.tf_actions_plan_has_changes == true
 
 
     # Kubernetes
