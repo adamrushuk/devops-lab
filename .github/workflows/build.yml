@@ -162,7 +162,7 @@ jobs:
 
     - name: Terraform Apply
       run: ./scripts/terraform_apply.sh
-      if: steps.tf_plan.outputs.tf_actions_plan_has_changes == "true"
+      # if: steps.tf_plan.outputs.tf_actions_plan_has_changes == "true"
 
 
     # Kubernetes
