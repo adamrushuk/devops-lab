@@ -1,14 +1,14 @@
 # Helm charts
 variable "nginx_chart_version" {
-  default = "1.36.2"
+  default = "1.36.3"
 }
 
 variable "cert_manager_chart_version" {
-  default = "v0.15.0-alpha.0"
+  default = "v0.15.0-alpha.2"
 }
 
 variable "velero_chart_version" {
-  default = "2.9.13"
+  default = "2.9.15"
 }
 
 
@@ -67,9 +67,14 @@ variable "azurerm_kubernetes_cluster_name" {
   default = "__AKS_CLUSTER_NAME__"
 }
 
-variable "enable_aks_dashboard" {
+variable "aks_dashboard_enabled" {
   description = "Should Kubernetes dashboard be enabled"
   default     = true
+}
+
+variable "aks_container_insights_enabled" {
+  description = "Should Container Insights monitoring be enabled"
+  default     = false
 }
 
 # Service Principle for AKS
