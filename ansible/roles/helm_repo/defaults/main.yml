@@ -1,0 +1,7 @@
+helm_repo_request_body:
+  name: helm-repo
+  online: true
+  storage:
+    blobStoreName: default
+    strictContentTypeValidation: true
+    writePolicy: ALLOW_ONCE
