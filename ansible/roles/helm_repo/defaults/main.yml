@@ -5,3 +5,8 @@ helm_repo_request_body:
     blobStoreName: default
     strictContentTypeValidation: true
     writePolicy: ALLOW_ONCE
+
+helm_charts:
+  - { name: 'fluentd', version: '2.4.0' }
+  - { name: 'jenkins', version: '1.16.0' }
+  - { name: 'external-dns', version: '2.20.4' }
