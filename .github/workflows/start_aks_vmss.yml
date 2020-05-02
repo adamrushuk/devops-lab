@@ -1,0 +1,65 @@
+name: Start AKS VMSS
+
+on:
+  repository_dispatch:
+    # name of GitHub event that triggers workflow
+    types: [start_vmss]
+
+# global environment variables
+env:
+  # prefix: used for some globally unique name requirements
+  PREFIX: rush
+
+  # debug
+  CI_DEBUG: true
+
+  # azure creds
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+jobs:
+  start_vmss:
+    runs-on: ubuntu-18.04
+
+    # only run if owner triggered action
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+    # Checkout
+    - uses: actions/checkout@v2
+      # specify different branch
+      # NOT required as I've changed the default branch to develop
+      # with:
+      #   ref: develop
+
+    # Init tasks - inc env var concatenation
+    - name: Init tasks - inc Env var concatenation (Workaround)
+      run: |
+        chmod -R +x ./scripts/
+        echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
+        echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
+
+    # Show event info
+    - name: Show triggered event data
+      run: pwsh -command "./scripts/Get-EventData.ps1"
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+
+    # Login
+    - name: Login to Azure
+      run: pwsh -command "./scripts/Login-Azure.ps1"
+
+    # Start
+    - name: Start AKS VMSS
+      run: ./scripts/start_aks_vmss.sh
+
+    # Notify
+    - name: Notify slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: pullreminders/slack-action@v1.0.9
+      with:
+        # env var concatenation not supported atm, so hard-code messages
+        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Start AKS VMSS complete\"}'

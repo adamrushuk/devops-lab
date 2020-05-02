@@ -38,9 +38,9 @@ jobs:
 
     # Show event info
     - name: Show triggered event data
+      run: pwsh -command "./scripts/Get-EventData.ps1"
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: pwsh -command "./scripts/Get-EventData.ps1"
 
     # WORKAROUND Env var concatenation
     # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
@@ -67,3 +67,13 @@ jobs:
         Write-Output "MY_STEP_VAR is: [$env:MY_STEP_VAR]"
         Write-Output "MY_CONCATENATED_BASH_VAR is: [$env:MY_CONCATENATED_BASH_VAR]"
         Write-Output "MY_CONCATENATED_PWSH_VAR is: [$env:MY_CONCATENATED_PWSH_VAR]"
+        Write-Output "SLACK_JSON is: [$env:SLACK_JSON]"
+
+    # Notify
+    - name: Notify slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: pullreminders/slack-action@v1.0.9
+      with:
+        # env var concatenation not supported atm, so hard-code messages
+        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Test notification\"}'

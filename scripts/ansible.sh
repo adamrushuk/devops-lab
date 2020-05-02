@@ -3,12 +3,17 @@
 # Prepares env vars and runs Ansible Playbook
 
 # Ensure strict mode and predictable pipeline failure
-set -eo pipefail
+set -euo pipefail
+trap "echo 'error: Script failed: see failed command above'" ERR
 
 #region Init
-# env vars set in GH build workflow
-# $AKS_CLUSTER_NAME
-# $AKS_RG_NAME
+# env vars set in GH build workflow:
+# Init tasks:
+#   $AKS_CLUSTER_NAME
+#   $AKS_RG_NAME
+# Run Ansible playbook task:
+#   $NEXUS_ADMIN_PASSWORD
+#   $DEMO_USER_PASSWORD
 
 # Get AKS Cluster credentials
 az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME" --overwrite-existing

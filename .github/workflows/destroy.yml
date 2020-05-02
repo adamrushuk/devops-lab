@@ -69,6 +69,8 @@ jobs:
     # Show event info
     - name: Show triggered event data
       run: pwsh -command "./scripts/Get-EventData.ps1"
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
 
     # Login
     - name: Login to Azure
@@ -91,3 +93,12 @@ jobs:
 
     - name: Delete Storage
       run: pwsh -command "./scripts/Delete-Storage.ps1"
+
+    # Notify
+    - name: Notify slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: pullreminders/slack-action@v1.0.9
+      with:
+        # env var concatenation not supported atm, so hard-code messages
+        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Destroy complete\"}'

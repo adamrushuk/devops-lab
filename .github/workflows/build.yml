@@ -19,7 +19,7 @@ env:
   PREFIX: rush
 
   # debug
-  CI_DEBUG: true
+  CI_DEBUG: false
 
   # api
   API_KEY: ${{ secrets.API_KEY }}
@@ -43,6 +43,7 @@ env:
   FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true
   LOCATION: uksouth
+  # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
 
   # terraform
@@ -55,7 +56,7 @@ env:
   # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
 
 jobs:
-  build:
+  build-and-deploy:
 
     # always pin versions
     # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
@@ -89,6 +90,8 @@ jobs:
     # Show event info
     - name: Show triggered event data
       run: pwsh -command "./scripts/Get-EventData.ps1"
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
 
     # Login
     - name: Login to Azure
@@ -107,17 +110,60 @@ jobs:
 
 
     # Terraform
+    # - name: Terraform Init
+    #   run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command 'init'"
+
+    # - name: Terraform Plan
+    #   run: pwsh -command "./scripts/Plan-Terraform.ps1"
+    #   env:
+    #     # https://www.terraform.io/docs/configuration/variables.html#environment-variables
+    #     TF_VAR_credentials_velero: ${{ secrets.CREDENTIALS_VELERO }}
+
+    # - name: Terraform Apply
+    #   run: pwsh -command "./scripts/Apply-Terraform.ps1"
+
+
+    # https://github.com/hashicorp/terraform-github-actions#usage
     - name: Terraform Init
-      run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command 'init'"
+      uses: hashicorp/terraform-github-actions@v0.8.0
+      with:
+        tf_actions_subcommand: init
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+
+    - name: Terraform Validate
+      uses: hashicorp/terraform-github-actions@v0.8.0
+      with:
+        tf_actions_subcommand: validate
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
 
     - name: Terraform Plan
-      run: pwsh -command "./scripts/Plan-Terraform.ps1"
+      id: tf_plan
+      uses: hashicorp/terraform-github-actions@v0.8.0
+      with:
+        tf_actions_comment: true
+        tf_actions_subcommand: plan
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
       env:
-        # https://www.terraform.io/docs/configuration/variables.html#environment-variables
+        # (Optional) The GitHub API token used to post comments to pull requests.
+        # Not required if the tf_actions_comment input is set to false
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TF_VAR_credentials_velero: ${{ secrets.CREDENTIALS_VELERO }}
 
+    # TODO: cannot use as PowerShell is not installed on the terraform-github-actions container
+    # - name: Terraform Apply
+    #   uses: hashicorp/terraform-github-actions@v0.8.0
+    #   with:
+    #     tf_actions_subcommand: apply
+    #     tf_actions_version: ${{ env.TF_VERSION }}
+    #     tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+    #   if: steps.tf_plan.outputs.tf_actions_plan_has_changes == "true"
+
     - name: Terraform Apply
-      run: pwsh -command "./scripts/Apply-Terraform.ps1"
+      run: ./scripts/terraform_apply.sh
+      # if: steps.tf_plan.outputs.tf_actions_plan_has_changes == "true"
 
 
     # Kubernetes
@@ -153,8 +199,17 @@ jobs:
       run: pwsh -command "./scripts/Start-Test.ps1"
 
     - name: Archive test artifacts
-      if: always()
       uses: actions/upload-artifact@v1
       with:
         name: test results
         path: test/pester-test-results-junit.xml
+      if: always()
+
+    # Notify
+    - name: Notify slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: pullreminders/slack-action@v1.0.9
+      with:
+        # env var concatenation not supported atm, so hard-code messages
+        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Build complete\"}'

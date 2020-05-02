@@ -1,0 +1,45 @@
+# HELM REPO
+- name: list repos
+  uri:
+    url: "{{ api_url }}/beta/repositories"
+    method: GET
+    status_code: 200
+  register: repositories
+
+- name: debug repos
+  debug:
+    var: repositories
+  when: enable_debug_output == "true"
+
+- name: extract repo names
+  set_fact:
+    repo_names: "{{ repositories.json | map( attribute='name' ) | list }}"
+
+- name: debug repo names
+  debug:
+    var: repo_names
+  when: enable_debug_output == "true"
+
+- name: create helm repo
+  uri:
+    url: "{{ api_url }}/beta/repositories/helm/hosted"
+    method: POST
+    body: "{{ helm_repo_request_body }}"
+    status_code: "201"
+  when: helm_repo_request_body.name not in repo_names
+  register: helm_repo_api_response
+
+- name: debug create helm repo
+  debug:
+    var: helm_repo_api_response
+  when: enable_debug_output == "true"
+
+- name: Download Example Helm Charts from GitHub
+  command: "helm pull stable/{{ item.name }} --version {{ item.version }}"
+  with_items:
+    - "{{ helm_charts }}"
+
+- name: Upload Helm Charts to Nexus
+  command: "curl -v -u {{ api_user }}:{{ admin_password }} {{ api_base_uri }}/repository/{{ helm_repo_request_body.name }}/ --upload-file {{ item.name }}-{{ item.version }}.tgz"
+  with_items:
+    - "{{ helm_charts }}"

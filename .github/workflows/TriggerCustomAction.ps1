@@ -13,6 +13,12 @@
     # Trigger build action
     ./.github/workflows/TriggerCustomAction.ps1 -CustomEventAction "build"
 
+    # Trigger deallocate vmss action
+    ./.github/workflows/TriggerCustomAction.ps1 -CustomEventAction "deallocate_vmss"
+
+    # Trigger start vmss action
+    ./.github/workflows/TriggerCustomAction.ps1 -CustomEventAction "start_vmss"
+
     # Trigger destroy action
     ./.github/workflows/TriggerCustomAction.ps1 -CustomEventAction "destroy"
 #>
@@ -30,7 +36,7 @@ param(
 
     $GithubRepo = "aks-nexus-velero",
 
-    [ValidateSet("test", "build", "destroy")]
+    [ValidateSet("test", "build", "deallocate_vmss", "start_vmss", "destroy")]
     $CustomEventAction = "test"
 )
 

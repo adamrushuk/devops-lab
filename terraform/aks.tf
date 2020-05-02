@@ -18,6 +18,7 @@ resource "azurerm_resource_group" "aks" {
 
 # Log Analytics
 resource "azurerm_log_analytics_workspace" "aks" {
+  count = var.aks_container_insights_enabled ? 1 : 0
   # The Workspace name is globally unique
   name                = var.log_analytics_workspace_name
   location            = azurerm_resource_group.aks.location
@@ -33,11 +34,12 @@ resource "azurerm_log_analytics_workspace" "aks" {
 }
 
 resource "azurerm_log_analytics_solution" "aks" {
+  count                 = var.aks_container_insights_enabled ? 1 : 0
   solution_name         = "ContainerInsights"
   location              = azurerm_resource_group.aks.location
   resource_group_name   = azurerm_resource_group.aks.name
-  workspace_resource_id = azurerm_log_analytics_workspace.aks.id
-  workspace_name        = azurerm_log_analytics_workspace.aks.name
+  workspace_resource_id = azurerm_log_analytics_workspace.aks[0].id
+  workspace_name        = azurerm_log_analytics_workspace.aks[0].name
 
   plan {
     publisher = "Microsoft"
@@ -90,12 +92,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   addon_profile {
     kube_dashboard {
-      enabled = var.enable_aks_dashboard
+      enabled = var.aks_dashboard_enabled
     }
 
     oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.aks.id
+      enabled                    = var.aks_container_insights_enabled
+      log_analytics_workspace_id = var.aks_container_insights_enabled ? azurerm_log_analytics_workspace.aks[0].id : null
     }
   }
 
