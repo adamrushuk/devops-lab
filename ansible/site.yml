@@ -1,7 +1,7 @@
 # configure Nexus via rest api
 #
 # cd ansible
-# ansible-playbook nexus.yml --extra-vars "api_base_uri=https://nexus.thehypepipe.co.uk"
+# ansible-playbook site.yml --extra-vars "api_base_uri=https://nexus.thehypepipe.co.uk"
 #
 # set env vars
 # export NEW_ADMIN_PASSWORD=<NEW_ADMIN_PASSWORD>

@@ -49,5 +49,5 @@ nexusBaseUrl="$protocol://$DNS_DOMAIN_NAME"
 
 # Run Ansible Playbook
 pushd ansible
-ansible-playbook nexus.yml --extra-vars "api_base_uri=$nexusBaseUrl"
+ansible-playbook site.yml --extra-vars "api_base_uri=$nexusBaseUrl"
 popd

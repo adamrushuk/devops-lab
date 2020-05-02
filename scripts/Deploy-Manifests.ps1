@@ -50,7 +50,7 @@ if ($env:ENABLE_TLS_INGRESS -eq "true") {
 # Applications
 Write-Output "`nAPPLYING: Applications..."
 # kubectl apply -n ingress -f ./manifests/azure-vote.yml
-kubectl apply -n ingress -f ./manifests/nexus.yml
+kubectl apply -n ingress -f ./manifests/site.yml
 
 # Ingress
 # ConfigMap - NGINX Configuration options

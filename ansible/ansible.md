@@ -89,5 +89,5 @@ After the prereqs steps have been completed, run the Ansible Playbook:
 1. Run the Ansible Playbook:
 
     ```powershell
-    ansible-playbook nexus.yml --extra-vars "api_base_uri=$nexusBaseUrl"
+    ansible-playbook site.yml --extra-vars "api_base_uri=$nexusBaseUrl"
     ```
