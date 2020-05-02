@@ -41,3 +41,12 @@
     method: PUT
     body: "{{ active_realms }}"
     status_code: 200,204
+
+- name: delete default repos
+  uri:
+    url: "{{ api_url }}/beta/repositories/{{ item }}"
+    method: DELETE
+    status_code: 204,404
+  loop: "{{ repos_to_remove }}"
+  register: del_repo_response
+  changed_when: del_repo_response.status == 204

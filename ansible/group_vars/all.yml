@@ -16,3 +16,9 @@ active_realms: [
   "DockerToken",
   "NuGetApiKey"
 ]
+
+repos_to_remove:
+  - maven-central
+  - maven-public
+  - maven-releases
+  - maven-snapshots
