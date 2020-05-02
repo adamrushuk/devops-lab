@@ -1,0 +1,15 @@
+# PyPI REPO
+- name: create pypi repo
+  uri:
+    url: "{{ api_url }}/beta/repositories/pypi/hosted"
+    method: POST
+    body: "{{ pypi_repo_request_body }}"
+    status_code: "201"
+  when: pypi_repo_request_body.name not in repo_names
+  register: pypi_repo_api_response
+
+- name: debug create pypi repo
+  debug:
+    var: pypi_repo_api_response
+  when: enable_debug_output == "true"
+
