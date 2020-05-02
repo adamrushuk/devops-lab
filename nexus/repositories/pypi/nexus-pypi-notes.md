@@ -33,6 +33,9 @@ pip list --local | grep adams-package
 pip install --user --index-url https://nexus.thehypepipe.co.uk/repository/pypi-repo/simple adams-package
 pip list --local | grep adams-package
 
+# search nexus repo
+pip search --index https://nexus.thehypepipe.co.uk/repository/pypi-repo/pypi adams-package
+
 # uninstall
 pip uninstall --yes adams-package
 ```

@@ -13,3 +13,33 @@
     var: pypi_repo_api_response
   when: enable_debug_output == "true"
 
+
+- name: search pypi repo
+  command: "pip search --index {{ pypi_search_url }} {{ pypi_package_name }}"
+  ignore_errors: yes
+  register: search_result
+
+
+- name: debug search pypi repo
+  debug:
+    var: search_result
+  when: enable_debug_output == "true"
+
+
+
+- name: Upload package to pypi repo
+  script: upload_package.sh {{ api_user }} {{ admin_password }}
+  args:
+    chdir: "{{ role_path }}/files/hello"
+  ignore_errors: yes
+  when: search_result.stdout | length == 0
+  register: shellout
+
+- name: debug create pypi repo
+  debug:
+    var: shellout.stdout_lines
+  when: enable_debug_output == "true"
+
+
+# - name: Upload package to pypi repo
+#   script: /some/local/script.sh --some-argument 1234
