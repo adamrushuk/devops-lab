@@ -6,5 +6,5 @@ pypi_repo_request_body:
     strictContentTypeValidation: true
     writePolicy: ALLOW_ONCE
 
-pypi_search_url: "{{ api_base_uri }}/repository/{{ pypi_repo_request_body.name }}/pypi"
 pypi_package_name: adams-package
+pypi_repo_url: "{{ api_base_uri }}/repository/{{ pypi_repo_request_body.name }}"
