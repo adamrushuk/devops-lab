@@ -175,6 +175,11 @@ jobs:
 
 
     # Ansible
+    - name: Lint Ansible Playbook
+      uses: ansible/ansible-lint-action@v4.1.0
+      with:
+        targets: "./ansible"
+
     - name: Run Ansible playbook
       run: ./scripts/ansible.sh
       env:
