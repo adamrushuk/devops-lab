@@ -95,15 +95,15 @@ jobs:
 
     # Login
     - name: Login to Azure
-      run: pwsh -command "./scripts/azure_login.sh"
+      run: ./scripts/azure_login.sh
 
 
     # Prereqs
     - name: Create Storage Account for Terraform state
-      run: pwsh -command "./scripts/storage_create.sh"
+      run: ./scripts/storage_create.sh
 
     - name: Lookup Storage Key
-      run: pwsh -command "./scripts/storage_key.sh"
+      run: ./scripts/storage_key.sh
 
     - name: Replace tokens in Terraform config files
       run: pwsh -command "./scripts/Replace-Tokens.ps1"
