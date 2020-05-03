@@ -16,7 +16,7 @@ Provisions an AKS cluster, deploys Nexus Repository OSS, configures Velero backu
 
 ## Getting Started
 
-Before you start the `build` GitHub Action, you need to create the following Secrets within
+Before you start the `build` GitHub Action workflow, you need to create the following Secrets within
 [GitHub Settings](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets):
 
 ### GoDaddy DNS API Secrets
