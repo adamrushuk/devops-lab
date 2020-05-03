@@ -176,9 +176,9 @@ jobs:
 
     # Ansible
     - name: Lint Ansible Playbook
-      uses: ansible/ansible-lint-action@v4.1.0
+      uses: ansible/ansible-lint-action@6c8c141
       with:
-        targets: "./ansible/site.yml"
+        targets: "./ansible"
 
     - name: Run Ansible playbook
       run: ./scripts/ansible.sh
