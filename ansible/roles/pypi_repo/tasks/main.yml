@@ -32,7 +32,7 @@
     PASSWORD: "{{ admin_password }}"
     REPO_URL: "{{ pypi_repo_url }}"
     PACKAGE_NAME: "{{ pypi_package_name }}"
-  ignore_errors: yes
+  # ignore_errors: yes
   when: search_result.stdout | length == 0
   register: shellout
 
