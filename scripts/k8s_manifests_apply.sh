@@ -38,7 +38,7 @@ fi
 
 # Applications
 echo "APPLYING: Applications..."
-kubectl apply -n ingress -f "./manifests/site.yml"
+kubectl apply -n ingress -f "./manifests/nexus.yml"
 
 # Ingress
 # ConfigMap - NGINX Configuration options
