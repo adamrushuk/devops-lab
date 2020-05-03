@@ -16,7 +16,7 @@ echo -e "\ninstalling twine..."
 pip install --user twine
 
 # check
-twine check dist/*
+# twine check dist/*
 
 # publish
 echo -e "\nuploading package..."
