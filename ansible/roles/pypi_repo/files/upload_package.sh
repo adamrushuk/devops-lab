@@ -29,4 +29,4 @@ pip install --user --index-url "$REPO_URL/simple" "$PACKAGE_NAME"
 pip list --local | grep "$PACKAGE_NAME"
 
 # uninstall
-pip uninstall --yes "$PACKAGE_NAME"
+# pip uninstall --yes "$PACKAGE_NAME"
