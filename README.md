@@ -51,44 +51,43 @@ Follow the steps below to update AKS credentials, get the Nexus admin password, 
 
 1. Import the AKS Cluster credentials:
 
-    ```powershell
+    ```bash
     # Vars
-    $prefix = "rush"
-    $aksClusterName = "$($prefix)-aks-001"
-    $aksClusterResourceGroupName = "$($prefix)-rg-aks-dev-001"
+    PREFIX="rush"
+    AKS_CLUSTER_NAME="$PREFIX-aks-001"
+    AKS_RG_NAME="$PREFIX-rg-aks-dev-001"
 
     # AKS Cluster credentials
-    az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aksClusterName --overwrite-existing
+    az aks get-credentials --resource-group $AKS_RG_NAME --name $AKS_CLUSTER_NAME --overwrite-existing
 
     # [OPTIONAL] View AKS Dashboard
-    az aks browse --resource-group $aksClusterResourceGroupName --name $aksClusterName
+    az aks browse --resource-group $AKS_RG_NAME --name $AKS_CLUSTER_NAME
     ```
 
 1. Get the auto-generated admin password from within the Nexus container:
 
-    ```powershell
+    ```bash
     # Get pod name
-    $podName = kubectl get pod -n ingress -l app=nexus -o jsonpath="{.items[0].metadata.name}"
+    pod_name=$(kubectl get pod -n ingress -l app=nexus -o jsonpath="{.items[0].metadata.name}")
 
     # Get admin password from pod
-    $adminPassword = kubectl exec -n ingress -it $podName cat /nexus-data/admin.password
-    echo $adminPassword
-    $adminPassword | Set-Clipboard
+    admin_password=$(kubectl exec -n ingress -it $pod_name -- cat /nexus-data/admin.password)
+    echo "$admin_password"
 
     # [OPTIONAL] Enter pod shell, then output admin password
-    kubectl exec -n ingress -it $podName /bin/bash
+    kubectl exec -n ingress -it $pod_name -- /bin/bash
     echo -e "\nadmin password: \n$(cat /nexus-data/admin.password)\n"
     ```
 
 1. Open the Nexus web console
 
-    ```powershell
+    ```bash
     # Set URL
-    $nexusHost = kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}"
-    $nexusBaseUrl = "https://$nexusHost"
+    nexus_host=$(kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}")
+    nexus_base_url="https://$nexus_host"
 
     # Sign in as admin, using auto-generated admin password from prereqs section
-    Start-Process $nexusBaseUrl
+    echo "$nexus_base_url"
     ```
 
 1. Click `Sign in` in top right corner, then login using admin password.
