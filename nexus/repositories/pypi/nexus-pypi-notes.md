@@ -11,31 +11,31 @@ Once Ansible has created the Nexus PyPI repo, follow the examples below for test
 cd nexus/repositories/pypi/hello
 
 # create package
-python setup.py sdist
+python3 setup.py sdist
 
 # install twine
-pip install --user twine
+pip3 install --user twine
 
 # check
-twine check dist/*
+python3 -m twine check dist/*
 
 # publish
 # this will prompt for the username and password
-twine upload --repository-url https://nexus.thehypepipe.co.uk/repository/pypi-repo/ dist/*
+python3 -m twine upload --repository-url https://nexus.thehypepipe.co.uk/repository/pypi-repo/ dist/*
 
 # publish without prompts
 NEW_ADMIN_PASSWORD="<ADMIN_PASSWORD>"
-twine upload --username admin --password "$NEW_ADMIN_PASSWORD" --repository-url https://nexus.thehypepipe.co.uk/repository/pypi-repo/ dist/*
+python3 -m twine upload --username admin --password "$NEW_ADMIN_PASSWORD" --repository-url https://nexus.thehypepipe.co.uk/repository/pypi-repo/ dist/*
 
 # install from private pypi repo
 # pip install --index-url http://my.package.repo/simple/ SomePackage
-pip list --local | grep adams-package
-pip install --user --index-url https://nexus.thehypepipe.co.uk/repository/pypi-repo/simple adams-package
-pip list --local | grep adams-package
+pip3 list --local | grep adams-package
+pip3 install --user --index-url https://nexus.thehypepipe.co.uk/repository/pypi-repo/simple adams-package
+pip3 list --local | grep adams-package
 
 # search nexus repo
-pip search --index https://nexus.thehypepipe.co.uk/repository/pypi-repo/pypi adams-package
+pip3 search --index https://nexus.thehypepipe.co.uk/repository/pypi-repo/pypi adams-package
 
 # uninstall
-pip uninstall --yes adams-package
+pip3 uninstall --yes adams-package
 ```
