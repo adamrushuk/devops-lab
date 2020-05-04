@@ -168,7 +168,7 @@ jobs:
 
     # Kubernetes
     - name: Deploy kubernetes manifests
-      run: pwsh -command "./scripts/k8s_manifests_apply.sh"
+      run: ./scripts/k8s_manifests_apply.sh
 
     - name: Wait for resources to be "Ready"
       run: ./scripts/wait.sh
