@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 # Finds and Deallocates AKS VMSS
 
 # Ensure strict mode and predictable pipeline failure

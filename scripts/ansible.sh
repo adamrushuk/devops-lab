@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 # Prepares env vars and runs Ansible Playbook
 

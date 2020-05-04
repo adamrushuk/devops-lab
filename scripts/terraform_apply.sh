@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 # Runs Terraform apply
 
 # Ensure strict mode and predictable pipeline failure

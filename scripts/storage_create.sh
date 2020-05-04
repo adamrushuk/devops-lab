@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 #
 # creates an azure resource group, storage account and storage container, used to store terraform remote state
 

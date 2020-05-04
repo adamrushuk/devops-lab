@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 # Waits for resources to be "Ready" before allowing build pipeline to continue
 

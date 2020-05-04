@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 # Finds and starts AKS VMSS
 
 # Ensure strict mode and predictable pipeline failure

@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 # Pushes example Docker images to repo
 
 # Ensure strict mode and predictable pipeline failure
