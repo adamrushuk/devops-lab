@@ -22,11 +22,11 @@ echo "creating package..."
 python3 setup.py sdist
 
 # check
-# twine check dist/*
+python3 -m twine check dist/*
 
 # publish
 echo "uploading package..."
-twine upload --username "$USERNAME" --password "$PASSWORD" --repository-url "$REPO_URL/" dist/*
+python3 -m twine upload --username "$USERNAME" --password "$PASSWORD" --repository-url "$REPO_URL/" dist/*
 
 # install from private pypi repo
 # pip3 install --index-url http://my.package.repo/simple/ SomePackage
