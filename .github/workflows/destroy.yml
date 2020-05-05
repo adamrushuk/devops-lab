@@ -60,6 +60,7 @@ jobs:
     # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
     - name: Concatenate env vars (Workaround)
       run: |
+        chmod -R +x ./scripts/
         echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
         echo ::set-env name=ACR_NAME::${{ env.PREFIX }}acr001${{ env.LOCATION }}001
         echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
@@ -74,25 +75,33 @@ jobs:
 
     # Login
     - name: Login to Azure
-      run: pwsh -command "./scripts/Login-Azure.ps1"
+      run: ./scripts/azure_login.sh
 
     # Prereqs
     - name: Lookup Storage Key
-      run: pwsh -command "./scripts/Get-StorageKey.ps1"
+      run: ./scripts/storage_key.sh
 
     - name: Replace tokens in Terraform config files
       run: pwsh -command "./scripts/Replace-Tokens.ps1"
 
     # Terraform
     - name: Terraform Init
-      run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command 'init'"
+      uses: hashicorp/terraform-github-actions@v0.8.0
+      with:
+        tf_actions_subcommand: init
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
 
     # Cleanup
     - name: Terraform Destroy
-      run: pwsh -command "./scripts/Destroy-Terraform.ps1"
+      uses: hashicorp/terraform-github-actions@v0.8.0
+      with:
+        tf_actions_subcommand: destroy
+        tf_actions_version: ${{ env.TF_VERSION }}
+        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
 
     - name: Delete Storage
-      run: pwsh -command "./scripts/Delete-Storage.ps1"
+      run: ./scripts/storage_delete.sh
 
     # Notify
     - name: Notify slack

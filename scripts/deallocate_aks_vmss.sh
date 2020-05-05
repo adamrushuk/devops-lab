@@ -1,8 +1,10 @@
 #! /usr/bin/env bash
+#
 # Finds and Deallocates AKS VMSS
 
-# Ensure strict mode and predictable pipeline failure
+# ensure strict mode and predictable pipeline failure
 set -euo pipefail
+trap "echo 'error: Script failed: see failed command above'" ERR
 
 # Get AKS node resource group name
 nodeResourceGroup=$(az aks show --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME" --query nodeResourceGroup -o tsv)
