@@ -2,8 +2,9 @@
 
 # Waits for resources to be "Ready" before allowing build pipeline to continue
 
-# Ensure strict mode and predictable pipeline failure
+# ensure strict mode and predictable pipeline failure
 set -euo pipefail
+trap "echo 'error: Script failed: see failed command above'" ERR
 
 # Get AKS creds
 message="Merging AKS credentials"

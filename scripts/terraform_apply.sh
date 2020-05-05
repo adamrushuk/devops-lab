@@ -1,8 +1,9 @@
 #! /usr/bin/env bash
 # Runs Terraform apply
 
-# Ensure strict mode and predictable pipeline failure
+# ensure strict mode and predictable pipeline failure
 set -euo pipefail
+trap "echo 'error: Script failed: see failed command above'" ERR
 
 # Change into TF folder location
 pushd ./terraform
