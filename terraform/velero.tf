@@ -44,6 +44,9 @@ resource "kubernetes_namespace" "velero" {
   metadata {
     name = "velero"
   }
+  timeouts {
+    delete = "10m"
+  }
 }
 
 

@@ -13,6 +13,9 @@ resource "kubernetes_namespace" "ingress" {
 
     name = "ingress"
   }
+  timeouts {
+    delete = "10m"
+  }
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
