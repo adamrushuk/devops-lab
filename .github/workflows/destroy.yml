@@ -95,7 +95,7 @@ jobs:
       with:
         terraform_version: ${{ env.TF_VERSION }}
 
-    - run: terraform destroy -no-color
+    - run: terraform destroy -no-color -auto-approve
       id: destroy
 
     # Cleanup
