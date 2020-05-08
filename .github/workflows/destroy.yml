@@ -91,21 +91,14 @@ jobs:
       run: pwsh -command "./scripts/Replace-Tokens.ps1"
 
     # Terraform
-    - name: Terraform Init
-      uses: hashicorp/terraform-github-actions@v0.8.0
+    - uses: hashicorp/setup-terraform@v1
       with:
-        tf_actions_subcommand: init
-        tf_actions_version: ${{ env.TF_VERSION }}
-        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+        terraform_version: ${{ env.TF_VERSION }}
+
+    - run: terraform destroy -no-color
+      id: destroy
 
     # Cleanup
-    - name: Terraform Destroy
-      uses: hashicorp/terraform-github-actions@v0.8.0
-      with:
-        tf_actions_subcommand: destroy
-        tf_actions_version: ${{ env.TF_VERSION }}
-        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
-
     - name: Delete Storage
       run: ./scripts/storage_delete.sh
 
