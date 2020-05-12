@@ -11,7 +11,7 @@ pushd ./terraform
 # Apply terraform
 message="Applying Terraform configuration"
 echo "STARTED: $message..."
-terraform apply -auto-approve
+terraform apply -auto-approve "$TF_PLAN"
 echo "FINISHED: $message."
 
 # Revert to previous folder location

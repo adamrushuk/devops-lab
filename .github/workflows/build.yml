@@ -49,6 +49,7 @@ env:
   # terraform
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
+  TF_PLAN: "tfplan"
   TF_VERSION: "0.12.24" # "latest" is supported
   TF_WORKING_DIR: ./terraform
 
@@ -114,12 +115,14 @@ jobs:
       with:
         terraform_version: ${{ env.TF_VERSION }}
 
-    - run: cd ${{ env.TF_WORKING_DIR }} && terraform init
-
-    - run: cd ${{ env.TF_WORKING_DIR }} && terraform validate
+    - run: |
+        terraform init
+        terraform validate
+      working-directory: ${{ env.TF_WORKING_DIR }}
 
     - id: plan
-      run: cd ${{ env.TF_WORKING_DIR }} && terraform plan
+      run: terraform plan -out=${{ env.TF_PLAN }} -detailed-exitcode
+      working-directory: ${{ env.TF_WORKING_DIR }}
 
     # - run: echo ${{ steps.plan.outputs.stdout }}
     # - run: echo ${{ steps.plan.outputs.stderr }}
@@ -127,7 +130,11 @@ jobs:
 
     - name: Terraform Apply
       run: ./scripts/terraform_apply.sh
-      # if: steps.tf_plan.outputs.tf_actions_plan_has_changes == "true"
+      # only apply if changes are present
+      # https://www.terraform.io/docs/commands/plan.html#detailed-exitcode
+      if: steps.plan.outputs.exitcode == 2
+      env:
+        TF_PLAN: ${{ env.TF_PLAN }}
 
 
     # Kubernetes
