@@ -122,35 +122,49 @@ jobs:
     # - name: Terraform Apply
     #   run: pwsh -command "./scripts/Apply-Terraform.ps1"
 
-
-    # https://github.com/hashicorp/terraform-github-actions#usage
-    - name: Terraform Init
-      uses: hashicorp/terraform-github-actions@v0.8.0
+    - uses: hashicorp/setup-terraform@v1
       with:
-        tf_actions_subcommand: init
-        tf_actions_version: ${{ env.TF_VERSION }}
-        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+        terraform_version: ${{ env.TF_VERSION }}
 
-    - name: Terraform Validate
-      uses: hashicorp/terraform-github-actions@v0.8.0
-      with:
-        tf_actions_subcommand: validate
-        tf_actions_version: ${{ env.TF_VERSION }}
-        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+    - run: terraform init
 
-    - name: Terraform Plan
-      id: tf_plan
-      uses: hashicorp/terraform-github-actions@v0.8.0
-      with:
-        tf_actions_comment: true
-        tf_actions_subcommand: plan
-        tf_actions_version: ${{ env.TF_VERSION }}
-        tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
-      env:
-        # (Optional) The GitHub API token used to post comments to pull requests.
-        # Not required if the tf_actions_comment input is set to false
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TF_VAR_credentials_velero: ${{ secrets.CREDENTIALS_VELERO }}
+    - run: terraform validate
+
+    - id: plan
+      run: terraform plan -no-color
+
+    - run: echo ${{ steps.plan.outputs.stdout }}
+    - run: echo ${{ steps.plan.outputs.stderr }}
+    - run: echo ${{ steps.plan.outputs.exitcode }}
+
+    # # https://github.com/hashicorp/terraform-github-actions#usage
+    # - name: Terraform Init
+    #   uses: hashicorp/terraform-github-actions@v0.8.0
+    #   with:
+    #     tf_actions_subcommand: init
+    #     tf_actions_version: ${{ env.TF_VERSION }}
+    #     tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+
+    # - name: Terraform Validate
+    #   uses: hashicorp/terraform-github-actions@v0.8.0
+    #   with:
+    #     tf_actions_subcommand: validate
+    #     tf_actions_version: ${{ env.TF_VERSION }}
+    #     tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+
+    # - name: Terraform Plan
+    #   id: tf_plan
+    #   uses: hashicorp/terraform-github-actions@v0.8.0
+    #   with:
+    #     tf_actions_comment: true
+    #     tf_actions_subcommand: plan
+    #     tf_actions_version: ${{ env.TF_VERSION }}
+    #     tf_actions_working_dir: ${{ env.TF_WORKING_DIR }}
+    #   env:
+    #     # (Optional) The GitHub API token used to post comments to pull requests.
+    #     # Not required if the tf_actions_comment input is set to false
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     TF_VAR_credentials_velero: ${{ secrets.CREDENTIALS_VELERO }}
 
     # TODO: cannot use as PowerShell is not installed on the terraform-github-actions container
     # - name: Terraform Apply
