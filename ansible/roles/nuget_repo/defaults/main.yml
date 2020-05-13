@@ -1,0 +1,41 @@
+nuget_repo_name: nuget.org-proxy
+nuget_repo_url: "{{ api_base_uri }}/repository/{{ nuget_repo_name }}/"
+
+powershell_modules:
+  - { name: 'Az.Accounts', version: '1.7.5' }
+  - { name: 'powershell-yaml', version: '0.4.2' }
+  - { name: 'PSWindowsUpdate', version: '2.2.0.2' }
+
+nuget_proxy_repo_request_body:
+  name: "{{ nuget_repo_name }}"
+  url: "{{ nuget_repo_url }}"
+  online: true
+  storage:
+    blobStoreName: default
+    strictContentTypeValidation: true
+    writePolicy: ALLOW
+  cleanup:
+  proxy:
+    # default is: https://www.nuget.org/api/v2/
+    remoteUrl: https://www.powershellgallery.com/api/v2
+    contentMaxAge: 1440
+    metadataMaxAge: 1440
+  negativeCache:
+    enabled: true
+    timeToLive: 1440
+  httpClient:
+    blocked: false
+    autoBlock: true
+    connection:
+      retries:
+      userAgentSuffix:
+      timeout:
+      enableCircularRedirects: false
+      enableCookies: false
+    authentication:
+  routingRuleName:
+  nugetProxy:
+    queryCacheItemMaxAge: 3600
+  format: nuget
+  type: proxy
+

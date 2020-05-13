@@ -37,6 +37,8 @@
   - import_role:
       name: user
   - import_role:
+      name: nuget_repo
+  - import_role:
       name: docker_repo
   - import_role:
       name: helm_repo

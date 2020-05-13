@@ -1,0 +1,36 @@
+# NUGET PROXY REPO
+- name: update nuget proxy repo
+  uri:
+    url: "{{ api_url }}/beta/repositories/nuget/proxy/{{ nuget_repo_name }}"
+    method: PUT
+    body: "{{ nuget_proxy_repo_request_body }}"
+    status_code: "204"
+  register: nuget_proxy_repo_api_response
+
+- name: debug update nuget proxy repo
+  debug:
+    var: nuget_proxy_repo_api_response
+  when: enable_debug_output == "true"
+
+- name: register nuget proxy repo
+  script: Register-NugetRepo.ps1
+  args:
+    executable: /usr/bin/pwsh
+  environment:
+    NUGET_REPO_NAME: "{{ nuget_repo_name }}"
+    NUGET_REPO_URL: "{{ nuget_repo_url }}"
+  # ignore_errors: yes
+  # when: search_result.stdout | length == 0
+  register: register_nuget_repo
+
+- name: debug register nuget proxy repo
+  debug:
+    var: register_nuget_repo
+  when: enable_debug_output == "true"
+
+- name: install example powershell modules from powershell gallery via nuget proxy
+  shell: "Install-Module -Repository {{ nuget_repo_name }} -Name {{ item.name }} -RequiredVersion {{ item.version }} -Verbose"
+  args:
+    executable: /usr/bin/pwsh
+  with_items:
+    - "{{ powershell_modules }}"
