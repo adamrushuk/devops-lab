@@ -97,6 +97,7 @@ jobs:
 
     - run: terraform destroy -no-color -auto-approve
       id: destroy
+      working-directory: ${{ env.TF_WORKING_DIR }}
 
     # Cleanup
     - name: Delete Storage
