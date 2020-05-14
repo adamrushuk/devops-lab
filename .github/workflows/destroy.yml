@@ -94,9 +94,10 @@ jobs:
     - uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: ${{ env.TF_VERSION }}
-
-    - run: terraform destroy -no-color -auto-approve
-      id: destroy
+    - name: Terraform destroy
+      run: |
+        terraform init
+        terraform destroy -no-color -auto-approve
       working-directory: ${{ env.TF_WORKING_DIR }}
 
     # Cleanup
