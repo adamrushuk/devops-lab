@@ -121,7 +121,7 @@ jobs:
       working-directory: ${{ env.TF_WORKING_DIR }}
 
     - id: plan
-      run: terraform plan -out=${{ env.TF_PLAN }} -detailed-exitcode
+      run: terraform plan -out=${{ env.TF_PLAN }}
       working-directory: ${{ env.TF_WORKING_DIR }}
 
     # - run: echo ${{ steps.plan.outputs.stdout }}
@@ -132,7 +132,7 @@ jobs:
       run: ./scripts/terraform_apply.sh
       # only apply if changes are present
       # https://www.terraform.io/docs/commands/plan.html#detailed-exitcode
-      if: steps.plan.outputs.exitcode == 2
+      # if: steps.plan.outputs.exitcode == 2
       env:
         TF_PLAN: ${{ env.TF_PLAN }}
 
