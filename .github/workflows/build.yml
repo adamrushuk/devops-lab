@@ -38,7 +38,7 @@ env:
   DOCKER_FQDN: docker-nexus.thehypepipe.co.uk
   DEMO_USER_USERNAME: demo_user
   # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
-  EMAIL_ADDRESS: adamrushuk+aksnexusvelero@gmail.com
+  EMAIL_ADDRESS: certadmin@domain.com
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true

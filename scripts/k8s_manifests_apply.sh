@@ -8,7 +8,7 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 
 # Replace tokens
 # local testing - manually add env vars
-# EMAIL_ADDRESS="admin@domain.com"
+# EMAIL_ADDRESS="certadmin@domain.com"
 # DNS_DOMAIN_NAME="nexus.thehypepipe.co.uk"
 # CERT_API_ENVIRONMENT="staging"
 pwsh -Command "./scripts/Replace-Tokens.ps1" -targetFilePattern "./manifests/*.yml"
