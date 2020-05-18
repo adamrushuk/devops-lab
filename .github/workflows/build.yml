@@ -145,41 +145,41 @@ jobs:
       run: ./scripts/wait.sh
 
 
-    # # Ansible
-    # - name: Lint Ansible Playbook
-    #   uses: ansible/ansible-lint-action@6c8c141
-    #   with:
-    #     targets: "./ansible"
+    # Ansible
+    - name: Lint Ansible Playbook
+      uses: ansible/ansible-lint-action@6c8c141
+      with:
+        targets: "./ansible"
 
-    # - name: Run Ansible playbook
-    #   run: ./scripts/ansible.sh
-    #   env:
-    #     NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
-    #     DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
-
-
-    # # Docker
-    # - name: Docker repo login
-    #   uses: Azure/docker-login@v1
-    #   with:
-    #     login-server: ${{ env.DOCKER_FQDN }}
-    #     username: ${{ env.DEMO_USER_USERNAME }}
-    #     password: ${{ secrets.DEMO_USER_PASSWORD }}
-
-    # - name: Push images to Docker repo
-    #   run: ./scripts/push_docker_images.sh
+    - name: Run Ansible playbook
+      run: ./scripts/ansible.sh
+      env:
+        NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
+        DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
 
 
-    # # Pester tests
-    # - name: Run Pester tests
-    #   run: pwsh -command "./scripts/Start-Test.ps1"
+    # Docker
+    - name: Docker repo login
+      uses: Azure/docker-login@v1
+      with:
+        login-server: ${{ env.DOCKER_FQDN }}
+        username: ${{ env.DEMO_USER_USERNAME }}
+        password: ${{ secrets.DEMO_USER_PASSWORD }}
 
-    # - name: Archive test artifacts
-    #   uses: actions/upload-artifact@v1
-    #   with:
-    #     name: test results
-    #     path: test/pester-test-results-junit.xml
-    #   if: always()
+    - name: Push images to Docker repo
+      run: ./scripts/push_docker_images.sh
+
+
+    # Pester tests
+    - name: Run Pester tests
+      run: pwsh -command "./scripts/Start-Test.ps1"
+
+    - name: Archive test artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: test results
+        path: test/pester-test-results-junit.xml
+      if: always()
 
     # Notify
     - name: Notify slack
