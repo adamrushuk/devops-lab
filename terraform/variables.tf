@@ -74,7 +74,7 @@ variable "aks_dashboard_enabled" {
 
 variable "aks_container_insights_enabled" {
   description = "Should Container Insights monitoring be enabled"
-  default     = true
+  default     = false
 }
 
 # Service Principle for AKS
