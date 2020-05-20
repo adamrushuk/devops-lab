@@ -13,10 +13,11 @@
     var: helm_repo_api_response
   when: enable_debug_output == "true"
 
+- name: Add stable Helm Chart
+  command: "helm repo add stable https://kubernetes-charts.storage.googleapis.com/"
+
 - name: Download Example Helm Charts from GitHub
-  command: |
-    helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-    "helm pull stable/{{ item.name }} --version {{ item.version }}"
+  command: "helm pull stable/{{ item.name }} --version {{ item.version }}"
   with_items:
     - "{{ helm_charts }}"
 
