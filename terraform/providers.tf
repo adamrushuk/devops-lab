@@ -9,8 +9,8 @@ terraform {
 
   # providers (pin all versions)
   required_providers {
-    helm       = "=1.1.1"
-    kubernetes = "=1.11.1"
+    helm       = "=1.2.1"
+    kubernetes = "=1.11.2"
   }
 
   required_version = ">=0.12"
