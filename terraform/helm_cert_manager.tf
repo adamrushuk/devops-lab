@@ -8,7 +8,7 @@ resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   name       = "cert-manager"
   namespace  = "ingress"
-  repository = data.helm_repository.jetstack.metadata[0].name
+  repository = "https://charts.jetstack.io"
   version    = var.cert_manager_chart_version
   set {
     name  = "global.logLevel"

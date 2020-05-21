@@ -1,9 +1,10 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 # Waits for resources to be "Ready" before allowing build pipeline to continue
 
-# Ensure strict mode and predictable pipeline failure
+# ensure strict mode and predictable pipeline failure
 set -euo pipefail
+trap "echo 'error: Script failed: see failed command above'" ERR
 
 # Get AKS creds
 message="Merging AKS credentials"
@@ -19,5 +20,4 @@ pod_name="nexus-0"
 message="Waiting for Ready condition on pod: [$pod_name]"
 echo -e "\nSTARTED: $message..."
 kubectl --namespace ingress wait pod $pod_name --for condition=ready --timeout=5m
-
 echo -e "FINISHED: $message."

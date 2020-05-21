@@ -49,7 +49,7 @@ jobs:
 
     # Login
     - name: Login to Azure
-      run: pwsh -command "./scripts/Login-Azure.ps1"
+      run: ./scripts/azure_login.sh
 
     # Deallocate
     - name: Deallocate AKS VMSS

@@ -2,3 +2,4 @@ terraform/.terraform
 localonly
 credentials*
 /temp
+*.egg-info

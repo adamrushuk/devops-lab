@@ -28,12 +28,18 @@ env:
   # prod or staging
   CERT_API_ENVIRONMENT: prod
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
-  EMAIL_ADDRESS: adamrushuk+aksnexusvelero@gmail.com
+  EMAIL_ADDRESS: certadmin@domain.com
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true
   LOCATION: uksouth
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
+
+  # terraform
+  TF_IN_AUTOMATION: "true"
+  TF_INPUT: "false"
+  TF_VERSION: "0.12.24" # "latest" is supported
+  TF_WORKING_DIR: terraform
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
   # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
@@ -60,6 +66,7 @@ jobs:
     # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
     - name: Concatenate env vars (Workaround)
       run: |
+        chmod -R +x ./scripts/
         echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
         echo ::set-env name=ACR_NAME::${{ env.PREFIX }}acr001${{ env.LOCATION }}001
         echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
@@ -74,25 +81,28 @@ jobs:
 
     # Login
     - name: Login to Azure
-      run: pwsh -command "./scripts/Login-Azure.ps1"
+      run: ./scripts/azure_login.sh
 
     # Prereqs
     - name: Lookup Storage Key
-      run: pwsh -command "./scripts/Get-StorageKey.ps1"
+      run: ./scripts/storage_key.sh
 
     - name: Replace tokens in Terraform config files
       run: pwsh -command "./scripts/Replace-Tokens.ps1"
 
     # Terraform
-    - name: Terraform Init
-      run: pwsh -command "./scripts/Invoke-Terraform.ps1 -Command 'init'"
+    - uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ env.TF_VERSION }}
+    - name: Terraform destroy
+      run: |
+        terraform init
+        terraform destroy -no-color -auto-approve
+      working-directory: ${{ env.TF_WORKING_DIR }}
 
     # Cleanup
-    - name: Terraform Destroy
-      run: pwsh -command "./scripts/Destroy-Terraform.ps1"
-
     - name: Delete Storage
-      run: pwsh -command "./scripts/Delete-Storage.ps1"
+      run: ./scripts/storage_delete.sh
 
     # Notify
     - name: Notify slack

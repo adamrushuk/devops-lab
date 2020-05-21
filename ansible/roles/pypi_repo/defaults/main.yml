@@ -1,0 +1,10 @@
+pypi_repo_request_body:
+  name: pypi-repo
+  online: true
+  storage:
+    blobStoreName: default
+    strictContentTypeValidation: true
+    writePolicy: ALLOW_ONCE
+
+pypi_package_name: adams-package
+pypi_repo_url: "{{ api_base_uri }}/repository/{{ pypi_repo_request_body.name }}"

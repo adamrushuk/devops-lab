@@ -8,11 +8,13 @@
   until:
     - result.status == 200
   retries: 60
-  delay: 5
+  delay: 10
   # reset module defaults for this simple check
   module_defaults:
     uri: {}
 
+
+# SECURITY
 - name: test admin access
   uri:
     url: "{{ api_url }}/v1/status/"
@@ -41,3 +43,35 @@
     method: PUT
     body: "{{ active_realms }}"
     status_code: 200,204
+
+- name: delete default repos
+  uri:
+    url: "{{ api_url }}/beta/repositories/{{ item }}"
+    method: DELETE
+    status_code: 204,404
+  loop: "{{ repos_to_remove }}"
+  register: del_repo_response
+  changed_when: del_repo_response.status == 204
+
+
+# REPOS
+- name: list repos
+  uri:
+    url: "{{ api_url }}/beta/repositories"
+    method: GET
+    status_code: 200
+  register: repositories
+
+- name: debug repos
+  debug:
+    var: repositories
+  when: enable_debug_output == "true"
+
+- name: extract repo names
+  set_fact:
+    repo_names: "{{ repositories.json | map( attribute='name' ) | list }}"
+
+- name: debug repo names
+  debug:
+    var: repo_names
+  when: enable_debug_output == "true"

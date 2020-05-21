@@ -1,30 +1,4 @@
 # DOCKER REPO
-- name: list repos
-  uri:
-    url: "{{ api_url }}/beta/repositories"
-    method: GET
-    status_code: 200
-  register: repositories
-
-- name: debug repos
-  debug:
-    var: repositories
-  when: enable_debug_output == "true"
-
-# - name: filter repo names
-#   debug:
-#     msg: "{{ repositories.json | json_query(jmesquery)}}"
-#   when: '"docker-repo" in repo_names'
-
-- name: extract repo names
-  set_fact:
-    repo_names: "{{ repositories.json | map( attribute='name' ) | list }}"
-
-- name: debug repo names
-  debug:
-    var: repo_names
-  when: enable_debug_output == "true"
-
 - name: create docker repo
   uri:
     url: "{{ api_url }}/beta/repositories/docker/hosted"

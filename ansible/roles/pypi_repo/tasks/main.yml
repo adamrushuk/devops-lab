@@ -1,0 +1,42 @@
+# PyPI REPO
+- name: create pypi repo
+  uri:
+    url: "{{ api_url }}/beta/repositories/pypi/hosted"
+    method: POST
+    body: "{{ pypi_repo_request_body }}"
+    status_code: "201"
+  when: pypi_repo_request_body.name not in repo_names
+  register: pypi_repo_api_response
+
+- name: debug create pypi repo
+  debug:
+    var: pypi_repo_api_response
+  when: enable_debug_output == "true"
+
+- name: search pypi repo
+  command: "pip search --index {{ pypi_repo_url }}/pypi {{ pypi_package_name }}"
+  ignore_errors: yes
+  register: search_result
+
+- name: debug search pypi repo
+  debug:
+    var: search_result
+  when: enable_debug_output == "true"
+
+- name: upload package to pypi repo
+  script: upload_package.sh
+  args:
+    chdir: "{{ role_path }}/files/hello"
+  environment:
+    USERNAME: "{{ api_user }}"
+    PASSWORD: "{{ admin_password }}"
+    REPO_URL: "{{ pypi_repo_url }}"
+    PACKAGE_NAME: "{{ pypi_package_name }}"
+  # ignore_errors: yes
+  when: search_result.stdout | length == 0
+  register: shellout
+
+- name: debug upload package
+  debug:
+    var: shellout.stdout_lines
+  when: enable_debug_output == "true"

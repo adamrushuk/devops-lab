@@ -44,6 +44,9 @@ resource "kubernetes_namespace" "velero" {
   metadata {
     name = "velero"
   }
+  timeouts {
+    delete = "10m"
+  }
 }
 
 
@@ -60,7 +63,7 @@ resource "helm_release" "velero" {
   chart      = "velero"
   name       = "velero"
   namespace  = "velero"
-  repository = data.helm_repository.vmware_tanzu.metadata[0].name
+  repository = "https://vmware-tanzu.github.io/helm-charts"
   values     = ["${file("helm/velero_values.yaml")}"]
   version    = var.velero_chart_version
   set {
