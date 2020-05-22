@@ -53,3 +53,15 @@ fi
 echo "APPLYING: Ingress [$ingressFilename]..."
 kubectl apply -n ingress -f "./manifests/$ingressFilename"
 echo "FINISHED: $message."
+
+
+#region external-dns
+# write file from GitHub secret
+echo "$EXTERNAL_DNS_CREDENTIAL_JSON" > ./creds/azure.json
+
+# create secret
+kubectl create -n ingress secret generic azure-config-file --from-file=./creds/azure.json
+
+# apply manifest
+kubectl apply -f ./manifests/external-dns.yml
+#endregion external-dns

@@ -43,7 +43,7 @@ az role assignment create --role "Contributor" --assignee <appId GUID> --scope <
 # create kubernetes secret
 # first, write file from GitHub secret: echo $EXTERNAL_DNS_CREDENTIAL_JSON > ./creds/azure.json
 kubectl ns ingress
-kubectl create secret generic azure-config-file --from-file=./creds/azure.json
+kubectl create -n ingress secret generic azure-config-file --from-file=./creds/azure.json
 
 # apply manifest
 kubectl apply -f ./manifests/external-dns.yml
@@ -51,11 +51,7 @@ kubectl apply -f ./manifests/external-dns.yml
 # add arg to nginx-ingress deployment
 --publish-service=ingress/nginx-nginx-ingress-controller
 
-
-
-
-
-# misc
-nslookup -type=SOA thehypepipe.co.uk
-
-
+# testing
+nslookup -type=SOA nexus.thehypepipe.co.uk
+nslookup nexus.thehypepipe.co.uk
+ping nexus.thehypepipe.co.uk

@@ -9,7 +9,7 @@ Provisions an AKS cluster, deploys Nexus Repository OSS, configures Velero backu
 - [aks-nexus-velero](#aks-nexus-velero)
   - [Contents](#contents)
   - [Getting Started](#getting-started)
-    - [GoDaddy DNS API Secrets](#godaddy-dns-api-secrets)
+    - [Assumptions](#assumptions)
     - [Azure Secrets](#azure-secrets)
     - [Velero Secret](#velero-secret)
   - [Login to Nexus Console](#login-to-nexus-console)
@@ -19,16 +19,11 @@ Provisions an AKS cluster, deploys Nexus Repository OSS, configures Velero backu
 Before you start the `build` GitHub Action workflow, you need to create the following Secrets within
 [GitHub Settings](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets):
 
-### GoDaddy DNS API Secrets
+### Assumptions
 
-There are plans to use [external-dns](https://github.com/kubernetes-sigs/external-dns) to handle DNS changes, but
-in the meantime, I'm using a script to update GoDaddy DNS records.
+<!-- TODO -->
 
-Learn how to [setup GoDaddy API access](https://developer.godaddy.com/getstarted), then add the following GitHub
-Secrets:
-
-- `API_KEY`
-- `API_SECRET`
+- Public DNS zone has been created in Azure, within resource group: `rg-externaldns`
 
 ### Azure Secrets
 

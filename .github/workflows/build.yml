@@ -21,10 +21,6 @@ env:
   # debug
   CI_DEBUG: true
 
-  # api
-  API_KEY: ${{ secrets.API_KEY }}
-  API_SECRET: ${{ secrets.API_SECRET }}
-
   # azure creds
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
@@ -34,6 +30,7 @@ env:
   # other
   # prod or staging
   CERT_API_ENVIRONMENT: prod
+  ROOT_DOMAIN_NAME: thehypepipe.co.uk
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
   DOCKER_FQDN: docker-nexus.thehypepipe.co.uk
   DEMO_USER_USERNAME: demo_user
@@ -140,6 +137,8 @@ jobs:
     # Kubernetes
     - name: Deploy kubernetes manifests
       run: ./scripts/k8s_manifests_apply.sh
+      env:
+        EXTERNAL_DNS_CREDENTIAL_JSON: ${{ secrets.EXTERNAL_DNS_CREDENTIAL_JSON }}
 
     - name: Wait for resources to be "Ready"
       run: ./scripts/wait.sh

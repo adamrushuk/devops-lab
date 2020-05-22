@@ -134,19 +134,21 @@ variable "credentials_velero" {
 }
 
 
-# DNS update script vars
-variable "dns_domain_name" {
-  default = "__DNS_DOMAIN_NAME__"
-}
+# ? Removed as now using kubernetes external-dns
+# ? keeping for reference of dns update script usage
+# # DNS update script vars
+# variable "dns_domain_name" {
+#   default = "__DNS_DOMAIN_NAME__"
+# }
 
-variable "has_subdomain" {
-  default = "__HAS_SUBDOMAIN__"
-}
+# variable "has_subdomain" {
+#   default = "__HAS_SUBDOMAIN__"
+# }
 
-variable "api_key" {
-  default = "__API_KEY__"
-}
+# variable "api_key" {
+#   default = "__API_KEY__"
+# }
 
-variable "api_secret" {
-  default = "__API_SECRET__"
-}
+# variable "api_secret" {
+#   default = "__API_SECRET__"
+# }

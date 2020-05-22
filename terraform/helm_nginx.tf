@@ -29,6 +29,8 @@ resource "helm_release" "nginx" {
   depends_on = [kubernetes_namespace.ingress]
 }
 
+# ? Removed as now using kubernetes external-dns
+# ? keeping for reference of dns update script usage
 # https://www.terraform.io/docs/provisioners/local-exec.html
 # resource "null_resource" "update_dns" {
 #   # triggers = {

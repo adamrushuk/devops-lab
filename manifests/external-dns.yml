@@ -53,7 +53,7 @@ spec:
         args:
         - --source=service
         - --source=ingress
-        - --domain-filter=thehypepipe.co.uk # (optional) limit to only example.com domains; change to match the zone created above.
+        - --domain-filter=__ROOT_DOMAIN_NAME__ # (optional) limit to only example.com domains; change to match the zone created above.
         - --provider=azure
         - --azure-resource-group=rg-externaldns # (optional) use the DNS zones from the tutorial's resource group
         volumeMounts:
