@@ -68,6 +68,6 @@ ls -la ./creds
 kubectl create -n ingress secret generic azure-config-file --from-file=./creds/azure.json
 
 # apply manifest
-kubectl apply -f ./manifests/external-dns.yml
+kubectl apply -n ingress -f ./manifests/external-dns.yml
 echo "FINISHED: $message."
 #endregion external-dns
