@@ -57,11 +57,17 @@ echo "FINISHED: $message."
 
 #region external-dns
 # write file from GitHub secret
+message="Writing azure credentials file"
+echo "STARTED: $message..."
+pwd
+mkdir -p ./creds/
 echo "$EXTERNAL_DNS_CREDENTIAL_JSON" > ./creds/azure.json
+ls -la ./creds
 
 # create secret
 kubectl create -n ingress secret generic azure-config-file --from-file=./creds/azure.json
 
 # apply manifest
 kubectl apply -f ./manifests/external-dns.yml
+echo "FINISHED: $message."
 #endregion external-dns

@@ -52,6 +52,7 @@ kubectl apply -f ./manifests/external-dns.yml
 --publish-service=ingress/nginx-nginx-ingress-controller
 
 # testing
+az network dns record-set a list --resource-group $resource_group --zone $zone
 nslookup -type=SOA nexus.thehypepipe.co.uk
 nslookup nexus.thehypepipe.co.uk
 ping nexus.thehypepipe.co.uk
