@@ -65,7 +65,7 @@ echo "$EXTERNAL_DNS_CREDENTIAL_JSON" > ./creds/azure.json
 ls -la ./creds
 
 # create secret
-kubectl create -n ingress secret generic azure-config-file --from-file=./creds/azure.json
+kubectl apply -n ingress secret generic azure-config-file --from-file=./creds/azure.json
 
 # apply manifest
 kubectl apply -n ingress -f ./manifests/external-dns.yml
