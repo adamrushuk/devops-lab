@@ -26,6 +26,7 @@ resource "helm_release" "nginx" {
   repository = "https://kubernetes-charts.storage.googleapis.com"
   version    = var.nginx_chart_version
   values     = ["${file("helm/nginx_values.yaml")}"]
+  timeout    = 600
   depends_on = [kubernetes_namespace.ingress]
 }
 
