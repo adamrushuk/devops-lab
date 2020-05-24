@@ -1,0 +1,30 @@
+{
+  "Name": "Terraform",
+  "IsCustom": true,
+  "Description": "Contributor, with exploded Microsoft.Authorization actions and no Blueprint actions.",
+  "Actions": [
+    "*"
+  ],
+  "NotActions": [
+    "Microsoft.Authorization/classicAdministrators/write",
+    "Microsoft.Authorization/classicAdministrators/delete",
+    "Microsoft.Authorization/denyAssignments/write",
+    "Microsoft.Authorization/denyAssignments/delete",
+    "Microsoft.Authorization/locks/write",
+    "Microsoft.Authorization/locks/delete",
+    "Microsoft.Authorization/policyAssignments/write",
+    "Microsoft.Authorization/policyAssignments/delete",
+    "Microsoft.Authorization/policyDefinitions/write",
+    "Microsoft.Authorization/policyDefinitions/delete",
+    "Microsoft.Authorization/policySetDefinitions/write",
+    "Microsoft.Authorization/policySetDefinitions/delete",
+    "Microsoft.Authorization/elevateAccess/Action",
+    "Microsoft.Blueprint/*/write",
+    "Microsoft.Blueprint/*/delete"
+  ],
+  "DataActions": [],
+  "NotDataActions": [],
+  "AssignableScopes": [
+    "/subscriptions/<SUBSCRIPTION_ID>"
+  ]
+}
