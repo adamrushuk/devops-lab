@@ -58,3 +58,29 @@ resource "azurerm_role_assignment" "aks_dns_sp_to_zone" {
   role_definition_name = "Contributor"
   scope                = azurerm_resource_group.dns.id
 }
+
+
+# Kuberenetes Secret for external-dns
+data "azurerm_subscription" "current" {}
+
+resource "kubernetes_secret" "external_dns" {
+  metadata {
+    name      = "azure-config-file"
+    namespace = "ingress"
+  }
+
+  data = {
+    cloud = <<EOT
+    {
+      "aadClientId": "${azuread_service_principal.aks_dns_sp[0].application_id}",
+      "aadClientSecret": "${random_string.aks_dns_sp[0].result}",
+      "tenantId": "${data.azurerm_subscription.current.tenant_id}",
+      "subscriptionId": "${data.azurerm_subscription.current.subscription_id}",
+      "resourceGroup": "${azurerm_resource_group.dns.name}"
+    }
+    EOT
+  }
+
+  type       = "Opaque"
+  depends_on = [kubernetes_namespace.ingress.0]
+}
