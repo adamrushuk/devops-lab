@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "dns" {
 resource "azurerm_dns_zone" "dns" {
   name                = var.dns_zone_name
   resource_group_name = azurerm_resource_group.dns.name
-  name_servers        = var.dns_name_servers
+  name_servers        = [var.dns_name_servers]
 }
 
 
@@ -82,5 +82,5 @@ resource "kubernetes_secret" "external_dns" {
   }
 
   type       = "Opaque"
-  depends_on = [kubernetes_namespace.ingress.0]
+  depends_on = [kubernetes_namespace.ingress]
 }
