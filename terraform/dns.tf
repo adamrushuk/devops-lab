@@ -46,7 +46,7 @@ resource "azuread_service_principal_password" "aks_dns_sp" {
 # Service Principle role assignments
 # reader on dns resource group
 resource "azurerm_role_assignment" "aks_dns_sp_to_rg" {
-  principal_id                     = azuread_application.aks_dns_sp.application_id
+  principal_id                     = azuread_service_principal.aks_dns_sp.id
   role_definition_name             = "Reader"
   scope                            = azurerm_dns_zone.dns.id
   skip_service_principal_aad_check = true
@@ -54,7 +54,7 @@ resource "azurerm_role_assignment" "aks_dns_sp_to_rg" {
 
 # contributor on dns zone
 resource "azurerm_role_assignment" "aks_dns_sp_to_zone" {
-  principal_id                     = azuread_application.aks_dns_sp.application_id
+  principal_id                     = azuread_service_principal.aks_dns_sp.id
   role_definition_name             = "Contributor"
   scope                            = azurerm_resource_group.dns.id
   skip_service_principal_aad_check = true
