@@ -65,7 +65,7 @@ echo "$EXTERNAL_DNS_CREDENTIAL_JSON" > ./creds/azure.json
 # create secret
 # cant use "apply", so use workaround:
 # kubectl create whatever --dry-run -o yaml | kubectl apply -f -
-kubectl create -n ingress secret generic azure-config-file --from-file=./creds/azure.json --dry-run -o yaml | kubectl apply -f -
+# kubectl create -n ingress secret generic azure-config-file --from-file=./creds/azure.json --dry-run -o yaml | kubectl apply -f -
 
 # apply manifest
 kubectl apply -n ingress -f ./manifests/external-dns.yml
