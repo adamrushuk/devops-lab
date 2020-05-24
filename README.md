@@ -23,8 +23,6 @@ Before you start the `build` GitHub Action workflow, you need to create the foll
 
 <!-- TODO -->
 
-- Public DNS zone has been created in Azure, within resource group: `rg-externaldns`
-
 ### Azure Secrets
 
 <!-- TODO -->
