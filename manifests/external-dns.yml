@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: external-dns
+  namespace: ingress
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
@@ -29,12 +30,13 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: external-dns
-  namespace: default
+  namespace: ingress
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: external-dns
+  namespace: ingress
 spec:
   strategy:
     type: Recreate
@@ -53,9 +55,9 @@ spec:
         args:
         - --source=service
         - --source=ingress
-        - --domain-filter=__ROOT_DOMAIN_NAME__ # (optional) limit to only example.com domains; change to match the zone created above.
+        - --domain-filter=__ROOT_DOMAIN_NAME__ # (optional) limit to only these domains
         - --provider=azure
-        - --azure-resource-group=rg-externaldns # (optional) use the DNS zones from the tutorial's resource group
+        - --azure-resource-group=__DNS_RG_NAME__
         volumeMounts:
         - name: azure-config-file
           mountPath: /etc/kubernetes
