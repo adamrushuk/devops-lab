@@ -148,6 +148,7 @@ variable "dns_zone_name" {
 }
 
 variable "dns_name_servers" {
+  type = list(string)
   default = [
     "ns1-07.azure-dns.com.",
     "ns2-07.azure-dns.net.",
