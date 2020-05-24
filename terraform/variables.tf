@@ -134,6 +134,25 @@ variable "credentials_velero" {
 }
 
 
+# DNS
+variable "dns_resource_group_name" {
+  default = "__DNS_RG_NAME__"
+}
+
+variable "dns_zone_name" {
+  default = "__ROOT_DOMAIN_NAME__"
+}
+
+variable "dns_name_servers" {
+  default = [
+    "ns1-07.azure-dns.com.",
+    "ns2-07.azure-dns.net.",
+    "ns3-07.azure-dns.org.",
+    "ns4-07.azure-dns.info."
+  ]
+}
+
+
 # ? Removed as now using kubernetes external-dns
 # ? keeping for reference of dns update script usage
 # # DNS update script vars

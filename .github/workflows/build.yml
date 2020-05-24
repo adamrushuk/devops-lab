@@ -30,16 +30,17 @@ env:
   # other
   # prod or staging
   CERT_API_ENVIRONMENT: prod
-  ROOT_DOMAIN_NAME: thehypepipe.co.uk
-  DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
-  DOCKER_FQDN: docker-nexus.thehypepipe.co.uk
   DEMO_USER_USERNAME: demo_user
   # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
+  DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
+  DNS_RG_NAME: rg-externaldns
+  DOCKER_FQDN: docker-nexus.thehypepipe.co.uk
   EMAIL_ADDRESS: certadmin@domain.com
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true
   LOCATION: uksouth
+  ROOT_DOMAIN_NAME: thehypepipe.co.uk
   # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
 
