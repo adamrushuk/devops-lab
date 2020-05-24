@@ -147,6 +147,7 @@ variable "dns_zone_name" {
   default = "__ROOT_DOMAIN_NAME__"
 }
 
+# not currently used as zone defaults to these anyway
 variable "dns_name_servers" {
   type = list(string)
   default = [

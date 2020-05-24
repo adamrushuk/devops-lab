@@ -12,7 +12,6 @@ resource "azurerm_resource_group" "dns" {
 resource "azurerm_dns_zone" "dns" {
   name                = var.dns_zone_name
   resource_group_name = azurerm_resource_group.dns.name
-  # name_servers        = [var.dns_name_servers]
 }
 
 

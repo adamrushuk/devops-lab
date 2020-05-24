@@ -23,6 +23,9 @@ Before you start the `build` GitHub Action workflow, you need to create the foll
 
 <!-- TODO -->
 
+- Configure Azure Service Principle for Terraform, and grant permission to manage AAD:
+https://www.terraform.io/docs/providers/azuread/guides/service_principal_configuration.html#granting-administrator-permissions
+
 ### Azure Secrets
 
 <!-- TODO -->
