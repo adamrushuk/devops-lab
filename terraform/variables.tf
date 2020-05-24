@@ -135,6 +135,10 @@ variable "credentials_velero" {
 
 
 # DNS
+variable "dns_service_principle_name" {
+  default = "sp_external_dns"
+}
+
 variable "dns_resource_group_name" {
   default = "__DNS_RG_NAME__"
 }
