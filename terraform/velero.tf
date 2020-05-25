@@ -115,10 +115,6 @@ resource "helm_release" "velero" {
     value = "velero"
   }
   # set {
-  #   name  = "credentials.secretContents.cloud"
-  #   value = var.credentials_velero
-  # }
-  # set {
   #   name  = "configuration.logLevel"
   #   value = "debug"
   # }

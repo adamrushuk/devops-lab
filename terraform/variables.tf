@@ -129,10 +129,6 @@ variable "velero_storage_account_name" {
   default = "__VELERO_STORAGE_ACCOUNT__"
 }
 
-variable "credentials_velero" {
-  default = "NOT_DEFINED"
-}
-
 variable "velero_service_principle_name" {
   default = "velero_sp"
 }

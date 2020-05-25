@@ -11,7 +11,6 @@ Provisions an AKS cluster, deploys Nexus Repository OSS, configures Velero backu
   - [Getting Started](#getting-started)
     - [Assumptions](#assumptions)
     - [Azure Secrets](#azure-secrets)
-    - [Velero Secret](#velero-secret)
   - [Login to Nexus Console](#login-to-nexus-console)
 
 ## Getting Started
@@ -34,12 +33,6 @@ https://www.terraform.io/docs/providers/azuread/guides/service_principal_configu
 - `ARM_CLIENT_SECRET`
 - `ARM_SUBSCRIPTION_ID`
 - `ARM_TENANT_ID`
-
-### Velero Secret
-
-<!-- TODO -->
-
-- `CREDENTIALS_VELERO`
 
 ## Login to Nexus Console
 
