@@ -178,7 +178,7 @@ credentials:
   useSecret: true
   # Name of a pre-existing secret (if any) in the Velero namespace
   # that should be used to get IAM account credentials. Optional.
-  existingSecret:
+  existingSecret: velero-credentials
   # Data to be stored in the Velero secret, if `useSecret` is
   # true and `existingSecret` is empty. This should be the contents
   # of your IAM credentials file.

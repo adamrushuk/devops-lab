@@ -133,6 +133,27 @@ variable "credentials_velero" {
   default = "NOT_DEFINED"
 }
 
+variable "velero_service_principle_name" {
+  default = "velero_sp"
+}
+
+# TODO: issue #85 Allow velero to be optional installation
+# variable "velero_enabled" {
+#   description = "Should Velero be enabled"
+#   default     = false
+# }
+
+variable "velero_backup_retention" {
+  # for testing, only retain for 6hrs
+  default = "6h0m0s"
+}
+
+variable "velero_backup_schedule" {
+  description = "Velero backup schedule in cron format"
+  # for testing, use "0 */1 * * *" for "every hour"
+  default = "0 */1 * * *"
+}
+
 
 # DNS
 variable "dns_service_principle_name" {

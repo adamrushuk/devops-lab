@@ -49,6 +49,30 @@ resource "kubernetes_namespace" "velero" {
   }
 }
 
+resource "kubernetes_secret" "velero_credentials" {
+  metadata {
+    name      = "velero-credentials"
+    namespace = "velero"
+
+    labels = {
+      component = "velero"
+    }
+  }
+
+  data = {
+    cloud = <<EOT
+    AZURE_SUBSCRIPTION_ID=${data.azurerm_subscription.current.subscription_id}
+    AZURE_TENANT_ID=${data.azurerm_subscription.current.tenant_id}
+    AZURE_CLIENT_ID=${azuread_service_principal.velero_sp.application_id}
+    AZURE_CLIENT_SECRET=${random_string.velero_sp.result}
+    AZURE_RESOURCE_GROUP=${azurerm_kubernetes_cluster.aks.node_resource_group}
+    AZURE_CLOUD_NAME=AzurePublicCloud
+    EOT
+  }
+
+  type       = "Opaque"
+  depends_on = [kubernetes_namespace.velero]
+}
 
 # Manually test new values:
 # helm upgrade \
@@ -78,14 +102,26 @@ resource "helm_release" "velero" {
     name  = "configuration.volumeSnapshotLocation.config.resourceGroup"
     value = azurerm_resource_group.velero.name
   }
-  set {
-    name  = "credentials.secretContents.cloud"
-    value = var.credentials_velero
+  set_string {
+    name  = "schedules.fullbackup.schedule"
+    value = var.velero_backup_schedule
+  }
+  set_string {
+    name  = "schedules.fullbackup.template.ttl"
+    value = var.velero_backup_retention
   }
   set {
-    name  = "configuration.logLevel"
-    value = "debug"
+    name  = "schedules.fullbackup.excludedNamespaces"
+    value = "velero"
   }
+  # set {
+  #   name  = "credentials.secretContents.cloud"
+  #   value = var.credentials_velero
+  # }
+  # set {
+  #   name  = "configuration.logLevel"
+  #   value = "debug"
+  # }
   timeout    = 600
   depends_on = [kubernetes_namespace.velero]
 }
