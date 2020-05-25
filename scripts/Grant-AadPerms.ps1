@@ -2,6 +2,8 @@
 #
 # source: https://www.terraform.io/docs/providers/azuread/guides/service_principal_configuration.html#granting-administrator-permissions
 
+# ! IMPORTANT NOTE: If you're authenticating using a Service Principal then it must have permissions to both Read and write all applications and Sign in and read user profile within the Windows Azure Active Directory API. Please see The Granting a Service Principal permission to manage AAD for the required steps.
+
 # ! NOTE: This requires the use of powershell cmdlets and is easiest to run in CloudShell.
 # ! MUST use Windows PowerShell session (PowerShell 7 not currently supported)
 
