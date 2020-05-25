@@ -71,7 +71,7 @@ resource "kubernetes_secret" "external_dns" {
   }
 
   data = {
-    cloud = <<EOT
+    azure.json = <<EOT
     {
       "aadClientId": "${azuread_service_principal.aks_dns_sp.application_id}",
       "aadClientSecret": "${random_string.aks_dns_sp.result}",
