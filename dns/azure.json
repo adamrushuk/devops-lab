@@ -1,0 +1,7 @@
+{
+  "tenantId": "01234abc-de56-ff78-abc1-234567890def",
+  "subscriptionId": "01234abc-de56-ff78-abc1-234567890def",
+  "resourceGroup": "MyDnsResourceGroup",
+  "aadClientId": "01234abc-de56-ff78-abc1-234567890def",
+  "aadClientSecret": "01234abc-de56-ff78-abc1-234567890def"
+}
