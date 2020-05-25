@@ -50,6 +50,7 @@ resource "azurerm_role_assignment" "aks_dns_sp_to_rg" {
   role_definition_name             = "Reader"
   scope                            = azurerm_dns_zone.dns.id
   skip_service_principal_aad_check = true
+  depends_on                       = [azuread_service_principal_password.aks_dns_sp]
 }
 
 # contributor on dns zone
@@ -58,12 +59,11 @@ resource "azurerm_role_assignment" "aks_dns_sp_to_zone" {
   role_definition_name             = "Contributor"
   scope                            = azurerm_resource_group.dns.id
   skip_service_principal_aad_check = true
+  depends_on                       = [azuread_service_principal_password.aks_dns_sp]
 }
 
 
 # Kuberenetes Secret for external-dns
-data "azurerm_subscription" "current" {}
-
 resource "kubernetes_secret" "external_dns" {
   metadata {
     name      = "azure-config-file"
