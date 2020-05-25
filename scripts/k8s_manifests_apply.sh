@@ -57,10 +57,10 @@ echo "FINISHED: $message."
 
 #region external-dns
 # write file from GitHub secret
-message="Writing azure credentials file"
-echo "STARTED: $message..."
-mkdir -p ./creds/
-echo "$EXTERNAL_DNS_CREDENTIAL_JSON" > ./creds/azure.json
+# message="Writing azure credentials file"
+# echo "STARTED: $message..."
+# mkdir -p ./creds/
+# echo "$EXTERNAL_DNS_CREDENTIAL_JSON" > ./creds/azure.json
 
 # create secret
 # cant use "apply", so use workaround:
