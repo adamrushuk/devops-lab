@@ -72,14 +72,14 @@ resource "kubernetes_secret" "external_dns" {
 
   data = {
     "azure.json" = <<EOT
-  {
-    "aadClientId": "${azuread_service_principal.aks_dns_sp.application_id}",
-    "aadClientSecret": "${random_string.aks_dns_sp.result}",
-    "tenantId": "${data.azurerm_subscription.current.tenant_id}",
-    "subscriptionId": "${data.azurerm_subscription.current.subscription_id}",
-    "resourceGroup": "${azurerm_resource_group.dns.name}"
-  }
-  EOT
+{
+  "aadClientId": "${azuread_service_principal.aks_dns_sp.application_id}",
+  "aadClientSecret": "${random_string.aks_dns_sp.result}",
+  "tenantId": "${data.azurerm_subscription.current.tenant_id}",
+  "subscriptionId": "${data.azurerm_subscription.current.subscription_id}",
+  "resourceGroup": "${azurerm_resource_group.dns.name}"
+}
+EOT
   }
 
   type       = "Opaque"
