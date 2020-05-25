@@ -138,8 +138,6 @@ jobs:
     # Kubernetes
     - name: Deploy kubernetes manifests
       run: ./scripts/k8s_manifests_apply.sh
-      # env:
-      #   EXTERNAL_DNS_CREDENTIAL_JSON: ${{ secrets.EXTERNAL_DNS_CREDENTIAL_JSON }}
 
     - name: Wait for resources to be "Ready"
       run: ./scripts/wait.sh
