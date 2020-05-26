@@ -143,17 +143,17 @@ jobs:
       run: ./scripts/wait.sh
 
 
-    # # Ansible
-    # - name: Lint Ansible Playbook
-    #   uses: ansible/ansible-lint-action@6c8c141
-    #   with:
-    #     targets: "./ansible"
+    # Ansible
+    - name: Lint Ansible Playbook
+      uses: ansible/ansible-lint-action@6c8c141
+      with:
+        targets: "./ansible"
 
-    # - name: Run Ansible playbook
-    #   run: ./scripts/ansible.sh
-    #   env:
-    #     NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
-    #     DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
+    - name: Run Ansible playbook
+      run: ./scripts/ansible.sh
+      env:
+        NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
+        DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
 
 
     # # Docker
