@@ -156,34 +156,34 @@ jobs:
         DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
 
 
-    # # Docker
-    # - name: Docker repo login
-    #   uses: Azure/docker-login@v1
-    #   with:
-    #     login-server: ${{ env.DOCKER_FQDN }}
-    #     username: ${{ env.DEMO_USER_USERNAME }}
-    #     password: ${{ secrets.DEMO_USER_PASSWORD }}
+    # Docker
+    - name: Docker repo login
+      uses: Azure/docker-login@v1
+      with:
+        login-server: ${{ env.DOCKER_FQDN }}
+        username: ${{ env.DEMO_USER_USERNAME }}
+        password: ${{ secrets.DEMO_USER_PASSWORD }}
 
-    # - name: Push images to Docker repo
-    #   run: ./scripts/push_docker_images.sh
+    - name: Push images to Docker repo
+      run: ./scripts/push_docker_images.sh
 
 
-    # # Pester tests
-    # - name: Run Pester tests
-    #   run: pwsh -command "./scripts/Start-Test.ps1"
+    # Pester tests
+    - name: Run Pester tests
+      run: pwsh -command "./scripts/Start-Test.ps1"
 
-    # - name: Archive test artifacts
-    #   uses: actions/upload-artifact@v1
-    #   with:
-    #     name: test results
-    #     path: test/pester-test-results-junit.xml
-    #   if: always()
+    - name: Archive test artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: test results
+        path: test/pester-test-results-junit.xml
+      if: always()
 
-    # # Notify
-    # - name: Notify slack
-    #   env:
-    #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-    #   uses: pullreminders/slack-action@v1.0.9
-    #   with:
-    #     # env var concatenation not supported atm, so hard-code messages
-    #     args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Build complete\"}'
+    # Notify
+    - name: Notify slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      uses: pullreminders/slack-action@v1.0.9
+      with:
+        # env var concatenation not supported atm, so hard-code messages
+        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Build complete\"}'
