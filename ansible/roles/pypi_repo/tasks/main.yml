@@ -14,7 +14,7 @@
   when: enable_debug_output == "true"
 
 - name: search pypi repo
-  command: "pip search --index {{ pypi_repo_url }}/pypi {{ pypi_package_name }}"
+  shell: "pip search --index {{ pypi_repo_url }}/pypi {{ pypi_package_name }}"
   ignore_errors: yes
   register: search_result
 

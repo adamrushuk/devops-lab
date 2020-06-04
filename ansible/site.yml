@@ -30,18 +30,20 @@
   # INIT
   # use "import_" for static mode
   # https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse.html#dynamic-vs-static
-  - name: run init tasks
-    import_tasks: init_tasks.yml
+  # - name: run init tasks
+  #   import_tasks: init_tasks.yml
 
   # ROLES
-  # - import_role:
-  #     name: user
-  # - import_role:
-  #     name: nuget_repo
-  # - import_role:
-  #     name: docker_repo
-  # - import_role:
-  #     name: helm_repo
-  # - import_role:
-  #     name: pypi_repo
+  - import_role:
+      name: init
+  - import_role:
+      name: user
+  - import_role:
+      name: nuget_repo
+  - import_role:
+      name: docker_repo
+  - import_role:
+      name: helm_repo
+  - import_role:
+      name: pypi_repo
 
