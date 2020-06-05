@@ -111,6 +111,10 @@ resource "helm_release" "velero" {
     value = var.velero_backup_retention
   }
   set {
+    name  = "schedules.fullbackup.template.storageLocation"
+    value = "azure"
+  }
+  set {
     name  = "schedules.fullbackup.excludedNamespaces"
     value = "velero"
   }
