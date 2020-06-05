@@ -130,7 +130,7 @@ variable "velero_storage_account_name" {
 }
 
 variable "velero_service_principle_name" {
-  default = "velero_sp"
+  default = "sp_velero"
 }
 
 # TODO: issue #85 Allow velero to be optional installation
