@@ -9,9 +9,9 @@ terraform {
 
   # providers (pin all versions)
   required_providers {
-    helm       = "=1.2.1"
+    helm       = "=1.2.2"
     kubernetes = "=1.11.3"
-    azuread    = "~> 0.9"
+    azuread    = "~> 0.10"
     random     = "~> 2.2"
     tls        = "~> 2.1"
   }
@@ -21,7 +21,7 @@ terraform {
 
 # must include blank features block
 provider "azurerm" {
-  version = "=2.11.0"
+  version = "=2.13.0"
   features {}
 }
 

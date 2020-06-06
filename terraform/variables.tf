@@ -1,14 +1,14 @@
 # Helm charts
 variable "nginx_chart_version" {
-  default = "1.36.3"
+  default = "1.39.1"
 }
 
 variable "cert_manager_chart_version" {
-  default = "v0.15.0-alpha.2"
+  default = "v0.15.1"
 }
 
 variable "velero_chart_version" {
-  default = "2.9.15"
+  default = "2.12.0"
 }
 
 
