@@ -132,8 +132,8 @@ jobs:
     - name: Terraform Lint
       uses: rickardl/tflint-action@v1.5
       with:
-        TFLINT_ACTION_COMMENT: true
-        TFLINT_ACTION_TERRAFORM_FOLDER: ${{ env.TF_WORKING_DIR }}
+        tflint_action_comment: true
+        tflint_action_folder: ${{ env.TF_WORKING_DIR }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
