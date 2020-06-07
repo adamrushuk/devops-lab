@@ -69,7 +69,7 @@ variable "azurerm_kubernetes_cluster_name" {
 
 variable "aks_dashboard_enabled" {
   description = "Should Kubernetes dashboard be enabled"
-  default     = true
+  default     = false
 }
 
 variable "aks_container_insights_enabled" {
@@ -121,6 +121,11 @@ variable "agent_pool_profile_disk_size_gb" {
 
 
 # Velero
+variable "velero_enabled" {
+  description = "Should Velero be enabled"
+  default     = false
+}
+
 variable "velero_resource_group_name" {
   default = "__VELERO_STORAGE_RG__"
 }
@@ -132,12 +137,6 @@ variable "velero_storage_account_name" {
 variable "velero_service_principle_name" {
   default = "sp_velero"
 }
-
-# TODO: issue #85 Allow velero to be optional installation
-# variable "velero_enabled" {
-#   description = "Should Velero be enabled"
-#   default     = false
-# }
 
 variable "velero_backup_retention" {
   # for testing, only retain for 6hrs

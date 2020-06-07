@@ -3,6 +3,7 @@
 # Prereqs
 # https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/blob/master/README.md#Create-Azure-storage-account-and-blob-container
 resource "azurerm_resource_group" "velero" {
+  count    = var.velero_enabled ? 1 : 0
   name     = var.velero_resource_group_name
   location = var.location
   tags     = var.tags
@@ -15,6 +16,7 @@ resource "azurerm_resource_group" "velero" {
 }
 
 resource "azurerm_storage_account" "velero" {
+  count                     = var.velero_enabled ? 1 : 0
   name                      = var.velero_storage_account_name
   resource_group_name       = azurerm_resource_group.velero.name
   location                  = azurerm_resource_group.velero.location
@@ -33,6 +35,7 @@ resource "azurerm_storage_account" "velero" {
 }
 
 resource "azurerm_storage_container" "velero" {
+  count                 = var.velero_enabled ? 1 : 0
   name                  = "velero"
   storage_account_name  = azurerm_storage_account.velero.name
   container_access_type = "private"
@@ -41,6 +44,7 @@ resource "azurerm_storage_container" "velero" {
 
 # Kubernetes
 resource "kubernetes_namespace" "velero" {
+  count = var.velero_enabled ? 1 : 0
   metadata {
     name = "velero"
   }
@@ -50,6 +54,7 @@ resource "kubernetes_namespace" "velero" {
 }
 
 resource "kubernetes_secret" "velero_credentials" {
+  count = var.velero_enabled ? 1 : 0
   metadata {
     name      = "velero-credentials"
     namespace = "velero"
@@ -83,6 +88,7 @@ EOT
 #     -f terraform/helm/velero_values.yaml
 
 resource "helm_release" "velero" {
+  count      = var.velero_enabled ? 1 : 0
   atomic     = true
   chart      = "velero"
   name       = "velero"
