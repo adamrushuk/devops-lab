@@ -30,18 +30,11 @@ variable "admin_username" {
   default     = "sysadmin"
 }
 
-
 # Use "cat ~/.ssh/id_rsa.pub"
 variable "ssh_public_key" {
   description = "Public key for SSH access to the VMs"
   default     = ""
 }
-
-# [NOT USED] Use "cat ~/.ssh/id_rsa"
-# variable "ssh_private_key" {
-#   description = "Private key for SSH access to the VMs"
-#   default     = ""
-# }
 
 variable "tags" {
   description = "A map of the tags to use on the resources"
