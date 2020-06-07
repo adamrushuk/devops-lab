@@ -18,8 +18,8 @@ resource "azurerm_resource_group" "velero" {
 resource "azurerm_storage_account" "velero" {
   count                     = var.velero_enabled ? 1 : 0
   name                      = var.velero_storage_account_name
-  resource_group_name       = azurerm_resource_group.velero.name
-  location                  = azurerm_resource_group.velero.location
+  resource_group_name       = azurerm_resource_group.velero[0].name
+  location                  = azurerm_resource_group.velero[0].location
   account_kind              = "BlobStorage"
   account_tier              = "Standard"
   account_replication_type  = "LRS"
@@ -37,7 +37,7 @@ resource "azurerm_storage_account" "velero" {
 resource "azurerm_storage_container" "velero" {
   count                 = var.velero_enabled ? 1 : 0
   name                  = "velero"
-  storage_account_name  = azurerm_storage_account.velero.name
+  storage_account_name  = azurerm_storage_account.velero[0].name
   container_access_type = "private"
 }
 
@@ -98,15 +98,15 @@ resource "helm_release" "velero" {
   version    = var.velero_chart_version
   set {
     name  = "configuration.backupStorageLocation.config.resourceGroup"
-    value = azurerm_resource_group.velero.name
+    value = azurerm_resource_group.velero[0].name
   }
   set {
     name  = "configuration.backupStorageLocation.config.storageAccount"
-    value = azurerm_storage_account.velero.name
+    value = azurerm_storage_account.velero[0].name
   }
   set {
     name  = "configuration.volumeSnapshotLocation.config.resourceGroup"
-    value = azurerm_resource_group.velero.name
+    value = azurerm_resource_group.velero[0].name
   }
   set {
     name  = "schedules.fullbackup.schedule"
