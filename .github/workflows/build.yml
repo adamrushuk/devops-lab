@@ -113,20 +113,29 @@ jobs:
       with:
         terraform_version: ${{ env.TF_VERSION }}
 
-    - run: |
+    - name: Terraform Init / Validate
+      run: |
         terraform init
         terraform validate
       working-directory: ${{ env.TF_WORKING_DIR }}
 
-    - name: tflint
-      uses: reviewdog/action-tflint@v1.4.2
+    # - name: tflint
+    #   uses: reviewdog/action-tflint@v1.4.2
+    #   with:
+    #     github_token: ${{ secrets.github_token }}
+    #     working_directory: ${{ env.TF_WORKING_DIR }}
+    #     reporter: github-pr-check # Optional. Change reporter
+    #     fail_on_error: "true" # Optional. Fail action if errors are found
+    #     filter_mode: "nofilter" # Optional. Check all files, not just the diff
+    #     flags: "--module" # Optional. Add custom tflint flags
+
+    - name: Terraform Lint
+      uses: rickardl/tflint-action@v1.5
       with:
-        github_token: ${{ secrets.github_token }}
-        working_directory: ${{ env.TF_WORKING_DIR }}
-        reporter: github-pr-review # Optional. Change reporter
-        fail_on_error: "true" # Optional. Fail action if errors are found
-        filter_mode: "nofilter" # Optional. Check all files, not just the diff
-        flags: "--module" # Optional. Add custom tflint flags
+        TFLINT_ACTION_COMMENT: true
+        TFLINT_ACTION_TERRAFORM_FOLDER: ${{ env.TF_WORKING_DIR }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - id: plan
       run: terraform plan -out=${{ env.TF_PLAN }}
