@@ -26,13 +26,6 @@
       timeout: 10
 
   tasks:
-
-  # INIT
-  # use "import_" for static mode
-  # https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse.html#dynamic-vs-static
-  # - name: run init tasks
-  #   import_tasks: init_tasks.yml
-
   # ROLES
   - import_role:
       name: init
@@ -46,4 +39,3 @@
       name: helm_repo
   - import_role:
       name: pypi_repo
-
