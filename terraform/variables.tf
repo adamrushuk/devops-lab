@@ -132,14 +132,14 @@ variable "velero_service_principle_name" {
 }
 
 variable "velero_backup_retention" {
-  # for testing, only retain for 6hrs
-  default = "6h0m0s"
+  # for testing, only retain for 2hrs
+  default = "2h0m0s"
 }
 
 variable "velero_backup_schedule" {
   description = "Velero backup schedule in cron format"
-  # for testing, use "0 */1 * * *" for "every hour"
-  default = "0 */1 * * *"
+  # for testing, use "*/30 * * * *" for "every 30 mins"
+  default = "*/30 * * * *"
 }
 
 
