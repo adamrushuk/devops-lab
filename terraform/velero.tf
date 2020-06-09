@@ -126,7 +126,7 @@ resource "helm_release" "velero" {
   # }
   set {
     name  = "schedules.fullbackup.template.includedNamespaces"
-    value = "ingress"
+    value = ["ingress"]
   }
   # set {
   #   name  = "configuration.logLevel"
