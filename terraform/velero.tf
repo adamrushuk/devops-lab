@@ -124,6 +124,9 @@ resource "helm_release" "velero" {
   #   name  = "schedules.fullbackup.template.excludedNamespaces"
   #   value = "velero"
   # }
+
+  # use join when setting a list:
+  # https://github.com/hashicorp/terraform-provider-helm/issues/92#issuecomment-407807183
   set {
     name  = "schedules.fullbackup.template.includedNamespaces"
     value = "{${join(",", var.velero_backup_included_namespaces)}}"
