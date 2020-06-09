@@ -121,11 +121,11 @@ resource "helm_release" "velero" {
     value = "azure"
   }
   # set {
-  #   name  = "schedules.fullbackup.excludedNamespaces"
+  #   name  = "schedules.fullbackup.template.excludedNamespaces"
   #   value = "velero"
   # }
   set {
-    name  = "schedules.fullbackup.includedNamespaces"
+    name  = "schedules.fullbackup.template.includedNamespaces"
     value = "ingress"
   }
   # set {
