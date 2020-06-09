@@ -142,6 +142,13 @@ variable "velero_backup_schedule" {
   default = "*/30 * * * *"
 }
 
+variable "velero_backup_included_namespaces" {
+  type = list(string)
+  default = [
+    "ingress"
+  ]
+}
+
 
 # DNS
 variable "dns_service_principle_name" {
