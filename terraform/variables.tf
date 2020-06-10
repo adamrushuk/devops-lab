@@ -136,10 +136,11 @@ variable "velero_backup_retention" {
   default = "2h0m0s"
 }
 
+# https://crontab.guru/
 variable "velero_backup_schedule" {
   description = "Velero backup schedule in cron format"
-  # for testing, use "*/30 * * * *" for "every 30 mins"
-  default = "*/30 * * * *"
+  # for testing, backup every hour"
+  default = "0 */1 * * *"
 }
 
 variable "velero_backup_included_namespaces" {
