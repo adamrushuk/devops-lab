@@ -80,6 +80,15 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
 
+    # Trigger workflow via Repository Dispatch
+    - name: Trigger start_aks_vmss Workflow
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        repository: adamrushuk/aks-nexus-velero
+        event-type: start_vmss
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+
     # Login
     - name: Login to Azure
       run: ./scripts/azure_login.sh
