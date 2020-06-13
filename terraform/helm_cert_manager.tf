@@ -18,4 +18,6 @@ resource "helm_release" "cert_manager" {
     name  = "installCRDs"
     value = "true"
   }
+  timeout    = 600
+  depends_on = [kubernetes_namespace.ingress]
 }
