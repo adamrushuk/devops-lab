@@ -49,7 +49,7 @@ resource "kubernetes_namespace" "velero" {
     name = "velero"
   }
   timeouts {
-    delete = "10m"
+    delete = "15m"
   }
 }
 

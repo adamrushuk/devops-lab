@@ -14,7 +14,7 @@ resource "kubernetes_namespace" "ingress" {
     name = "ingress"
   }
   timeouts {
-    delete = "10m"
+    delete = "15m"
   }
 }
 
