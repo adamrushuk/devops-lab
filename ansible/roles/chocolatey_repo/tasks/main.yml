@@ -1,0 +1,13 @@
+# Chocolatey Proxy Repo
+- name: create chocolatey proxy repo
+  uri:
+    url: "{{ api_url }}/beta/repositories/nuget/proxy"
+    method: POST
+    body: "{{ chocolatey_proxy_repo_request_body }}"
+    status_code: "201"
+  register: chocolatey_proxy_repo_api_response
+
+- name: debug create chocolatey proxy repo
+  debug:
+    var: chocolatey_proxy_repo_api_response
+  when: enable_debug_output == "true"
