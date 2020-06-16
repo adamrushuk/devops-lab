@@ -5,6 +5,7 @@
     method: POST
     body: "{{ chocolatey_proxy_repo_request_body }}"
     status_code: "201"
+  when: chocolatey_proxy_repo_request_body.name not in repo_names
   register: chocolatey_proxy_repo_api_response
 
 - name: debug create chocolatey proxy repo
