@@ -211,3 +211,44 @@ jobs:
       with:
         # env var concatenation not supported atm, so hard-code messages
         args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Build complete\"}'
+
+
+  # used for any windows-only tasks
+  test-windows:
+    needs: build-and-deploy
+
+    # https://github.com/actions/virtual-environments
+    runs-on: windows-2019
+
+    # only run if owner triggered action
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+    # Init tasks - inc Env var concatenation
+    - name: Init tasks - inc Env var concatenation (Workaround)
+      run: |
+        chmod -R +x ./scripts/
+        echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
+        echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
+
+    # Login
+    - name: Login to Azure
+      run: |
+        chmod -R +x ./scripts/
+        echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
+        echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
+
+    # Chocolatey
+    - name: Test Nexus Chocolatey proxy repo
+      run: |
+        choco install velero --source "https://${{ env.DNS_DOMAIN_NAME }}/repository/chocolatey-proxy/"
+
+    # Velero CLI
+    - name: Test Velero CLI
+      run: |
+        az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME" --overwrite-existing
+
+        velero version
+        velero backup-location get
+        velero backup get
+        velero backup-location
