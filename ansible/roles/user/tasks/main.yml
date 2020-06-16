@@ -4,6 +4,7 @@
     url: "{{ api_url }}/beta/security/users?userId={{ user_request_body.userId }}"
     method: GET
     status_code: 200
+  check_mode: yes
   register: user_api_response
 
 - name: check demo debug
