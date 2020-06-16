@@ -93,7 +93,6 @@
     url: "{{ api_url }}/beta/repositories"
     method: GET
     status_code: 200
-  check_mode: yes
   register: repositories
 
 - name: debug repos
@@ -104,7 +103,6 @@
 - name: extract repo names
   set_fact:
     repo_names: "{{ repositories.json | map( attribute='name' ) | list }}"
-  check_mode: yes
 
 - name: debug repo names
   debug:
