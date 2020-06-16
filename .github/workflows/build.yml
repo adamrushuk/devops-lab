@@ -227,16 +227,14 @@ jobs:
     # Init tasks - inc Env var concatenation
     - name: Init tasks - inc Env var concatenation (Workaround)
       run: |
-        chmod -R +x ./scripts/
         echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
         echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
 
     # Login
     - name: Login to Azure
       run: |
-        chmod -R +x ./scripts/
-        echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
-        echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
+        az login --service-principal --tenant "$ARM_TENANT_ID" -u "$ARM_CLIENT_ID" -p "$ARM_CLIENT_SECRET"
+        az account set --subscription "$ARM_SUBSCRIPTION_ID"
 
     # Chocolatey
     - name: Test Nexus Chocolatey proxy repo
