@@ -247,7 +247,11 @@ jobs:
       run: |
         az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing
 
+        echo "`nVelero version info:"
         velero version
+
+        echo "`nVelero backup location info:"
         velero backup-location get
+
+        echo "`nVelero backup info:"
         velero backup get
-        velero backup-location
