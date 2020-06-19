@@ -1,0 +1,35 @@
+chocolatey_repo_name: chocolatey-proxy
+chocolatey_repo_url: "{{ api_base_uri }}/repository/{{ chocolatey_repo_name }}/"
+
+chocolatey_proxy_repo_request_body:
+  name: "{{ chocolatey_repo_name }}"
+  url: "{{ chocolatey_repo_url }}"
+  online: true
+  storage:
+    blobStoreName: default
+    strictContentTypeValidation: true
+    writePolicy: ALLOW
+  cleanup:
+  proxy:
+    remoteUrl: https://chocolatey.org/api/v2/
+    contentMaxAge: 1440
+    metadataMaxAge: 1440
+  negativeCache:
+    enabled: true
+    timeToLive: 1440
+  httpClient:
+    blocked: false
+    autoBlock: true
+    connection:
+      retries:
+      userAgentSuffix:
+      timeout:
+      enableCircularRedirects: false
+      enableCookies: false
+    authentication:
+  routingRuleName:
+  nugetProxy:
+    queryCacheItemMaxAge: 3600
+  format: nuget
+  type: proxy
+

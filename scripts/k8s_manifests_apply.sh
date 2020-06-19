@@ -53,3 +53,8 @@ fi
 echo "APPLYING: Ingress [$ingressFilename]..."
 kubectl apply -n ingress -f "./manifests/$ingressFilename"
 echo "FINISHED: $message."
+
+
+# external-dns
+kubectl apply -n ingress -f ./manifests/external-dns.yml
+echo "FINISHED: $message."

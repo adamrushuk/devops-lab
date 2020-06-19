@@ -1,14 +1,14 @@
 # Helm charts
 variable "nginx_chart_version" {
-  default = "1.36.3"
+  default = "1.39.1"
 }
 
 variable "cert_manager_chart_version" {
-  default = "v0.15.0-alpha.2"
+  default = "v0.15.1"
 }
 
 variable "velero_chart_version" {
-  default = "2.9.15"
+  default = "2.12.0"
 }
 
 
@@ -30,18 +30,11 @@ variable "admin_username" {
   default     = "sysadmin"
 }
 
-
 # Use "cat ~/.ssh/id_rsa.pub"
 variable "ssh_public_key" {
   description = "Public key for SSH access to the VMs"
   default     = ""
 }
-
-# [NOT USED] Use "cat ~/.ssh/id_rsa"
-# variable "ssh_private_key" {
-#   description = "Private key for SSH access to the VMs"
-#   default     = ""
-# }
 
 variable "tags" {
   description = "A map of the tags to use on the resources"
@@ -56,7 +49,7 @@ variable "tags" {
 
 # AKS
 variable "kubernetes_version" {
-  default = "1.15.10"
+  default = "1.15.11"
 }
 
 variable "aks_dns_prefix" {
@@ -69,7 +62,7 @@ variable "azurerm_kubernetes_cluster_name" {
 
 variable "aks_dashboard_enabled" {
   description = "Should Kubernetes dashboard be enabled"
-  default     = true
+  default     = false
 }
 
 variable "aks_container_insights_enabled" {
@@ -121,6 +114,11 @@ variable "agent_pool_profile_disk_size_gb" {
 
 
 # Velero
+variable "velero_enabled" {
+  description = "Should Velero be enabled"
+  default     = true
+}
+
 variable "velero_resource_group_name" {
   default = "__VELERO_STORAGE_RG__"
 }
@@ -129,24 +127,70 @@ variable "velero_storage_account_name" {
   default = "__VELERO_STORAGE_ACCOUNT__"
 }
 
-variable "credentials_velero" {
-  default = "NOT_DEFINED"
+variable "velero_service_principle_name" {
+  default = "sp_velero"
+}
+
+variable "velero_backup_retention" {
+  # for testing, only retain for 2hrs
+  default = "2h0m0s"
+}
+
+# https://crontab.guru/
+variable "velero_backup_schedule" {
+  description = "Velero backup schedule in cron format"
+  # for testing, backup every hour"
+  default = "0 */1 * * *"
+}
+
+variable "velero_backup_included_namespaces" {
+  type = list(string)
+  default = [
+    "ingress"
+  ]
 }
 
 
-# DNS update script vars
-variable "dns_domain_name" {
-  default = "__DNS_DOMAIN_NAME__"
+# DNS
+variable "dns_service_principle_name" {
+  default = "sp_external_dns"
 }
 
-variable "has_subdomain" {
-  default = "__HAS_SUBDOMAIN__"
+variable "dns_resource_group_name" {
+  default = "__DNS_RG_NAME__"
 }
 
-variable "api_key" {
-  default = "__API_KEY__"
+variable "dns_zone_name" {
+  default = "__ROOT_DOMAIN_NAME__"
 }
 
-variable "api_secret" {
-  default = "__API_SECRET__"
+# not currently used as zone defaults to these anyway
+variable "dns_name_servers" {
+  type = list(string)
+  default = [
+    "ns1-07.azure-dns.com.",
+    "ns2-07.azure-dns.net.",
+    "ns3-07.azure-dns.org.",
+    "ns4-07.azure-dns.info."
+  ]
 }
+
+
+# ? Removed as now using kubernetes external-dns
+# ? keeping for reference of dns update script usage
+# # DNS update script vars
+# variable "dns_domain_name" {
+#   default = "__DNS_DOMAIN_NAME__"
+# }
+
+# variable "has_subdomain" {
+#   default = "__HAS_SUBDOMAIN__"
+# }
+
+# variable "api_key" {
+#   default = "__API_KEY__"
+# }
+
+# variable "api_secret" {
+#   default = "__API_SECRET__"
+# }

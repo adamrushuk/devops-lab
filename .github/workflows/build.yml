@@ -21,10 +21,6 @@ env:
   # debug
   CI_DEBUG: true
 
-  # api
-  API_KEY: ${{ secrets.API_KEY }}
-  API_SECRET: ${{ secrets.API_SECRET }}
-
   # azure creds
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
@@ -34,15 +30,17 @@ env:
   # other
   # prod or staging
   CERT_API_ENVIRONMENT: prod
-  DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
-  DOCKER_FQDN: docker-nexus.thehypepipe.co.uk
   DEMO_USER_USERNAME: demo_user
   # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
+  DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
+  DNS_RG_NAME: rg-externaldns
+  DOCKER_FQDN: docker-nexus.thehypepipe.co.uk
   EMAIL_ADDRESS: certadmin@domain.com
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true
   LOCATION: uksouth
+  ROOT_DOMAIN_NAME: thehypepipe.co.uk
   # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
 
@@ -115,10 +113,34 @@ jobs:
       with:
         terraform_version: ${{ env.TF_VERSION }}
 
-    - run: |
+    - name: Terraform Init / Validate
+      run: |
         terraform init
         terraform validate
       working-directory: ${{ env.TF_WORKING_DIR }}
+
+    # - name: tflint
+    #   uses: reviewdog/action-tflint@v1.4.2
+    #   with:
+    #     github_token: ${{ secrets.github_token }}
+    #     working_directory: ${{ env.TF_WORKING_DIR }}
+    #     reporter: github-pr-check # Optional. Change reporter
+    #     fail_on_error: "true" # Optional. Fail action if errors are found
+    #     filter_mode: "nofilter" # Optional. Check all files, not just the diff
+    #     flags: "--module" # Optional. Add custom tflint flags
+
+    # - name: Terraform Lint
+    #   uses: rickardl/tflint-action@v1.5
+    #   with:
+    #     tflint_action_comment: true
+    #     tflint_action_folder: ${{ env.TF_WORKING_DIR }}
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Terraform Lint
+      run: ./scripts/tflint.sh
+      env:
+        TF_WORKING_DIR: ${{ env.TF_WORKING_DIR }}
 
     - id: plan
       run: terraform plan -out=${{ env.TF_PLAN }}
@@ -189,3 +211,43 @@ jobs:
       with:
         # env var concatenation not supported atm, so hard-code messages
         args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Build complete\"}'
+
+
+  # used for any windows-only tasks
+  test-windows:
+    needs: build-and-deploy
+
+    # https://github.com/actions/virtual-environments
+    runs-on: windows-2019
+
+    # only run if owner triggered action
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+    # Checkout
+    - uses: actions/checkout@v2
+
+    # Init tasks - inc Env var concatenation
+    - name: Init tasks - inc Env var concatenation (Workaround)
+      run: |
+        echo "::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001"
+        echo "::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001"
+
+    # Login
+    - name: Login to Azure
+      run: ./scripts/azure_login.ps1
+
+    # Chocolatey
+    - name: Test Nexus Chocolatey proxy repo
+      run: |
+        choco install velero --source "https://${{ env.DNS_DOMAIN_NAME }}/repository/chocolatey-proxy/"
+
+    # Velero CLI
+    - name: Test Velero CLI
+      run: |
+        az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing
+
+        velero version
+        velero backup-location get
+        velero backup get
+        velero backup-location

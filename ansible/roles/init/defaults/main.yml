@@ -1,0 +1,2 @@
+# init role vars
+admin_password_script_timeout_mins: 10
