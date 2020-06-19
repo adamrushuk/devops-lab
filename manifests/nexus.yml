@@ -33,7 +33,7 @@ spec:
       #     mountPath: /nexus-data
       containers:
       - name: nexus
-        image: sonatype/nexus3:3.23.0
+        image: sonatype/nexus3:3.24.0
         ports:
         # http-web
         - containerPort: 8081
