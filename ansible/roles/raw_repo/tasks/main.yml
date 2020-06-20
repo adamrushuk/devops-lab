@@ -12,3 +12,16 @@
   debug:
     var: raw_repo_api_response
   when: enable_debug_output == "true"
+
+- name: upload zip file to raw repo
+  uri:
+    url: "{{ raw_repo_upload_url }}"
+    method: PUT
+    src: test.zip
+    status_code: "201"
+  register: raw_repo_upload_response
+
+- name: debug raw repo upload
+  debug:
+    var: raw_repo_upload_response
+  when: enable_debug_output == "true"
