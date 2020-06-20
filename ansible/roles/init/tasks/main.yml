@@ -28,7 +28,7 @@
   until:
     - result.status == 200
   retries: 30
-  delay: 10
+  delay: 60
   # reset module defaults for this simple check
   module_defaults:
     uri: {}
