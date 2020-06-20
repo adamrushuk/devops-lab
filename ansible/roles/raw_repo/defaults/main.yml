@@ -1,0 +1,7 @@
+raw_repo_request_body:
+  name: raw-repo
+  online: true
+  storage:
+    blobStoreName: default
+    strictContentTypeValidation: true
+    writePolicy: ALLOW_ONCE
