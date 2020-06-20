@@ -101,7 +101,8 @@ variable "agent_pool_profile_name" {
 }
 
 variable "agent_pool_profile_vm_size" {
-  default = "Standard_D1_v2"
+  # https://docs.microsoft.com/en-us/azure/virtual-machines/dv3-dsv3-series#dsv3-series
+  default = "Standard_D2s_v3"
 }
 
 variable "agent_pool_profile_os_type" {
