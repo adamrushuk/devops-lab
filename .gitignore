@@ -1,5 +1,12 @@
+# Misc
 terraform/.terraform
 localonly
 credentials*
 /temp
 *.egg-info
+
+# Azure Functions artifacts
+bin
+obj
+appsettings.json
+local.settings.json
