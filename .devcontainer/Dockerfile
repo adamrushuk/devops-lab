@@ -1,13 +1,5 @@
-#-------------------------------------------------------------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
-#-------------------------------------------------------------------------------------------------------------
 
-# Pick any base image, but if you select node, skip installing node. 😊
-FROM debian:9
-
-# Avoid warnings by switching to noninteractive
-ENV DEBIAN_FRONTEND=noninteractive
+FROM mcr.microsoft.com/dotnet/core/sdk:2.1
 
 # This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
 # property in devcontainer.json to use it. On Linux, the container user's GID/UIDs
@@ -17,49 +9,60 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
+ARG PS_VERSION=6.2.3
+ARG PS_PACKAGE=powershell_${PS_VERSION}-1.debian.9_amd64.deb
+ARG PS_PACKAGE_URL=https://github.com/PowerShell/PowerShell/releases/download/v${PS_VERSION}/${PS_PACKAGE}
+
+# Download the Linux package and save it
+ADD ${PS_PACKAGE_URL} /tmp/powershell.deb
+
+# Define ENVs for Localization/Globalization
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    # set a fixed location for the Module analysis cache
+    PSModuleAnalysisCachePath=/var/cache/microsoft/powershell/PSModuleAnalysisCache/ModuleAnalysisCache
+
+ENV FUNCTIONS_WORKER_RUNTIME=powershell
+
 # Configure apt and install packages
 RUN apt-get update \
+    && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
+    && apt install -y /tmp/powershell.deb \
     #
-    # Verify git, required tools installed
-    && apt-get install -y \
-        git \
-        openssh-client \
-        less \
-        iproute2 \
-        curl \
-        procps \
-        unzip \
-        apt-transport-https \
-        ca-certificates \
-        gnupg-agent \
-        software-properties-common \
-        lsb-release 2>&1 \
+    # Verify git and needed tools are installed
+    && apt-get -y install \
+    git \
+    openssh-client \
+    less \
+    iproute2 \
+    procps \
+    curl \
+    apt-transport-https \
+    gnupg2 \
+    lsb-release \
+    # less is required for help in powershell
+    less \
+    # requied to setup the locale
+    locales \
+    # required for SSL
+    ca-certificates \
+    gss-ntlmssp \
+    && apt-get dist-upgrade -y \
+    # enable en_US.UTF-8 locale
+    && sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
+    # generate locale
+    && locale-gen && update-locale \
+    # remove powershell package
+    && rm /tmp/powershell.deb \
     #
-    # [Optional] Install Node.js for Azure Cloud Shell support 
-    # Change the "lts/*" in the two lines below to pick a different version
-    && curl -so- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash 2>&1 \
-    && /bin/bash -c "source $HOME/.nvm/nvm.sh \
-        && nvm install lts/* \
-        && nvm alias default lts/*" 2>&1 \
-    #
-    # [Optional] For local testing instead of cloud shell
-    # Install Docker CE CLI. 
-    && curl -fsSL https://download.docker.com/linux/$(lsb_release -is | tr '[:upper:]' '[:lower:]')/gpg | apt-key add - 2>/dev/null \
-    && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$(lsb_release -is | tr '[:upper:]' '[:lower:]') $(lsb_release -cs) stable" \
-    && apt-get update \
-    && apt-get install -y docker-ce-cli \
-    #
-    # [Optional] For local testing instead of cloud shell
-    # Install the Azure CLI
+    # Install Azure Functions and Azure CLI
     && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" > /etc/apt/sources.list.d/azure-cli.list \
-    && curl -sL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 2>/dev/null \
+    && echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-$(lsb_release -cs)-prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list \
+    && curl -sL https://packages.microsoft.com/keys/microsoft.asc | (OUT=$(apt-key add - 2>&1) || echo $OUT) \
     && apt-get update \
-    && apt-get install -y azure-cli \
-    #
-    # Install Ansible
-    && apt-get install -y libssl-dev libffi-dev python-dev python-pip \
-    && pip install ansible[azure] \
+    && apt-get install -y azure-cli azure-functions-core-tools-3 \
     #
     # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
     && groupadd --gid $USER_GID $USERNAME \
@@ -72,8 +75,16 @@ RUN apt-get update \
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
-
-# Switch back to dialog for any ad-hoc use of apt-get
-ENV DEBIAN_FRONTEND=dialog
+    && rm -rf /var/lib/apt/lists/* \
+    # intialize powershell module cache
+    && pwsh \
+        -NoLogo \
+        -NoProfile \
+        -Command " \
+        \$ErrorActionPreference = 'Stop' ; \
+        \$ProgressPreference = 'SilentlyContinue' ; \
+        while(!(Test-Path -Path \$env:PSModuleAnalysisCachePath)) {  \
+            Write-Host "'Waiting for $env:PSModuleAnalysisCachePath'" ; \
+            Start-Sleep -Seconds 6 ; \
+        }"
 

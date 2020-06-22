@@ -1,35 +1,25 @@
 // For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.106.0/containers/azure-ansible
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.122.1/containers/azure-functions-pwsh-6
 {
-	"name": "Azure Ansible",
+	"name": "Azure Functions & PowerShell 6",
 	"dockerFile": "Dockerfile",
-	"mounts": [ 
-		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
-	],
-
+	"forwardPorts": [ 7071 ],
+	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
+	
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
-		"terminal.integrated.shell.linux": "/bin/bash"
+		"terminal.integrated.shell.linux": "/usr/bin/pwsh"
 	},
-	
+
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"vscoss.vscode-ansible",
-		"redhat.vscode-yaml",
-		"ms-vscode.azurecli",
-		"ms-azuretools.vscode-docker"
+		"ms-azuretools.vscode-azurefunctions",
+		"ms-vscode.powershell"
 	]
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "ansible --version",
-
-	// Uncomment when using a ptrace-based debugger like C++, Go, and Rust
-	// "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
+	// "postCreateCommand": "dotnet restore",
 
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
-
 }
