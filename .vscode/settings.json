@@ -1,0 +1,8 @@
+{
+    "azureFunctions.deploySubpath": "function_app",
+    "azureFunctions.projectLanguage": "PowerShell",
+    "azureFunctions.projectRuntime": "~3",
+    // "debug.internalConsoleOptions": "neverOpen",
+    "remote.SSH.showLoginTerminal": true,
+    "remote.SSH.useLocalServer": false
+}
