@@ -1,12 +1,15 @@
 # Helm charts
+# https://hub.helm.sh/charts/stable/nginx-ingress
 variable "nginx_chart_version" {
-  default = "1.39.1"
+  default = "1.40.3"
 }
 
+# https://hub.helm.sh/charts/jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v0.15.1"
+  default = "v0.15.2"
 }
 
+# https://github.com/vmware-tanzu/helm-charts/releases
 variable "velero_chart_version" {
   default = "2.12.0"
 }
