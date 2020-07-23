@@ -1,4 +1,5 @@
 .git*
 .vscode
 local.settings.json
-test
+CreateFunctionAppZip.ps1
+.funcignore
