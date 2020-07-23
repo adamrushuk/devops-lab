@@ -116,5 +116,9 @@ resource "azurerm_function_app" "func_app" {
   }
 }
 
-# TODO: add Reader access to AKS resource group required?
-# azurerm_function_app.func_app.identity.0.principal_id
+# Give Function App Reader role for the AKS cluster node resource group
+resource "azurerm_role_assignment" "func_app" {
+  scope                = azurerm_kubernetes_cluster.aks.node_resource_group
+  role_definition_name = "Reader"
+  principal_id         = azurerm_function_app.func_app.identity.0.principal_id
+}
