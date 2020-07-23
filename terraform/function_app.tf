@@ -86,13 +86,14 @@ resource "azurerm_application_insights" "appinsights" {
 
 # Function App using zipped up source files
 resource "azurerm_function_app" "func_app" {
-  name                      = "${var.prefix}-funcapp"
-  location                  = azurerm_resource_group.func_app.location
-  resource_group_name       = azurerm_resource_group.func_app.name
-  app_service_plan_id       = azurerm_app_service_plan.func_app.id
-  storage_connection_string = azurerm_storage_account.func_app.primary_connection_string
-  version                   = "~3"
-  tags                      = var.tags
+  name                       = "${var.prefix}-funcapp"
+  location                   = azurerm_resource_group.func_app.location
+  resource_group_name        = azurerm_resource_group.func_app.name
+  app_service_plan_id        = azurerm_app_service_plan.func_app.id
+  storage_account_name       = azurerm_storage_account.func_app.name
+  storage_account_access_key = azurerm_storage_account.func_app.primary_access_key
+  version                    = "~3"
+  tags                       = var.tags
   app_settings = {
     "APPINSIGHTS_INSTRUMENTATIONKEY"   = azurerm_application_insights.appinsights.instrumentation_key
     "FUNCTION_APP_EDIT_MODE"           = "readonly"
