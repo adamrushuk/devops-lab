@@ -2,5 +2,7 @@
 # See https://aka.ms/functionsmanageddependency for additional information.
 #
 @{
-    'Az' = '4.*'
+    # 'Az' = '4.*'
+    # Only need compute cmdlets for VMSS and VM status checks
+    'Az.Compute' = '4.*'
 }

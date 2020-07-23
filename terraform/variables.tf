@@ -16,6 +16,10 @@ variable "velero_chart_version" {
 
 
 # Common
+variable "prefix" {
+  default = "__PREFIX__"
+}
+
 variable "location" {
   default = "__LOCATION__"
 }
@@ -53,10 +57,6 @@ variable "tags" {
 # AKS
 variable "kubernetes_version" {
   default = "1.15.11"
-}
-
-variable "aks_dns_prefix" {
-  default = "__PREFIX__"
 }
 
 variable "azurerm_kubernetes_cluster_name" {
@@ -198,3 +198,14 @@ variable "dns_name_servers" {
 # variable "api_secret" {
 #   default = "__API_SECRET__"
 # }
+
+
+# Function Apps
+variable "func_app_sas_expires_in_hours" {
+  # 2190h = 3 months
+  default = "2190h"
+}
+
+variable "ifttt_webhook_key" {
+  default = "__IFTTT_WEBHOOK_KEY__"
+}

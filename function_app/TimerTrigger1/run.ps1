@@ -32,7 +32,8 @@ $PSVersionTable | Out-String
 
 # List VMSS
 Write-Host "Getting VMSS VMs..."
-$vmssVms = Get-AzVmss | Get-AzVmssVM -InstanceView | Select-Object Name, ResourceGroupName, ProvisioningState, @{ N = "PowerState"; E = { $_.InstanceView.Statuses[1].Code } }
+$vmssVms = Get-AzVmss | Get-AzVmssVM -InstanceView |
+    Select-Object Name, ResourceGroupName, ProvisioningState, @{ N = "PowerState"; E = { $_.InstanceView.Statuses[1].Code } }
 $vmssVms
 
 # Check for running VMs
