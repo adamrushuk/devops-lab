@@ -57,10 +57,6 @@ data "azurerm_storage_account_sas" "func_app" {
     update  = false
     process = false
   }
-
-  lifecycle {
-    ignore_changes = [start, expiry]
-  }
 }
 
 resource "azurerm_app_service_plan" "func_app" {
