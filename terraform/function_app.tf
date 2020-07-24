@@ -63,8 +63,8 @@ resource "azurerm_app_service_plan" "func_app" {
   name                = "${var.prefix}-funcapp"
   location            = azurerm_resource_group.func_app.location
   resource_group_name = azurerm_resource_group.func_app.name
-  reserved            = false # This needs to be set as 'false' otherwise the default is a Linux function app which won't work with our code
-  kind                = "elastic"
+  # reserved            = false # This needs to be set as 'false' otherwise the default is a Linux function app which won't work with our code
+  kind                = "FunctionApp"
   tags                = var.tags
 
   # Consumption Plan

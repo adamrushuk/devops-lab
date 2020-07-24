@@ -14,3 +14,7 @@ foreach ($file in (Get-ChildItem -Path $PSScriptRoot)) {
 
 # Create zip file of Function App
 Compress-Archive -Path $filesToZip -DestinationPath $functionZipPath -Force
+
+$zipHash = Get-FileHash -Path $functionZipPath
+
+Write-Host "File hash for zip file is: [$($zipHash.Hash)]"
