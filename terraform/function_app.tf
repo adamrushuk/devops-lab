@@ -11,6 +11,7 @@ resource "azurerm_storage_account" "func_app" {
   location                 = azurerm_resource_group.func_app.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  allow_blob_public_access = false
   tags                     = var.tags
 }
 
@@ -64,8 +65,8 @@ resource "azurerm_app_service_plan" "func_app" {
   location            = azurerm_resource_group.func_app.location
   resource_group_name = azurerm_resource_group.func_app.name
   # reserved            = false # This needs to be set as 'false' otherwise the default is a Linux function app which won't work with our code
-  kind                = "FunctionApp"
-  tags                = var.tags
+  kind = "FunctionApp"
+  tags = var.tags
 
   # Consumption Plan
   sku {
