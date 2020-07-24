@@ -1,3 +1,4 @@
+# WARNING: this outputs credential / login config
 # output "aks_config" {
 #   value = azurerm_kubernetes_cluster.aks
 # }
@@ -8,6 +9,10 @@ output "aks_credentials_command" {
 
 output "aks_browse_command" {
   value = "az aks browse --resource-group ${azurerm_kubernetes_cluster.aks.resource_group_name} --name ${azurerm_kubernetes_cluster.aks.name}"
+}
+
+output "aks_node_resource_group" {
+  value = azurerm_kubernetes_cluster.aks.node_resource_group
 }
 
 # output "ssh_private_key" {
