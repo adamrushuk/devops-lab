@@ -8,15 +8,17 @@ terraform {
   }
 
   # providers (pin all versions)
+  # versioning syntax: https://www.terraform.io/docs/configuration/modules.html#module-versions
   required_providers {
-    helm       = "=1.2.4"
-    kubernetes = "=1.11.4"
+    helm       = "= 1.2.4"
+    kubernetes = "= 1.11.4"
     azuread    = "~> 0.10"
     random     = "~> 2.2"
     tls        = "~> 2.1"
   }
 
-  required_version = "=0.12"
+  # 0.12.X
+  required_version = "~> 0.12.29"
 }
 
 # must include blank features block
