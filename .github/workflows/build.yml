@@ -147,7 +147,8 @@ jobs:
       env:
         TF_WORKING_DIR: ${{ env.TF_WORKING_DIR }}
 
-    - id: plan
+    - name: Terraform Plan
+      id: plan
       run: terraform plan -out=${{ env.TF_PLAN }}
       working-directory: ${{ env.TF_WORKING_DIR }}
 
