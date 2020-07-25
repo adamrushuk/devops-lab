@@ -13,8 +13,11 @@ foreach ($file in (Get-ChildItem -Path $PSScriptRoot)) {
 }
 
 # Create zip file of Function App
+$taskMessage="Creating zip file of Function App files"
+Write-Output "STARTED: $taskMessage..."
 Compress-Archive -Path $filesToZip -DestinationPath $functionZipPath -Force
+Write-Output "FINISHED: $taskMessage."
 
+# Show file hash
 $zipHash = Get-FileHash -Path $functionZipPath
-
-Write-Host "File hash for zip file is: [$($zipHash.Hash)]"
+Write-Output "File hash for zip file is: [$($zipHash.Hash)]"
