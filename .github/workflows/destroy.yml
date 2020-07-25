@@ -103,6 +103,11 @@ jobs:
 
     - name: Replace tokens in Terraform config files
       run: pwsh -command "./scripts/Replace-Tokens.ps1"
+      env:
+        IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
+
+    - name: Create zip file of Function App
+      run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
 
     # Terraform
     - uses: hashicorp/setup-terraform@v1
