@@ -93,8 +93,9 @@ resource "azurerm_function_app" "func_app" {
   location                   = azurerm_resource_group.func_app.location
   resource_group_name        = azurerm_resource_group.func_app.name
   app_service_plan_id        = azurerm_app_service_plan.func_app.id
-  storage_account_name       = azurerm_storage_account.func_app.name
+  https_only                 = true
   storage_account_access_key = azurerm_storage_account.func_app.primary_access_key
+  storage_account_name       = azurerm_storage_account.func_app.name
   version                    = "~3"
   tags                       = var.tags
   app_settings = {
