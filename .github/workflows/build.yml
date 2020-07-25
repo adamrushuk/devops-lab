@@ -106,7 +106,8 @@ jobs:
 
     - name: Replace tokens in Terraform config files
       run: pwsh -command "./scripts/Replace-Tokens.ps1"
-
+      env:
+        IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
 
     # Terraform
     - uses: hashicorp/setup-terraform@v1
