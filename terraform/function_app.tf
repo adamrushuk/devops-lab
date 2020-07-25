@@ -11,7 +11,7 @@ resource "azurerm_storage_account" "func_app" {
   location                 = azurerm_resource_group.func_app.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
-  # allow_blob_public_access = false
+  allow_blob_public_access = false
   tags                     = var.tags
 }
 

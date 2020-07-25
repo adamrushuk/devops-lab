@@ -1,5 +1,6 @@
 # Helm charts
-# https://hub.helm.sh/charts/stable/nginx-ingress
+# Deprecated? https://hub.helm.sh/charts/stable/nginx-ingress
+# new? https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm/
 variable "nginx_chart_version" {
   default = "1.40.3"
 }
@@ -11,7 +12,7 @@ variable "cert_manager_chart_version" {
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 variable "velero_chart_version" {
-  default = "2.12.0"
+  default = "2.12.1"
 }
 
 
