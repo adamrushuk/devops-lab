@@ -1,5 +1,7 @@
 # Function App for reporting on VMs left running outside allowed time range
 resource "azurerm_resource_group" "func_app" {
+  # TODO: use prefix after next full build
+  # name     = "${var.prefix}-rg-function-app"
   name     = "rg-function-app"
   location = var.location
   tags     = var.tags
