@@ -112,11 +112,11 @@ resource "azurerm_function_app" "func_app" {
     type = "SystemAssigned"
   }
 
-  lifecycle {
-    ignore_changes = [
-      app_settings,
-    ]
-  }
+  # lifecycle {
+  #   ignore_changes = [
+  #     app_settings,
+  #   ]
+  # }
 }
 
 
