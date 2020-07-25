@@ -3,6 +3,7 @@
 #
 @{
     # 'Az' = '4.*'
-    # Only need compute cmdlets for VMSS and VM status checks
+    # Only need Account and Compute cmdlets for VMSS and VM status checks
+    'Az.Accounts' = '1.*'
     'Az.Compute' = '4.*'
 }
