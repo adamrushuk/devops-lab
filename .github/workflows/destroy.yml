@@ -97,6 +97,7 @@ jobs:
     - name: Start AKS VMSS
       run: ./scripts/start_aks_vmss.sh
 
+
     # Prereqs
     - name: Lookup Storage Key
       run: ./scripts/storage_key.sh
@@ -109,6 +110,7 @@ jobs:
     - name: Create zip file of Function App
       run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
 
+
     # Terraform
     - uses: hashicorp/setup-terraform@v1
       with:
@@ -119,9 +121,11 @@ jobs:
         terraform destroy -no-color -auto-approve
       working-directory: ${{ env.TF_WORKING_DIR }}
 
+
     # Cleanup
     - name: Delete Storage
       run: ./scripts/storage_delete.sh
+
 
     # Notify
     - name: Notify slack
