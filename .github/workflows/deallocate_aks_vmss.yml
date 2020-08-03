@@ -8,14 +8,7 @@ on:
   # enable manual workflow
   # https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#manually-running-a-workflow
   workflow_dispatch:
-    inputs:
-      name:
-        description: 'Name var'
-        required: true
-        default: 'Adam'
-      home:
-        description: 'Location var'
-        required: false
+    inputs: {}
 
 # global environment variables
 env:

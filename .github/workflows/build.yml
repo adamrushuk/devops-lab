@@ -11,6 +11,10 @@ on:
   # https://github.com/adamrushuk/aks-nexus-velero/blob/master/TriggerCustomAction.ps1#L28
   repository_dispatch:
     types: [build]
+  # enable manual workflow
+  # https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#manually-running-a-workflow
+  workflow_dispatch:
+    inputs: {}
 
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables

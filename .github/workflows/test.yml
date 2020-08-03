@@ -11,6 +11,18 @@ on:
   repository_dispatch:
     types: [test]
 
+  # enable manual workflow
+  # https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#manually-running-a-workflow
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Mandatory var'
+        required: true
+        default: 'Adam'
+      home:
+        description: 'Optional var'
+        required: false
+
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 env:

@@ -9,6 +9,11 @@ on:
   repository_dispatch:
     types: [destroy]
 
+  # enable manual workflow
+  # https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#manually-running-a-workflow
+  workflow_dispatch:
+    inputs: {}
+
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 env:
