@@ -57,7 +57,7 @@ variable "tags" {
 
 # AKS
 variable "kubernetes_version" {
-  default = "1.15.11"
+  default = "1.15.10"
 }
 
 variable "azurerm_kubernetes_cluster_name" {
