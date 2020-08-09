@@ -1,12 +1,13 @@
 # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
-name: Build environment
+name: Build env
 
 # name of GitHub event that triggers workflow
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
 on:
   # trigger when I star my own repo
-  # watch:
-  #   types: [started]
+  watch:
+    types: [started]
+
   # trigger via webhook
   # https://github.com/adamrushuk/aks-nexus-velero/blob/master/TriggerCustomAction.ps1#L28
   repository_dispatch:
