@@ -2,8 +2,12 @@
 
 
 #region Versions
+# version used for both main AKS API service, and default node pool
 variable "kubernetes_version" {
-  default = "1.16.13"
+  # lowest v1.15: 1.15.11
+  # current default: 1.16.13
+  default = "1.15.11"
+  # default = "1.16.13"
 }
 
 # Helm charts
