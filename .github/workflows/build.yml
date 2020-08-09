@@ -5,8 +5,8 @@ name: Build environment
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
 on:
   # trigger when I star my own repo
-  watch:
-    types: [started]
+  # watch:
+  #   types: [started]
   # trigger via webhook
   # https://github.com/adamrushuk/aks-nexus-velero/blob/master/TriggerCustomAction.ps1#L28
   repository_dispatch:
