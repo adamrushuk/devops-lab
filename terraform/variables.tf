@@ -1,3 +1,11 @@
+# Variables
+
+
+#region Versions
+variable "kubernetes_version" {
+  default = "1.16.13"
+}
+
 # Helm charts
 # Deprecated? https://hub.helm.sh/charts/stable/nginx-ingress
 # new? https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm/
@@ -14,6 +22,8 @@ variable "cert_manager_chart_version" {
 variable "velero_chart_version" {
   default = "2.12.6"
 }
+#endregion Versions
+
 
 
 # Common
@@ -55,11 +65,8 @@ variable "tags" {
 }
 
 
-# AKS
-variable "kubernetes_version" {
-  default = "1.15.11"
-}
 
+# AKS
 variable "azurerm_kubernetes_cluster_name" {
   default = "__AKS_CLUSTER_NAME__"
 }
@@ -118,6 +125,7 @@ variable "agent_pool_profile_disk_size_gb" {
 }
 
 
+
 # Velero
 variable "velero_enabled" {
   description = "Should Velero be enabled"
@@ -154,6 +162,7 @@ variable "velero_backup_included_namespaces" {
     "ingress"
   ]
 }
+
 
 
 # DNS
@@ -199,6 +208,7 @@ variable "dns_name_servers" {
 # variable "api_secret" {
 #   default = "__API_SECRET__"
 # }
+
 
 
 # Function Apps
