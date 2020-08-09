@@ -97,16 +97,17 @@ resource "azurerm_kubernetes_cluster" "aks" {
     type = "SystemAssigned"
   }
 
-  role_based_access_control {
-    enabled = true
+  # TODO Enable RBAC and AAD auth: https://app.zenhub.com/workspaces/aks-nexus-velero-5e602702ee332f0fc76d35dd/issues/adamrushuk/aks-nexus-velero/105
+  # role_based_access_control {
+  #   enabled = true
 
-    azure_active_directory {
-      managed = true
-      admin_group_object_ids = [
-        data.azuread_group.aks.id
-      ]
-    }
-  }
+  #   azure_active_directory {
+  #     managed = true
+  #     admin_group_object_ids = [
+  #       data.azuread_group.aks.id
+  #     ]
+  #   }
+  # }
 
   addon_profile {
     kube_dashboard {
