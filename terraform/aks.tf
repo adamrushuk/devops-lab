@@ -55,6 +55,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = azurerm_resource_group.aks.name
   dns_prefix          = var.prefix
   kubernetes_version  = var.kubernetes_version
+  sku_tier            = var.sla_sku
 
   default_node_pool {
     name                 = var.agent_pool_profile_name
@@ -81,15 +82,30 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
+
+  # TODO DELETE SECTION
   # service_principal block: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#client_id
   # service_principal {
   #   client_id     = var.service_principal_client_id
   #   client_secret = var.service_principal_client_secret
   # }
+  # TODO DELETE SECTION
+
 
   # managed identity block: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#type-1
   identity {
     type = "SystemAssigned"
+  }
+
+  role_based_access_control {
+    enabled = true
+
+    azure_active_directory {
+      managed = true
+      admin_group_object_ids = [
+        data.azuread_group.aks.id
+      ]
+    }
   }
 
   addon_profile {

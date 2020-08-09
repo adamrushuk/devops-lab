@@ -66,11 +66,12 @@ az storage container create -n $blobContainerName --public-access off --account-
 
 ## Install CLI
 
-- Follow these steps: https://velero.io/docs/master/basic-install/
-- Download binary: https://github.com/vmware-tanzu/velero/releases/tag/v1.2.0
-- Move velero binary into your system path
+Follow these steps: https://velero.io/docs/master/basic-install/
 
 ```powershell
+# Install velero via Chocolatey
+choco install velero
+
 # Show version
 velero version
 ```
@@ -219,6 +220,7 @@ velero backup delete nginx-pv-backup
 
 # Create a backup
 velero backup create nginx-pv-backup --include-namespaces nginx-pv
+velero backup create ingress-backup --include-namespaces ingress --storage-location azure
 
 # Check backup
 velero backup describe nginx-pv-backup

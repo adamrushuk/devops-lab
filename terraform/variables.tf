@@ -75,6 +75,18 @@ variable "azurerm_kubernetes_cluster_name" {
   default = "__AKS_CLUSTER_NAME__"
 }
 
+variable "aad_group_name" {
+  description = "Name of the Azure AD group for cluster-admin access"
+  type        = string
+  default     = "AKS-Admins"
+}
+
+variable "sla_sku" {
+  description = "Define the SLA under which the managed master control plane of AKS is running"
+  type        = string
+  default     = "Free"
+}
+
 variable "aks_dashboard_enabled" {
   description = "Should Kubernetes dashboard be enabled"
   default     = false
@@ -85,14 +97,18 @@ variable "aks_container_insights_enabled" {
   default     = false
 }
 
-# Service Principle for AKS
-variable "service_principal_client_id" {
-  default = "__ARM_CLIENT_ID__"
-}
 
-variable "service_principal_client_secret" {
-  default = "__ARM_CLIENT_SECRET__"
-}
+# TODO DELETE SECTION
+# Service Principle for AKS
+# variable "service_principal_client_id" {
+#   default = "__ARM_CLIENT_ID__"
+# }
+
+# variable "service_principal_client_secret" {
+#   default = "__ARM_CLIENT_SECRET__"
+# }
+# TODO DELETE SECTION
+
 
 # Agent Pool
 variable "agent_pool_node_count" {
