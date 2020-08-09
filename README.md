@@ -27,20 +27,15 @@ https://www.terraform.io/docs/providers/azuread/guides/service_principal_configu
 
 These API permissions are required for your Terraform Service Principle:
 
-```bash
-Azure Active Directory Graph (3)
-Application.ReadWrite.All
-Application
-Read and write all applications
+**Azure Active Directory Graph**  
+Application Permissions:
 
-Directory.Read.All
-Application
-Read directory data
+1. Application.ReadWrite.All - Read and write all applications
+1. Directory.Read.All - Read directory data
 
-User.Read
-Delegated
-Sign in and read user profile
-```
+Delegated Permissions:  
+
+1. User.Read - Sign in and read user profile
 
 ### Azure Secrets
 
