@@ -31,6 +31,6 @@ resource "azurerm_role_assignment" "velero_sp_to_sub" {
   principal_id                     = azuread_service_principal.velero_sp.id
   role_definition_name             = "Contributor"
   scope                            = data.azurerm_subscription.current.id
-  skip_service_principal_aad_check = false
+  skip_service_principal_aad_check = true
   depends_on                       = [azuread_service_principal_password.velero_sp]
 }
