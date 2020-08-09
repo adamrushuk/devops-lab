@@ -10,20 +10,20 @@ terraform {
   # providers (pin all versions)
   # versioning syntax: https://www.terraform.io/docs/configuration/modules.html#module-versions
   required_providers {
-    helm       = "= 1.2.4"
-    kubernetes = "= 1.11.4"
-    azuread    = "~> 0.10"
-    random     = "~> 2.2"
+    helm       = "= 1.2.4"  # https://github.com/hashicorp/terraform-provider-helm/releases
+    kubernetes = "= 1.12.0" # https://github.com/hashicorp/terraform-provider-kubernetes/releases
+    azuread    = "= 0.11.0" # https://github.com/terraform-providers/terraform-provider-azuread/releases
+    random     = "~> 2.2"   # ~> 2.2 = 2.X.Y
     tls        = "~> 2.1"
   }
 
   # 0.12.X
-  required_version = "~> 0.12.29"
+  required_version = "~> 0.12.29" # https://github.com/hashicorp/terraform/releases
 }
 
 # must include blank features block
 provider "azurerm" {
-  version = "=2.20.0"
+  version = "=2.22.0" # https://github.com/terraform-providers/terraform-provider-azurerm/releases
   features {}
 }
 
