@@ -43,15 +43,15 @@ resource "azurerm_storage_container" "velero" {
 
 
 # Kubernetes
-resource "kubernetes_namespace" "velero" {
-  count = var.velero_enabled ? 1 : 0
-  metadata {
-    name = "velero"
-  }
-  timeouts {
-    delete = "15m"
-  }
-}
+# resource "kubernetes_namespace" "velero" {
+#   count = var.velero_enabled ? 1 : 0
+#   metadata {
+#     name = "velero"
+#   }
+#   timeouts {
+#     delete = "15m"
+#   }
+# }
 
 resource "kubernetes_secret" "velero_credentials" {
   count = var.velero_enabled ? 1 : 0
