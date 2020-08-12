@@ -41,7 +41,7 @@ $storageAccountName = "$($prefix)stbckuksouth001"
 $blobContainerName = "velero"
 
 # Downloading latest credentials for AKS Cluster
-az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aksClusterName --overwrite-existing
+az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aksClusterName --overwrite-existing --admin
 
 # [OPTIONAL] View AKS Dashboard
 az aks browse --resource-group $aksClusterResourceGroupName --name $aksClusterName
@@ -134,13 +134,13 @@ helm repo update
 
 # Check chart versions
 # Show latest chart version
-helm search vmware-tanzu/velero
+helm search repo vmware-tanzu/velero
 
 # Show all chart version
-helm search vmware-tanzu/velero -l
+helm search repo vmware-tanzu/velero -l
 
 # Show all chart versions starting with 2.9 (eg. 2.9.x)
-helm search vmware-tanzu/velero -l -v ~2.9
+helm search repo vmware-tanzu/velero -l --version ~2.9
 
 # Install
 helm install --namespace velero -f velero-values.yaml stable/velero

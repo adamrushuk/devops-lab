@@ -59,7 +59,7 @@ Follow the steps below to update AKS credentials, get the Nexus admin password, 
     AKS_RG_NAME="$PREFIX-rg-aks-dev-001"
 
     # AKS Cluster credentials
-    az aks get-credentials --resource-group $AKS_RG_NAME --name $AKS_CLUSTER_NAME --overwrite-existing
+    az aks get-credentials --resource-group $AKS_RG_NAME --name $AKS_CLUSTER_NAME --overwrite-existing --admin
 
     # [OPTIONAL] View AKS Dashboard
     az aks browse --resource-group $AKS_RG_NAME --name $AKS_CLUSTER_NAME
