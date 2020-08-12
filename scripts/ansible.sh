@@ -10,7 +10,7 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 # Get AKS Cluster credentials
 message="Merging AKS credentials"
 echo "STARTED: $message..."
-az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME" --overwrite-existing
+az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME" --overwrite-existing --admin
 echo "FINISHED: $message."
 
 # Set environment variables for passwords

@@ -258,7 +258,7 @@ jobs:
     # Velero CLI
     - name: Test Velero CLI
       run: |
-        az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing
+        az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing --admin
 
         echo "`nVelero version info:"
         velero version
