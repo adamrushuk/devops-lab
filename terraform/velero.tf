@@ -136,5 +136,5 @@ resource "helm_release" "velero" {
   #   value = "debug"
   # }
   timeout    = 600
-  depends_on = [kubernetes_namespace.velero]
+  # depends_on = [kubernetes_namespace.velero]
 }
