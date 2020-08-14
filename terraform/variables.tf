@@ -24,7 +24,7 @@ variable "cert_manager_chart_version" {
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 variable "velero_chart_version" {
-  default = "2.12.15"
+  default = "2.12.13"
 }
 #endregion Versions
 
