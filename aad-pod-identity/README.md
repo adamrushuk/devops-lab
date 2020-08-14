@@ -67,11 +67,13 @@ az identity create --subscription "$AZURE_SUBSCRIPTION_ID" --resource-group "$AK
 # Store the client ID and resource ID of the identity as environment variables
 export IDENTITY_CLIENT_ID="$(az identity show -g "$AKS_NODE_RESOURCE_GROUP_NAME" -n "$IDENTITY_NAME" --subscription "$AZURE_SUBSCRIPTION_ID" --query clientId -o tsv)"
 export IDENTITY_RESOURCE_ID="$(az identity show -g "$AKS_NODE_RESOURCE_GROUP_NAME" -n "$IDENTITY_NAME" --subscription "$AZURE_SUBSCRIPTION_ID" --query id -o tsv)"
+echo "IDENTITY_RESOURCE_ID: $IDENTITY_RESOURCE_ID"
+echo "IDENTITY_CLIENT_ID: $IDENTITY_CLIENT_ID"
 
 # Assign the identity a role
 export IDENTITY_ASSIGNMENT_ID="$(az role assignment create --role Contributor --assignee "$IDENTITY_CLIENT_ID" --scope "$AKS_NODE_RESOURCE_GROUP_ID" --query id -o tsv)"
 
-# Create an AzureIdentity and AzureIdentityBinding
+# Create an AzureIdentity
 cat <<EOF | kubectl apply --namespace aad-pod-identity -f -
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentity
@@ -79,10 +81,12 @@ metadata:
   name: $IDENTITY_NAME
 spec:
   type: 0
+  vmType: vmss
   resourceID: $IDENTITY_RESOURCE_ID
   clientID: $IDENTITY_CLIENT_ID
 EOF
 
+# Create an AzureIdentityBinding
 cat <<EOF | kubectl apply --namespace aad-pod-identity -f -
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentityBinding
@@ -115,4 +119,23 @@ Once `aad-pod-identity` has been configured, and the Velero credentials secret h
 # source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.12.13/charts/velero/values.yaml#L24
 podLabels:
   aadpodidbinding: velero
+```
+
+During testing, edit Velero schedule to run every 10 mins (`*/10 * * * *`):
+
+```powershell
+# set env var to use vscode
+$env:KUBE_EDITOR = 'code --wait'
+
+# list crds
+kubectl get crd
+
+# list velero schedules
+kubectl get schedules.velero.io
+
+# describe velero schedule
+kubectl describe schedules.velero.io/velero-fullbackup
+
+# edit velero schedule - every 10 mins (*/10 * * * *)
+kubectl edit schedules.velero.io/velero-fullbackup
 ```
