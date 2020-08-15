@@ -149,7 +149,7 @@ variable "agent_pool_profile_disk_size_gb" {
 # Velero
 variable "velero_enabled" {
   description = "Should Velero be enabled"
-  default     = true
+  default     = false
 }
 
 variable "velero_resource_group_name" {
