@@ -16,7 +16,7 @@ pwsh -Command "./scripts/Replace-Tokens.ps1" -targetFilePattern "./manifests/*.y
 # Setting k8s current context
 message="Merging AKS credentials"
 echo "STARTED: $message..."
-az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME" --overwrite-existing
+az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME" --overwrite-existing --admin
 echo "FINISHED: $message."
 
 # Testing kubectl

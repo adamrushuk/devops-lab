@@ -38,7 +38,7 @@ $ErrorActionPreference = "Stop"
 # Setting k8s current context
 $message = "Getting AKS credentials"
 Write-Verbose "`nSTARTED: $message..."
-az aks get-credentials --resource-group $env:AKS_RG_NAME --name $env:AKS_CLUSTER_NAME --overwrite-existing
+az aks get-credentials --resource-group $env:AKS_RG_NAME --name $env:AKS_CLUSTER_NAME --overwrite-existing --admin
 Write-Verbose "FINISHED: $message.`n"
 
 # Wait for Loadbalancer IP to exist

@@ -41,7 +41,7 @@ $storageAccountName = "$($prefix)stbckuksouth001"
 $blobContainerName = "velero"
 
 # Downloading latest credentials for AKS Cluster
-az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aksClusterName --overwrite-existing
+az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aksClusterName --overwrite-existing --admin
 
 # [OPTIONAL] View AKS Dashboard
 az aks browse --resource-group $aksClusterResourceGroupName --name $aksClusterName
@@ -66,11 +66,12 @@ az storage container create -n $blobContainerName --public-access off --account-
 
 ## Install CLI
 
-- Follow these steps: https://velero.io/docs/master/basic-install/
-- Download binary: https://github.com/vmware-tanzu/velero/releases/tag/v1.2.0
-- Move velero binary into your system path
+Follow these steps: https://velero.io/docs/master/basic-install/
 
 ```powershell
+# Install velero via Chocolatey
+choco install velero
+
 # Show version
 velero version
 ```
@@ -133,13 +134,13 @@ helm repo update
 
 # Check chart versions
 # Show latest chart version
-helm search vmware-tanzu/velero
+helm search repo vmware-tanzu/velero
 
 # Show all chart version
-helm search vmware-tanzu/velero -l
+helm search repo vmware-tanzu/velero -l
 
 # Show all chart versions starting with 2.9 (eg. 2.9.x)
-helm search vmware-tanzu/velero -l -v ~2.9
+helm search repo vmware-tanzu/velero -l --version ~2.9
 
 # Install
 helm install --namespace velero -f velero-values.yaml stable/velero
@@ -219,6 +220,7 @@ velero backup delete nginx-pv-backup
 
 # Create a backup
 velero backup create nginx-pv-backup --include-namespaces nginx-pv
+velero backup create ingress-backup --include-namespaces ingress --storage-location azure
 
 # Check backup
 velero backup describe nginx-pv-backup

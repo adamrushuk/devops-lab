@@ -1,0 +1,27 @@
+# RAW REPO
+- name: create raw repo
+  uri:
+    url: "{{ api_url }}/beta/repositories/raw/hosted"
+    method: POST
+    body: "{{ raw_repo_request_body }}"
+    status_code: "201"
+  when: raw_repo_request_body.name not in repo_names
+  register: raw_repo_api_response
+
+- name: debug create raw repo
+  debug:
+    var: raw_repo_api_response
+  when: enable_debug_output == "true"
+
+- name: upload zip file to raw repo
+  uri:
+    url: "{{ raw_repo_upload_url }}"
+    method: PUT
+    src: test.zip
+    status_code: "201"
+  register: raw_repo_upload_response
+
+- name: debug raw repo upload
+  debug:
+    var: raw_repo_upload_response
+  when: enable_debug_output == "true"

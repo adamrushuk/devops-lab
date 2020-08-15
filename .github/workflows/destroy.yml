@@ -9,6 +9,11 @@ on:
   repository_dispatch:
     types: [destroy]
 
+  # enable manual workflow
+  # https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#manually-running-a-workflow
+  workflow_dispatch:
+    inputs: {}
+
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 env:
@@ -38,7 +43,7 @@ env:
   # terraform
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
-  TF_VERSION: "0.12.24" # "latest" is supported
+  TF_VERSION: "0.12.29" # "latest" is supported
   TF_WORKING_DIR: terraform
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
@@ -97,12 +102,19 @@ jobs:
     - name: Start AKS VMSS
       run: ./scripts/start_aks_vmss.sh
 
+
     # Prereqs
     - name: Lookup Storage Key
       run: ./scripts/storage_key.sh
 
     - name: Replace tokens in Terraform config files
       run: pwsh -command "./scripts/Replace-Tokens.ps1"
+      env:
+        IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
+
+    - name: Create zip file of Function App
+      run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
+
 
     # Terraform
     - uses: hashicorp/setup-terraform@v1
@@ -114,9 +126,11 @@ jobs:
         terraform destroy -no-color -auto-approve
       working-directory: ${{ env.TF_WORKING_DIR }}
 
+
     # Cleanup
     - name: Delete Storage
       run: ./scripts/storage_delete.sh
+
 
     # Notify
     - name: Notify slack

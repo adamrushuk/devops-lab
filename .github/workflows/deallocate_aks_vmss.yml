@@ -5,6 +5,11 @@ on:
     # name of GitHub event that triggers workflow
     types: [deallocate_vmss]
 
+  # enable manual workflow
+  # https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#manually-running-a-workflow
+  workflow_dispatch:
+    inputs: {}
+
 # global environment variables
 env:
   # prefix: used for some globally unique name requirements

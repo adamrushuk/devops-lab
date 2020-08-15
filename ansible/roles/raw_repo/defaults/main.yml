@@ -1,0 +1,10 @@
+raw_repo_name: raw-repo
+raw_repo_upload_url: "{{ api_base_uri }}/repository/{{ raw_repo_name }}/org/test/test_1.0.0.zip"
+
+raw_repo_request_body:
+  name: "{{ raw_repo_name }}"
+  online: true
+  storage:
+    blobStoreName: default
+    strictContentTypeValidation: true
+    writePolicy: ALLOW

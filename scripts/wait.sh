@@ -9,7 +9,7 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 # Get AKS creds
 message="Merging AKS credentials"
 echo -e "\nSTARTED: $message..."
-az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME" --overwrite-existing
+az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME" --overwrite-existing --admin
 echo -e "FINISHED: $message.\n"
 
 # Testing kubectl

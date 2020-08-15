@@ -43,7 +43,7 @@ Before the Ansible playbook can be run, follow the steps below:
     az aks install-cli
 
     # AKS Cluster credentials
-    az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aksClusterName --overwrite-existing
+    az aks get-credentials --resource-group $aksClusterResourceGroupName --name $aksClusterName --overwrite-existing --admin
 
     # [OPTIONAL] View AKS Dashboard
     az aks browse --resource-group $aksClusterResourceGroupName --name $aksClusterName

@@ -1,18 +1,40 @@
+# Variables
+
+
+#region Versions
+# version used for both main AKS API service, and default node pool
+variable "kubernetes_version" {
+  # lowest v1.15: 1.15.11
+  # current default: 1.16.13
+  # default = "1.15.11"
+  default = "1.16.13"
+}
+
 # Helm charts
+# Deprecated? https://hub.helm.sh/charts/stable/nginx-ingress
+# new? https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm/
 variable "nginx_chart_version" {
-  default = "1.39.1"
+  default = "1.40.3"
 }
 
+# https://hub.helm.sh/charts/jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v0.15.1"
+  default = "v0.15.2"
 }
 
+# https://github.com/vmware-tanzu/helm-charts/releases
 variable "velero_chart_version" {
-  default = "2.12.0"
+  default = "2.12.13"
 }
+#endregion Versions
+
 
 
 # Common
+variable "prefix" {
+  default = "__PREFIX__"
+}
+
 variable "location" {
   default = "__LOCATION__"
 }
@@ -47,17 +69,22 @@ variable "tags" {
 }
 
 
+
 # AKS
-variable "kubernetes_version" {
-  default = "1.15.11"
-}
-
-variable "aks_dns_prefix" {
-  default = "__PREFIX__"
-}
-
 variable "azurerm_kubernetes_cluster_name" {
   default = "__AKS_CLUSTER_NAME__"
+}
+
+variable "aad_group_name" {
+  description = "Name of the Azure AD group for cluster-admin access"
+  type        = string
+  default     = "AKS-Admins"
+}
+
+variable "sla_sku" {
+  description = "Define the SLA under which the managed master control plane of AKS is running"
+  type        = string
+  default     = "Free"
 }
 
 variable "aks_dashboard_enabled" {
@@ -70,14 +97,18 @@ variable "aks_container_insights_enabled" {
   default     = false
 }
 
-# Service Principle for AKS
-variable "service_principal_client_id" {
-  default = "__ARM_CLIENT_ID__"
-}
 
-variable "service_principal_client_secret" {
-  default = "__ARM_CLIENT_SECRET__"
-}
+# TODO DELETE SECTION
+# Service Principle for AKS
+# variable "service_principal_client_id" {
+#   default = "__ARM_CLIENT_ID__"
+# }
+
+# variable "service_principal_client_secret" {
+#   default = "__ARM_CLIENT_SECRET__"
+# }
+# TODO DELETE SECTION
+
 
 # Agent Pool
 variable "agent_pool_node_count" {
@@ -101,7 +132,8 @@ variable "agent_pool_profile_name" {
 }
 
 variable "agent_pool_profile_vm_size" {
-  default = "Standard_D1_v2"
+  # https://docs.microsoft.com/en-us/azure/virtual-machines/dv3-dsv3-series#dsv3-series
+  default = "Standard_D2s_v3"
 }
 
 variable "agent_pool_profile_os_type" {
@@ -111,6 +143,7 @@ variable "agent_pool_profile_os_type" {
 variable "agent_pool_profile_disk_size_gb" {
   default = 30
 }
+
 
 
 # Velero
@@ -149,6 +182,7 @@ variable "velero_backup_included_namespaces" {
     "ingress"
   ]
 }
+
 
 
 # DNS
@@ -194,3 +228,15 @@ variable "dns_name_servers" {
 # variable "api_secret" {
 #   default = "__API_SECRET__"
 # }
+
+
+
+# Function Apps
+variable "func_app_sas_expires_in_hours" {
+  # 2190h = 3 months
+  default = "2190h"
+}
+
+variable "ifttt_webhook_key" {
+  default = "__IFTTT_WEBHOOK_KEY__"
+}

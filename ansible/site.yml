@@ -41,3 +41,5 @@
       name: helm_repo
   - import_role:
       name: pypi_repo
+  - import_role:
+      name: raw_repo
