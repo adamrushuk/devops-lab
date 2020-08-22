@@ -48,6 +48,7 @@ env:
   ROOT_DOMAIN_NAME: thehypepipe.co.uk
   # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
+  VELERO_ENABLED: false
 
   # terraform
   TF_IN_AUTOMATION: "true"
@@ -257,11 +258,12 @@ jobs:
 
     # Velero CLI
     - name: Test Velero CLI
+      if: env.VELERO_ENABLED
       run: |
         az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing --admin
 
         echo "`nVelero version info:"
-        velero version
+        velero version || true
 
         echo "`nVelero backup location info:"
         velero backup-location get
