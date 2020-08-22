@@ -221,7 +221,7 @@ jobs:
       run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
 
     - name: Pester report
-      uses: zyborg/pester-tests-report@v1.3.1
+      uses: zyborg/pester-tests-report@v1.1.0
       with:
         test_results_path: test/pester-test-results.xml
         report_name: pester_tests
