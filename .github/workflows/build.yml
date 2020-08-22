@@ -213,9 +213,16 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: test results
-        path: test/pester-test-results-junit.xml
+        path: test/pester-test-results.xml
       if: always()
 
+    - name: Pester report
+      uses: zyborg/pester-tests-report@v1.3.1
+      with:
+        test_results_path: test/pester-test-results.xml
+        report_name: pester_tests
+        report_title: Pester Tests
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
     # Notify
     - name: Notify slack
