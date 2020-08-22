@@ -1,7 +1,7 @@
 # NUGET PROXY REPO
 - name: update nuget proxy repo
   uri:
-    url: "{{ api_url }}/beta/repositories/nuget/proxy/{{ nuget_repo_name }}"
+    url: "{{ api_url }}/v1/repositories/nuget/proxy/{{ nuget_repo_name }}"
     method: PUT
     body: "{{ nuget_proxy_repo_request_body }}"
     status_code: "204"

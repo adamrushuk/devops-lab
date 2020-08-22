@@ -13,7 +13,7 @@ $bytes = [System.Text.Encoding]::UTF8.GetBytes("$username`:$password")
 $cred = [System.Convert]::ToBase64String($bytes)
 
 $restParams = @{
-    Uri     = "$baseUri/beta/security/users"
+    Uri     = "$baseUri/v1/security/users"
     Method  = "GET"
     Headers = @{
         authorization = "Basic $cred"
@@ -27,10 +27,10 @@ Invoke-RestMethod @restParams
 $credential = [pscredential]::new($username, (ConvertTo-SecureString -String $password -AsPlainText -Force))
 
 # Endpoints
-$endpoint = "$baseUri/beta/security/users"
-$endpoint = "$baseUri/beta/repositories"
-$endpoint = "$baseUri/beta/security/realms/active"
-$endpoint = "$baseUri/beta/security/realms/available"
+$endpoint = "$baseUri/v1/security/users"
+$endpoint = "$baseUri/v1/repositories"
+$endpoint = "$baseUri/v1/security/realms/active"
+$endpoint = "$baseUri/v1/security/realms/available"
 
 $restParams = @{
     Uri            = $endpoint

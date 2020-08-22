@@ -1,7 +1,7 @@
 # PyPI REPO
 - name: create pypi repo
   uri:
-    url: "{{ api_url }}/beta/repositories/pypi/hosted"
+    url: "{{ api_url }}/v1/repositories/pypi/hosted"
     method: POST
     body: "{{ pypi_repo_request_body }}"
     status_code: "201"
