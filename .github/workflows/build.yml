@@ -258,7 +258,7 @@ jobs:
 
     # Velero CLI
     - name: Test Velero CLI
-      if: env.VELERO_ENABLED
+      if: ${{ env.VELERO_ENABLED == true }}
       run: |
         az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing --admin
 
