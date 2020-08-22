@@ -216,6 +216,10 @@ jobs:
         path: test/pester-test-results.xml
       if: always()
 
+    # remove NuGet proxy repo so pester report step doesnt fail
+    - name: Unregister NuGet proxy repo
+      run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
+
     - name: Pester report
       uses: zyborg/pester-tests-report@v1.3.1
       with:
@@ -223,6 +227,7 @@ jobs:
         report_name: pester_tests
         report_title: Pester Tests
         github_token: ${{ secrets.GITHUB_TOKEN }}
+
 
     # Notify
     - name: Notify slack
