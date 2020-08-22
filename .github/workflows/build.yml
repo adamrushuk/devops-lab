@@ -220,13 +220,14 @@ jobs:
     - name: Unregister NuGet proxy repo
       run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
 
-    - name: Pester report
-      uses: zyborg/pester-tests-report@v1.1.0
-      with:
-        test_results_path: test/pester-test-results.xml
-        report_name: pester_tests
-        report_title: Pester Tests
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+    # TODO: https://github.com/zyborg/pester-tests-report/issues/1
+    # - name: Pester report
+    #   uses: zyborg/pester-tests-report@v1.1.0
+    #   with:
+    #     test_results_path: test/pester-test-results.xml
+    #     report_name: pester_tests
+    #     report_title: Pester Tests
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
 
 
     # Notify
