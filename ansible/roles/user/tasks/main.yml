@@ -1,7 +1,7 @@
 # DEMO USER
 - name: check demo user exists
   uri:
-    url: "{{ api_url }}/beta/security/users?userId={{ user_request_body.userId }}"
+    url: "{{ api_url }}/v1/security/users?userId={{ user_request_body.userId }}"
     method: GET
     status_code: 200
   register: user_api_response
@@ -13,7 +13,7 @@
 
 - name: create demo user
   uri:
-    url: "{{ api_url }}/beta/security/users"
+    url: "{{ api_url }}/v1/security/users"
     method: POST
     body: "{{ user_request_body }}"
     status_code: 200,204

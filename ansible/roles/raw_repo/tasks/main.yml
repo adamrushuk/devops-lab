@@ -1,7 +1,7 @@
 # RAW REPO
 - name: create raw repo
   uri:
-    url: "{{ api_url }}/beta/repositories/raw/hosted"
+    url: "{{ api_url }}/v1/repositories/raw/hosted"
     method: POST
     body: "{{ raw_repo_request_body }}"
     status_code: "201"

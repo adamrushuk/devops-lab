@@ -32,7 +32,7 @@ $taskMessage = "Running Pester tests"
 Write-Verbose "STARTED: $taskMessage..."
 try {
     $testScripts = Get-ChildItem -Path "*.tests.ps1"
-    Invoke-Pester -Script $testScripts -PassThru -OutputFormat "JUnitXml" -OutputFile "pester-test-results-junit.xml" -Verbose -ErrorAction "Stop"
+    Invoke-Pester -Script $testScripts -PassThru -OutputFormat "NUnitXml" -OutputFile "pester-test-results.xml" -Verbose -ErrorAction "Stop"
 
     Write-Verbose "FINISHED: $taskMessage."
 }

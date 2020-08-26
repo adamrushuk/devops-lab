@@ -1,7 +1,7 @@
 # DOCKER REPO
 - name: create docker repo
   uri:
-    url: "{{ api_url }}/beta/repositories/docker/hosted"
+    url: "{{ api_url }}/v1/repositories/docker/hosted"
     method: POST
     body: "{{ docker_repo_request_body }}"
     status_code: "201"

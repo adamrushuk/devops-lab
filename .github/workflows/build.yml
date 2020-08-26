@@ -48,6 +48,7 @@ env:
   ROOT_DOMAIN_NAME: thehypepipe.co.uk
   # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
+  VELERO_ENABLED: false
 
   # terraform
   TF_IN_AUTOMATION: "true"
@@ -212,8 +213,21 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: test results
-        path: test/pester-test-results-junit.xml
+        path: test/pester-test-results.xml
       if: always()
+
+    # remove NuGet proxy repo so pester report step doesnt fail
+    - name: Unregister NuGet proxy repo
+      run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
+
+    # TODO: https://github.com/zyborg/pester-tests-report/issues/1
+    - name: Pester report
+      uses: zyborg/pester-tests-report@v1.3.2
+      with:
+        test_results_path: test/pester-test-results.xml
+        report_name: pester_tests
+        report_title: Pester Tests
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
 
     # Notify
@@ -257,11 +271,12 @@ jobs:
 
     # Velero CLI
     - name: Test Velero CLI
+      if: ${{ env.VELERO_ENABLED == true }}
       run: |
         az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing --admin
 
         echo "`nVelero version info:"
-        velero version
+        velero version || true
 
         echo "`nVelero backup location info:"
         velero backup-location get

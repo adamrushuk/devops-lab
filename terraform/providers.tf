@@ -23,7 +23,7 @@ terraform {
 
 # must include blank features block
 provider "azurerm" {
-  version = "=2.22.0" # https://github.com/terraform-providers/terraform-provider-azurerm/releases
+  version = "=2.24.0" # https://github.com/terraform-providers/terraform-provider-azurerm/releases
   features {}
 }
 

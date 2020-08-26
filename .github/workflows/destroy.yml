@@ -39,6 +39,7 @@ env:
   HAS_SUBDOMAIN: true
   LOCATION: uksouth
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
+  VELERO_ENABLED: false
 
   # terraform
   TF_IN_AUTOMATION: "true"
