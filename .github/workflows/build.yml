@@ -220,7 +220,8 @@ jobs:
     - name: Unregister NuGet proxy repo
       run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
 
-    # TODO: https://github.com/zyborg/pester-tests-report/issues/1
+    # ? Only works during a PR
+    # https://github.com/adamrushuk/aks-nexus-velero/runs/1030180950
     - name: Pester report
       uses: zyborg/pester-tests-report@v1.3.2
       with:
