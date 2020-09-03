@@ -4,22 +4,27 @@
 #region Versions
 # version used for both main AKS API service, and default node pool
 variable "kubernetes_version" {
-  # lowest v1.15: 1.15.11
-  # current default: 1.16.13
-  # default = "1.15.11"
   default = "1.16.13"
 }
 
 # Helm charts
-# Deprecated? https://hub.helm.sh/charts/stable/nginx-ingress
-# new? https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm/
+# Migrated to newer kubernetes nginx helm chart:
+# https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx#migrating-from-stablenginx-ingress
+# https://kubernetes.github.io/ingress-nginx/deploy/
+#
+# Upstream nginx chart (noted only for reference as using kubernetes nginx chart)
+# https://github.com/nginxinc/kubernetes-ingress/tree/v1.8.1/deployments/helm-chart
+# https://github.com/nginxinc/kubernetes-ingress/releases
+#
+# [DEPRECATED] https://hub.helm.sh/charts/stable/nginx-ingress
+# https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm/
 variable "nginx_chart_version" {
-  default = "1.40.3"
+  default = "2.15.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v0.15.2"
+  default = "v1.0.0"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases

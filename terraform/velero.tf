@@ -135,6 +135,6 @@ resource "helm_release" "velero" {
   #   name  = "configuration.logLevel"
   #   value = "debug"
   # }
-  timeout    = 600
+  timeout = 600
   # depends_on = [kubernetes_namespace.velero]
 }
