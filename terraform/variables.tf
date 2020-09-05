@@ -24,7 +24,7 @@ variable "nginx_chart_version" {
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.0.0"
+  default = "v1.0.1"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
