@@ -25,35 +25,29 @@ kubectl version --short
 # Apply manifests
 message="Applying Kubernetes manifests"
 echo "STARTED: $message..."
-echo "ENABLE_TLS_INGRESS: [$ENABLE_TLS_INGRESS]"
+# echo "ENABLE_TLS_INGRESS: [$ENABLE_TLS_INGRESS]"
 
-# ClusterIssuers
-if [[ $ENABLE_TLS_INGRESS == "true" ]]; then
-    echo "APPLYING: ClusterIssuers..."
-    kubectl apply -f "./manifests/cluster-issuer-staging.yml"
-    kubectl apply -f "./manifests/cluster-issuer-prod.yml"
-else
-    echo "SKIPPING: ClusterIssuers..."
-fi
+# # ClusterIssuers
+# if [[ $ENABLE_TLS_INGRESS == "true" ]]; then
+#     echo "APPLYING: ClusterIssuers..."
+#     kubectl apply -f "./manifests/cluster-issuer-staging.yml"
+#     kubectl apply -f "./manifests/cluster-issuer-prod.yml"
+# else
+#     echo "SKIPPING: ClusterIssuers..."
+# fi
 
-# Applications
-echo "APPLYING: Applications..."
-kubectl apply -n ingress -f "./manifests/nexus.yml"
+# # Applications
+# echo "APPLYING: Applications..."
+# kubectl apply -n ingress -f "./manifests/nexus.yml"
 
-# Ingress
-# ConfigMap - NGINX Configuration options
-# https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
-# kubectl apply -n ingress -f ./manifests/nginx-configmap.yml
-
-# default to basic http
-ingressFilename="ingress-http.yml"
-if [[ $ENABLE_TLS_INGRESS == "true" ]]; then
-    ingressFilename="ingress-tls.yml"
-fi
-echo "APPLYING: Ingress [$ingressFilename]..."
-kubectl apply -n ingress -f "./manifests/$ingressFilename"
-echo "FINISHED: $message."
-
+# # default to basic http
+# ingressFilename="ingress-http.yml"
+# if [[ $ENABLE_TLS_INGRESS == "true" ]]; then
+#     ingressFilename="ingress-tls.yml"
+# fi
+# echo "APPLYING: Ingress [$ingressFilename]..."
+# kubectl apply -n ingress -f "./manifests/$ingressFilename"
+# echo "FINISHED: $message."
 
 # external-dns
 kubectl apply -n ingress -f ./manifests/external-dns.yml
