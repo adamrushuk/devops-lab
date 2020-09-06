@@ -45,7 +45,7 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 1. Click `Create repository`.
 1. Select `docker (hosted)` recipe.
 1. Enter repo name: `docker-repo`
-1. Tick `http` Repository Connector and enter port: `8123`
+1. Tick `http` Repository Connector and enter port: `5000`
 1. Tick `Allow anonymous docker pull`.
 1. Leave the rest of the settings as default, and click `Create repository` at the bottom.
 1. When configured correctly, the following command should return the `Error 400 Not a Docker request`:
