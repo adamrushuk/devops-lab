@@ -31,7 +31,7 @@ env:
 
   # other
   # prod or staging
-  CERT_API_ENVIRONMENT: prod
+  CERT_API_ENVIRONMENT: staging
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
   EMAIL_ADDRESS: certadmin@domain.com
   ENABLE_TLS_INGRESS: true
