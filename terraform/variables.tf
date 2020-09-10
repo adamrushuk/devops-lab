@@ -31,6 +31,11 @@ variable "cert_manager_chart_version" {
 variable "velero_chart_version" {
   default = "2.12.13"
 }
+
+# https://github.com/adamrushuk/charts/releases
+variable "nexus_chart_version" {
+  default = "0.2.5"
+}
 #endregion Versions
 
 
@@ -244,4 +249,23 @@ variable "func_app_sas_expires_in_hours" {
 
 variable "ifttt_webhook_key" {
   default = "__IFTTT_WEBHOOK_KEY__"
+}
+
+
+
+# Nexus
+variable "nexus_base_domain" {
+  default = "__ROOT_DOMAIN_NAME__"
+}
+
+variable "nexus_cert_email" {
+  default = "__EMAIL_ADDRESS__"
+}
+
+variable "nexus_ingress_enabled" {
+  default = "__ENABLE_TLS_INGRESS__"
+}
+
+variable "nexus_letsencrypt_environment" {
+  default = "__CERT_API_ENVIRONMENT__"
 }

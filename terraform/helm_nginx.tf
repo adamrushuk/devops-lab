@@ -3,14 +3,6 @@
 # https://www.terraform.io/docs/providers/kubernetes/r/namespace.html
 resource "kubernetes_namespace" "ingress" {
   metadata {
-    # annotations = {
-    #   name = "example-annotation"
-    # }
-
-    # labels = {
-    #   mylabel = "label-value"
-    # }
-
     name = "ingress"
   }
   timeouts {

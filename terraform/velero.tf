@@ -96,30 +96,37 @@ resource "helm_release" "velero" {
   repository = "https://vmware-tanzu.github.io/helm-charts"
   values     = ["${file("helm/velero_values.yaml")}"]
   version    = var.velero_chart_version
+
   set {
     name  = "configuration.backupStorageLocation.config.resourceGroup"
     value = azurerm_resource_group.velero[0].name
   }
+
   set {
     name  = "configuration.backupStorageLocation.config.storageAccount"
     value = azurerm_storage_account.velero[0].name
   }
+
   set {
     name  = "configuration.volumeSnapshotLocation.config.resourceGroup"
     value = azurerm_resource_group.velero[0].name
   }
+
   set {
     name  = "schedules.fullbackup.schedule"
     value = var.velero_backup_schedule
   }
+
   set {
     name  = "schedules.fullbackup.template.ttl"
     value = var.velero_backup_retention
   }
+
   set {
     name  = "schedules.fullbackup.template.storageLocation"
     value = "azure"
   }
+
   # set {
   #   name  = "schedules.fullbackup.template.excludedNamespaces"
   #   value = "velero"
@@ -131,10 +138,12 @@ resource "helm_release" "velero" {
     name  = "schedules.fullbackup.template.includedNamespaces"
     value = "{${join(",", var.velero_backup_included_namespaces)}}"
   }
+
   # set {
   #   name  = "configuration.logLevel"
   #   value = "debug"
   # }
+
   timeout = 600
   # depends_on = [kubernetes_namespace.velero]
 }
