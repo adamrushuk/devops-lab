@@ -15,8 +15,9 @@ nexus:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # GitHub Action helm/kind-action uses: storageClassName: "standard"
-  # storageClass: "standard"
+  # GitHub Action helm/kind-action uses: "standard"
+  # Azure uses: "default"
+  storageClass: "default"
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 image:
