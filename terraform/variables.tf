@@ -34,7 +34,7 @@ variable "velero_chart_version" {
 
 # https://github.com/adamrushuk/charts/releases
 variable "nexus_chart_version" {
-  default = "0.2.5"
+  default = "0.2.6"
 }
 #endregion Versions
 

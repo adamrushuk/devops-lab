@@ -17,9 +17,7 @@ resource "helm_release" "nexus" {
   namespace  = "nexus"
   repository = "https://adamrushuk.github.io/charts/"
   version    = var.nexus_chart_version
-
-  # not using static values file, as using GH workflow vars
-  # values     = ["${file("helm/nexus_values.yaml")}"]
+  values     = ["${file("helm/nexus_values.yaml")}"]
 
   set {
     name  = "nexus.baseDomain"

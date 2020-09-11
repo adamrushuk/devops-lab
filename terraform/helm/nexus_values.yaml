@@ -1,0 +1,26 @@
+# Default values for nexus.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nexus:
+  # The ports should only be changed if the nexus image uses a different port
+  dockerPort: 5000
+  nexusPort: 8081
+
+  storageSize: 8Gi
+
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # GitHub Action helm/kind-action uses: storageClassName: "standard"
+  # storageClass: "standard"
+
+# https://hub.docker.com/r/sonatype/nexus3/tags
+image:
+  repository: sonatype/nexus3
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "3.27.0"
