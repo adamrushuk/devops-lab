@@ -22,7 +22,7 @@
 
 - name: wait for Nexus API to respond
   uri:
-    url: "{{ api_url }}/v1/status/"
+    url: "{{ api_url }}/v1/status/writable"
     status_code: 200
   register: result
   until:
