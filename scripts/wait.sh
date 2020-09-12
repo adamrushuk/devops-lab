@@ -16,7 +16,7 @@ echo -e "FINISHED: $message.\n"
 kubectl version --short
 
 # Wait
-pod_name="nexus-0"
+pod_name=$(kubectl get pod --namespace nexus -l app.kubernetes.io/name=sonatype-nexus -o jsonpath="{.items[0].metadata.name}")
 message="Waiting for Ready condition on pod: [$pod_name]"
 echo -e "\nSTARTED: $message..."
 kubectl --namespace ingress wait pod $pod_name --for condition=ready --timeout=5m
