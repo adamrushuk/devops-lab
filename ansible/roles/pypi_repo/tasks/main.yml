@@ -14,7 +14,7 @@
   when: enable_debug_output == "true"
 
 - name: search pypi repo
-  shell: "PYTHONHTTPSVERIFY=0 pip search --index {{ pypi_repo_url }}/pypi {{ pypi_package_name }}"
+  shell: "PYTHONHTTPSVERIFY=0 pip search --index {{ pypi_repo_url }}/pypi {{ pypi_package_name }} --trusted-host nexus.thehypepipe.co.uk"
   ignore_errors: yes
   register: search_result
 
