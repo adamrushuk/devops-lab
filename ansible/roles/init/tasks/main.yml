@@ -24,12 +24,12 @@
   uri:
     url: "{{ api_url }}/v1/status/writable"
     status_code: 200
+    validate_certs: false
   register: result
   until:
     - result.status == 200
   retries: 15
   delay: 60
-  validate_certs: false
   # reset module defaults for this simple check
   module_defaults:
     uri: {}
