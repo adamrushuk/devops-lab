@@ -6,6 +6,9 @@
 set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
+# disable ssl cert verification
+export PYTHONHTTPSVERIFY=0
+
 # install twine
 echo "installing twine..."
 pip3 install --user twine --trusted-host nexus.thehypepipe.co.uk
