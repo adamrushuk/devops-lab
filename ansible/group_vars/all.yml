@@ -2,6 +2,7 @@
 # assign password via environment variable
 admin_password: "{{ lookup('env', 'NEW_ADMIN_PASSWORD') }}"
 ansible_python_interpreter: /usr/bin/python3
+dns_domain_name: ""
 api_base_uri: ""
 api_url: "{{ api_base_uri }}/service/rest"
 api_user: "admin"

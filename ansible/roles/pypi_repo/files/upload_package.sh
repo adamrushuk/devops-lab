@@ -11,7 +11,7 @@ export PYTHONHTTPSVERIFY=0
 
 # install twine
 echo "installing twine..."
-pip3 install --user twine --trusted-host nexus.thehypepipe.co.uk
+pip3 install --user twine --trusted-host "$DNS_DOMAIN_NAME"
 
 # info
 echo "show version info..."
@@ -34,7 +34,7 @@ python3 -m twine upload --username "$USERNAME" --password "$PASSWORD" --reposito
 # install from private pypi repo
 # pip3 install --index-url http://my.package.repo/simple/ SomePackage
 echo "installing package..."
-pip3 install --user --index-url "$REPO_URL/simple" "$PACKAGE_NAME" --trusted-host nexus.thehypepipe.co.uk
+pip3 install --user --index-url "$REPO_URL/simple" "$PACKAGE_NAME" --trusted-host "$DNS_DOMAIN_NAME"
 pip3 list --local | grep "$PACKAGE_NAME"
 
 # uninstall
