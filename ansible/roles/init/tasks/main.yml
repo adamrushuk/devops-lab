@@ -28,8 +28,9 @@
   register: result
   until:
     - result.status == 200
-  retries: 15
-  delay: 60
+  # 90 x 10secs = 15mins
+  retries: 90
+  delay: 10
   # reset module defaults for this simple check
   module_defaults:
     uri: {}
