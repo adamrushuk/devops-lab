@@ -8,7 +8,7 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 
 # install twine
 echo "installing twine..."
-pip3 install --user twine
+pip3 install --user twine --trusted-host nexus.thehypepipe.co.uk
 
 # info
 echo "show version info..."
