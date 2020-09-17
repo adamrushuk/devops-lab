@@ -35,7 +35,7 @@ env:
 
   # other
   # prod or staging
-  CERT_API_ENVIRONMENT: prod
+  CERT_API_ENVIRONMENT: staging
   DEMO_USER_USERNAME: demo_user
   # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk

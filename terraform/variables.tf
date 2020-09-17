@@ -10,16 +10,11 @@ variable "kubernetes_version" {
 # Helm charts
 # Migrated to newer kubernetes nginx helm chart:
 # https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx#migrating-from-stablenginx-ingress
-# https://kubernetes.github.io/ingress-nginx/deploy/
 #
-# Upstream nginx chart (noted only for reference as using kubernetes nginx chart)
-# https://github.com/nginxinc/kubernetes-ingress/tree/v1.8.1/deployments/helm-chart
-# https://github.com/nginxinc/kubernetes-ingress/releases
-#
-# [DEPRECATED] https://hub.helm.sh/charts/stable/nginx-ingress
-# https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm/
+# https://github.com/kubernetes/ingress-nginx/releases
+# https://kubernetes.github.io/ingress-nginx/deploy/#using-helm
 variable "nginx_chart_version" {
-  default = "2.15.0"
+  default = "3.1.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -29,7 +24,7 @@ variable "cert_manager_chart_version" {
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 variable "velero_chart_version" {
-  default = "2.12.13"
+  default = "2.12.17"
 }
 
 # https://github.com/adamrushuk/charts/releases
