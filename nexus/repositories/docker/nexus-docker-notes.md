@@ -86,7 +86,7 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
 
     ```json
     {
-      "insecure-registries": [ "docker-nexus.domain.com" ]
+      "insecure-registries": [ "docker.domain.com" ]
     }
     ```
 
@@ -110,9 +110,9 @@ Follow the [Login to Nexus Console](./../../../README.md#login-to-nexus-console)
     $dockerSysInfoJson = docker system info --format '{{json .}}' | ConvertFrom-Json
     $dockerSysInfoJson.RegistryConfig.IndexConfigs
 
-    http://docker-nexus.domain.com
+    http://docker.domain.com
     ------------------------------
-    @{Name=docker-nexus.domain.com; Mirrors=System.Object[]; Secure=False; Official=False}
+    @{Name=docker.domain.com; Mirrors=System.Object[]; Secure=False; Official=False}
     ```
 
 ## Login to Docker Repo
