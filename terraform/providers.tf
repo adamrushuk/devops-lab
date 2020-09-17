@@ -32,7 +32,7 @@ provider "kubernetes" {
   client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
   cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
   host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
-  # load_config_file       = false # when you wish not to load the local config file
+  load_config_file       = false # when you wish not to load the local config file
 }
 
 provider "helm" {
