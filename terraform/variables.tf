@@ -11,8 +11,8 @@ variable "kubernetes_version" {
 # Migrated to newer kubernetes nginx helm chart:
 # https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx#migrating-from-stablenginx-ingress
 #
-# https://github.com/kubernetes/ingress-nginx/releases
 # https://kubernetes.github.io/ingress-nginx/deploy/#using-helm
+# https://github.com/kubernetes/ingress-nginx/releases
 variable "nginx_chart_version" {
   default = "3.1.0"
 }
