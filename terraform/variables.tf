@@ -184,7 +184,7 @@ variable "velero_backup_schedule" {
 variable "velero_backup_included_namespaces" {
   type = list(string)
   default = [
-    "ingress"
+    "*"
   ]
 }
 
