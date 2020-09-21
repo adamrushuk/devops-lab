@@ -124,7 +124,7 @@ resource "helm_release" "velero" {
 
   set {
     name  = "schedules.fullbackup.template.storageLocation"
-    value = "azure"
+    value = "default"
   }
 
   # set {
