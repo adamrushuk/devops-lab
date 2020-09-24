@@ -3,8 +3,10 @@
 
 #region Versions
 # version used for both main AKS API service, and default node pool
+# https://github.com/Azure/AKS/releases
+# az aks get-versions --location uksouth --output table
 variable "kubernetes_version" {
-  default = "1.16.13"
+  default = "1.16.15"
 }
 
 # Helm charts
@@ -14,12 +16,12 @@ variable "kubernetes_version" {
 # https://kubernetes.github.io/ingress-nginx/deploy/#using-helm
 # https://github.com/kubernetes/ingress-nginx/releases
 variable "nginx_chart_version" {
-  default = "3.1.0"
+  default = "3.3.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.0.1"
+  default = "v1.0.2"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
