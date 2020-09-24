@@ -32,6 +32,7 @@ podLabels: {}
 resources: {}
 
 # Init containers to add to the Velero deployment's pod spec. At least one plugin provider image is required.
+# https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/releases
 initContainers:
   - name: velero-plugin-for-microsoft-azure
     # use "main" for development build
