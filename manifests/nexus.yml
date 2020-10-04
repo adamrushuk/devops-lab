@@ -39,7 +39,7 @@ spec:
         # http-web
         - containerPort: 8081
         # http-docker
-        - containerPort: 8123
+        - containerPort: 5000
         # These volume mounts are persistent. They are like inline claims,
         # but not exactly because the names need to match exactly one of
         # the stateful pod volumes.
@@ -71,6 +71,6 @@ spec:
   - name: http-web
     port: 8081
   - name: http-docker
-    port: 8123
+    port: 5000
   selector:
       app: nexus

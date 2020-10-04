@@ -3,14 +3,6 @@
 # https://www.terraform.io/docs/providers/kubernetes/r/namespace.html
 resource "kubernetes_namespace" "ingress" {
   metadata {
-    # annotations = {
-    #   name = "example-annotation"
-    # }
-
-    # labels = {
-    #   mylabel = "label-value"
-    # }
-
     name = "ingress"
   }
   timeouts {
@@ -20,10 +12,10 @@ resource "kubernetes_namespace" "ingress" {
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
 resource "helm_release" "nginx" {
-  chart      = "nginx-ingress"
+  chart      = "ingress-nginx"
   name       = "nginx"
   namespace  = "ingress"
-  repository = "https://kubernetes-charts.storage.googleapis.com"
+  repository = "https://kubernetes.github.io/ingress-nginx"
   version    = var.nginx_chart_version
   values     = ["${file("helm/nginx_values.yaml")}"]
   timeout    = 600

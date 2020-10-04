@@ -43,41 +43,41 @@ resource "azurerm_storage_container" "velero" {
 
 
 # Kubernetes
-# resource "kubernetes_namespace" "velero" {
-#   count = var.velero_enabled ? 1 : 0
-#   metadata {
-#     name = "velero"
-#   }
-#   timeouts {
-#     delete = "15m"
-#   }
-# }
+resource "kubernetes_namespace" "velero" {
+  count = var.velero_enabled ? 1 : 0
+  metadata {
+    name = "velero"
+  }
+  timeouts {
+    delete = "15m"
+  }
+}
 
-# resource "kubernetes_secret" "velero_credentials" {
-#   count = var.velero_enabled ? 1 : 0
-#   metadata {
-#     name      = "velero-credentials"
-#     namespace = "velero"
+resource "kubernetes_secret" "velero_credentials" {
+  count = var.velero_enabled ? 1 : 0
+  metadata {
+    name      = "velero-credentials"
+    namespace = "velero"
 
-#     labels = {
-#       component = "velero"
-#     }
-#   }
+    labels = {
+      component = "velero"
+    }
+  }
 
-#   data = {
-#     cloud = <<EOT
-# AZURE_SUBSCRIPTION_ID=${data.azurerm_subscription.current.subscription_id}
-# AZURE_TENANT_ID=${data.azurerm_subscription.current.tenant_id}
-# AZURE_CLIENT_ID=${azuread_service_principal.velero_sp.application_id}
-# AZURE_CLIENT_SECRET=${random_string.velero_sp.result}
-# AZURE_RESOURCE_GROUP=${azurerm_kubernetes_cluster.aks.node_resource_group}
-# AZURE_CLOUD_NAME=AzurePublicCloud
-# EOT
-#   }
+  data = {
+    cloud = <<EOT
+AZURE_SUBSCRIPTION_ID=${data.azurerm_subscription.current.subscription_id}
+AZURE_TENANT_ID=${data.azurerm_subscription.current.tenant_id}
+AZURE_CLIENT_ID=${azuread_service_principal.velero_sp.application_id}
+AZURE_CLIENT_SECRET=${random_string.velero_sp.result}
+AZURE_RESOURCE_GROUP=${azurerm_kubernetes_cluster.aks.node_resource_group}
+AZURE_CLOUD_NAME=AzurePublicCloud
+EOT
+  }
 
-#   type       = "Opaque"
-#   depends_on = [kubernetes_namespace.velero]
-# }
+  type       = "Opaque"
+  depends_on = [kubernetes_namespace.velero]
+}
 
 # Manually test new values:
 # helm upgrade \
@@ -96,30 +96,37 @@ resource "helm_release" "velero" {
   repository = "https://vmware-tanzu.github.io/helm-charts"
   values     = ["${file("helm/velero_values.yaml")}"]
   version    = var.velero_chart_version
+
   set {
     name  = "configuration.backupStorageLocation.config.resourceGroup"
     value = azurerm_resource_group.velero[0].name
   }
+
   set {
     name  = "configuration.backupStorageLocation.config.storageAccount"
     value = azurerm_storage_account.velero[0].name
   }
+
   set {
     name  = "configuration.volumeSnapshotLocation.config.resourceGroup"
     value = azurerm_resource_group.velero[0].name
   }
+
   set {
     name  = "schedules.fullbackup.schedule"
     value = var.velero_backup_schedule
   }
+
   set {
     name  = "schedules.fullbackup.template.ttl"
     value = var.velero_backup_retention
   }
+
   set {
     name  = "schedules.fullbackup.template.storageLocation"
-    value = "azure"
+    value = "default"
   }
+
   # set {
   #   name  = "schedules.fullbackup.template.excludedNamespaces"
   #   value = "velero"
@@ -131,10 +138,12 @@ resource "helm_release" "velero" {
     name  = "schedules.fullbackup.template.includedNamespaces"
     value = "{${join(",", var.velero_backup_included_namespaces)}}"
   }
+
   # set {
   #   name  = "configuration.logLevel"
   #   value = "debug"
   # }
-  timeout    = 600
+
+  timeout = 600
   # depends_on = [kubernetes_namespace.velero]
 }

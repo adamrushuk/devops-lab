@@ -39,7 +39,7 @@ env:
   DEMO_USER_USERNAME: demo_user
   # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
-  DOCKER_FQDN: docker-nexus.thehypepipe.co.uk
+  DOCKER_FQDN: docker.thehypepipe.co.uk
   EMAIL_ADDRESS: certadmin@domain.com
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
@@ -48,7 +48,7 @@ env:
   ROOT_DOMAIN_NAME: thehypepipe.co.uk
   # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
-  VELERO_ENABLED: false
+  VELERO_ENABLED: true
 
   # terraform
   TF_IN_AUTOMATION: "true"
@@ -220,7 +220,7 @@ jobs:
     - name: Unregister NuGet proxy repo
       run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
 
-    # TODO: https://github.com/zyborg/pester-tests-report/issues/1
+    # Shows at the bottom of a run: https://github.com/adamrushuk/aks-nexus-velero/runs/1035347513?check_suite_focus=true
     - name: Pester report
       uses: zyborg/pester-tests-report@v1.3.2
       with:

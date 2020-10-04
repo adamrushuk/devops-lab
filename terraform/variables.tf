@@ -3,28 +3,36 @@
 
 #region Versions
 # version used for both main AKS API service, and default node pool
+# https://github.com/Azure/AKS/releases
+# az aks get-versions --location uksouth --output table
 variable "kubernetes_version" {
-  # lowest v1.15: 1.15.11
-  # current default: 1.16.13
-  # default = "1.15.11"
-  default = "1.16.13"
+  default = "1.16.15"
 }
 
 # Helm charts
-# Deprecated? https://hub.helm.sh/charts/stable/nginx-ingress
-# new? https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm/
+# Migrated to newer kubernetes nginx helm chart:
+# https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx#migrating-from-stablenginx-ingress
+#
+# https://kubernetes.github.io/ingress-nginx/deploy/#using-helm
+# https://github.com/kubernetes/ingress-nginx/releases
+# https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/Chart.yaml#L3
 variable "nginx_chart_version" {
-  default = "1.40.3"
+  default = "3.4.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v0.15.2"
+  default = "v1.0.2"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 variable "velero_chart_version" {
-  default = "2.12.13"
+  default = "2.12.17"
+}
+
+# https://github.com/adamrushuk/charts/releases
+variable "nexus_chart_version" {
+  default = "0.2.6"
 }
 #endregion Versions
 
@@ -179,7 +187,7 @@ variable "velero_backup_schedule" {
 variable "velero_backup_included_namespaces" {
   type = list(string)
   default = [
-    "ingress"
+    "*"
   ]
 }
 
@@ -239,4 +247,23 @@ variable "func_app_sas_expires_in_hours" {
 
 variable "ifttt_webhook_key" {
   default = "__IFTTT_WEBHOOK_KEY__"
+}
+
+
+
+# Nexus
+variable "nexus_base_domain" {
+  default = "__ROOT_DOMAIN_NAME__"
+}
+
+variable "nexus_cert_email" {
+  default = "__EMAIL_ADDRESS__"
+}
+
+variable "nexus_ingress_enabled" {
+  default = "__ENABLE_TLS_INGRESS__"
+}
+
+variable "nexus_letsencrypt_environment" {
+  default = "__CERT_API_ENVIRONMENT__"
 }

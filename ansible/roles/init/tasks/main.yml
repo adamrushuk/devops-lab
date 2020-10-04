@@ -2,11 +2,11 @@
 # INIT
 - name: get auto-generated admin password from pod - timeout {{ admin_password_script_timeout_mins }} mins
   shell: |
-    podName=$(kubectl get pod -n ingress -l app=nexus -o jsonpath="{.items[0].metadata.name}")
+    podName=$(kubectl get pod --namespace {{ nexus_namespace }} -l app.kubernetes.io/name=sonatype-nexus -o jsonpath="{.items[0].metadata.name}")
 
-    kubectl cp -n ingress {{role_path}}/files/get_admin_password.sh "$podName":/tmp/get_admin_password.sh
+    kubectl cp --namespace {{ nexus_namespace }} {{role_path}}/files/get_admin_password.sh "$podName":/tmp/get_admin_password.sh
 
-    kubectl exec -n ingress "$podName" -- sh -c "chmod +x /tmp/get_admin_password.sh; timeout {{ admin_password_script_timeout_mins }}m /tmp/get_admin_password.sh"
+    kubectl exec --namespace {{ nexus_namespace }} "$podName" -- sh -c "chmod +x /tmp/get_admin_password.sh; timeout {{ admin_password_script_timeout_mins }}m /tmp/get_admin_password.sh"
 
   # ignore_errors: yes
   register: admin_password_result
@@ -22,13 +22,15 @@
 
 - name: wait for Nexus API to respond
   uri:
-    url: "{{ api_url }}/v1/status/"
+    url: "{{ api_url }}/v1/status/writable"
     status_code: 200
+    validate_certs: false
   register: result
   until:
     - result.status == 200
-  retries: 30
-  delay: 60
+  # 90 x 10secs = 15mins
+  retries: 90
+  delay: 10
   # reset module defaults for this simple check
   module_defaults:
     uri: {}
@@ -65,9 +67,9 @@
 
 - name: set admin password changed marker file
   shell: |
-    podName=$(kubectl get pod -n ingress -l app=nexus -o jsonpath="{.items[0].metadata.name}")
+    podName=$(kubectl get pod --namespace {{ nexus_namespace }} -l app.kubernetes.io/name=sonatype-nexus -o jsonpath="{.items[0].metadata.name}")
 
-    kubectl exec -n ingress "$podName" -- sh -c "touch /nexus-data/admin-password-changed"
+    kubectl exec --namespace {{ nexus_namespace }} "$podName" -- sh -c "touch /nexus-data/admin-password-changed"
   when: admin_password_response.status is defined and admin_password_response.status == 204
 
 - name: set active realms

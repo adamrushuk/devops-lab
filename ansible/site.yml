@@ -24,6 +24,7 @@
       password: "{{ admin_password }}"
       force_basic_auth: yes
       timeout: 10
+      validate_certs: false
 
   tasks:
   # ROLES

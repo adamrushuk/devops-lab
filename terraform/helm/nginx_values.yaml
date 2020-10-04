@@ -2,14 +2,6 @@
 ## Ref: https://github.com/kubernetes/ingress/blob/master/controllers/nginx/configuration.md
 ##
 controller:
-  name: controller
-  image:
-    repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-    tag: "0.30.0"
-    pullPolicy: IfNotPresent
-    # www-data -> uid 101
-    runAsUser: 101
-    allowPrivilegeEscalation: true
 
   # Will add custom configuration options to Nginx https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
   config:
@@ -21,40 +13,43 @@ controller:
     redirect-to-https: "false"
     ssl-redirect: "false"
 
+  ## Annotations to be added to the controller config configuration configmap
+  ##
+  configAnnotations: {}
+
+  # Will add custom headers before sending traffic to backends according to https://github.com/kubernetes/ingress-nginx/tree/master/docs/examples/customization/custom-headers
+  proxySetHeaders: {}
+
+  # Will add custom headers before sending response traffic to the client according to: https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#add-headers
+  addHeaders: {}
+
+  # Bare-metal considerations via the host network https://kubernetes.github.io/ingress-nginx/deploy/baremetal/#via-the-host-network
+  # Ingress status was blank because there is no Service exposing the NGINX Ingress controller in a configuration using the host network, the default --publish-service flag used in standard cloud setups does not apply
+  reportNodeInternalIp: false
+
+  ## Allows customization of the source of the IP address or FQDN to report
+  ## in the ingress status field. By default, it reads the information provided
+  ## by the service. If disable, the status field reports the IP address of the
+  ## node or nodes where an ingress controller pod is running.
+  publishService:
+    enabled: true
+    ## Allows overriding of the publish service to bind to
+    ## Must be <namespace>/<service_name>
+    ##
+    pathOverride: ""
+
+
   ## Additional command line arguments to pass to nginx-ingress-controller
   ## E.g. to specify the default SSL certificate you can use
   ## extraArgs:
   ##   default-ssl-certificate: "<namespace>/<secret_name>"
-  extraArgs:
-    v: 3
-    publish-service: ingress/nginx-nginx-ingress-controller
+  extraArgs: {}
 
-  ## Node labels for controller pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-    kubernetes.io/os: linux
-
-
-
-## Default 404 backend
-##
-defaultBackend:
-
-  ## If false, controller.defaultBackendService must be provided
-  ##
-  enabled: true
-
-  name: default-backend
-  image:
-    repository: k8s.gcr.io/defaultbackend-amd64
-    tag: "1.5"
-    pullPolicy: IfNotPresent
-    # nobody user -> uid 65534
-    runAsUser: 65534
-
-  ## Node labels for default backend pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-    kubernetes.io/os: linux
+  ## Additional environment variables to set
+  extraEnvs: []
+  # extraEnvs:
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource

@@ -10,14 +10,17 @@ resource "helm_release" "cert_manager" {
   namespace  = "ingress"
   repository = "https://charts.jetstack.io"
   version    = var.cert_manager_chart_version
+
   set {
     name  = "global.logLevel"
     value = "3"
   }
+
   set {
     name  = "installCRDs"
     value = "true"
   }
+
   timeout    = 600
   depends_on = [kubernetes_namespace.ingress]
 }

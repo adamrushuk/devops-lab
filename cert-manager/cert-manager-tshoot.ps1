@@ -47,7 +47,7 @@ curl -i -k $nexusBaseUrl
 # openssl s_client
 # to prevent hanging, use "echo Q | " at the start
 # openssl s_client -connect host:port -status [-showcerts]
-echo Q | openssl s_client -connect docker-nexus.thehypepipe.co.uk:443 | sls "CN =|error"
+echo Q | openssl s_client -connect docker.thehypepipe.co.uk:443 | sls "CN =|error"
 echo Q | openssl s_client -connect "$($nexusHost):443" | sls "CN =|error"
 echo Q | openssl s_client -connect "$($nexusHost):443" -status -showcerts
 echo Q | openssl s_client -connect "$($nexusHost):443" -status

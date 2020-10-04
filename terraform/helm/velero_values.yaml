@@ -1,5 +1,4 @@
-# https://github.com/vmware-tanzu/helm-charts/blob/master/charts/velero/values.yaml
-
+# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.12.17/charts/velero/values.yaml
 ##
 ## Configuration settings that directly affect the Velero deployment YAML.
 ##
@@ -7,12 +6,16 @@
 # Details of the container image to use in the Velero deployment & daemonset (if
 # enabling restic). Required.
 image:
+  # https://hub.docker.com/r/velero/velero/tags
   repository: velero/velero
-  tag: v1.4.0
+  tag: v1.5.1
   # Digest value example: sha256:d238835e151cec91c6a811fe3a89a66d3231d9f64d09e5f3c49552672d271f38. If used, it will
   # take precedence over the image.tag.
   # digest:
   pullPolicy: IfNotPresent
+  # One or more secrets to be used when pulling images
+  imagePullSecrets: []
+  # - registrySecretName
 
 # Annotations to add to the Velero deployment's pod template. Optional.
 #
@@ -23,25 +26,20 @@ podAnnotations: {}
 
 # Additional pod labels for Velero deployment's template. Optional
 # ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-# podLabels: {}
+podLabels: {}
 
-# https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure#install-and-start-velero
-# If you're using AAD Pod Identity, you now need to add the aadpodidbinding=$IDENTITY_NAME label to the Velero
-# pod(s), preferably through the Deployment's pod template.
-#
-# $IDENTITY_NAME set in step 2: https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure#option-2-use-aad-pod-identity
-podLabels:
-  aadpodidbinding: velero
 
 # Resource requests/limits to specify for the Velero deployment. Optional.
 resources: {}
 
 # Init containers to add to the Velero deployment's pod spec. At least one plugin provider image is required.
+# https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/releases
 initContainers:
   - name: velero-plugin-for-microsoft-azure
     # use "main" for development build
-    # image: velero/velero-plugin-for-microsoft-azure:v1.1.0
-    image: velero/velero-plugin-for-microsoft-azure:main
+    # https://hub.docker.com/r/velero/velero-plugin-for-microsoft-azure/tags
+    image: velero/velero-plugin-for-microsoft-azure:v1.1.0
+    # image: velero/velero-plugin-for-microsoft-azure:main
     imagePullPolicy: IfNotPresent
     volumeMounts:
       - mountPath: /target
@@ -99,18 +97,14 @@ configuration:
   backupStorageLocation:
     # name is the name of the backup storage location where backups should be stored. If a name is not provided,
     # a backup storage location will be created with the name "default". Optional.
-    name: azure
+    name: default
     # provider is the name for the backup storage location provider. If omitted
     # `configuration.provider` will be used instead.
     provider:
     # bucket is the name of the bucket to store backups in. Required.
     bucket: velero
-    # caCert defines a CA bundle to use when verifying TLS connections to the provider.
+    # caCert defines a base64 encoded CA bundle to use when verifying TLS connections to the provider.
     caCert:
-      # type is byte
-      format:
-      # type is string
-      type:
     # prefix is the directory under which all Velero data should be stored within the bucket. Optional.
     prefix:
     # Additional provider-specific configuration. See link above
@@ -130,12 +124,12 @@ configuration:
     #  serviceAccount:
 
   # Parameters for the `default` VolumeSnapshotLocation. See
- # https://velero.io/docs/v1.4/api-types/volumesnapshotlocation/
+  # https://velero.io/docs/v1.4/api-types/volumesnapshotlocation/
   volumeSnapshotLocation:
     # name is the name of the volume snapshot location where snapshots are being taken. Required.
-    name: azure
-      # provider is the name for the volume snapshot provider. If omitted
-      # `configuration.provider` will be used instead.
+    name: default
+    # provider is the name for the volume snapshot provider. If omitted
+    # `configuration.provider` will be used instead.
     provider:
     # Additional provider-specific configuration. See link above
     # for details of required/optional fields for your provider.

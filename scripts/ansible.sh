@@ -28,6 +28,6 @@ nexusBaseUrl="$protocol://$DNS_DOMAIN_NAME"
 message="Running Ansible playbook"
 echo "STARTED: $message..."
 pushd ansible
-ansible-playbook site.yml --extra-vars "api_base_uri=$nexusBaseUrl"
+ansible-playbook site.yml --extra-vars "api_base_uri=$nexusBaseUrl dns_domain_name=$DNS_DOMAIN_NAME"
 popd
 echo "FINISHED: $message."

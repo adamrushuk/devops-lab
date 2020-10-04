@@ -33,5 +33,5 @@ spec:
       paths:
       - backend:
           serviceName: nexus
-          servicePort: 8123
+          servicePort: 5000
         path: /

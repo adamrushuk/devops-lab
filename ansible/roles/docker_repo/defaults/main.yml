@@ -8,4 +8,4 @@ docker_repo_request_body:
   docker:
     v1Enabled: false
     forceBasicAuth: false
-    httpPort: 8123
+    httpPort: 5000
