@@ -15,8 +15,9 @@ variable "kubernetes_version" {
 #
 # https://kubernetes.github.io/ingress-nginx/deploy/#using-helm
 # https://github.com/kubernetes/ingress-nginx/releases
+# https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/Chart.yaml#L3
 variable "nginx_chart_version" {
-  default = "3.3.0"
+  default = "3.4.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
