@@ -36,8 +36,8 @@ resources: {}
 initContainers:
   - name: velero-plugin-for-microsoft-azure
     # use "main" for development build
-    # image: velero/velero-plugin-for-microsoft-azure:v1.1.0
-    image: velero/velero-plugin-for-microsoft-azure:main
+    image: velero/velero-plugin-for-microsoft-azure:v1.1.0
+    # image: velero/velero-plugin-for-microsoft-azure:main
     imagePullPolicy: IfNotPresent
     volumeMounts:
       - mountPath: /target
