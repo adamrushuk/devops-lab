@@ -6,8 +6,9 @@
 # Details of the container image to use in the Velero deployment & daemonset (if
 # enabling restic). Required.
 image:
+  # https://hub.docker.com/r/velero/velero/tags
   repository: velero/velero
-  tag: v1.4.2
+  tag: v1.5.1
   # Digest value example: sha256:d238835e151cec91c6a811fe3a89a66d3231d9f64d09e5f3c49552672d271f38. If used, it will
   # take precedence over the image.tag.
   # digest:
@@ -36,6 +37,7 @@ resources: {}
 initContainers:
   - name: velero-plugin-for-microsoft-azure
     # use "main" for development build
+    # https://hub.docker.com/r/velero/velero-plugin-for-microsoft-azure/tags
     image: velero/velero-plugin-for-microsoft-azure:v1.1.0
     # image: velero/velero-plugin-for-microsoft-azure:main
     imagePullPolicy: IfNotPresent
