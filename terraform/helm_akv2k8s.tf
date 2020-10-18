@@ -14,7 +14,7 @@ resource "null_resource" "akv2k8s_crds" {
 
   provisioner "local-exec" {
     # command = "kubectl apply -f https://raw.githubusercontent.com/sparebankenvest/azure-key-vault-to-kubernetes/crd-1.1.0/crds/AzureKeyVaultSecret.yaml"
-    command = "kubectl cluster-info"
+    # command = "kubectl cluster-info"
 
     command = <<EOT
       echo "${azurerm_kubernetes_cluster.aks.kube_config_raw}" > ./azurek8s
