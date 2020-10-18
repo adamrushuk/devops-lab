@@ -268,3 +268,10 @@ variable "nexus_ingress_enabled" {
 variable "nexus_letsencrypt_environment" {
   default = "__CERT_API_ENVIRONMENT__"
 }
+
+
+
+# akv2k8s
+variable "akv2k8s_yaml_path" {
+  default = "files/AzureKeyVaultSecret.yaml"
+}
