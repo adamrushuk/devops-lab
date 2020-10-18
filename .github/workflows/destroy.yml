@@ -39,8 +39,9 @@ env:
   FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true
   LOCATION: uksouth
+  ROOT_DOMAIN_NAME: thehypepipe.co.uk
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
-  VELERO_ENABLED: false
+  VELERO_ENABLED: true
 
   # terraform
   TF_IN_AUTOMATION: "true"
