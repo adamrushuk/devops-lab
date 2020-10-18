@@ -34,8 +34,8 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
   # other
-  # prod or staging
-  CERT_API_ENVIRONMENT: prod
+  # prod or staging. "" disables cert-manager annotations
+  CERT_API_ENVIRONMENT: ""
   DEMO_USER_USERNAME: demo_user
   # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk

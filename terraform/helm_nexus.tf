@@ -41,6 +41,11 @@ resource "helm_release" "nexus" {
     value = var.nexus_letsencrypt_environment
   }
 
+  set {
+    name  = "ingress.tls.secretName"
+    value = "nexus-tls-secret"
+  }
+
   timeout    = 600
   depends_on = [helm_release.nginx, kubernetes_namespace.nexus]
 }
