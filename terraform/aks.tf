@@ -129,7 +129,7 @@ resource "azurerm_key_vault_access_policy" "aks" {
   key_vault_id = data.azurerm_key_vault.kv.id
 
   tenant_id = data.azurerm_subscription.current.tenant_id
-  object_id = azurerm_kubernetes_cluster.aks.identity[0].principal_id
+  object_id = azurerm_kubernetes_cluster.aks.kubelet_identity.object_id
 
   certificate_permissions = [
     "backup",
