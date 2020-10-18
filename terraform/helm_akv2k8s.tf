@@ -14,7 +14,7 @@ resource "local_file" "kubeconfig" {
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "akv2k8s_crds" {
   triggers = {
-    always_run = "${timestamp()}"
+    # always_run = "${timestamp()}"
     akv2k8s_yaml_contents = filemd5(var.akv2k8s_yaml_path)
   }
 
@@ -22,8 +22,7 @@ resource "null_resource" "akv2k8s_crds" {
     interpreter = ["/bin/bash", "-c"]
     command = <<EOT
       export KUBECONFIG=${var.aks_config_path}
-      kubectl cluster-info
-      kubectl apply -f ${file(var.akv2k8s_yaml_path)}
+      kubectl apply -f ${var.akv2k8s_yaml_path}
     EOT
   }
 
