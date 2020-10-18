@@ -19,6 +19,7 @@ resource "null_resource" "akv2k8s_crds" {
   }
 
   provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
     command = <<EOT
       export KUBECONFIG=${var.aks_config_path}
       kubectl cluster-info
