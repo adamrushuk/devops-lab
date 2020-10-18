@@ -106,6 +106,10 @@ variable "aks_container_insights_enabled" {
   default     = false
 }
 
+variable "aks_config_path" {
+  default = "${path.module}/files/azurek8s_config"
+}
+
 
 # TODO DELETE SECTION
 # Service Principle for AKS

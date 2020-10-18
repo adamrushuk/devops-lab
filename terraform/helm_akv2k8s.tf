@@ -4,27 +4,30 @@
 # https://akv2k8s.io/
 # https://github.com/SparebankenVest/azure-key-vault-to-kubernetes
 
+resource "local_file" "kubeconfig" {
+  sensitive_content = azurerm_kubernetes_cluster.aks.kube_config_raw
+  filename = var.aks_config_path
+
+  depends_on = [azurerm_kubernetes_cluster.aks]
+}
 
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "akv2k8s_crds" {
   triggers = {
-    always_run = "${timestamp()}"
-    # akv2k8s_yaml_contents = filemd5(var.akv2k8s_yaml_path)
+    # always_run = "${timestamp()}"
+    kubeconfig_contents = filemd5(var.aks_config_path)
+    akv2k8s_yaml_contents = filemd5(var.akv2k8s_yaml_path)
   }
 
   provisioner "local-exec" {
-    # command = "kubectl apply -f https://raw.githubusercontent.com/sparebankenvest/azure-key-vault-to-kubernetes/crd-1.1.0/crds/AzureKeyVaultSecret.yaml"
-    # command = "kubectl cluster-info"
-
     command = <<EOT
-      echo "${azurerm_kubernetes_cluster.aks.kube_config_raw}" > ./azurek8s
-      export KUBECONFIG=./azurek8s
+      export KUBECONFIG=${var.aks_config_path}
       kubectl cluster-info
+      kubectl apply -f ${file(var.akv2k8s_yaml_path)}
     EOT
-
   }
 
-  depends_on = [azurerm_kubernetes_cluster.aks]
+  depends_on = [local_file.kubeconfig]
 }
 
 # https://www.terraform.io/docs/providers/kubernetes/r/namespace.html
