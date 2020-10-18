@@ -107,7 +107,7 @@ variable "aks_container_insights_enabled" {
 }
 
 variable "aks_config_path" {
-  default = "${path.module}/files/azurek8s_config"
+  default = "./azurek8s_config"
 }
 
 
