@@ -14,8 +14,7 @@ resource "local_file" "kubeconfig" {
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "akv2k8s_crds" {
   triggers = {
-    # always_run = "${timestamp()}"
-    kubeconfig_contents = filemd5(var.aks_config_path)
+    always_run = "${timestamp()}"
     akv2k8s_yaml_contents = filemd5(var.akv2k8s_yaml_path)
   }
 
