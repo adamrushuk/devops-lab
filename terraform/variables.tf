@@ -34,6 +34,12 @@ variable "velero_chart_version" {
 variable "nexus_chart_version" {
   default = "0.2.6"
 }
+
+# https://github.com/SparebankenVest/public-helm-charts/releases
+# https://github.com/SparebankenVest/helm-charts/tree/gh-pages/akv2k8s
+variable "akv2k8s_chart_version" {
+  default = "1.1.25"
+}
 #endregion Versions
 
 
@@ -93,11 +99,6 @@ variable "sla_sku" {
   description = "Define the SLA under which the managed master control plane of AKS is running"
   type        = string
   default     = "Free"
-}
-
-variable "aks_dashboard_enabled" {
-  description = "Should Kubernetes dashboard be enabled"
-  default     = false
 }
 
 variable "aks_container_insights_enabled" {
