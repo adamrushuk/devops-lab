@@ -82,16 +82,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
-
-  # TODO DELETE SECTION
-  # service_principal block: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#client_id
-  # service_principal {
-  #   client_id     = var.service_principal_client_id
-  #   client_secret = var.service_principal_client_secret
-  # }
-  # TODO DELETE SECTION
-
-
   # managed identity block: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#type-1
   identity {
     type = "SystemAssigned"
@@ -126,4 +116,37 @@ resource "azurerm_kubernetes_cluster" "aks" {
       # addon_profile,
     ]
   }
+}
+
+
+# Key vault access policy for AKS
+data "azurerm_key_vault" "kv" {
+  name                = var.key_vault_name
+  resource_group_name = var.key_vault_resource_group_name
+}
+
+resource "azurerm_key_vault_access_policy" "aks" {
+  key_vault_id = data.azurerm_key_vault.kv.id
+
+  tenant_id = data.azurerm_subscription.current.tenant_id
+  object_id = azurerm_kubernetes_cluster.aks.identity[0].principal_id
+
+  certificate_permissions = [
+    "backup",
+    "create",
+    "delete",
+    "deleteissuers",
+    "get",
+    "getissuers",
+    "import",
+    "list",
+    "listissuers",
+    "managecontacts",
+    "manageissuers",
+    "purge",
+    "recover",
+    "restore",
+    "setissuers",
+    "update"
+  ]
 }

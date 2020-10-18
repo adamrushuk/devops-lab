@@ -82,6 +82,14 @@ variable "tags" {
   }
 }
 
+variable "key_vault_name" {
+  default = "__KEY_VAULT_NAME__"
+}
+
+variable "key_vault_resource_group_name" {
+  default = "__KEY_VAULT_RESOURCE_GROUP_NAME__"
+}
+
 
 
 # AKS

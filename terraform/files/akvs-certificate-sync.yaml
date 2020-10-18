@@ -12,5 +12,5 @@ spec:
       type: certificate
   output:
     secret:
-      name: my-certificate-from-akv # kubernetes secret name
+      name: nexus-tls-secret # kubernetes secret name
       type: kubernetes.io/tls # kubernetes secret type

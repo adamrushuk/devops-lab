@@ -38,6 +38,8 @@ env:
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true
+  KEY_VAULT_NAME: kv-rush-iz6y
+  KEY_VAULT_RESOURCE_GROUP_NAME: rg-keyvault-acmebot
   LOCATION: uksouth
   ROOT_DOMAIN_NAME: thehypepipe.co.uk
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
