@@ -100,6 +100,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   addon_profile {
+    # cannot remove this deprecated block yet, due to this issue:
+    # https://github.com/terraform-providers/terraform-provider-azurerm/issues/7716
+    kube_dashboard {
+      enabled = false
+    }
+
     oms_agent {
       enabled                    = var.aks_container_insights_enabled
       log_analytics_workspace_id = var.aks_container_insights_enabled ? azurerm_log_analytics_workspace.aks[0].id : null
