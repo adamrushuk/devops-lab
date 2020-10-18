@@ -279,3 +279,7 @@ variable "nexus_letsencrypt_environment" {
 variable "akv2k8s_yaml_path" {
   default = "files/AzureKeyVaultSecret.yaml"
 }
+
+variable "cert_sync_yaml_path" {
+  default = "files/akvs-certificate-sync.yaml"
+}

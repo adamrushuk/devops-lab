@@ -1,0 +1,16 @@
+# https://akv2k8s.io/tutorials/sync/2-certificate/
+apiVersion: spv.no/v1alpha1
+kind: AzureKeyVaultSecret
+metadata:
+  name: certificate-sync
+  namespace: nexus
+spec:
+  vault:
+    name: kv-rush-iz6y # name of key vault
+    object:
+      name: wildcard-thehypepipe-co-uk # key vault certificate name
+      type: certificate
+  output:
+    secret:
+      name: my-certificate-from-akv # kubernetes secret name
+      type: kubernetes.io/tls # kubernetes secret type
