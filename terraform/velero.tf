@@ -51,6 +51,8 @@ resource "kubernetes_namespace" "velero" {
   timeouts {
     delete = "15m"
   }
+
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 resource "kubernetes_secret" "velero_credentials" {
