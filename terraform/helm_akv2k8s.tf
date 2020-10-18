@@ -8,13 +8,20 @@
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "akv2k8s_crds" {
   triggers = {
-    # always_run = "${timestamp()}"
-    akv2k8s_yaml_contents = filemd5(var.akv2k8s_yaml_path)
+    always_run = "${timestamp()}"
+    # akv2k8s_yaml_contents = filemd5(var.akv2k8s_yaml_path)
   }
 
   provisioner "local-exec" {
     # command = "kubectl apply -f https://raw.githubusercontent.com/sparebankenvest/azure-key-vault-to-kubernetes/crd-1.1.0/crds/AzureKeyVaultSecret.yaml"
     command = "kubectl cluster-info"
+
+    command = <<EOT
+      echo "${azurerm_kubernetes_cluster.aks.kube_config_raw}" > ./azurek8s
+      export KUBECONFIG=./azurek8s
+      kubectl cluster-info
+    EOT
+
   }
 
   depends_on = [azurerm_kubernetes_cluster.aks]
