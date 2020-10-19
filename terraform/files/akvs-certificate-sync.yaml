@@ -6,11 +6,11 @@ metadata:
   namespace: nexus
 spec:
   vault:
-    name: kv-rush-iz6y # name of key vault
+    name: __KEY_VAULT_NAME__ # name of key vault
     object:
-      name: wildcard-thehypepipe-co-uk # key vault certificate name
+      name: __KEY_VAULT_CERT_NAME__ # key vault certificate name
       type: certificate
   output:
     secret:
-      name: nexus-tls-secret # kubernetes secret name
+      name: __K8S_TLS_SECRET_NAME__ # kubernetes secret name
       type: kubernetes.io/tls # kubernetes secret type

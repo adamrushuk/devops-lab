@@ -43,7 +43,7 @@ resource "helm_release" "nexus" {
 
   set {
     name  = "ingress.tls.secretName"
-    value = "nexus-tls-secret"
+    value = var.nexus_tls_secret_name
   }
 
   timeout    = 600

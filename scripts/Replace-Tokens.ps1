@@ -1,6 +1,6 @@
 # Replace tokens
 param (
-    $TargetFilePattern = './terraform/*.tf',
+    $TargetFilePattern = @('./terraform/*.tf', './terraform/files/*.yaml'),
     $TokenPrefix = '__',
     $TokenSuffix = '__',
 

@@ -282,6 +282,10 @@ variable "nexus_letsencrypt_environment" {
   default = "__CERT_API_ENVIRONMENT__"
 }
 
+variable "nexus_tls_secret_name" {
+  default = "__K8S_TLS_SECRET_NAME__"
+}
+
 
 
 # akv2k8s
