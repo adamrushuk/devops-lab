@@ -14,3 +14,4 @@ spec:
     secret:
       name: __K8S_TLS_SECRET_NAME__ # kubernetes secret name
       type: kubernetes.io/tls # kubernetes secret type
+      chainOrder: ensureserverfirst
