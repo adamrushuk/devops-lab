@@ -22,6 +22,11 @@ resource "helm_release" "nexus" {
   values     = ["${file("helm/nexus_values.yaml")}"]
 
   set {
+    name  = "image.tag"
+    value = var.nexus_image_tag
+  }
+
+  set {
     name  = "nexus.baseDomain"
     value = var.nexus_base_domain
   }
