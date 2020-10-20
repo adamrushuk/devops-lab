@@ -125,17 +125,6 @@ variable "aks_config_path" {
 }
 
 
-# TODO DELETE SECTION
-# Service Principle for AKS
-# variable "service_principal_client_id" {
-#   default = "__ARM_CLIENT_ID__"
-# }
-
-# variable "service_principal_client_secret" {
-#   default = "__ARM_CLIENT_SECRET__"
-# }
-# TODO DELETE SECTION
-
 
 # Agent Pool
 variable "agent_pool_node_count" {
