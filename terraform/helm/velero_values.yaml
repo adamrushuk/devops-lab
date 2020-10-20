@@ -1,4 +1,4 @@
-# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.12.17/charts/velero/values.yaml
+# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.13.3/charts/velero/values.yaml
 ##
 ## Configuration settings that directly affect the Velero deployment YAML.
 ##
@@ -28,7 +28,6 @@ podAnnotations: {}
 # ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podLabels: {}
 
-
 # Resource requests/limits to specify for the Velero deployment. Optional.
 resources: {}
 
@@ -38,7 +37,7 @@ initContainers:
   - name: velero-plugin-for-microsoft-azure
     # use "main" for development build
     # https://hub.docker.com/r/velero/velero-plugin-for-microsoft-azure/tags
-    image: velero/velero-plugin-for-microsoft-azure:v1.1.0
+    image: velero/velero-plugin-for-microsoft-azure:v1.1.1
     # image: velero/velero-plugin-for-microsoft-azure:main
     imagePullPolicy: IfNotPresent
     volumeMounts:
@@ -93,7 +92,7 @@ configuration:
   provider: azure
 
   # Parameters for the `default` BackupStorageLocation. See
-  # https://velero.io/docs/v1.4/api-types/backupstoragelocation/
+  # https://velero.io/docs/v1.5/api-types/backupstoragelocation/
   backupStorageLocation:
     # name is the name of the backup storage location where backups should be stored. If a name is not provided,
     # a backup storage location will be created with the name "default". Optional.
@@ -124,7 +123,7 @@ configuration:
     #  serviceAccount:
 
   # Parameters for the `default` VolumeSnapshotLocation. See
-  # https://velero.io/docs/v1.4/api-types/volumesnapshotlocation/
+  # https://velero.io/docs/v1.5/api-types/volumesnapshotlocation/
   volumeSnapshotLocation:
     # name is the name of the volume snapshot location where snapshots are being taken. Required.
     name: default
@@ -167,6 +166,9 @@ configuration:
 
   # Set log-format for Velero pod. Default: text. Other option: json.
   logFormat:
+
+  # Set true for backup all pod volumes without having to apply annotation on the pod when used restic Default: false. Other option: false.
+  defaultVolumesToRestic:
 
 ##
 ## End of backup/snapshot location settings.
@@ -242,13 +244,13 @@ restic:
 # Eg:
 # schedules:
 #   mybackup:
-#      labels:
-#        myenv: foo
+#     labels:
+#       myenv: foo
 #     schedule: "0 0 * * *"
 #     template:
 #       ttl: "240h"
 #       includedNamespaces:
-#        - foo
+#       - foo
 schedules: {}
 
 # Velero ConfigMaps.
