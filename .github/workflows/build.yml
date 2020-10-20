@@ -86,16 +86,16 @@ jobs:
       #   ref: develop
 
     # Init tasks - inc Env var concatenation
-    # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
+    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
     - name: Init tasks - inc Env var concatenation (Workaround)
       run: |
         chmod -R +x ./scripts/
-        echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
-        echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
-        echo ::set-env name=TERRAFORM_STORAGE_ACCOUNT::${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
-        echo ::set-env name=TERRAFORM_STORAGE_RG::${{ env.PREFIX }}-rg-tfstate-dev-001
-        echo ::set-env name=VELERO_STORAGE_RG::${{ env.PREFIX }}-rg-velero-dev-001
-        echo ::set-env name=VELERO_STORAGE_ACCOUNT::${{ env.PREFIX }}stbckuksouth001
+        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
+        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
+        echo "TERRAFORM_STORAGE_ACCOUNT=${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001" >> $GITHUB_ENV
+        echo "TERRAFORM_STORAGE_RG=${{ env.PREFIX }}-rg-tfstate-dev-001" >> $GITHUB_ENV
+        echo "VELERO_STORAGE_RG=${{ env.PREFIX }}-rg-velero-dev-001" >> $GITHUB_ENV
+        echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
 
     # Show event info
     - name: Show triggered event data

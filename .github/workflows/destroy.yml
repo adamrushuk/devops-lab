@@ -75,9 +75,7 @@ jobs:
       #   ref: develop
 
     # Env var concatenation
-    # Old  method: https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
-    # New method: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
-    # echo "action_state=yellow" >> $GITHUB_ENV
+    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
     - name: Concatenate env vars (Workaround)
       run: |
         chmod -R +x ./scripts/
