@@ -73,6 +73,14 @@ echo "IDENTITY_CLIENT_ID: $IDENTITY_CLIENT_ID"
 # Assign the identity a role
 export IDENTITY_ASSIGNMENT_ID="$(az role assignment create --role Contributor --assignee "$IDENTITY_CLIENT_ID" --scope "$AKS_NODE_RESOURCE_GROUP_ID" --query id -o tsv)"
 
+# Describe AzureIdentity CRDs (they dont have metadata)
+kubectl describe AzureIdentity velero
+kubectl explain --recursive AzureIdentity
+kubectl explain --recursive backups
+kubectl explain --recursive AzureIdentity.spec
+kubectl explain --recursive AzureIdentityBinding
+kubectl explain --recursive AzureIdentityBinding.spec
+
 # Create an AzureIdentity
 cat <<EOF | kubectl apply --namespace aad-pod-identity -f -
 apiVersion: "aadpodidentity.k8s.io/v1"
@@ -131,11 +139,11 @@ $env:KUBE_EDITOR = 'code --wait'
 kubectl get crd
 
 # list velero schedules
-kubectl get schedules.velero.io
+kubectl get schedules.velero.io --namespace velero
 
 # describe velero schedule
-kubectl describe schedules.velero.io/velero-fullbackup
+kubectl describe schedules.velero.io/velero-fullbackup --namespace velero
 
-# edit velero schedule - every 10 mins (*/10 * * * *)
-kubectl edit schedules.velero.io/velero-fullbackup
+# edit velero schedule - every 5 mins (0 */5 * * *)
+kubectl edit schedules.velero.io/velero-fullbackup --namespace velero
 ```
