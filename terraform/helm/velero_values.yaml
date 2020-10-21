@@ -35,10 +35,8 @@ resources: {}
 # https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/releases
 initContainers:
   - name: velero-plugin-for-microsoft-azure
-    # use "main" for development build
     # https://hub.docker.com/r/velero/velero-plugin-for-microsoft-azure/tags
     image: velero/velero-plugin-for-microsoft-azure:v1.1.1
-    # image: velero/velero-plugin-for-microsoft-azure:main
     imagePullPolicy: IfNotPresent
     volumeMounts:
       - mountPath: /target
