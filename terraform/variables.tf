@@ -27,7 +27,7 @@ variable "cert_manager_chart_version" {
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 variable "velero_chart_version" {
-  default = "2.13.3"
+  default = "2.13.6"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
