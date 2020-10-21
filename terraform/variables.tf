@@ -46,6 +46,11 @@ variable "nexus_chart_version" {
 variable "akv2k8s_chart_version" {
   default = "1.1.25"
 }
+
+# https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
+variable "aad_pod_identity_chart_version" {
+  default = "2.0.2"
+}
 #endregion Versions
 
 
