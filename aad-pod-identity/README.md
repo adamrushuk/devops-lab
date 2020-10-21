@@ -25,7 +25,7 @@ Before automating the installation and configuration of aad-pod-identity, follow
 
 ### Deploy aad-pod-identity using Helm 3
 
-Repo: [https://github.com/Azure/aad-pod-identity/tree/master/charts/aad-pod-identity](https://github.com/Azure/aad-pod-identity/tree/master/charts/aad-pod-identity)
+Repo: [aad-pod-identity chart](https://github.com/Azure/aad-pod-identity/tree/master/charts/aad-pod-identity)
 
 ```bash
 # Navigate to aad-pod-identity folder
@@ -44,7 +44,7 @@ helm search repo aad-pod-identity --version ^2.0.0
 kubectl create namespace aad-pod-identity
 
 # Install aad-pod-identity
-helm upgrade aad-pod-identity aad-pod-identity/aad-pod-identity --version 2.0.1 --values aad_pod_identity_values.yaml --install --atomic --namespace aad-pod-identity --debug
+helm upgrade aad-pod-identity aad-pod-identity/aad-pod-identity --version 2.0.2 --values aad_pod_identity_values.yaml --set=installCRDs=true --install --atomic --namespace aad-pod-identity --debug
 ```
 
 ### Configure aad-pod-identity
@@ -116,7 +116,7 @@ kubectl create secret generic --namespace velero velero-credentials --from-file=
 Once `aad-pod-identity` has been configured, and the Velero credentials secret has been populated, install Velero via Helm chart ensuring the aadpodidbinding=$IDENTITY_NAME label has been added to the Velero values.yaml, eg:
 
 ```yaml
-# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.12.13/charts/velero/values.yaml#L24
+# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.13.3/charts/velero/values.yaml#L27
 podLabels:
   aadpodidbinding: velero
 ```
