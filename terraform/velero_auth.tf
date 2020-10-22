@@ -1,4 +1,4 @@
-# TODO remove this after confirming MSI auth works
+# TODO remove this after confirming MI auth works
 # Service Principle for velero
 # resource "azuread_application" "velero_sp" {
 #   name = var.velero_service_principle_name
