@@ -11,7 +11,7 @@ resource "azurerm_role_assignment" "aks_mi_aks_node_rg" {
 
 data "template_file" "azureIdentities" {
   count    = var.velero_enabled ? 1 : 0
-  template = "${file("${path.module}/helm/azureIdentities.yaml.tpl")}"
+  template = file("${path.module}/helm/azureIdentities.yaml.tpl")
   vars = {
     resourceID = azurerm_user_assigned_identity.velero[0].id
     clientID  = azurerm_user_assigned_identity.velero[0].client_id
