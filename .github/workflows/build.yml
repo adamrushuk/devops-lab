@@ -261,8 +261,8 @@ jobs:
     # Init tasks - inc Env var concatenation
     - name: Init tasks - inc Env var concatenation (Workaround)
       run: |
-        echo "::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001"
-        echo "::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001"
+        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
+        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
 
     # Login
     - name: Login to Azure
