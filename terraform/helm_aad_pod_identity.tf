@@ -41,7 +41,7 @@ resource "helm_release" "aad_pod_identity" {
   version    = var.aad_pod_identity_chart_version
 
   values     = [
-    "${file("helm/aad_pod_identity_values.yaml")}",
+    file("helm/aad_pod_identity_values.yaml"),
     data.template_file.azureIdentities[0].rendered
   ]
 
