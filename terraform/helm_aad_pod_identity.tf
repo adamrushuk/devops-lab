@@ -42,7 +42,7 @@ resource "helm_release" "aad_pod_identity" {
 
   values     = [
     "${file("helm/aad_pod_identity_values.yaml")}",
-    data.template_file.azureIdentities.rendered
+    data.template_file.azureIdentities[0].rendered
   ]
 
   set {
@@ -51,5 +51,5 @@ resource "helm_release" "aad_pod_identity" {
   }
 
   timeout    = 600
-  depends_on = [kubernetes_namespace.aad_pod_identity]
+  depends_on = [kubernetes_namespace.aad_pod_identity[0]]
 }
