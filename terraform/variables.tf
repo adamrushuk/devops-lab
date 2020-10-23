@@ -44,7 +44,7 @@ variable "nexus_chart_version" {
 # https://github.com/SparebankenVest/helm-charts/tree/gh-pages/akv2k8s
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
 variable "akv2k8s_chart_version" {
-  default = "1.1.26"
+  default = "1.1.25"
 }
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4

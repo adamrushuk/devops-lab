@@ -123,29 +123,3 @@ resource "azurerm_kubernetes_cluster" "aks" {
     ]
   }
 }
-
-
-# Key vault access policy for AKS / akv2k8s
-data "azurerm_key_vault" "kv" {
-  name                = var.key_vault_name
-  resource_group_name = var.key_vault_resource_group_name
-}
-
-resource "azurerm_key_vault_access_policy" "aks" {
-  key_vault_id = data.azurerm_key_vault.kv.id
-
-  tenant_id = data.azurerm_subscription.current.tenant_id
-  object_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-
-  certificate_permissions = [
-    "get"
-  ]
-
-  key_permissions = [
-    "get"
-  ]
-
-  secret_permissions = [
-    "get"
-  ]
-}

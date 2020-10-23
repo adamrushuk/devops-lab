@@ -4,6 +4,32 @@
 # https://akv2k8s.io/
 # https://github.com/SparebankenVest/azure-key-vault-to-kubernetes
 
+# Key vault access policy for AKS / akv2k8s
+data "azurerm_key_vault" "kv" {
+  name                = var.key_vault_name
+  resource_group_name = var.key_vault_resource_group_name
+}
+
+resource "azurerm_key_vault_access_policy" "aks" {
+  key_vault_id = data.azurerm_key_vault.kv.id
+
+  tenant_id = data.azurerm_subscription.current.tenant_id
+  object_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+
+  certificate_permissions = [
+    "get"
+  ]
+
+  key_permissions = [
+    "get"
+  ]
+
+  secret_permissions = [
+    "get"
+  ]
+}
+
+
 resource "local_file" "kubeconfig" {
   sensitive_content = azurerm_kubernetes_cluster.aks.kube_config_raw
   filename = var.aks_config_path
