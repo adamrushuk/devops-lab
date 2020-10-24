@@ -1,17 +1,35 @@
 # aad-pod-identity helm chart
 
 # role assignment for aad-pod-identity
-resource "azurerm_role_assignment" "aks_mi_aks_node_rg" {
+# https://azure.github.io/aad-pod-identity/docs/getting-started/role-assignment/#performing-role-assignments
+resource "azurerm_role_assignment" "aks_mi_aks_node_rg_vm_contributor" {
   count                            = var.velero_enabled ? 1 : 0
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-  role_definition_name             = "Contributor"
+  role_definition_name             = "Virtual Machine Contributor"
   scope                            = data.azurerm_resource_group.aks.id
+  skip_service_principal_aad_check = true
+}
+
+resource "azurerm_role_assignment" "aks_mi_aks_node_rg_mi_operator" {
+  count                            = var.velero_enabled ? 1 : 0
+  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  role_definition_name             = "Managed Identity Operator"
+  scope                            = data.azurerm_resource_group.aks.id
+  skip_service_principal_aad_check = true
+}
+
+# velero user MI in different RG, so assign role there too
+resource "azurerm_role_assignment" "aks_mi_velero_rg_mi_operator" {
+  count                            = var.velero_enabled ? 1 : 0
+  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  role_definition_name             = "Managed Identity Operator"
+  scope                            = azurerm_user_assigned_identity.velero[0].resource_group_name
   skip_service_principal_aad_check = true
 }
 
 data "template_file" "azureIdentities" {
   count    = var.velero_enabled ? 1 : 0
-  template = file("${path.module}/helm/azureIdentities.yaml.tpl")
+  template = file("${path.module}/files/azureIdentities.yaml.tpl")
   vars = {
     resourceID = azurerm_user_assigned_identity.velero[0].id
     clientID  = azurerm_user_assigned_identity.velero[0].client_id
