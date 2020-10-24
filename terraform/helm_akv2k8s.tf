@@ -42,7 +42,6 @@ resource "null_resource" "akv2k8s_crds" {
   triggers = {
     # always_run = "${timestamp()}"
     akv2k8s_yaml_contents           = filemd5(var.akv2k8s_yaml_path)
-    akv2k8s_exception_yaml_contents = filemd5(var.akv2k8s_exception_yaml_path)
     cert_sync_yaml_contents         = filemd5(var.cert_sync_yaml_path)
   }
 
@@ -53,7 +52,6 @@ resource "null_resource" "akv2k8s_crds" {
       # TODO: is this needed, or do CRDs install by default?
       # https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
       # kubectl apply -f ${var.akv2k8s_yaml_path}
-      kubectl apply -f ${var.akv2k8s_exception_yaml_path}
       kubectl apply -f ${var.cert_sync_yaml_path}
     EOT
   }
@@ -71,6 +69,24 @@ resource "kubernetes_namespace" "akv2k8s" {
   }
 
   depends_on = [null_resource.akv2k8s_crds]
+}
+
+# https://www.terraform.io/docs/provisioners/local-exec.html
+resource "null_resource" "akv2k8s_exceptions" {
+  triggers = {
+    # always_run = "${timestamp()}"
+    akv2k8s_exception_yaml_contents = filemd5(var.akv2k8s_exception_yaml_path)
+  }
+
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    command     = <<EOT
+      export KUBECONFIG=${var.aks_config_path}
+      kubectl apply -f ${var.akv2k8s_exception_yaml_path}
+    EOT
+  }
+
+  depends_on = [local_file.kubeconfig, kubernetes_namespace.akv2k8s]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
