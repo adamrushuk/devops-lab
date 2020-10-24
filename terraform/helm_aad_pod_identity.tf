@@ -23,7 +23,7 @@ resource "azurerm_role_assignment" "aks_mi_velero_rg_mi_operator" {
   count                            = var.velero_enabled ? 1 : 0
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   role_definition_name             = "Managed Identity Operator"
-  scope                            = azurerm_user_assigned_identity.velero[0].resource_group_name
+  scope                            = azurerm_resource_group.velero[0].name
   skip_service_principal_aad_check = true
 }
 
