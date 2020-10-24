@@ -32,7 +32,7 @@ resource "azurerm_key_vault_access_policy" "aks" {
 
 resource "local_file" "kubeconfig" {
   sensitive_content = azurerm_kubernetes_cluster.aks.kube_config_raw
-  filename = var.aks_config_path
+  filename          = var.aks_config_path
 
   depends_on = [azurerm_kubernetes_cluster.aks]
 }
@@ -41,15 +41,17 @@ resource "local_file" "kubeconfig" {
 resource "null_resource" "akv2k8s_crds" {
   triggers = {
     # always_run = "${timestamp()}"
-    akv2k8s_yaml_contents = filemd5(var.akv2k8s_yaml_path)
+    akv2k8s_yaml_contents   = filemd5(var.akv2k8s_yaml_path)
     cert_sync_yaml_contents = filemd5(var.cert_sync_yaml_path)
   }
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command = <<EOT
+    command     = <<EOT
       export KUBECONFIG=${var.aks_config_path}
-      kubectl apply -f ${var.akv2k8s_yaml_path}
+      # TODO: is this needed, or do CRDs install by default?
+      # https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
+      # kubectl apply -f ${var.akv2k8s_yaml_path}
       kubectl apply -f ${var.cert_sync_yaml_path}
     EOT
   }
@@ -77,6 +79,12 @@ resource "helm_release" "akv2k8s" {
   namespace  = "akv2k8s"
   repository = "http://charts.spvapi.no"
   version    = var.akv2k8s_chart_version
+
+  set {
+    name  = "logLevel"
+    value = "debug"
+  }
+
   timeout    = 600
   depends_on = [kubernetes_namespace.akv2k8s]
 }
