@@ -49,9 +49,8 @@ resource "null_resource" "akv2k8s_crds" {
     interpreter = ["/bin/bash", "-c"]
     command     = <<EOT
       export KUBECONFIG=${var.aks_config_path}
-      # TODO: is this needed, or do CRDs install by default?
       # https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
-      # kubectl apply -f ${var.akv2k8s_yaml_path}
+      kubectl apply -f ${var.akv2k8s_yaml_path}
       kubectl apply -f ${var.cert_sync_yaml_path}
     EOT
   }
