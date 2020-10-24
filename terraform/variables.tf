@@ -288,8 +288,13 @@ variable "nexus_tls_secret_name" {
 
 
 # akv2k8s
+# TODO: is this CRD file required?
 variable "akv2k8s_yaml_path" {
   default = "files/AzureKeyVaultSecret.yaml"
+}
+
+variable "akv2k8s_exception_yaml_path" {
+  default = "files/akv2k8s-exception.yaml"
 }
 
 variable "cert_sync_yaml_path" {

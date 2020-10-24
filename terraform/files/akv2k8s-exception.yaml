@@ -1,0 +1,9 @@
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzurePodIdentityException
+metadata:
+  name: akv2k8s-exception
+  namespace: akv2k8s # change if akv2k8s is installed in a different ns
+spec:
+  podLabels:
+    app.kubernetes.io/instance: akv2k8s
+    app.kubernetes.io/name: controller
