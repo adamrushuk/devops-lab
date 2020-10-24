@@ -70,6 +70,9 @@ export IDENTITY_RESOURCE_ID="$(az identity show -g "$AKS_NODE_RESOURCE_GROUP_NAM
 echo "IDENTITY_RESOURCE_ID: $IDENTITY_RESOURCE_ID"
 echo "IDENTITY_CLIENT_ID: $IDENTITY_CLIENT_ID"
 
+# [OPTIONAL] Check assigned VMSS identity
+az vmss identity show -g "$AKS_NODE_RESOURCE_GROUP_NAME" -n "aks-default-39636823-vmss"
+
 # Assign the identity a role
 export IDENTITY_ASSIGNMENT_ID="$(az role assignment create --role Contributor --assignee "$IDENTITY_CLIENT_ID" --scope "$AKS_NODE_RESOURCE_GROUP_ID" --query id -o tsv)"
 
