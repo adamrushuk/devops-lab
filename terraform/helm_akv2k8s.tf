@@ -98,7 +98,7 @@ resource "helm_release" "akv2k8s" {
   version    = var.akv2k8s_chart_version
 
   set {
-    name  = "logLevel"
+    name  = "controller.logLevel"
     value = "debug"
   }
 
