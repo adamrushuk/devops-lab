@@ -78,7 +78,7 @@ resource "null_resource" "azureIdentity_external_dns" {
     interpreter = ["/bin/bash", "-c"]
     command     = <<EOT
       export KUBECONFIG=${var.aks_config_path}
-      ${data.template_file.azureIdentity_external_dns.rendered} | kubectl apply -f -
+      echo "${data.template_file.azureIdentity_external_dns.rendered}" | kubectl apply -f -
     EOT
   }
 
