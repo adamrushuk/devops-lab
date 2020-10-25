@@ -6,16 +6,14 @@ metadata:
   namespace: aad-pod-identity
 spec:
   type: 0
-  ResourceID: ${managedIdentityResourceID}
-  ClientID: ${managedIdentityClientID}
-
+  resourceID: ${managedIdentityResourceID}
+  clientID: ${managedIdentityClientID}
 ---
-
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentityBinding
 metadata:
   name: external-dns
   namespace: aad-pod-identity
 spec:
-  AzureIdentity: external-dns
-  Selector: external-dns
+  azureIdentity: external-dns
+  selector: external-dns
