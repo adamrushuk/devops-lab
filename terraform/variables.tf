@@ -51,6 +51,12 @@ variable "akv2k8s_chart_version" {
 variable "aad_pod_identity_chart_version" {
   default = "2.0.2"
 }
+
+# https://github.com/bitnami/charts/tree/master/bitnami/external-dns
+# https://bitnami.com/stack/external-dns/helm
+variable "external_dns_chart_version" {
+  default = "3.4.9"
+}
 #endregion Versions
 
 

@@ -22,10 +22,10 @@ echo "FINISHED: $message."
 # Testing kubectl
 kubectl version --short
 
-# Apply manifests
-message="Applying Kubernetes manifests"
-echo "STARTED: $message..."
+# # Apply manifests
+# message="Applying Kubernetes manifests"
+# echo "STARTED: $message..."
 
-# external-dns
-kubectl apply -n ingress -f ./manifests/external-dns.yml
-echo "FINISHED: $message."
+# # external-dns
+# kubectl apply -n ingress -f ./manifests/external-dns.yml
+# echo "FINISHED: $message."
