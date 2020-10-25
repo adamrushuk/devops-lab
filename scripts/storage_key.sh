@@ -17,9 +17,9 @@ echo "FINISHED: $taskMessage."
 taskMessage="Updating workflow env vars"
 echo "STARTED: $taskMessage..."
 
-# https://help.github.com/en/actions/reference/development-tools-for-github-actions#set-an-environment-variable-set-env
-# ::set-env name={name}::{value}
-echo "::set-env name=STORAGE_KEY::$storage_key"
+# # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
+# echo "{name}={value}" >> $GITHUB_ENV
+echo "STORAGE_KEY=$storage_key" >> "$GITHUB_ENV"
 
 # Mask sensitive env var
 # https://help.github.com/en/actions/reference/development-tools-for-github-actions#example-masking-an-environment-variable

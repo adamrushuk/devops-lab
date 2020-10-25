@@ -22,17 +22,34 @@ variable "nginx_chart_version" {
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.0.2"
+  default = "v1.0.3"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 variable "velero_chart_version" {
-  default = "2.12.17"
+  default = "2.13.6"
+}
+
+# https://hub.docker.com/r/sonatype/nexus3/tags
+variable "nexus_image_tag" {
+  default = "3.28.1"
 }
 
 # https://github.com/adamrushuk/charts/releases
 variable "nexus_chart_version" {
-  default = "0.2.6"
+  default = "0.2.7"
+}
+
+# https://github.com/SparebankenVest/public-helm-charts/releases
+# https://github.com/SparebankenVest/helm-charts/tree/gh-pages/akv2k8s
+# https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
+variable "akv2k8s_chart_version" {
+  default = "1.1.25"
+}
+
+# https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
+variable "aad_pod_identity_chart_version" {
+  default = "2.0.2"
 }
 #endregion Versions
 
@@ -76,6 +93,14 @@ variable "tags" {
   }
 }
 
+variable "key_vault_name" {
+  default = "__KEY_VAULT_NAME__"
+}
+
+variable "key_vault_resource_group_name" {
+  default = "__KEY_VAULT_RESOURCE_GROUP_NAME__"
+}
+
 
 
 # AKS
@@ -95,27 +120,15 @@ variable "sla_sku" {
   default     = "Free"
 }
 
-variable "aks_dashboard_enabled" {
-  description = "Should Kubernetes dashboard be enabled"
-  default     = false
-}
-
 variable "aks_container_insights_enabled" {
   description = "Should Container Insights monitoring be enabled"
   default     = false
 }
 
+variable "aks_config_path" {
+  default = "./azurek8s_config"
+}
 
-# TODO DELETE SECTION
-# Service Principle for AKS
-# variable "service_principal_client_id" {
-#   default = "__ARM_CLIENT_ID__"
-# }
-
-# variable "service_principal_client_secret" {
-#   default = "__ARM_CLIENT_SECRET__"
-# }
-# TODO DELETE SECTION
 
 
 # Agent Pool
@@ -187,7 +200,7 @@ variable "velero_backup_schedule" {
 variable "velero_backup_included_namespaces" {
   type = list(string)
   default = [
-    "*"
+    "nexus"
   ]
 }
 
@@ -266,4 +279,24 @@ variable "nexus_ingress_enabled" {
 
 variable "nexus_letsencrypt_environment" {
   default = "__CERT_API_ENVIRONMENT__"
+}
+
+variable "nexus_tls_secret_name" {
+  default = "__K8S_TLS_SECRET_NAME__"
+}
+
+
+
+# akv2k8s
+# TODO: is this CRD file required?
+variable "akv2k8s_yaml_path" {
+  default = "files/AzureKeyVaultSecret.yaml"
+}
+
+variable "akv2k8s_exception_yaml_path" {
+  default = "files/akv2k8s-exception.yaml"
+}
+
+variable "cert_sync_yaml_path" {
+  default = "files/akvs-certificate-sync.yaml"
 }

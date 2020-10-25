@@ -82,36 +82,28 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
-
-  # TODO DELETE SECTION
-  # service_principal block: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#client_id
-  # service_principal {
-  #   client_id     = var.service_principal_client_id
-  #   client_secret = var.service_principal_client_secret
-  # }
-  # TODO DELETE SECTION
-
-
   # managed identity block: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#type-1
   identity {
     type = "SystemAssigned"
   }
 
   # TODO Enable RBAC and AAD auth: https://app.zenhub.com/workspaces/aks-nexus-velero-5e602702ee332f0fc76d35dd/issues/adamrushuk/aks-nexus-velero/105
-  # role_based_access_control {
-  #   enabled = true
+  role_based_access_control {
+    enabled = true
 
-  #   azure_active_directory {
-  #     managed = true
-  #     admin_group_object_ids = [
-  #       data.azuread_group.aks.id
-  #     ]
-  #   }
-  # }
+    # azure_active_directory {
+    #   managed = true
+    #   admin_group_object_ids = [
+    #     data.azuread_group.aks.id
+    #   ]
+    # }
+  }
 
   addon_profile {
+    # cannot remove this deprecated block yet, due to this issue:
+    # https://github.com/terraform-providers/terraform-provider-azurerm/issues/7716
     kube_dashboard {
-      enabled = var.aks_dashboard_enabled
+      enabled = false
     }
 
     oms_agent {

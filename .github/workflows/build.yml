@@ -34,16 +34,21 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
   # other
-  # prod or staging
-  CERT_API_ENVIRONMENT: prod
+  # prod or staging. "" disables cert-manager annotations
+  CERT_API_ENVIRONMENT: ""
   DEMO_USER_USERNAME: demo_user
   # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
+  DNS_RG_NAME: rg-dns
   DOCKER_FQDN: docker.thehypepipe.co.uk
   EMAIL_ADDRESS: certadmin@domain.com
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   HAS_SUBDOMAIN: true
+  K8S_TLS_SECRET_NAME: tls-secret
+  KEY_VAULT_NAME: kv-rush-iz6y
+  KEY_VAULT_CERT_NAME: wildcard-thehypepipe-co-uk
+  KEY_VAULT_RESOURCE_GROUP_NAME: rg-keyvault-acmebot
   LOCATION: uksouth
   ROOT_DOMAIN_NAME: thehypepipe.co.uk
   # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
@@ -81,17 +86,16 @@ jobs:
       #   ref: develop
 
     # Init tasks - inc Env var concatenation
-    # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
+    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
     - name: Init tasks - inc Env var concatenation (Workaround)
       run: |
         chmod -R +x ./scripts/
-        echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
-        echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
-        echo ::set-env name=DNS_RG_NAME::${{ env.PREFIX }}-rg-externaldns
-        echo ::set-env name=TERRAFORM_STORAGE_ACCOUNT::${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001
-        echo ::set-env name=TERRAFORM_STORAGE_RG::${{ env.PREFIX }}-rg-tfstate-dev-001
-        echo ::set-env name=VELERO_STORAGE_RG::${{ env.PREFIX }}-rg-velero-dev-001
-        echo ::set-env name=VELERO_STORAGE_ACCOUNT::${{ env.PREFIX }}stbckuksouth001
+        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
+        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
+        echo "TERRAFORM_STORAGE_ACCOUNT=${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001" >> $GITHUB_ENV
+        echo "TERRAFORM_STORAGE_RG=${{ env.PREFIX }}-rg-tfstate-dev-001" >> $GITHUB_ENV
+        echo "VELERO_STORAGE_RG=${{ env.PREFIX }}-rg-velero-dev-001" >> $GITHUB_ENV
+        echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
 
     # Show event info
     - name: Show triggered event data
@@ -257,8 +261,8 @@ jobs:
     # Init tasks - inc Env var concatenation
     - name: Init tasks - inc Env var concatenation (Workaround)
       run: |
-        echo "::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001"
-        echo "::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001"
+        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
+        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
 
     # Login
     - name: Login to Azure

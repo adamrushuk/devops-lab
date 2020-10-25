@@ -51,6 +51,8 @@ resource "kubernetes_namespace" "velero" {
   timeouts {
     delete = "15m"
   }
+
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 resource "kubernetes_secret" "velero_credentials" {
@@ -67,9 +69,6 @@ resource "kubernetes_secret" "velero_credentials" {
   data = {
     cloud = <<EOT
 AZURE_SUBSCRIPTION_ID=${data.azurerm_subscription.current.subscription_id}
-AZURE_TENANT_ID=${data.azurerm_subscription.current.tenant_id}
-AZURE_CLIENT_ID=${azuread_service_principal.velero_sp.application_id}
-AZURE_CLIENT_SECRET=${random_string.velero_sp.result}
 AZURE_RESOURCE_GROUP=${azurerm_kubernetes_cluster.aks.node_resource_group}
 AZURE_CLOUD_NAME=AzurePublicCloud
 EOT
@@ -137,6 +136,12 @@ resource "helm_release" "velero" {
   set {
     name  = "schedules.fullbackup.template.includedNamespaces"
     value = "{${join(",", var.velero_backup_included_namespaces)}}"
+  }
+
+  # https://github.com/vmware-tanzu/helm-charts/blob/velero-2.13.3/charts/velero/values.yaml#L27
+  set {
+    name  = "podLabels.aadpodidbinding"
+    value = "velero"
   }
 
   # set {

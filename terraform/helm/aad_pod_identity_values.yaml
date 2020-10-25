@@ -189,7 +189,7 @@ rbac:
 
 # Create azure identities and bindings
 azureIdentities: []
-  # - name: "azure-identity"
+  # - name: "velero"
   #   # if not defined, then the azure identity will be deployed in the same namespace as the chart
   #   namespace: ""
   #   # type 0: MSI, type 1: Service Principal
@@ -198,9 +198,9 @@ azureIdentities: []
   #   resourceID: ""
   #   clientID: ""
   #   binding:
-  #     name: "azure-identity-binding"
+  #     name: "velero-binding"
   #     # The selector will also need to be included in labels for app deployment
-  #     selector: "demo"
+  #     selector: "velero"
 
 # If true, install necessary custom resources.
 installCRDs: false

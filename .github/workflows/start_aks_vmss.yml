@@ -43,8 +43,8 @@ jobs:
     - name: Init tasks - inc Env var concatenation (Workaround)
       run: |
         chmod -R +x ./scripts/
-        echo ::set-env name=AKS_RG_NAME::${{ env.PREFIX }}-rg-aks-dev-001
-        echo ::set-env name=AKS_CLUSTER_NAME::${{ env.PREFIX }}-aks-001
+        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
+        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
 
     # Show event info
     - name: Show triggered event data

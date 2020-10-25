@@ -25,7 +25,7 @@ Before automating the installation and configuration of aad-pod-identity, follow
 
 ### Deploy aad-pod-identity using Helm 3
 
-Repo: [https://github.com/Azure/aad-pod-identity/tree/master/charts/aad-pod-identity](https://github.com/Azure/aad-pod-identity/tree/master/charts/aad-pod-identity)
+Repo: [aad-pod-identity chart](https://github.com/Azure/aad-pod-identity/tree/master/charts/aad-pod-identity)
 
 ```bash
 # Navigate to aad-pod-identity folder
@@ -44,7 +44,7 @@ helm search repo aad-pod-identity --version ^2.0.0
 kubectl create namespace aad-pod-identity
 
 # Install aad-pod-identity
-helm upgrade aad-pod-identity aad-pod-identity/aad-pod-identity --version 2.0.1 --values aad_pod_identity_values.yaml --install --atomic --namespace aad-pod-identity --debug
+helm upgrade aad-pod-identity aad-pod-identity/aad-pod-identity --version 2.0.2 --values aad_pod_identity_values.yaml --set=installCRDs=true --install --atomic --namespace aad-pod-identity --debug
 ```
 
 ### Configure aad-pod-identity
@@ -70,8 +70,19 @@ export IDENTITY_RESOURCE_ID="$(az identity show -g "$AKS_NODE_RESOURCE_GROUP_NAM
 echo "IDENTITY_RESOURCE_ID: $IDENTITY_RESOURCE_ID"
 echo "IDENTITY_CLIENT_ID: $IDENTITY_CLIENT_ID"
 
+# [OPTIONAL] Check assigned VMSS identity
+az vmss identity show -g "$AKS_NODE_RESOURCE_GROUP_NAME" -n "aks-default-39636823-vmss"
+
 # Assign the identity a role
 export IDENTITY_ASSIGNMENT_ID="$(az role assignment create --role Contributor --assignee "$IDENTITY_CLIENT_ID" --scope "$AKS_NODE_RESOURCE_GROUP_ID" --query id -o tsv)"
+
+# Describe AzureIdentity CRDs (they dont have metadata)
+kubectl describe AzureIdentity velero
+kubectl explain --recursive AzureIdentity
+kubectl explain --recursive backups
+kubectl explain --recursive AzureIdentity.spec
+kubectl explain --recursive AzureIdentityBinding
+kubectl explain --recursive AzureIdentityBinding.spec
 
 # Create an AzureIdentity
 cat <<EOF | kubectl apply --namespace aad-pod-identity -f -
@@ -116,7 +127,7 @@ kubectl create secret generic --namespace velero velero-credentials --from-file=
 Once `aad-pod-identity` has been configured, and the Velero credentials secret has been populated, install Velero via Helm chart ensuring the aadpodidbinding=$IDENTITY_NAME label has been added to the Velero values.yaml, eg:
 
 ```yaml
-# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.12.13/charts/velero/values.yaml#L24
+# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.13.3/charts/velero/values.yaml#L27
 podLabels:
   aadpodidbinding: velero
 ```
@@ -131,11 +142,11 @@ $env:KUBE_EDITOR = 'code --wait'
 kubectl get crd
 
 # list velero schedules
-kubectl get schedules.velero.io
+kubectl get schedules.velero.io --namespace velero
 
 # describe velero schedule
-kubectl describe schedules.velero.io/velero-fullbackup
+kubectl describe schedules.velero.io/velero-fullbackup --namespace velero
 
-# edit velero schedule - every 10 mins (*/10 * * * *)
-kubectl edit schedules.velero.io/velero-fullbackup
+# edit velero schedule - every 5 mins (0 */5 * * *)
+kubectl edit schedules.velero.io/velero-fullbackup --namespace velero
 ```
