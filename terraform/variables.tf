@@ -225,6 +225,10 @@ variable "dns_zone_name" {
   default = "__ROOT_DOMAIN_NAME__"
 }
 
+variable "azureidentity_external_dns_yaml_path" {
+  default = "files/azureIdentity-external-dns.yaml.tpl"
+}
+
 # not currently used as zone defaults to these anyway
 variable "dns_name_servers" {
   type = list(string)
@@ -237,7 +241,7 @@ variable "dns_name_servers" {
 }
 
 
-# ? Removed as now using kubernetes external-dns
+# ? TODO Removed as now using kubernetes external-dns
 # ? keeping for reference of dns update script usage
 # # DNS update script vars
 # variable "dns_domain_name" {
