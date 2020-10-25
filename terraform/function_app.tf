@@ -32,8 +32,12 @@ resource "azurerm_storage_blob" "func_app" {
 data "azurerm_storage_account_sas" "func_app" {
   connection_string = azurerm_storage_account.func_app.primary_connection_string
   https_only        = true
-  start             = formatdate("YYYY-MM-DD", timestamp())
-  expiry            = formatdate("YYYY-MM-DD", timeadd(timestamp(), var.func_app_sas_expires_in_hours))
+  # start             = formatdate("YYYY-MM-DD", timestamp())
+  # expiry            = formatdate("YYYY-MM-DD", timeadd(timestamp(), var.func_app_sas_expires_in_hours))
+
+  # hardcoded values to stop timestamp() affecting EVERY Terraform Plan
+  start             = "2020-10-25"
+  expiry            = "2022-01-01"
 
   resource_types {
     object    = true
@@ -111,11 +115,11 @@ resource "azurerm_function_app" "func_app" {
     type = "SystemAssigned"
   }
 
-  # lifecycle {
-  #   ignore_changes = [
-  #     app_settings,
-  #   ]
-  # }
+  lifecycle {
+    ignore_changes = [
+      app_settings,
+    ]
+  }
 }
 
 
