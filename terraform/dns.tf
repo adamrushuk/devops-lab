@@ -99,22 +99,17 @@ resource "helm_release" "external_dns" {
 
   set {
     name  = "azure.tenantId"
-    value = ""
+    value = data.azurerm_subscription.current.tenant_id
   }
 
   set {
     name  = "azure.subscriptionId"
-    value = ""
-  }
-
-  set {
-    name  = "azure.tenantId"
-    value = ""
+    value = data.azurerm_subscription.current.subscription_id
   }
 
   set {
     name  = "azure.resourceGroup"
-    value = ""
+    value = data.azurerm_resource_group.dns.name
   }
 
   set {
