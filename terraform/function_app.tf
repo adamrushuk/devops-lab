@@ -120,12 +120,8 @@ resource "azurerm_function_app" "func_app" {
 
 
 # Give Function App Reader role for the AKS cluster node resource group
-data "azurerm_resource_group" "aks" {
-  name = azurerm_kubernetes_cluster.aks.node_resource_group
-}
-
 resource "azurerm_role_assignment" "func_app" {
-  scope                = data.azurerm_resource_group.aks.id
+  scope                = data.azurerm_resource_group.aks_node_rg.id
   role_definition_name = "Reader"
   principal_id         = azurerm_function_app.func_app.identity.0.principal_id
 }

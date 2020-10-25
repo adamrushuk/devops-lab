@@ -6,7 +6,7 @@ resource "azurerm_role_assignment" "aks_mi_aks_node_rg_vm_contributor" {
   count                            = var.velero_enabled ? 1 : 0
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   role_definition_name             = "Virtual Machine Contributor"
-  scope                            = data.azurerm_resource_group.aks.id
+  scope                            = data.azurerm_resource_group.aks_node_rg.id
   skip_service_principal_aad_check = true
 }
 
@@ -14,7 +14,7 @@ resource "azurerm_role_assignment" "aks_mi_aks_node_rg_mi_operator" {
   count                            = var.velero_enabled ? 1 : 0
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   role_definition_name             = "Managed Identity Operator"
-  scope                            = data.azurerm_resource_group.aks.id
+  scope                            = data.azurerm_resource_group.aks_node_rg.id
   skip_service_principal_aad_check = true
 }
 
