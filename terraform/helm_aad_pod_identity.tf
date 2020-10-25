@@ -68,6 +68,12 @@ resource "helm_release" "aad_pod_identity" {
     value = "true"
   }
 
+  # https://github.com/Azure/aad-pod-identity/wiki/Debugging#increasing-the-verbosity-of-the-logs
+  set {
+    name  = "mic.logVerbosity"
+    value = 6
+  }
+
   timeout    = 600
   depends_on = [kubernetes_namespace.aad_pod_identity[0]]
 }
