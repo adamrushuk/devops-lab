@@ -1,10 +1,9 @@
 # velero managed identity auth
 resource "azurerm_user_assigned_identity" "velero" {
   count               = var.velero_enabled ? 1 : 0
-  resource_group_name = azurerm_resource_group.velero[0].name
-  location            = azurerm_resource_group.velero[0].location
-
-  name = "mi_velero"
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
+  location            = azurerm_kubernetes_cluster.aks.location
+  name = "mi-velero"
 }
 
 # assign velero MI contributor rights to velero storage RG

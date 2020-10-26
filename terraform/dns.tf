@@ -39,7 +39,7 @@ data "azurerm_dns_zone" "dns" {
 resource "azurerm_user_assigned_identity" "external_dns" {
   resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
   location            = azurerm_kubernetes_cluster.aks.location
-  name                = "mi_external_dns"
+  name                = "mi-external-dns"
 }
 
 # reader on dns resource group
