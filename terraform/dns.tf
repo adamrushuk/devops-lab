@@ -63,7 +63,7 @@ data "template_file" "azureIdentity_external_dns" {
   template = file(var.azureidentity_external_dns_yaml_path)
   vars = {
     managedIdentityResourceID = azurerm_user_assigned_identity.external_dns.id
-    managedIdentityClientID  = azurerm_user_assigned_identity.external_dns.client_id
+    managedIdentityClientID   = azurerm_user_assigned_identity.external_dns.client_id
   }
 }
 
@@ -119,6 +119,11 @@ resource "helm_release" "external_dns" {
   repository = "https://charts.bitnami.com/bitnami"
   version    = var.external_dns_chart_version
   # values     = [file("helm/NOT_USED.yaml")]
+
+  set {
+    name  = "logLevel"
+    value = "debug"
+  }
 
   set {
     name  = "domainFilters[0]"
