@@ -82,7 +82,7 @@ resource "null_resource" "azureIdentity_external_dns" {
     EOT
   }
 
-  depends_on = [local_file.kubeconfig, kubernetes_namespace.ingress]
+  depends_on = [local_file.kubeconfig, kubernetes_namespace.ingress, helm_release.aad_pod_identity]
 }
 
 # # Kuberenetes Secret for external-dns
