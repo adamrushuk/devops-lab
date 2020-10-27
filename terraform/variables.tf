@@ -213,10 +213,6 @@ variable "velero_backup_included_namespaces" {
 
 
 # DNS
-variable "dns_service_principle_name" {
-  default = "sp_external_dns"
-}
-
 variable "dns_resource_group_name" {
   default = "__DNS_RG_NAME__"
 }
@@ -228,37 +224,6 @@ variable "dns_zone_name" {
 variable "azureidentity_external_dns_yaml_path" {
   default = "files/azureIdentity-external-dns.yaml.tpl"
 }
-
-# not currently used as zone defaults to these anyway
-variable "dns_name_servers" {
-  type = list(string)
-  default = [
-    "ns1-07.azure-dns.com.",
-    "ns2-07.azure-dns.net.",
-    "ns3-07.azure-dns.org.",
-    "ns4-07.azure-dns.info."
-  ]
-}
-
-
-# ? TODO Removed as now using kubernetes external-dns
-# ? keeping for reference of dns update script usage
-# # DNS update script vars
-# variable "dns_domain_name" {
-#   default = "__DNS_DOMAIN_NAME__"
-# }
-
-# variable "has_subdomain" {
-#   default = "__HAS_SUBDOMAIN__"
-# }
-
-# variable "api_key" {
-#   default = "__API_KEY__"
-# }
-
-# variable "api_secret" {
-#   default = "__API_SECRET__"
-# }
 
 
 
