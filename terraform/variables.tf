@@ -143,7 +143,7 @@ variable "agent_pool_node_count" {
 }
 
 variable "agent_pool_enable_auto_scaling" {
-  default = true
+  default = false
 }
 
 variable "agent_pool_node_min_count" {
