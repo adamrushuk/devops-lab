@@ -1,9 +1,9 @@
-name: Deallocate AKS VMSS
+name: Start AKS Cluster
 
 on:
   repository_dispatch:
     # name of GitHub event that triggers workflow
-    types: [deallocate_vmss]
+    types: [start_aks_cluster]
 
   # enable manual workflow
   # https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#manually-running-a-workflow
@@ -25,7 +25,7 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
 jobs:
-  deallocate_vmss:
+  start_aks_cluster:
     runs-on: ubuntu-18.04
 
     # only run if owner triggered action
@@ -45,6 +45,7 @@ jobs:
         chmod -R +x ./scripts/
         echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
         echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
+
     # Show event info
     - name: Show triggered event data
       run: pwsh -command "./scripts/Get-EventData.ps1"
@@ -55,9 +56,9 @@ jobs:
     - name: Login to Azure
       run: ./scripts/azure_login.sh
 
-    # Stop
+    # Start
     # Prereqs: https://docs.microsoft.com/en-us/azure/aks/start-stop-cluster
-    - name: Stop AKS Cluster
+    - name: Start AKS Cluster
       run: |
         # Install the aks-preview extension
         az extension add --name aks-preview
@@ -65,8 +66,8 @@ jobs:
         # Update the extension to make sure you have the latest version installed
         az extension update --name aks-preview
 
-        # Stop AKS cluster
-        az aks stop --name ${{ env.AKS_CLUSTER_NAME }} --resource-group ${{ env.AKS_RG_NAME }}
+        # Start AKS cluster
+        az aks start --name ${{ env.AKS_CLUSTER_NAME }} --resource-group ${{ env.AKS_RG_NAME }}
 
     # Notify
     - name: Notify slack
@@ -75,4 +76,4 @@ jobs:
       uses: pullreminders/slack-action@v1.0.9
       with:
         # env var concatenation not supported atm, so hard-code messages
-        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Deallocate AKS VMSS complete\"}'
+        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Start AKS Cluster complete\"}'
