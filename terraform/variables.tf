@@ -17,12 +17,12 @@ variable "kubernetes_version" {
 # https://github.com/kubernetes/ingress-nginx/releases
 # https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/Chart.yaml#L3
 variable "nginx_chart_version" {
-  default = "3.4.0"
+  default = "3.7.1"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.0.3"
+  default = "v1.0.4"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
@@ -44,7 +44,7 @@ variable "nexus_chart_version" {
 # https://github.com/SparebankenVest/helm-charts/tree/gh-pages/akv2k8s
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
 variable "akv2k8s_chart_version" {
-  default = "1.1.25"
+  default = "1.1.26"
 }
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
@@ -52,10 +52,10 @@ variable "aad_pod_identity_chart_version" {
   default = "2.0.2"
 }
 
-# https://github.com/bitnami/charts/tree/master/bitnami/external-dns
 # https://bitnami.com/stack/external-dns/helm
+# https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L3
 variable "external_dns_chart_version" {
-  default = "3.4.9"
+  default = "3.5.0"
 }
 #endregion Versions
 
