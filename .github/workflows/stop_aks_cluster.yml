@@ -58,15 +58,7 @@ jobs:
     # Stop
     # Prereqs: https://docs.microsoft.com/en-us/azure/aks/start-stop-cluster
     - name: Stop AKS Cluster
-      run: |
-        # Install the aks-preview extension
-        az extension add --name aks-preview
-
-        # Update the extension to make sure you have the latest version installed
-        az extension update --name aks-preview
-
-        # Stop AKS cluster
-        az aks stop --name ${{ env.AKS_CLUSTER_NAME }} --resource-group ${{ env.AKS_RG_NAME }}
+      run: ./scripts/stop_aks_cluster.sh
 
     # Notify
     - name: Notify slack

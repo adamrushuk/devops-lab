@@ -104,9 +104,9 @@ jobs:
     - name: Login to Azure
       run: ./scripts/azure_login.sh
 
-    # Ensure VMSS is started, else timeouts will occur on k8s Terraform resource destroy tasks
-    - name: Start AKS VMSS
-      run: ./scripts/start_aks_vmss.sh
+    # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform resource destroy tasks
+    - name: Start AKS Cluster
+      run: ./scripts/start_aks_cluster.sh
 
 
     # Prereqs
