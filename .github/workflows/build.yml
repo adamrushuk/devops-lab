@@ -248,7 +248,7 @@ jobs:
       env:
         SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      run: ./scripts/send_slack_message "[aks-nexus-velero] Build complete"
+      run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Build complete"
 
 
   # used for any windows-only tasks
