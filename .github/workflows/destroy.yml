@@ -67,6 +67,8 @@ jobs:
 
     steps:
     # Checkout
+    # Reference the major version of a release
+    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#example-using-versioned-actions
     - uses: actions/checkout@v2
       # specify different branch
       # NOT required as I've changed the default branch to develop
@@ -123,7 +125,7 @@ jobs:
 
 
     # Terraform
-    - uses: hashicorp/setup-terraform@v1.2.1
+    - uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: ${{ env.TF_VERSION }}
     - name: Terraform destroy
