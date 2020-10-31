@@ -131,8 +131,6 @@ jobs:
     # Notify
     - name: Notify slack
       env:
+        SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      uses: pullreminders/slack-action@v1.0.9
-      with:
-        # env var concatenation not supported atm, so hard-code messages
-        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Destroy complete\"}'
+      run: ./scripts/send_slack_message "[aks-nexus-velero] Destroy complete"
