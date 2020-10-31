@@ -33,8 +33,9 @@ fi
 http_post_data="{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\"$1\"}"
 
 # Send message to Slack API
-curl -X POST \
-    -H "Content-type: application/json" \
-    -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
-    --data "$http_post_data" \
-    https://slack.com/api/chat.postMessage
+curl --request POST \
+     --header "Content-type: application/json" \
+     --header "Authorization: Bearer $SLACK_BOT_TOKEN" \
+     --data "$http_post_data" \
+     --silent --output /dev/null --show-error --fail \
+     https://slack.com/api/chat.postMessage
