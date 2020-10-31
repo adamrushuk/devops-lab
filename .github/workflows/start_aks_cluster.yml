@@ -46,12 +46,6 @@ jobs:
         echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
         echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
 
-    # Show event info
-    - name: Show triggered event data
-      run: pwsh -command "./scripts/Get-EventData.ps1"
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-
     # Login
     - name: Login to Azure
       run: ./scripts/azure_login.sh
