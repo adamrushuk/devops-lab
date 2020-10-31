@@ -183,12 +183,6 @@ jobs:
       run: ./scripts/wait.sh
 
 
-    # TODO: Remove once issue has been fixed
-    # https://github.com/terraform-providers/terraform-provider-azurerm/issues/8546
-    - name: Restart Function App
-      run: az functionapp restart --name "${{ env.PREFIX }}-funcapp" --resource-group "${{ env.PREFIX }}-rg-function-app"
-
-
     # Ansible
     - name: Lint Ansible Playbook
       uses: ansible/ansible-lint-action@6c8c141
@@ -214,8 +208,15 @@ jobs:
       run: ./scripts/push_docker_images.sh
 
 
+    # TODO: Remove once issue has been fixed
+    # https://github.com/terraform-providers/terraform-provider-azurerm/issues/8546
+    - name: Restart Function App
+      run: az functionapp restart --name "${{ env.PREFIX }}-funcapp" --resource-group "${{ env.PREFIX }}-rg-function-app"
+
+
     # Pester tests
     - name: Run Pester tests
+      continue-on-error: true
       run: pwsh -command "./scripts/Start-Test.ps1"
 
     - name: Archive test artifacts
@@ -232,6 +233,8 @@ jobs:
 
     # Shows at the bottom of a run: https://github.com/adamrushuk/aks-nexus-velero/runs/1035347513?check_suite_focus=true
     - name: Pester report
+      # TODO: remove continue-on-error once bug is fixed
+      continue-on-error: true
       uses: zyborg/pester-tests-report@v1.3.2
       with:
         test_results_path: test/pester-test-results.xml
