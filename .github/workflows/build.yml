@@ -124,7 +124,7 @@ jobs:
 
 
     # Terraform
-    - uses: hashicorp/setup-terraform@v1
+    - uses: hashicorp/setup-terraform@v1.2
       with:
         terraform_version: ${{ env.TF_VERSION }}
 
