@@ -8,6 +8,21 @@ For a `TimerTrigger` to work, you provide a schedule in the form of a [cron expr
 
 ## Local Testing
 
+Ensure you have a `local.settings.json` file with the following settings (replacing the placeholders):
+
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "<STORAGE_ACCOUNT_CONNECTION_STRING>",
+    "FUNCTIONS_WORKER_RUNTIME": "powershell",
+    "FUNCTIONS_WORKER_RUNTIME_VERSION": "~7",
+    "IFTTT_WEBHOOK_KEY": "<IFTTT_WEBHOOK_KEY>",
+    "WEEKDAY_ALLOWED_TIME_RANGE": "06:30 -> 08:00"
+  }
+}
+```
+
 Full instructions here: https://docs.microsoft.com/en-us/azure/azure-functions/functions-develop-vs-code?tabs=csharp#run-functions-locally
 
 Ensure the [Azure Functions Core Tools are installed](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Ccsharp%2Cbash#install-the-azure-functions-core-tools), 
