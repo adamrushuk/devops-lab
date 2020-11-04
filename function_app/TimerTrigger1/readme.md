@@ -22,7 +22,7 @@ then follow the steps below to run and test
 the code locally:
 
 ```powershell
-<# set to use PowerShell 7
+<# [NO LONGER REQUIRED?] set to use PowerShell 7
 $env:FUNCTIONS_WORKER_RUNTIME_VERSION = '~7'
 #>
 # enter function directory
