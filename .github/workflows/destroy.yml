@@ -114,7 +114,7 @@ jobs:
       run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
 
     # Terraform
-    - uses: hashicorp/setup-terraform@v1.2
+    - uses: hashicorp/setup-terraform@v1.2.1
       with:
         terraform_version: ${{ env.TF_VERSION }}
 
