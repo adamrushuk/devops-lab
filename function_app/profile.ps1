@@ -13,13 +13,13 @@
 # Remove this if you are not planning on using MSI or Azure PowerShell.
 if ($env:MSI_SECRET -and (Get-Module -ListAvailable Az.Accounts)) {
     Write-Output "Authenticating PowerShell using Managed Identity..."
-    Disable-AzContextAutosave -Scope Process | Out-Null
+    # Disable-AzContextAutosave -Scope Process | Out-Null
     Connect-AzAccount -Identity
 }
 elseif ($env:ARM_TENANT_ID -and $env:ARM_SUBSCRIPTION_ID -and $env:ARM_CLIENT_ID -and $env:ARM_CLIENT_SECRET) {
     # This is used for local development
     Write-Output "Authenticating PowerShell session using env vars..."
-    Disable-AzContextAutosave -Scope Process | Out-Null
+    # Disable-AzContextAutosave -Scope Process | Out-Null
     $servicePrincipleCredential = [pscredential]::new($env:ARM_CLIENT_ID, (ConvertTo-SecureString $env:ARM_CLIENT_SECRET -AsPlainText -Force))
     Connect-AzAccount -ServicePrincipal -Tenant $env:ARM_TENANT_ID -Credential $servicePrincipleCredential -Subscription $env:ARM_SUBSCRIPTION_ID -Verbose
 }
