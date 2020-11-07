@@ -14,7 +14,7 @@
   when: enable_debug_output == "true"
 
 - name: Add stable Helm Chart
-  shell: "helm repo add stable https://kubernetes-charts.storage.googleapis.com/"
+  shell: "helm repo add stable https://charts.helm.sh/stable/"
 
 - name: Download Example Helm Charts from GitHub
   shell: "helm pull stable/{{ item.name }} --version {{ item.version }}"
