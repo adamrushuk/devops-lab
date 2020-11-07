@@ -106,6 +106,12 @@ jobs:
     - name: Login to Azure
       run: ./scripts/azure_login.sh
 
+    # This is required when developing after the initial build, and the AKS cluster may have been stopped
+    # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform apply tasks
+    - name: Start AKS Cluster
+      continue-on-error: true
+      run: ./scripts/start_aks_cluster.sh
+
 
     # Prereqs
     - name: Create Storage Account for Terraform state
