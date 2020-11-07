@@ -1,9 +1,9 @@
-name: Deallocate AKS VMSS
+name: Stop AKS Cluster
 
 on:
   repository_dispatch:
     # name of GitHub event that triggers workflow
-    types: [deallocate_vmss]
+    types: [stop_aks_cluster]
 
   # enable manual workflow
   # https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#manually-running-a-workflow
@@ -25,7 +25,7 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
 jobs:
-  deallocate_vmss:
+  stop_aks_cluster:
     runs-on: ubuntu-18.04
 
     # only run if owner triggered action
@@ -45,25 +45,19 @@ jobs:
         chmod -R +x ./scripts/
         echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
         echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
-    # Show event info
-    - name: Show triggered event data
-      run: pwsh -command "./scripts/Get-EventData.ps1"
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
 
     # Login
     - name: Login to Azure
       run: ./scripts/azure_login.sh
 
-    # Deallocate
-    - name: Deallocate AKS VMSS
-      run: ./scripts/deallocate_aks_vmss.sh
+    # Stop
+    # Prereqs: https://docs.microsoft.com/en-us/azure/aks/start-stop-cluster
+    - name: Stop AKS Cluster
+      run: ./scripts/stop_aks_cluster.sh
 
     # Notify
     - name: Notify slack
       env:
+        SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      uses: pullreminders/slack-action@v1.0.9
-      with:
-        # env var concatenation not supported atm, so hard-code messages
-        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Deallocate AKS VMSS complete\"}'
+      run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Stop AKS Cluster complete"

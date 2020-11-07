@@ -41,8 +41,8 @@ resource "local_file" "kubeconfig" {
 resource "null_resource" "akv2k8s_crds" {
   triggers = {
     # always_run = "${timestamp()}"
-    akv2k8s_yaml_contents           = filemd5(var.akv2k8s_yaml_path)
-    cert_sync_yaml_contents         = filemd5(var.cert_sync_yaml_path)
+    akv2k8s_yaml_contents   = filemd5(var.akv2k8s_yaml_path)
+    cert_sync_yaml_contents = filemd5(var.cert_sync_yaml_path)
   }
 
   provisioner "local-exec" {
@@ -85,7 +85,11 @@ resource "null_resource" "akv2k8s_exceptions" {
     EOT
   }
 
-  depends_on = [local_file.kubeconfig, kubernetes_namespace.akv2k8s]
+  depends_on = [
+    local_file.kubeconfig,
+    kubernetes_namespace.akv2k8s,
+    helm_release.aad_pod_identity
+  ]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
@@ -98,7 +102,7 @@ resource "helm_release" "akv2k8s" {
   version    = var.akv2k8s_chart_version
 
   set {
-    name  = "logLevel"
+    name  = "controller.logLevel"
     value = "debug"
   }
 

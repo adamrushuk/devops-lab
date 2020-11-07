@@ -37,7 +37,6 @@ env:
   EMAIL_ADDRESS: certadmin@domain.com
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
-  HAS_SUBDOMAIN: true
   K8S_TLS_SECRET_NAME: tls-secret
   KEY_VAULT_NAME: kv-rush-iz6y
   KEY_VAULT_CERT_NAME: wildcard-thehypepipe-co-uk
@@ -68,6 +67,8 @@ jobs:
 
     steps:
     # Checkout
+    # Reference the major version of a release
+    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#example-using-versioned-actions
     - uses: actions/checkout@v2
       # specify different branch
       # NOT required as I've changed the default branch to develop
@@ -92,23 +93,13 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
 
-    # # Trigger workflow via Repository Dispatch
-    # - name: Trigger start_aks_vmss Workflow
-    #   uses: peter-evans/repository-dispatch@v1
-    #   with:
-    #     token: ${{ secrets.REPO_ACCESS_TOKEN }}
-    #     repository: adamrushuk/aks-nexus-velero
-    #     event-type: start_vmss
-    #     client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
-
     # Login
     - name: Login to Azure
       run: ./scripts/azure_login.sh
 
-    # Ensure VMSS is started, else timeouts will occur on k8s Terraform resource destroy tasks
-    - name: Start AKS VMSS
-      run: ./scripts/start_aks_vmss.sh
-
+    # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform resource destroy tasks
+    - name: Start AKS Cluster
+      run: ./scripts/start_aks_cluster.sh
 
     # Prereqs
     - name: Lookup Storage Key
@@ -122,28 +113,24 @@ jobs:
     - name: Create zip file of Function App
       run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
 
-
     # Terraform
     - uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: ${{ env.TF_VERSION }}
+
     - name: Terraform destroy
       run: |
         terraform init
         terraform destroy -no-color -auto-approve
       working-directory: ${{ env.TF_WORKING_DIR }}
 
-
     # Cleanup
     - name: Delete Storage
       run: ./scripts/storage_delete.sh
 
-
     # Notify
     - name: Notify slack
       env:
+        SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      uses: pullreminders/slack-action@v1.0.9
-      with:
-        # env var concatenation not supported atm, so hard-code messages
-        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Destroy complete\"}'
+      run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Destroy complete"

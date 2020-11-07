@@ -4,12 +4,11 @@
     {
       "type": "func",
       "command": "host start",
-      "problemMatcher": "$func-watch",
+      "problemMatcher": "$func-powershell-watch",
       "isBackground": true,
       "options": {
         "cwd": "${workspaceFolder}/function_app"
-      },
-      "label": "func host start"
+      }
     }
   ]
 }

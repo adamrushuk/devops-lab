@@ -1,5 +1,5 @@
 # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
-name: Build env
+name: Build environment
 
 # name of GitHub event that triggers workflow
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
@@ -44,7 +44,6 @@ env:
   EMAIL_ADDRESS: certadmin@domain.com
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
-  HAS_SUBDOMAIN: true
   K8S_TLS_SECRET_NAME: tls-secret
   KEY_VAULT_NAME: kv-rush-iz6y
   KEY_VAULT_CERT_NAME: wildcard-thehypepipe-co-uk
@@ -106,6 +105,12 @@ jobs:
     # Login
     - name: Login to Azure
       run: ./scripts/azure_login.sh
+
+    # This is required when developing after the initial build, and the AKS cluster may have been stopped
+    # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform apply tasks
+    - name: Start AKS Cluster
+      continue-on-error: true
+      run: ./scripts/start_aks_cluster.sh
 
 
     # Prereqs
@@ -209,8 +214,15 @@ jobs:
       run: ./scripts/push_docker_images.sh
 
 
+    # TODO: Remove once issue has been fixed
+    # https://github.com/terraform-providers/terraform-provider-azurerm/issues/8546
+    - name: Restart Function App
+      run: az functionapp restart --name "${{ env.PREFIX }}-funcapp" --resource-group "${{ env.PREFIX }}-rg-function-app"
+
+
     # Pester tests
     - name: Run Pester tests
+      continue-on-error: true
       run: pwsh -command "./scripts/Start-Test.ps1"
 
     - name: Archive test artifacts
@@ -218,6 +230,7 @@ jobs:
       with:
         name: test results
         path: test/pester-test-results.xml
+      # TODO: only run when previous task (Pester tests) has been successful
       if: always()
 
     # remove NuGet proxy repo so pester report step doesnt fail
@@ -226,6 +239,8 @@ jobs:
 
     # Shows at the bottom of a run: https://github.com/adamrushuk/aks-nexus-velero/runs/1035347513?check_suite_focus=true
     - name: Pester report
+      # TODO: remove continue-on-error once bug is fixed
+      continue-on-error: true
       uses: zyborg/pester-tests-report@v1.3.2
       with:
         test_results_path: test/pester-test-results.xml
@@ -237,11 +252,9 @@ jobs:
     # Notify
     - name: Notify slack
       env:
+        SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      uses: pullreminders/slack-action@v1.0.9
-      with:
-        # env var concatenation not supported atm, so hard-code messages
-        args: '{\"channel\":\"C012ZQHT9A4\",\"text\":\"[aks-nexus-velero] Build complete\"}'
+      run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Build complete"
 
 
   # used for any windows-only tasks

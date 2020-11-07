@@ -17,12 +17,12 @@ variable "kubernetes_version" {
 # https://github.com/kubernetes/ingress-nginx/releases
 # https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/Chart.yaml#L3
 variable "nginx_chart_version" {
-  default = "3.4.0"
+  default = "3.7.1"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.0.3"
+  default = "v1.0.4"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
@@ -44,12 +44,18 @@ variable "nexus_chart_version" {
 # https://github.com/SparebankenVest/helm-charts/tree/gh-pages/akv2k8s
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
 variable "akv2k8s_chart_version" {
-  default = "1.1.25"
+  default = "1.1.26"
 }
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 variable "aad_pod_identity_chart_version" {
   default = "2.0.2"
+}
+
+# https://bitnami.com/stack/external-dns/helm
+# https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L3
+variable "external_dns_chart_version" {
+  default = "3.5.0"
 }
 #endregion Versions
 
@@ -137,15 +143,15 @@ variable "agent_pool_node_count" {
 }
 
 variable "agent_pool_enable_auto_scaling" {
-  default = true
+  default = false
 }
 
 variable "agent_pool_node_min_count" {
-  default = 1
+  default = null
 }
 
 variable "agent_pool_node_max_count" {
-  default = 3
+  default = null
 }
 
 variable "agent_pool_profile_name" {
@@ -207,10 +213,6 @@ variable "velero_backup_included_namespaces" {
 
 
 # DNS
-variable "dns_service_principle_name" {
-  default = "sp_external_dns"
-}
-
 variable "dns_resource_group_name" {
   default = "__DNS_RG_NAME__"
 }
@@ -219,36 +221,9 @@ variable "dns_zone_name" {
   default = "__ROOT_DOMAIN_NAME__"
 }
 
-# not currently used as zone defaults to these anyway
-variable "dns_name_servers" {
-  type = list(string)
-  default = [
-    "ns1-07.azure-dns.com.",
-    "ns2-07.azure-dns.net.",
-    "ns3-07.azure-dns.org.",
-    "ns4-07.azure-dns.info."
-  ]
+variable "azureidentity_external_dns_yaml_path" {
+  default = "files/azureIdentity-external-dns.yaml.tpl"
 }
-
-
-# ? Removed as now using kubernetes external-dns
-# ? keeping for reference of dns update script usage
-# # DNS update script vars
-# variable "dns_domain_name" {
-#   default = "__DNS_DOMAIN_NAME__"
-# }
-
-# variable "has_subdomain" {
-#   default = "__HAS_SUBDOMAIN__"
-# }
-
-# variable "api_key" {
-#   default = "__API_KEY__"
-# }
-
-# variable "api_secret" {
-#   default = "__API_SECRET__"
-# }
 
 
 
@@ -288,7 +263,6 @@ variable "nexus_tls_secret_name" {
 
 
 # akv2k8s
-# TODO: is this CRD file required?
 variable "akv2k8s_yaml_path" {
   default = "files/AzureKeyVaultSecret.yaml"
 }
