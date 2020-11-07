@@ -14,7 +14,7 @@ az extension add --name aks-preview
 az extension update --name aks-preview
 
 # Check AKS power state
-aks_power_state=$(az aks show --name "$AKS_CLUSTER_NAME" --resource-group "$AKS_RG_NAME" --query 'powerState.code')
+aks_power_state=$(az aks show --name "$AKS_CLUSTER_NAME" --resource-group "$AKS_RG_NAME" --output tsv --query 'powerState.code')
 echo -e "\n[$AKS_CLUSTER_NAME] AKS Cluster power state is [$aks_power_state]."
 
 if [ "$aks_power_state" == "Running" ]; then
