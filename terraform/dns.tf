@@ -10,8 +10,8 @@ data "azurerm_dns_zone" "dns" {
 
 # external-dns managed identity
 resource "azurerm_user_assigned_identity" "external_dns" {
-  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
-  location            = azurerm_kubernetes_cluster.aks.location
+  resource_group_name = module.aks.node_resource_group
+  location            = module.aks.location
   name                = "mi-external-dns"
 }
 
@@ -40,7 +40,7 @@ resource "kubernetes_namespace" "external_dns" {
     delete = "15m"
   }
 
-  depends_on = [azurerm_kubernetes_cluster.aks]
+  depends_on = [module.aks]
 }
 
 data "template_file" "azureIdentity_external_dns" {

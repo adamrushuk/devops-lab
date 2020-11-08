@@ -37,7 +37,7 @@ variable "nexus_image_tag" {
 
 # https://github.com/adamrushuk/charts/releases
 variable "nexus_chart_version" {
-  default = "0.2.7"
+  default = "0.2.8"
 }
 
 # https://github.com/SparebankenVest/public-helm-charts/releases

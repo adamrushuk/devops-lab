@@ -6,5 +6,5 @@ data "azuread_group" "aks" {
 }
 
 data "azurerm_resource_group" "aks_node_rg" {
-  name = azurerm_kubernetes_cluster.aks.node_resource_group
+  name = module.aks.node_resource_group
 }

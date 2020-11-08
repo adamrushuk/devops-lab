@@ -49,77 +49,25 @@ resource "azurerm_log_analytics_solution" "aks" {
 }
 
 # AKS
-resource "azurerm_kubernetes_cluster" "aks" {
-  name                = var.azurerm_kubernetes_cluster_name
+module "aks" {
+  source  = "adamrushuk/aks/azurerm"
+  version = "0.1.2"
+
+  kubernetes_version  = var.kubernetes_version
   location            = azurerm_resource_group.aks.location
   resource_group_name = azurerm_resource_group.aks.name
-  dns_prefix          = var.prefix
-  kubernetes_version  = var.kubernetes_version
-  sku_tier            = var.sla_sku
+  name                = var.azurerm_kubernetes_cluster_name
+  sla_sku             = var.sla_sku
+  tags                = var.tags
 
-  default_node_pool {
-    name                 = var.agent_pool_profile_name
-    type                 = "VirtualMachineScaleSets"
-    orchestrator_version = var.kubernetes_version
-    node_count           = var.agent_pool_node_count
-    vm_size              = var.agent_pool_profile_vm_size
-    os_disk_size_gb      = var.agent_pool_profile_disk_size_gb
-    enable_auto_scaling  = var.agent_pool_enable_auto_scaling
-    min_count            = var.agent_pool_node_min_count
-    max_count            = var.agent_pool_node_max_count
-  }
-
-  linux_profile {
-    admin_username = var.admin_username
-
-    ssh_key {
-      key_data = chomp(
-        coalesce(
-          var.ssh_public_key,
-          tls_private_key.ssh.public_key_openssh,
-        )
-      )
-    }
-  }
-
-  # managed identity block: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#type-1
-  identity {
-    type = "SystemAssigned"
-  }
-
-  # TODO Enable RBAC and AAD auth: https://app.zenhub.com/workspaces/aks-nexus-velero-5e602702ee332f0fc76d35dd/issues/adamrushuk/aks-nexus-velero/105
-  role_based_access_control {
-    enabled = true
-
-    # azure_active_directory {
-    #   managed = true
-    #   admin_group_object_ids = [
-    #     data.azuread_group.aks.id
-    #   ]
-    # }
-  }
-
-  addon_profile {
-    # cannot remove this deprecated block yet, due to this issue:
-    # https://github.com/terraform-providers/terraform-provider-azurerm/issues/7716
-    kube_dashboard {
-      enabled = false
-    }
-
-    oms_agent {
-      enabled                    = var.aks_container_insights_enabled
-      log_analytics_workspace_id = var.aks_container_insights_enabled ? azurerm_log_analytics_workspace.aks[0].id : null
-    }
-  }
-
-  tags = var.tags
-
-  lifecycle {
-    ignore_changes = [
-      service_principal,
-      default_node_pool[0].node_count,
-      tags,
-      # addon_profile,
-    ]
+  # override defaults
+  default_node_pool = {
+    name                = var.agent_pool_profile_name
+    count               = var.agent_pool_node_count
+    vm_size             = var.agent_pool_profile_vm_size
+    enable_auto_scaling = var.agent_pool_enable_auto_scaling
+    min_count           = var.agent_pool_node_min_count
+    max_count           = var.agent_pool_node_max_count
+    os_disk_size_gb     = var.agent_pool_profile_disk_size_gb
   }
 }

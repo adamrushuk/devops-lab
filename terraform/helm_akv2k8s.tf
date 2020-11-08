@@ -14,7 +14,7 @@ resource "azurerm_key_vault_access_policy" "aks" {
   key_vault_id = data.azurerm_key_vault.kv.id
 
   tenant_id = data.azurerm_subscription.current.tenant_id
-  object_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  object_id = module.aks.kubelet_identity[0].object_id
 
   certificate_permissions = [
     "get"
@@ -31,10 +31,10 @@ resource "azurerm_key_vault_access_policy" "aks" {
 
 
 resource "local_file" "kubeconfig" {
-  sensitive_content = azurerm_kubernetes_cluster.aks.kube_config_raw
+  sensitive_content = module.aks.kube_config_raw
   filename          = var.aks_config_path
 
-  depends_on = [azurerm_kubernetes_cluster.aks]
+  depends_on = [module.aks]
 }
 
 # https://www.terraform.io/docs/provisioners/local-exec.html

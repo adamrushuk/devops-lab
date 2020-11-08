@@ -9,7 +9,7 @@ resource "kubernetes_namespace" "nexus" {
     delete = "15m"
   }
 
-  depends_on = [azurerm_kubernetes_cluster.aks]
+  depends_on = [module.aks]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html

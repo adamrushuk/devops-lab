@@ -3,14 +3,14 @@
 # role assignment for aad-pod-identity
 # https://azure.github.io/aad-pod-identity/docs/getting-started/role-assignment/#performing-role-assignments
 resource "azurerm_role_assignment" "aks_mi_aks_node_rg_vm_contributor" {
-  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  principal_id                     = module.aks.kubelet_identity[0].object_id
   role_definition_name             = "Virtual Machine Contributor"
   scope                            = data.azurerm_resource_group.aks_node_rg.id
   skip_service_principal_aad_check = true
 }
 
 resource "azurerm_role_assignment" "aks_mi_aks_node_rg_mi_operator" {
-  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  principal_id                     = module.aks.kubelet_identity[0].object_id
   role_definition_name             = "Managed Identity Operator"
   scope                            = data.azurerm_resource_group.aks_node_rg.id
   skip_service_principal_aad_check = true
@@ -33,7 +33,7 @@ resource "kubernetes_namespace" "aad_pod_identity" {
     delete = "15m"
   }
 
-  depends_on = [azurerm_kubernetes_cluster.aks]
+  depends_on = [module.aks]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
