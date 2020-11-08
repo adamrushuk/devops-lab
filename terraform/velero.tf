@@ -91,7 +91,7 @@ resource "helm_release" "velero" {
   atomic     = true
   chart      = "velero"
   name       = "velero"
-  namespace  = kubernetes_namespace.velero.metadata.name
+  namespace  = kubernetes_namespace.velero[0].metadata[0].name
   repository = "https://vmware-tanzu.github.io/helm-charts"
   version    = var.velero_chart_version
   timeout    = 600

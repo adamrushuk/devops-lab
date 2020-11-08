@@ -7,7 +7,7 @@
 resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   name       = "cert-manager"
-  namespace  = kubernetes_namespace.ingress.metadata.name
+  namespace  = kubernetes_namespace.ingress.metadata[0].name
   repository = "https://charts.jetstack.io"
   version    = var.cert_manager_chart_version
   timeout    = 600

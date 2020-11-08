@@ -16,7 +16,7 @@ resource "kubernetes_namespace" "nexus" {
 resource "helm_release" "nexus" {
   chart      = "sonatype-nexus"
   name       = "nexus"
-  namespace  = kubernetes_namespace.nexus.metadata.name
+  namespace  = kubernetes_namespace.nexus.metadata[0].name
   repository = "https://adamrushuk.github.io/charts/"
   version    = var.nexus_chart_version
   timeout    = 600

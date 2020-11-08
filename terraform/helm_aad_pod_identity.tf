@@ -40,7 +40,7 @@ resource "kubernetes_namespace" "aad_pod_identity" {
 resource "helm_release" "aad_pod_identity" {
   chart      = "aad-pod-identity"
   name       = "aad-pod-identity"
-  namespace  = kubernetes_namespace.aad_pod_identity.metadata.name
+  namespace  = kubernetes_namespace.aad_pod_identity.metadata[0].name
   repository = "https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts"
   version    = var.aad_pod_identity_chart_version
   timeout    = 600

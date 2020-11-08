@@ -97,7 +97,7 @@ resource "null_resource" "akv2k8s_exceptions" {
 resource "helm_release" "akv2k8s" {
   chart      = "akv2k8s"
   name       = "akv2k8s"
-  namespace  = kubernetes_namespace.akv2k8s.metadata.name
+  namespace  = kubernetes_namespace.akv2k8s.metadata[0].name
   repository = "http://charts.spvapi.no"
   version    = var.akv2k8s_chart_version
   timeout    = 600

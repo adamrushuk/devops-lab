@@ -16,7 +16,7 @@ resource "kubernetes_namespace" "ingress" {
 resource "helm_release" "nginx" {
   chart      = "ingress-nginx"
   name       = "nginx"
-  namespace  = kubernetes_namespace.ingress.metadata.name
+  namespace  = kubernetes_namespace.ingress.metadata[0].name
   repository = "https://kubernetes.github.io/ingress-nginx"
   version    = var.nginx_chart_version
   timeout    = 600

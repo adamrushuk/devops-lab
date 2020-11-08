@@ -78,7 +78,7 @@ resource "null_resource" "azureIdentity_external_dns" {
 resource "helm_release" "external_dns" {
   chart      = "external-dns"
   name       = "external-dns"
-  namespace  = kubernetes_namespace.external_dns.metadata.name
+  namespace  = kubernetes_namespace.external_dns.metadata[0].name
   repository = "https://charts.bitnami.com/bitnami"
   version    = var.external_dns_chart_version
   timeout    = 600
