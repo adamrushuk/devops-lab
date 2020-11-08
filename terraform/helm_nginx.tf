@@ -16,10 +16,9 @@ resource "kubernetes_namespace" "ingress" {
 resource "helm_release" "nginx" {
   chart      = "ingress-nginx"
   name       = "nginx"
-  namespace  = "ingress"
+  namespace  = kubernetes_namespace.ingress.metadata.name
   repository = "https://kubernetes.github.io/ingress-nginx"
   version    = var.nginx_chart_version
-  values     = ["${file("helm/nginx_values.yaml")}"]
   timeout    = 600
-  depends_on = [kubernetes_namespace.ingress]
+  values     = ["${file("helm/nginx_values.yaml")}"]
 }

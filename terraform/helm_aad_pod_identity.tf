@@ -20,7 +20,7 @@ data "template_file" "azureIdentities" {
   template = file("${path.module}/files/azureIdentities.yaml.tpl")
   vars = {
     resourceID = azurerm_user_assigned_identity.velero[0].id
-    clientID  = azurerm_user_assigned_identity.velero[0].client_id
+    clientID   = azurerm_user_assigned_identity.velero[0].client_id
   }
 }
 
@@ -40,11 +40,12 @@ resource "kubernetes_namespace" "aad_pod_identity" {
 resource "helm_release" "aad_pod_identity" {
   chart      = "aad-pod-identity"
   name       = "aad-pod-identity"
-  namespace  = "aad-pod-identity"
+  namespace  = kubernetes_namespace.aad_pod_identity.metadata.name
   repository = "https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts"
   version    = var.aad_pod_identity_chart_version
+  timeout    = 600
 
-  values     = [
+  values = [
     file("helm/aad_pod_identity_values.yaml"),
     data.template_file.azureIdentities.rendered
   ]
@@ -59,7 +60,4 @@ resource "helm_release" "aad_pod_identity" {
     name  = "mic.logVerbosity"
     value = 6
   }
-
-  timeout    = 600
-  depends_on = [kubernetes_namespace.aad_pod_identity]
 }

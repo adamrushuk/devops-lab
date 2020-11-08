@@ -91,10 +91,12 @@ resource "helm_release" "velero" {
   atomic     = true
   chart      = "velero"
   name       = "velero"
-  namespace  = "velero"
+  namespace  = kubernetes_namespace.velero.metadata.name
   repository = "https://vmware-tanzu.github.io/helm-charts"
-  values     = ["${file("helm/velero_values.yaml")}"]
   version    = var.velero_chart_version
+  timeout    = 600
+
+  values = ["${file("helm/velero_values.yaml")}"]
 
   set {
     name  = "configuration.backupStorageLocation.config.resourceGroup"
@@ -148,7 +150,4 @@ resource "helm_release" "velero" {
   #   name  = "configuration.logLevel"
   #   value = "debug"
   # }
-
-  timeout = 600
-  # depends_on = [kubernetes_namespace.velero]
 }

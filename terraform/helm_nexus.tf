@@ -16,10 +16,12 @@ resource "kubernetes_namespace" "nexus" {
 resource "helm_release" "nexus" {
   chart      = "sonatype-nexus"
   name       = "nexus"
-  namespace  = "nexus"
+  namespace  = kubernetes_namespace.nexus.metadata.name
   repository = "https://adamrushuk.github.io/charts/"
   version    = var.nexus_chart_version
-  values     = ["${file("helm/nexus_values.yaml")}"]
+  timeout    = 600
+
+  values = ["${file("helm/nexus_values.yaml")}"]
 
   set {
     name  = "image.tag"
@@ -51,6 +53,5 @@ resource "helm_release" "nexus" {
     value = var.nexus_tls_secret_name
   }
 
-  timeout    = 600
-  depends_on = [helm_release.nginx, kubernetes_namespace.nexus]
+  depends_on = [helm_release.nginx]
 }
