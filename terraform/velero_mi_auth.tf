@@ -2,7 +2,7 @@
 resource "azurerm_user_assigned_identity" "velero" {
   count               = var.velero_enabled ? 1 : 0
   resource_group_name = module.aks.node_resource_group
-  location            = module.aks.location
+  location            = var.location
   name = "mi-velero"
 }
 

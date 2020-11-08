@@ -11,7 +11,7 @@ data "azurerm_dns_zone" "dns" {
 # external-dns managed identity
 resource "azurerm_user_assigned_identity" "external_dns" {
   resource_group_name = module.aks.node_resource_group
-  location            = module.aks.location
+  location            = var.location
   name                = "mi-external-dns"
 }
 
