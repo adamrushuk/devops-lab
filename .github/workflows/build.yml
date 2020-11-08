@@ -189,11 +189,12 @@ jobs:
       run: ./scripts/wait.sh
 
 
-    # Ansible
-    - name: Lint Ansible Playbook
-      uses: ansible/ansible-lint-action@6c8c141
-      with:
-        targets: "./ansible"
+    # TODO: enable Ansible Lint once this issue has been resolved: https://github.com/ansible/ansible-lint-action/issues/36
+    # # Ansible
+    # - name: Lint Ansible Playbook
+    #   uses: ansible/ansible-lint-action@6c8c141
+    #   with:
+    #     targets: "./ansible"
 
     - name: Run Ansible playbook
       run: ./scripts/ansible.sh
