@@ -102,18 +102,19 @@ jobs:
     #   env:
     #     GITHUB_CONTEXT: ${{ toJson(github) }}
 
-    - name: Lint Code Base
-      uses: github/super-linter@v3
-      env:
-        DEFAULT_BRANCH: develop
-        # VALIDATE_ALL_CODEBASE: false
-        VALIDATE_ANSIBLE: true
-        VALIDATE_BASH: true
-        VALIDATE_POWERSHELL: true
-        VALIDATE_SHELL_SHFMT: true
-        VALIDATE_TERRAFORM: true
-        VALIDATE_TERRAFORM_TERRASCAN: true
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # # Linting multiple languages
+    # - name: Lint Code Base
+    #   uses: github/super-linter@v3
+    #   env:
+    #     DEFAULT_BRANCH: develop
+    #     # VALIDATE_ALL_CODEBASE: false
+    #     VALIDATE_ANSIBLE: true
+    #     VALIDATE_BASH: true
+    #     VALIDATE_POWERSHELL: true
+    #     VALIDATE_SHELL_SHFMT: true
+    #     VALIDATE_TERRAFORM: true
+    #     VALIDATE_TERRAFORM_TERRASCAN: true
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
     # Login
