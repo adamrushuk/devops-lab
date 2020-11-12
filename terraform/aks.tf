@@ -49,6 +49,7 @@ resource "azurerm_log_analytics_solution" "aks" {
 }
 
 # AKS
+# https://registry.terraform.io/modules/adamrushuk/aks/azurerm/latest
 module "aks" {
   source  = "adamrushuk/aks/azurerm"
   version = "0.1.2"
