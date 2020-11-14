@@ -52,7 +52,7 @@ resource "azurerm_log_analytics_solution" "aks" {
 # https://registry.terraform.io/modules/adamrushuk/aks/azurerm/latest
 module "aks" {
   source  = "adamrushuk/aks/azurerm"
-  version = "0.1.2"
+  version = "0.2.0"
 
   kubernetes_version  = var.kubernetes_version
   location            = azurerm_resource_group.aks.location
