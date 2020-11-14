@@ -7,10 +7,6 @@ output "aks_credentials_command" {
   value = "az aks get-credentials --resource-group ${azurerm_resource_group.aks.name} --name ${module.aks.name} --overwrite-existing"
 }
 
-output "aks_browse_command" {
-  value = "az aks browse --resource-group ${azurerm_resource_group.aks.name} --name ${module.aks.name}"
-}
-
 output "aks_node_resource_group" {
   value = module.aks.node_resource_group
 }
