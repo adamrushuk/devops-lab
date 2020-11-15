@@ -71,7 +71,7 @@ module "aks" {
     enable_auto_scaling = var.agent_pool_enable_auto_scaling
     min_count           = var.agent_pool_node_min_count
     max_count           = var.agent_pool_node_max_count
-    os_disk_size_gb     = var.agent_pool_profile_disk_size
+    os_disk_size_gb     = var.agent_pool_profile_disk_size_gb
   }
 
   # add-ons
