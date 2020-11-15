@@ -19,6 +19,7 @@ resource "azurerm_resource_group" "aks" {
 # Log Analytics
 resource "azurerm_log_analytics_workspace" "aks" {
   count = var.aks_container_insights_enabled ? 1 : 0
+
   # The Workspace name is globally unique
   name                = var.log_analytics_workspace_name
   location            = azurerm_resource_group.aks.location
@@ -35,7 +36,8 @@ resource "azurerm_log_analytics_workspace" "aks" {
 }
 
 resource "azurerm_log_analytics_solution" "aks" {
-  count                 = var.aks_container_insights_enabled ? 1 : 0
+  count = var.aks_container_insights_enabled ? 1 : 0
+
   solution_name         = "ContainerInsights"
   location              = azurerm_resource_group.aks.location
   resource_group_name   = azurerm_resource_group.aks.name
@@ -52,7 +54,7 @@ resource "azurerm_log_analytics_solution" "aks" {
 # https://registry.terraform.io/modules/adamrushuk/aks/azurerm/latest
 module "aks" {
   source  = "adamrushuk/aks/azurerm"
-  version = "0.2.0"
+  version = "0.3.0"
 
   kubernetes_version  = var.kubernetes_version
   location            = azurerm_resource_group.aks.location
@@ -69,6 +71,9 @@ module "aks" {
     enable_auto_scaling = var.agent_pool_enable_auto_scaling
     min_count           = var.agent_pool_node_min_count
     max_count           = var.agent_pool_node_max_count
-    os_disk_size_gb     = var.agent_pool_profile_disk_size_gb
+    os_disk_size_gb     = var.agent_pool_profile_disk_size
   }
+
+  # add-ons
+  log_analytics_workspace_id = var.aks_container_insights_enabled == true ? azurerm_log_analytics_workspace.aks[0].id : ""
 }
