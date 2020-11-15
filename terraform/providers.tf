@@ -38,18 +38,18 @@ provider "azurerm" {
 # https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs#statically-defined-credentials
 provider "kubernetes" {
   load_config_file       = false # when you wish not to load the local config file
-  host                   = module.aks.kube_admin_config[0].host
-  client_certificate     = base64decode(module.aks.kube_admin_config[0].client_certificate)
-  client_key             = base64decode(module.aks.kube_admin_config[0].client_key)
-  cluster_ca_certificate = base64decode(module.aks.kube_admin_config[0].cluster_ca_certificate)
+  host                   = module.aks.full_object.kube_admin_config[0].host
+  client_certificate     = base64decode(module.aks.full_object.kube_admin_config[0].client_certificate)
+  client_key             = base64decode(module.aks.full_object.kube_admin_config[0].client_key)
+  cluster_ca_certificate = base64decode(module.aks.full_object.kube_admin_config[0].cluster_ca_certificate)
 }
 
 provider "helm" {
   kubernetes {
     load_config_file       = false
-    host                   = module.aks.kube_admin_config[0].host
-    client_certificate     = base64decode(module.aks.kube_admin_config[0].client_certificate)
-    client_key             = base64decode(module.aks.kube_admin_config[0].client_key)
-    cluster_ca_certificate = base64decode(module.aks.kube_admin_config[0].cluster_ca_certificate)
+    host                   = module.aks.full_object.kube_admin_config[0].host
+    client_certificate     = base64decode(module.aks.full_object.kube_admin_config[0].client_certificate)
+    client_key             = base64decode(module.aks.full_object.kube_admin_config[0].client_key)
+    cluster_ca_certificate = base64decode(module.aks.full_object.kube_admin_config[0].cluster_ca_certificate)
   }
 }
