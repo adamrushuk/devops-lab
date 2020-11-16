@@ -57,7 +57,7 @@ resource "helm_release" "aad_pod_identity" {
 
   # allow Kubenet: https://azure.github.io/aad-pod-identity/docs/configure/aad_pod_identity_on_kubenet/
   set {
-    name  = "allowNetworkPluginKubenet"
+    name  = "nmi.allowNetworkPluginKubenet"
     value = "true"
   }
 
