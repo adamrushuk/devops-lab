@@ -55,6 +55,12 @@ resource "helm_release" "aad_pod_identity" {
     value = "true"
   }
 
+  # allow Kubenet: https://azure.github.io/aad-pod-identity/docs/configure/aad_pod_identity_on_kubenet/
+  set {
+    name  = "allowNetworkPluginKubenet"
+    value = "true"
+  }
+
   # https://github.com/Azure/aad-pod-identity/wiki/Debugging#increasing-the-verbosity-of-the-logs
   set {
     name  = "mic.logVerbosity"
