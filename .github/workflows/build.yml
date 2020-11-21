@@ -234,8 +234,8 @@ jobs:
 
     # TODO: Remove once issue has been fixed
     # https://github.com/terraform-providers/terraform-provider-azurerm/issues/8546
-    # - name: Restart Function App
-    #   run: az functionapp restart --name "${{ env.PREFIX }}-funcapp" --resource-group "${{ env.PREFIX }}-rg-function-app"
+    - name: Restart Function App
+      run: az functionapp restart --name "${{ env.PREFIX }}-funcapp" --resource-group "${{ env.PREFIX }}-rg-function-app"
 
 
     # Pester tests
