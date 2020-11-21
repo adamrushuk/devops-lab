@@ -54,14 +54,16 @@ resource "azurerm_log_analytics_solution" "aks" {
 # https://registry.terraform.io/modules/adamrushuk/aks/azurerm/latest
 module "aks" {
   source  = "adamrushuk/aks/azurerm"
-  version = "0.4.0"
+  version = "0.4.1"
 
-  kubernetes_version  = var.kubernetes_version
-  location            = azurerm_resource_group.aks.location
-  resource_group_name = azurerm_resource_group.aks.name
-  name                = var.azurerm_kubernetes_cluster_name
-  sla_sku             = var.sla_sku
-  tags                = var.tags
+  kubernetes_version   = var.kubernetes_version
+  location             = azurerm_resource_group.aks.location
+  resource_group_name  = azurerm_resource_group.aks.name
+  name                 = var.azurerm_kubernetes_cluster_name
+  sla_sku              = var.sla_sku
+  aad_auth_enabled     = true
+  azure_policy_enabled = false
+  tags                 = var.tags
 
   # override defaults
   default_node_pool = {
