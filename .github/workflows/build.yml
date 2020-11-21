@@ -25,7 +25,7 @@ env:
   PREFIX: rush
 
   # debug
-  CI_DEBUG: true
+  CI_DEBUG: false
 
   # azure creds
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -34,7 +34,8 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
   # other
-  # prod or staging. "" disables cert-manager annotations
+  # prod or staging.
+  # "" disables cert-manager annotations (use if you already have an existing TLS secret)
   CERT_API_ENVIRONMENT: ""
   DEMO_USER_USERNAME: demo_user
   # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
