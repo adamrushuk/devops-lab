@@ -54,7 +54,7 @@ env:
   # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
   VELERO_ENABLED: true
-  WEAVE_SCOPE_ENABLED: true
+  WEAVE_SCOPE_ENABLED: false
 
   # terraform
   TF_IN_AUTOMATION: "true"
