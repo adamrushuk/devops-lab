@@ -26,6 +26,10 @@ kubectl version --short
 # message="Applying Kubernetes manifests"
 # echo "STARTED: $message..."
 
+# Install Weave Scope
+# https://www.weave.works/docs/scope/latest/installing/#k8s
+kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
 # # external-dns
 # kubectl apply -n ingress -f ./manifests/external-dns.yml
 # echo "FINISHED: $message."
