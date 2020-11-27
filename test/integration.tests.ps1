@@ -1,6 +1,10 @@
 # Pester integration tests for provisioned infrastructure
 # Assumes az cli has already been logged in
 
+# Documentation:
+# - https://pester.dev/docs/migrations/v3-to-v4#update-to-the-new-assertions-syntax
+# - https://pester.dev/docs/usage/assertions
+
 # Pester tests
 Describe "Integration Tests" {
 
