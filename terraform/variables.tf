@@ -18,19 +18,19 @@ variable "kubernetes_version" {
 # https://github.com/kubernetes/ingress-nginx/blob/ingress-nginx-3.11.0/charts/ingress-nginx/Chart.yaml#L3
 # helm search repo ingress-nginx/ingress-nginx
 variable "nginx_chart_version" {
-  default = "3.11.0"
+  default = "3.12.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.0.4"
+  default = "v1.1.0"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 # helm search repo vmware-tanzu/velero
 variable "velero_chart_version" {
-  default = "2.13.7"
+  default = "2.14.1"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
@@ -62,7 +62,7 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.0.0"
+  default = "4.3.1"
 }
 #endregion Versions
 

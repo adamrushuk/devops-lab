@@ -70,7 +70,7 @@ jobs:
   build-and-deploy:
 
     # always pin versions
-    # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
+    # view installed software: https://docs.github.com/en/free-pro-team@latest/actions/reference/specifications-for-github-hosted-runners#supported-software
     runs-on: ubuntu-18.04
 
     # only run if owner triggered action

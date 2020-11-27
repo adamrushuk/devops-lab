@@ -1,4 +1,4 @@
-# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.13.6/charts/velero/values.yaml
+# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.14.1/charts/velero/values.yaml
 
 ##
 ## Configuration settings that directly affect the Velero deployment YAML.
@@ -31,6 +31,10 @@ podLabels: {}
 
 # Resource requests/limits to specify for the Velero deployment. Optional.
 resources: {}
+
+# Configure the dnsPolicy of the Velero deployment
+# See: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+dnsPolicy: ClusterFirst
 
 # Init containers to add to the Velero deployment's pod spec. At least one plugin provider image is required.
 # https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/releases
@@ -79,6 +83,11 @@ metrics:
 
 # Install CRDs as a templates. Enabled by default.
 installCRDs: true
+
+# Enable/disable all helm hooks annotations
+# You should disable this if using a deploy tool that doesn't support helm hooks,
+# such as ArgoCD
+enableHelmHooks: true
 
 ##
 ## End of deployment-related settings.
@@ -202,6 +211,8 @@ credentials:
   # credentials. Set to false if, for example, using kube2iam or
   # kiam to provide IAM credentials for the Velero pod.
   useSecret: true
+  # Name of the secret to create if `useSecret` is true and `existingSecret` is empty
+  name:
   # Name of a pre-existing secret (if any) in the Velero namespace
   # that should be used to get IAM account credentials. Optional.
   existingSecret: velero-credentials
@@ -211,6 +222,10 @@ credentials:
   secretContents: {}
   # additional key/value pairs to be used as environment variables such as "DIGITALOCEAN_TOKEN: <your-key>". Values will be stored in the secret.
   extraEnvVars: {}
+  # Name of a pre-existing secret (if any) in the Velero namespace
+  # that will be used to load environment variables into velero and restic.
+  # Secret should be in format - https://kubernetes.io/docs/concepts/configuration/secret/#use-case-as-container-environment-variables
+  extraSecretRef: ""
 
 # Whether to create backupstoragelocation crd, if false => do not create a default backup location
 backupsEnabled: true
@@ -235,6 +250,10 @@ restic:
 
   # Extra volumeMounts for the Restic daemonset. Optional.
   extraVolumeMounts: []
+
+  # Configure the dnsPolicy of the Restic daemonset
+  # See: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+  dnsPolicy: ClusterFirst
 
   # SecurityContext to use for the Velero deployment. Optional.
   # Set fsGroup for `AWS IAM Roles for Service Accounts`
