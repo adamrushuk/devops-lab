@@ -15,19 +15,22 @@ variable "kubernetes_version" {
 #
 # https://kubernetes.github.io/ingress-nginx/deploy/#using-helm
 # https://github.com/kubernetes/ingress-nginx/releases
-# https://github.com/kubernetes/ingress-nginx/blob/master/charts/ingress-nginx/Chart.yaml#L3
+# https://github.com/kubernetes/ingress-nginx/blob/ingress-nginx-3.11.0/charts/ingress-nginx/Chart.yaml#L3
+# helm search repo ingress-nginx/ingress-nginx
 variable "nginx_chart_version" {
-  default = "3.7.1"
+  default = "3.11.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
+# helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
   default = "v1.0.4"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
+# helm search repo vmware-tanzu/velero
 variable "velero_chart_version" {
-  default = "2.13.6"
+  default = "2.13.7"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
@@ -36,26 +39,30 @@ variable "nexus_image_tag" {
 }
 
 # https://github.com/adamrushuk/charts/releases
+# helm search repo adamrushuk/sonatype-nexus
 variable "nexus_chart_version" {
-  default = "0.2.7"
+  default = "0.2.8"
 }
 
 # https://github.com/SparebankenVest/public-helm-charts/releases
 # https://github.com/SparebankenVest/helm-charts/tree/gh-pages/akv2k8s
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
+# helm search repo spv-charts/akv2k8s
 variable "akv2k8s_chart_version" {
   default = "1.1.26"
 }
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
+# helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "2.0.2"
+  default = "2.0.3"
 }
 
 # https://bitnami.com/stack/external-dns/helm
-# https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L3
+# https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
+# helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "3.5.0"
+  default = "4.0.0"
 }
 #endregion Versions
 
@@ -128,7 +135,7 @@ variable "sla_sku" {
 
 variable "aks_container_insights_enabled" {
   description = "Should Container Insights monitoring be enabled"
-  default     = false
+  default     = true
 }
 
 variable "aks_config_path" {

@@ -14,7 +14,7 @@ resource "azurerm_key_vault_access_policy" "aks" {
   key_vault_id = data.azurerm_key_vault.kv.id
 
   tenant_id = data.azurerm_subscription.current.tenant_id
-  object_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  object_id = module.aks.kubelet_identity[0].object_id
 
   certificate_permissions = [
     "get"
@@ -30,11 +30,13 @@ resource "azurerm_key_vault_access_policy" "aks" {
 }
 
 
+# Requires "kube_admin_config_raw" as has AAD Auth enabled
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#kube_admin_config_raw
 resource "local_file" "kubeconfig" {
-  sensitive_content = azurerm_kubernetes_cluster.aks.kube_config_raw
+  sensitive_content = module.aks.full_object.kube_admin_config_raw
   filename          = var.aks_config_path
 
-  depends_on = [azurerm_kubernetes_cluster.aks]
+  depends_on = [module.aks]
 }
 
 # https://www.terraform.io/docs/provisioners/local-exec.html
@@ -97,15 +99,13 @@ resource "null_resource" "akv2k8s_exceptions" {
 resource "helm_release" "akv2k8s" {
   chart      = "akv2k8s"
   name       = "akv2k8s"
-  namespace  = "akv2k8s"
+  namespace  = kubernetes_namespace.akv2k8s.metadata[0].name
   repository = "http://charts.spvapi.no"
   version    = var.akv2k8s_chart_version
+  timeout    = 600
 
   set {
     name  = "controller.logLevel"
     value = "debug"
   }
-
-  timeout    = 600
-  depends_on = [kubernetes_namespace.akv2k8s]
 }

@@ -52,7 +52,7 @@ resource "kubernetes_namespace" "velero" {
     delete = "15m"
   }
 
-  depends_on = [azurerm_kubernetes_cluster.aks]
+  depends_on = [module.aks]
 }
 
 resource "kubernetes_secret" "velero_credentials" {
@@ -69,7 +69,7 @@ resource "kubernetes_secret" "velero_credentials" {
   data = {
     cloud = <<EOT
 AZURE_SUBSCRIPTION_ID=${data.azurerm_subscription.current.subscription_id}
-AZURE_RESOURCE_GROUP=${azurerm_kubernetes_cluster.aks.node_resource_group}
+AZURE_RESOURCE_GROUP=${module.aks.node_resource_group}
 AZURE_CLOUD_NAME=AzurePublicCloud
 EOT
   }
@@ -91,10 +91,12 @@ resource "helm_release" "velero" {
   atomic     = true
   chart      = "velero"
   name       = "velero"
-  namespace  = "velero"
+  namespace  = kubernetes_namespace.velero[0].metadata[0].name
   repository = "https://vmware-tanzu.github.io/helm-charts"
-  values     = ["${file("helm/velero_values.yaml")}"]
   version    = var.velero_chart_version
+  timeout    = 600
+
+  values = ["${file("helm/velero_values.yaml")}"]
 
   set {
     name  = "configuration.backupStorageLocation.config.resourceGroup"
@@ -148,7 +150,4 @@ resource "helm_release" "velero" {
   #   name  = "configuration.logLevel"
   #   value = "debug"
   # }
-
-  timeout = 600
-  # depends_on = [kubernetes_namespace.velero]
 }

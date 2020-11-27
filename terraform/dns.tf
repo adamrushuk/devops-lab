@@ -10,8 +10,8 @@ data "azurerm_dns_zone" "dns" {
 
 # external-dns managed identity
 resource "azurerm_user_assigned_identity" "external_dns" {
-  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
-  location            = azurerm_kubernetes_cluster.aks.location
+  resource_group_name = module.aks.node_resource_group
+  location            = var.location
   name                = "mi-external-dns"
 }
 
@@ -40,7 +40,7 @@ resource "kubernetes_namespace" "external_dns" {
     delete = "15m"
   }
 
-  depends_on = [azurerm_kubernetes_cluster.aks]
+  depends_on = [module.aks]
 }
 
 data "template_file" "azureIdentity_external_dns" {
@@ -78,9 +78,10 @@ resource "null_resource" "azureIdentity_external_dns" {
 resource "helm_release" "external_dns" {
   chart      = "external-dns"
   name       = "external-dns"
-  namespace  = "external-dns"
+  namespace  = kubernetes_namespace.external_dns.metadata[0].name
   repository = "https://charts.bitnami.com/bitnami"
   version    = var.external_dns_chart_version
+  timeout    = 600
   # values     = [file("helm/NOT_USED.yaml")]
 
   set {
@@ -124,9 +125,7 @@ resource "helm_release" "external_dns" {
     value = "external-dns"
   }
 
-  timeout = 600
   depends_on = [
-    kubernetes_namespace.external_dns,
     azurerm_role_assignment.aks_dns_mi_to_rg,
     azurerm_role_assignment.aks_dns_mi_to_zone
   ]

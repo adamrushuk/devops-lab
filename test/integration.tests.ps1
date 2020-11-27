@@ -78,15 +78,11 @@ Describe "Integration Tests" {
 
         # Vars
         $hostname = $env:DNS_DOMAIN_NAME
+        $hostname = "nexus.thehypepipe.co.uk"
         $port = 443
         # Number of days out to warn about certificate expiration
         $warningThreshold = 14
-
-        switch ($env:CERT_API_ENVIRONMENT) {
-            prod { $expectedIssuerName = "Let's Encrypt Authority" }
-            staging { $expectedIssuerName = "Fake LE Intermediate" }
-            Default { $expectedIssuerName = "NOT DEFINED" }
-        }
+        $expectedIssuerName = "Let's Encrypt Authority"
 
         # Get common cert info
         . ../scripts/Get-CertInfo.ps1
@@ -96,7 +92,7 @@ Describe "Integration Tests" {
         if ($env:CI_DEBUG -eq "true") { $certResult | Format-Custom | Out-String | Write-Verbose }
 
         # Tests
-        It "Should have a [$env:CERT_API_ENVIRONMENT] SSL cert for [$hostname] issued by: [$expectedIssuerName]" {
+        It "Should have an SSL cert for [$hostname] issued by: [$expectedIssuerName]" {
             $certResult.Issuer -like "*$expectedIssuerName*" | Should Be $true
         }
 
@@ -107,7 +103,7 @@ Describe "Integration Tests" {
             $sslResult = Test-SslProtocol -ComputerName $hostname -Port $port
 
             # DEBUG Output
-            if ($env:CI_DEBUG -eq "true") { $sslResult | Format-Custom | Out-String | Write-Verbose}
+            if ($env:CI_DEBUG -eq "true") { $sslResult | Format-Custom | Out-String | Write-Verbose }
 
             It "Should have Signature Algorithm of [sha256RSA]" {
                 $sslResult.SignatureAlgorithm | Should Be "sha256RSA"
