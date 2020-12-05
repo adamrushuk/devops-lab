@@ -64,6 +64,17 @@ variable "aad_pod_identity_chart_version" {
 variable "external_dns_chart_version" {
   default = "4.3.1"
 }
+
+# https://github.com/weaveworks/kured/tree/master/charts/kured
+# helm search repo kured/kured
+variable "kured_chart_version" {
+  default = "2.2.1"
+}
+
+# https://github.com/weaveworks/kured#kubernetes--os-compatibility
+variable "kured_image_tag" {
+  default = "1.4.4"
+}
 #endregion Versions
 
 
