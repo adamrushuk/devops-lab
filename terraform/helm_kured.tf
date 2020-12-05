@@ -1,4 +1,5 @@
 # kured helm chart
+# https://docs.microsoft.com/en-us/azure/aks/node-updates-kured
 
 # https://www.terraform.io/docs/providers/kubernetes/r/namespace.html
 resource "kubernetes_namespace" "kured" {

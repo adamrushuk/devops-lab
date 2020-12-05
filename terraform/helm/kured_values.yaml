@@ -17,7 +17,7 @@ configuration:
   timeZone: "Europe/London"                  # time-zone to use (valid zones from "time" golang package)
 
 nodeSelector:
-  kubernetes.io/os: Linux
+  kubernetes.io/os: linux
 
 extraArgs: {}
 
