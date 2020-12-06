@@ -1,5 +1,5 @@
 # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
-name: Destroy environment
+name: destroy
 
 # name of GitHub event that triggers workflow
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch

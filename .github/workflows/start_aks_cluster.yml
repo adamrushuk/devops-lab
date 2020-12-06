@@ -1,4 +1,4 @@
-name: Start AKS Cluster
+name: start_aks_cluster
 
 on:
   repository_dispatch:

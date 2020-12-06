@@ -1,4 +1,4 @@
-name: Stop AKS Cluster
+name: stop_aks_cluster
 
 on:
   repository_dispatch:
