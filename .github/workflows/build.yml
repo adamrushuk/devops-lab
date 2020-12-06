@@ -37,8 +37,6 @@ env:
   # prod or staging.
   # "" disables cert-manager annotations (use if you already have an existing TLS secret)
   CERT_API_ENVIRONMENT: ""
-  DEMO_USER_USERNAME: demo_user
-  # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
   DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
   DNS_RG_NAME: rg-dns
   DOCKER_FQDN: docker.thehypepipe.co.uk
@@ -46,12 +44,14 @@ env:
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   K8S_TLS_SECRET_NAME: tls-secret
-  KEY_VAULT_NAME: kv-rush-iz6y
   KEY_VAULT_CERT_NAME: wildcard-thehypepipe-co-uk
+  KEY_VAULT_NAME: kv-rush-iz6y
   KEY_VAULT_RESOURCE_GROUP_NAME: rg-keyvault-acmebot
   LOCATION: uksouth
-  ROOT_DOMAIN_NAME: thehypepipe.co.uk
   # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
+  # NEXUS_USER_PASSWORD: ${{ secrets.NEXUS_USER_PASSWORD }}
+  NEXUS_USER_USERNAME: demo_user
+  ROOT_DOMAIN_NAME: thehypepipe.co.uk
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
   VELERO_ENABLED: true
   WEAVE_SCOPE_ENABLED: false
@@ -218,7 +218,7 @@ jobs:
       run: ./scripts/ansible.sh
       env:
         NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
-        DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
+        NEXUS_USER_PASSWORD: ${{ secrets.NEXUS_USER_PASSWORD }}
 
 
     # Docker
@@ -226,8 +226,8 @@ jobs:
       uses: Azure/docker-login@v1
       with:
         login-server: ${{ env.DOCKER_FQDN }}
-        username: ${{ env.DEMO_USER_USERNAME }}
-        password: ${{ secrets.DEMO_USER_PASSWORD }}
+        username: ${{ env.NEXUS_USER_USERNAME }}
+        password: ${{ secrets.NEXUS_USER_PASSWORD }}
 
     - name: Push images to Docker repo
       run: ./scripts/push_docker_images.sh
