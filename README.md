@@ -16,6 +16,7 @@ being used now.
   - [Configure Azure Authentication](#configure-azure-authentication)
   - [Create Secrets](#create-secrets)
   - [Running the Build workflow](#running-the-build-workflow)
+  - [Running the Destroy workflow](#running-the-destroy-workflow)
 
 ## Getting Started
 
@@ -44,6 +45,16 @@ Once Azure authentication has been configured, the Service Principle credential 
 Now that Azure authentication has been configured with corresponding secrets, the build workflow is ready to be run:
 
 1. Navigate to the [build workflow](../../actions?query=workflow%3Abuild).
+1. Click the `Run workflow` drop-down button.
+1. Select the desired branch.
+1. Click the `Run workflow` button.
+
+### Running the Destroy workflow
+
+There will be ongoing costs if the environment is left running, so to avoid unexpected bills the destroy workflow
+should be run once testing has been completed:
+
+1. Navigate to the [destroy workflow](../../actions?query=workflow%3Adestroy).
 1. Click the `Run workflow` drop-down button.
 1. Select the desired branch.
 1. Click the `Run workflow` button.
