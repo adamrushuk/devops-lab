@@ -3,10 +3,10 @@
 
 [![Build environment](https://github.com/adamrushuk/aks-nexus-velero/workflows/build/badge.svg)](https://github.com/adamrushuk/aks-nexus-velero/actions?query=workflow%3A%22build)
 
-This is the main repo I use to test Kubernetes /  DevOps applications, products, and processes. It's basically my
+This is the main repo I use to test Kubernetes /  DevOps applications, products, and processes. It's essentially my
 playground in Azure.
 
-I started off with a Kubernetes cluster, Nexus Repository OSS, and Velero  for backups, but there's *loads* more
+I started off with a Kubernetes cluster, Nexus Repository OSS, and Velero  for backups, but there are *loads* more
 being used now.
 
 <!-- omit in toc -->
@@ -41,7 +41,7 @@ Once Azure authentication has been configured, the Service Principle credential 
 
 ### Running the Build workflow
 
-Now that Azure authentication has been configured with coresponding secrets, the build workflow is ready to be run:
+Now that Azure authentication has been configured with corresponding secrets, the build workflow is ready to be run:
 
 1. Navigate to the [build workflow](/actions?query=workflow%3Abuild).
 1. Click the `Run workflow` drop-down button.
