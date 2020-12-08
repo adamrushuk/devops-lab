@@ -43,7 +43,7 @@ Once Azure authentication has been configured, the Service Principle credential 
 
 Now that Azure authentication has been configured with corresponding secrets, the build workflow is ready to be run:
 
-1. Navigate to the [build workflow](/actions?query=workflow%3Abuild).
+1. Navigate to the [build workflow](../../actions?query=workflow%3Abuild).
 1. Click the `Run workflow` drop-down button.
 1. Select the desired branch.
 1. Click the `Run workflow` button.
