@@ -294,6 +294,7 @@ jobs:
     # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
     - name: Init tasks - inc Env var concatenation (Workaround)
       # * NOTE: different syntax required for Windows agents
+      # ! Docs say to use "$env:GITHUB_PATH", but only "$env:GITHUB_ENV" worked for me
       run: |
         echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
         echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
