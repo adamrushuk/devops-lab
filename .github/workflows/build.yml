@@ -291,10 +291,12 @@ jobs:
     - uses: actions/checkout@v2
 
     # Init tasks - inc Env var concatenation
+    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
     - name: Init tasks - inc Env var concatenation (Workaround)
+      # * NOTE: different syntax required for Windows agents
       run: |
-        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
-        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
+        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     # Login
     - name: Login to Azure
@@ -309,6 +311,7 @@ jobs:
     - name: Test Velero CLI
       #  NOTE: Some functions cast values to a string to perform comparisons
       # https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#functions
+      # ! WARNING: only single quotes work for boolean comparison
       if: env.VELERO_ENABLED == 'true'
       run: |
         az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing --admin
