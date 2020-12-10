@@ -313,10 +313,8 @@ jobs:
       #  NOTE: Some functions cast values to a string to perform comparisons
       # https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#functions
       # ! WARNING: only single quotes work for boolean comparison
-      if: env.VELERO_ENABLED == 'true'
+      if: env.VELERO_ENABLED == 'false'
       run: |
-        ls env:
-
         az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing --admin
 
         echo "`nVelero version info:"
