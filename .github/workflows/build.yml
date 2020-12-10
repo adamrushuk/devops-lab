@@ -295,8 +295,8 @@ jobs:
     - name: Init tasks - inc Env var concatenation (Workaround)
       # * NOTE: different syntax required for Windows agents
       run: |
-        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
     # Login
     - name: Login to Azure
