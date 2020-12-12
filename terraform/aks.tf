@@ -69,6 +69,8 @@ module "aks" {
   default_node_pool = {
     name                = var.agent_pool_profile_name
     count               = var.agent_pool_node_count
+    # use one availability zone to reduce volume node affinity conflicts during testing
+    availability_zones  = [1]
     vm_size             = var.agent_pool_profile_vm_size
     enable_auto_scaling = var.agent_pool_enable_auto_scaling
     max_count           = var.agent_pool_node_max_count
