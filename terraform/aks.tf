@@ -71,8 +71,9 @@ module "aks" {
     count               = var.agent_pool_node_count
     vm_size             = var.agent_pool_profile_vm_size
     enable_auto_scaling = var.agent_pool_enable_auto_scaling
-    min_count           = var.agent_pool_node_min_count
     max_count           = var.agent_pool_node_max_count
+    max_pods            = 90
+    min_count           = var.agent_pool_node_min_count
     os_disk_size_gb     = var.agent_pool_profile_disk_size_gb
   }
 
