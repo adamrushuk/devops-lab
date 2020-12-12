@@ -188,6 +188,9 @@ variable "agent_pool_profile_vm_size" {
 
   # Standard_D4s_v3 - £0.172911 per hour
   # 4 x CPU, 16GB RAM, 8 x Data Disks
+
+  # Standard_F8s_v2 - £0.301104 per hour
+  # 8 x CPU, 16GB RAM, 16 x Data Disks
   default = "Standard_D4s_v3"
 }
 
