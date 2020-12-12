@@ -177,8 +177,14 @@ variable "agent_pool_profile_name" {
 }
 
 variable "agent_pool_profile_vm_size" {
+  # Standard_D2s_v3
+  # 2 x CPU, 8GB RAM, 4 x Data Disks
   # https://docs.microsoft.com/en-us/azure/virtual-machines/dv3-dsv3-series#dsv3-series
-  default = "Standard_D2s_v3"
+
+  # Standard_DS2_v2
+  # 2 x CPU, 7GB RAM, 8 x Data Disks
+  # https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series?toc=/azure/virtual-machines/linux/toc.json&bc=/azure/virtual-machines/linux/breadcrumb/toc.json#dsv2-series
+  default = "Standard_D2_v2"
 }
 
 variable "agent_pool_profile_os_type" {
