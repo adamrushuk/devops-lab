@@ -54,7 +54,7 @@ resource "azurerm_log_analytics_solution" "aks" {
 # https://registry.terraform.io/modules/adamrushuk/aks/azurerm/latest
 module "aks" {
   source  = "adamrushuk/aks/azurerm"
-  version = "0.4.1"
+  version = "0.4.2"
 
   kubernetes_version   = var.kubernetes_version
   location             = azurerm_resource_group.aks.location
@@ -69,8 +69,7 @@ module "aks" {
   default_node_pool = {
     name                = var.agent_pool_profile_name
     count               = var.agent_pool_node_count
-    # use one availability zone to reduce volume node affinity conflicts during testing
-    availability_zones  = [1]
+    # availability_zones  = null
     vm_size             = var.agent_pool_profile_vm_size
     enable_auto_scaling = var.agent_pool_enable_auto_scaling
     max_count           = var.agent_pool_node_max_count
