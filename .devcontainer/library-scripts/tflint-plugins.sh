@@ -27,12 +27,12 @@ echo "STARTED: $message..."
 curl -L "$(curl -Ls https://api.github.com/repos/terraform-linters/tflint-ruleset-azurerm/releases/latest | grep -o -E "https://.+?_linux_amd64.zip")" -o tflint-ruleset-azurerm_linux_amd64.zip && unzip tflint-ruleset-azurerm_linux_amd64.zip && rm tflint-ruleset-azurerm_linux_amd64.zip
 
 # move tflint-ruleset-azurerm plugin to correct path
-install -D -m 777 tflint-ruleset-azurerm ./.tflint.d/plugins/tflint-ruleset-azurerm
+install -D -m 777 tflint-ruleset-azurerm /home/vscode/.tflint.d/plugins/tflint-ruleset-azurerm
 
 echo "FINISHED: $message."
 
 # check versions
-./tflint --version
+tflint --version
 
 # create tflint config
 # cat > .tflint.hcl << EOF

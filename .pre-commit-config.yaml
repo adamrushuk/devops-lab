@@ -8,21 +8,24 @@ repos:
       - id: check-added-large-files
       - id: detect-private-key
 
-  - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.12 # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
-    hooks:
-      - id: tflint
-        args:
-          - "--module"
-          - "--deep"
-          - "--config=.tflint.hcl"
-      # - id: terraform-validate
-      # - id: terraform-fmt
-
   - repo: https://github.com/antonbabenko/pre-commit-terraform.git
     rev: v1.45.0 # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
     hooks:
-      - id: terraform_tfsec
       - id: terraform_docs
       - id: terraform_fmt
       - id: terraform_validate
+      - id: terraform_tflint
+      - id: terraform_tfsec
+
+  # ! WIP: unhandled errors running tflint with pre-commit
+  # - repo: https://github.com/gruntwork-io/pre-commit
+  #   rev: v0.1.12 # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
+  #   hooks:
+  #     - id: tflint
+  #       args:
+  #         - "terraform"
+  #         # - "--module"
+  #         # - "--deep"
+  #         - "--config=.tflint.hcl"
+  # #     # - id: terraform-validate
+  # #     # - id: terraform-fmt
