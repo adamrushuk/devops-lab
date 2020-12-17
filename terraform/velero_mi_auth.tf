@@ -3,15 +3,15 @@ resource "azurerm_user_assigned_identity" "velero" {
   count               = var.velero_enabled ? 1 : 0
   resource_group_name = module.aks.node_resource_group
   location            = var.location
-  name = "mi-velero"
+  name                = "mi-velero"
 }
 
 # assign velero MI contributor rights to velero storage RG
 resource "azurerm_role_assignment" "velero_mi_velero_storage_rg" {
-  count                            = var.velero_enabled ? 1 : 0
-  principal_id                     = azurerm_user_assigned_identity.velero[0].principal_id
-  role_definition_name             = "Contributor"
-  scope                            = azurerm_resource_group.velero[0].id
+  count                = var.velero_enabled ? 1 : 0
+  principal_id         = azurerm_user_assigned_identity.velero[0].principal_id
+  role_definition_name = "Contributor"
+  scope                = azurerm_resource_group.velero[0].id
 }
 
 # assign velero MI contributor rights to velero storage RG

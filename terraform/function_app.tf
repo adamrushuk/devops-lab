@@ -36,8 +36,8 @@ data "azurerm_storage_account_sas" "func_app" {
   # expiry            = formatdate("YYYY-MM-DD", timeadd(timestamp(), var.func_app_sas_expires_in_hours))
 
   # hardcoded values to stop timestamp() affecting EVERY Terraform Plan
-  start             = "2020-10-25"
-  expiry            = "2022-01-01"
+  start  = "2020-10-25"
+  expiry = "2022-01-01"
 
   resource_types {
     object    = true

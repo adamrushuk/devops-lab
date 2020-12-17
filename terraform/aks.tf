@@ -67,8 +67,8 @@ module "aks" {
 
   # override defaults
   default_node_pool = {
-    name                = var.agent_pool_profile_name
-    count               = var.agent_pool_node_count
+    name  = var.agent_pool_profile_name
+    count = var.agent_pool_node_count
     # availability_zones  = null
     vm_size             = var.agent_pool_profile_vm_size
     enable_auto_scaling = var.agent_pool_enable_auto_scaling
