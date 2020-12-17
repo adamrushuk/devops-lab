@@ -7,7 +7,7 @@ function Get-CIEdgeSecurityCheck {
     Retrieves basic vShield edge security information including:
     - FW enabled (True/False)
     - FW default action (Allow/Drop)
-    - Any insecure FW rules 
+    - Any insecure FW rules
 
     .PARAMETER Name
     Specifies the name of the vShield Edge you want to retrieve.
@@ -46,7 +46,7 @@ function Get-CIEdgeSecurityCheck {
         [Parameter(Mandatory = $true, ParameterSetName = "ByName")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Name,
-        
+
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "Standard")]
         [ValidateNotNullOrEmpty()]
         $CIEdge
@@ -64,9 +64,9 @@ function Get-CIEdgeSecurityCheck {
         if ($PsCmdlet.ParameterSetName -eq "ByName") {
 
             $CIEdge = Get-CIEdge -Name $Name
-            
+
         }
-        
+
         # We need this foreach to handle multiple edges returned via 'name' parameter
         foreach ($Edge in $CIEdge) {
             # Check Firewall default action
@@ -86,10 +86,10 @@ function Get-CIEdgeSecurityCheck {
             }
 
             # Check for insecure firewall setups
-            $AllowedEnabledRules = $Edge.XML.EdgeGateway.Configuration.EdgeGatewayServiceConfiguration.FirewallService.FirewallRule | 
+            $AllowedEnabledRules = $Edge.XML.EdgeGateway.Configuration.EdgeGatewayServiceConfiguration.FirewallService.FirewallRule |
                 Where-Object {$_.IsEnabled -eq $true -and $_.Policy -eq "allow"}
 
-            # Initialise array ready for PSCustomObject(s) of firewall rules 
+            # Initialise array ready for PSCustomObject(s) of firewall rules
             $InSecureFirewallRules = @()
 
             foreach ($Rule in $AllowedEnabledRules) {
@@ -98,42 +98,42 @@ function Get-CIEdgeSecurityCheck {
                 $OffendingRuleCounter = $null
 
                 switch ($Rule) {
-                    {$Rule.SourceIp -eq "external" -and $Rule.DestinationIp -eq "external" -and $Rule.DestinationPortRange -eq "Any"} {  
+                    {$Rule.SourceIp -eq "external" -and $Rule.DestinationIp -eq "external" -and $Rule.DestinationPortRange -eq "Any"} {
                         $OffendingRuleCounter = $true
                         $RuleId = $Rule.Id
-                        $RuleDescription = $Rule.Description 
+                        $RuleDescription = $Rule.Description
                         $RuleViolation = "External to External on any port"
                         break
                     }
-                    {$Rule.SourceIp -eq "external" -and $Rule.DestinationIp -eq "any" -and $Rule.DestinationPortRange -eq "Any"} {  
+                    {$Rule.SourceIp -eq "external" -and $Rule.DestinationIp -eq "any" -and $Rule.DestinationPortRange -eq "Any"} {
                         $OffendingRuleCounter = $true
                         $RuleId = $Rule.Id
-                        $RuleDescription = $Rule.Description 
+                        $RuleDescription = $Rule.Description
                         $RuleViolation = "External to Any on any port"
                         break
                     }
-                    {$Rule.SourceIp -eq "external" -and $Rule.DestinationIp -eq "internal" -and $Rule.DestinationPortRange -eq "Any"} {  
+                    {$Rule.SourceIp -eq "external" -and $Rule.DestinationIp -eq "internal" -and $Rule.DestinationPortRange -eq "Any"} {
                         $OffendingRuleCounter = $true
                         $RuleId = $Rule.Id
-                        $RuleDescription = $Rule.Description 
+                        $RuleDescription = $Rule.Description
                         $RuleViolation = "External to Internal on any port"
                         break
                     }
-                    {$Rule.SourceIp -eq "any" -and $Rule.DestinationIp -eq "any" -and $Rule.DestinationPortRange -eq "Any"} {  
+                    {$Rule.SourceIp -eq "any" -and $Rule.DestinationIp -eq "any" -and $Rule.DestinationPortRange -eq "Any"} {
                         $OffendingRuleCounter = $true
                         $RuleId = $Rule.Id
-                        $RuleDescription = $Rule.Description 
+                        $RuleDescription = $Rule.Description
                         $RuleViolation = "Any to Any on any port"
                         break
                     }
                 }
-                
+
                 # Build the offending rule PSCustomObject
                 if ($OffendingRuleCounter) {
                     $InSecureFirewallRules += [PSCustomObject]@{
                         RuleId          = $RuleId
                         RuleDescription = $RuleDescription
-                        RuleViolation   = $RuleViolation 
+                        RuleViolation   = $RuleViolation
                         ExtensionData   = $Rule
                     }
                 }
