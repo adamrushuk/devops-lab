@@ -44,12 +44,22 @@ RUN if [ "${INSTALL_AZURE_CLI}" = "true" ]; then bash /tmp/library-scripts/azcli
     fi \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Terraform, tflint
+# Install Terraform, tflint, Go, PowerShell
+# TODO: move this into main "RUN" layer above
 ARG TERRAFORM_VERSION=0.12.29
 ARG TFLINT_VERSION=0.18.0
 RUN bash /tmp/library-scripts/terraform-debian.sh "${TERRAFORM_VERSION}" "${TFLINT_VERSION}" \
-    && rm -rf /tmp/library-scripts
+    && bash /tmp/library-scripts/go-debian.sh \
+    && bash /tmp/library-scripts/powershell-debian.sh \
+    && bash /tmp/library-scripts/kubectl-helm-debian.sh
+    # && rm -rf /tmp/library-scripts
 
+# TODO: move this into main "RUN" layer above
+# Testing in new layer for faster builds
+RUN bash /tmp/library-scripts/terraform-pre-commit.sh
+RUN bash /tmp/library-scripts/tflint-plugins.sh
+RUN bash /tmp/library-scripts/terraform-extras.sh
+    # && rm -rf /tmp/library-scripts
 
 ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 CMD [ "sleep", "infinity" ]

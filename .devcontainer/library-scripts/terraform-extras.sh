@@ -20,9 +20,20 @@ if ! dpkg -s curl ca-certificates > /dev/null 2>&1; then
 fi
 
 # vars
-PRECOMMIT_VERSION=${1:-"2.9.3"}
+TFSEC_VERSION=${2:-"0.36.10"}
+TERRAFORM_DOCS_VERSION=${3:-"0.10.1"}
 
-# pre-commit
-apt install -y python3-pip
-python3 -m pip install --upgrade pip
-python3 -m pip install --upgrade pre-commit==${PRECOMMIT_VERSION}
+# workaround for "cannot use path@version syntax in GOPATH mode" error
+# export GO111MODULE="on"
+
+# check
+command -v go
+
+# TFSec
+go get -u github.com/tfsec/tfsec/cmd/tfsec@v${TFSEC_VERSION}
+
+# Terraform Docs
+go get github.com/terraform-docs/terraform-docs@v${TERRAFORM_DOCS_VERSION}
+
+# TODO: install TFLint azurerm plugin
+# https://github.com/terraform-linters/tflint-ruleset-azurerm
