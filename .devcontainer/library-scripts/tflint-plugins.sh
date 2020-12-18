@@ -24,7 +24,7 @@ message="Downloading tflint and azurerm plugin"
 echo "STARTED: $message..."
 
 # download tflint-ruleset-azurerm plugin
-curl -L "$(curl -Ls https://api.github.com/repos/terraform-linters/tflint-ruleset-azurerm/releases/latest | grep -o -E "https://.+?_linux_amd64.zip")" -o tflint-ruleset-azurerm_linux_amd64.zip && unzip tflint-ruleset-azurerm_linux_amd64.zip && rm tflint-ruleset-azurerm_linux_amd64.zip
+curl -sL "$(curl -Ls https://api.github.com/repos/terraform-linters/tflint-ruleset-azurerm/releases/latest | grep -o -E "https://.+?_linux_amd64.zip")" -o tflint-ruleset-azurerm_linux_amd64.zip && unzip tflint-ruleset-azurerm_linux_amd64.zip && rm tflint-ruleset-azurerm_linux_amd64.zip
 
 # move tflint-ruleset-azurerm plugin to correct path
 install -D -m 777 tflint-ruleset-azurerm /home/vscode/.tflint.d/plugins/tflint-ruleset-azurerm

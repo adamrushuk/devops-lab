@@ -5,7 +5,6 @@
 # https://hub.docker.com/_/microsoft-vscode-devcontainers
 # https://github.com/microsoft/vscode-dev-containers/blob/master/containers/azure-terraform/.devcontainer/Dockerfile
 
-
 # You can pick any Debian/Ubuntu-based image. 😊
 FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-18.04
 
@@ -38,28 +37,23 @@ ENV NVM_SYMLINK_CURRENT=true \
 RUN if [ "${INSTALL_AZURE_CLI}" = "true" ]; then bash /tmp/library-scripts/azcli-debian.sh; fi \
     && if [ "${INSTALL_NODE}" = "true" ]; then bash /tmp/library-scripts/node-debian.sh "${NVM_DIR}" "${NODE_VERSION}" "${USERNAME}"; fi \
     && if [ "${INSTALL_DOCKER}" = "true" ]; then \
-        bash /tmp/library-scripts/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "${USERNAME}"; \
+    bash /tmp/library-scripts/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "${USERNAME}"; \
     else \
-        echo '#!/bin/bash\n"$@"' > /usr/local/share/docker-init.sh && chmod +x /usr/local/share/docker-init.sh; \
+    echo '#!/bin/bash\n"$@"' > /usr/local/share/docker-init.sh && chmod +x /usr/local/share/docker-init.sh; \
     fi \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Terraform, tflint, Go, PowerShell
+# Install Terraform, tflint, Go, PowerShell, and other useful tools
 # TODO: move this into main "RUN" layer above
 ARG TERRAFORM_VERSION=0.12.29
 ARG TFLINT_VERSION=0.18.0
 RUN bash /tmp/library-scripts/terraform-debian.sh "${TERRAFORM_VERSION}" "${TFLINT_VERSION}" \
-    && bash /tmp/library-scripts/go-debian.sh \
     && bash /tmp/library-scripts/powershell-debian.sh \
-    && bash /tmp/library-scripts/kubectl-helm-debian.sh
-    # && rm -rf /tmp/library-scripts
-
-# TODO: move this into main "RUN" layer above
-# Testing in new layer for faster builds
-RUN bash /tmp/library-scripts/terraform-pre-commit.sh
-RUN bash /tmp/library-scripts/tflint-plugins.sh
-RUN bash /tmp/library-scripts/terraform-extras.sh
-    # && rm -rf /tmp/library-scripts
+    && bash /tmp/library-scripts/kubectl-helm-debian.sh \
+    && bash /tmp/library-scripts/terraform-pre-commit.sh \
+    && bash /tmp/library-scripts/tflint-plugins.sh \
+    && bash /tmp/library-scripts/go-debian.sh \
+    && rm -rf /tmp/library-scripts
 
 ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 CMD [ "sleep", "infinity" ]

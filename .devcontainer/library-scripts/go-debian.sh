@@ -106,6 +106,8 @@ GO_TOOLS_WITH_MODULES="\
     github.com/zmb3/gogetdoc \
     github.com/fatih/gomodifytags \
     github.com/mgechev/revive \
+    github.com/tfsec/tfsec/cmd/tfsec \
+    github.com/terraform-docs/terraform-docs \
     github.com/go-delve/delve/cmd/dlv"
 if [ "${INSTALL_GO_TOOLS}" = "true" ]; then
     echo "Installing common Go tools..."
