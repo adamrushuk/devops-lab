@@ -31,9 +31,9 @@ chmod +x /etc/profile.d/00-restore-env.sh
 if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
     USERNAME=""
     POSSIBLE_USERS=("vscode" "node" "codespace" "$(awk -v val=1000 -F ":" '$3==val{print $1}' /etc/passwd)")
-    for CURRENT_USER in ${POSSIBLE_USERS[@]}; do
-        if id -u ${CURRENT_USER} > /dev/null 2>&1; then
-            USERNAME=${CURRENT_USER}
+    for CURRENT_USER in "${POSSIBLE_USERS[@]}"; do
+        if id -u "${CURRENT_USER}" > /dev/null 2>&1; then
+            USERNAME="${CURRENT_USER}"
             break
         fi
     done
@@ -127,11 +127,11 @@ if [ "${INSTALL_GO_TOOLS}" = "true" ]; then
     go build -o gocode-gomod github.com/stamblerre/gocode
 
     # golangci-lint
-    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ${TARGET_GOPATH}/bin 2>&1
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "${TARGET_GOPATH}/bin" 2>&1
 
     # Move Go tools into path and clean up
-    mv /tmp/gotools/bin/* ${TARGET_GOPATH}/bin/
-    mv gocode-gomod ${TARGET_GOPATH}/bin/
+    mv /tmp/gotools/bin/* "${TARGET_GOPATH}/bin/"
+    mv gocode-gomod "${TARGET_GOPATH}/bin/"
     rm -rf /tmp/gotools
     chown -R ${USERNAME} "${TARGET_GOPATH}"
 fi
