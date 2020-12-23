@@ -18,7 +18,7 @@ on:
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 env:
   # prefix: used for some globally unique name requirements
-  PREFIX: rushabc
+  PREFIX: arshz
 
   # debug
   CI_DEBUG: true
