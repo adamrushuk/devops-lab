@@ -47,7 +47,8 @@ env:
   KEY_VAULT_CERT_NAME: wildcard-thehypepipe-co-uk
   KEY_VAULT_NAME: kv-rush-iz6y
   KEY_VAULT_RESOURCE_GROUP_NAME: rg-keyvault-acmebot
-  LOCATION: uksouth
+  # NOTE: "eastus" is cheaper than "uksouth"
+  LOCATION: eastus
   # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
   # NEXUS_USER_PASSWORD: ${{ secrets.NEXUS_USER_PASSWORD }}
   NEXUS_USER_USERNAME: demo_user
