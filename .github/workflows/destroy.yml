@@ -100,6 +100,7 @@ jobs:
 
     # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform resource destroy tasks
     - name: Start AKS Cluster
+      continue-on-error: true
       run: ./scripts/start_aks_cluster.sh
 
     # Prereqs
