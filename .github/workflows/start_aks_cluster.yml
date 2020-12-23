@@ -13,7 +13,7 @@ on:
 # global environment variables
 env:
   # prefix: used for some globally unique name requirements
-  PREFIX: rush
+  PREFIX: arshz
 
   # debug
   CI_DEBUG: true
@@ -32,32 +32,32 @@ jobs:
     if: github.actor == github.event.repository.owner.login
 
     steps:
-    # Checkout
-    - uses: actions/checkout@v2
-      # specify different branch
-      # NOT required as I've changed the default branch to develop
-      # with:
-      #   ref: develop
+      # Checkout
+      - uses: actions/checkout@v2
+        # specify different branch
+        # NOT required as I've changed the default branch to develop
+        # with:
+        #   ref: develop
 
-    # Init tasks - inc env var concatenation
-    - name: Init tasks - inc Env var concatenation (Workaround)
-      run: |
-        chmod -R +x ./scripts/
-        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
-        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
+      # Init tasks - inc env var concatenation
+      - name: Init tasks - inc Env var concatenation (Workaround)
+        run: |
+          chmod -R +x ./scripts/
+          echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
+          echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
 
-    # Login
-    - name: Login to Azure
-      run: ./scripts/azure_login.sh
+      # Login
+      - name: Login to Azure
+        run: ./scripts/azure_login.sh
 
-    # Start
-    # Prereqs: https://docs.microsoft.com/en-us/azure/aks/start-stop-cluster
-    - name: Start AKS Cluster
-      run: ./scripts/start_aks_cluster.sh
+      # Start
+      # Prereqs: https://docs.microsoft.com/en-us/azure/aks/start-stop-cluster
+      - name: Start AKS Cluster
+        run: ./scripts/start_aks_cluster.sh
 
-    # Notify
-    - name: Notify slack
-      env:
-        SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Start AKS Cluster complete"
+      # Notify
+      - name: Notify slack
+        env:
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Start AKS Cluster complete"
