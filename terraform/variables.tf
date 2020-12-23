@@ -75,6 +75,18 @@ variable "kured_chart_version" {
 variable "kured_image_tag" {
   default = "1.4.4"
 }
+
+
+# argo cd
+# https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
+variable "argocd_chart_version" {
+  default = "2.11.0"
+}
+
+# https://hub.docker.com/r/argoproj/argocd/tags
+variable "argocd_image_tag" {
+  default = "v1.8.1"
+}
 #endregion Versions
 
 

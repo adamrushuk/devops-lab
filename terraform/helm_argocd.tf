@@ -42,7 +42,7 @@ resource "helm_release" "argocd" {
 
   set {
     name  = "server.ingress.tls[0].hosts[0]"
-    value = "argocd.${local.dns_zone_name}"
+    value = "argocd.${var.dns_zone_name}"
   }
 
   set {
