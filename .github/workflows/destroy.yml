@@ -5,7 +5,7 @@ name: destroy
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
 on:
   # trigger via webhook
-  # https://github.com/adamrushuk/aks-nexus-velero/blob/master/TriggerCustomAction.ps1#L28
+  # https://github.com/adamrushuk/devops-lab/blob/master/TriggerCustomAction.ps1#L28
   repository_dispatch:
     types: [destroy]
 

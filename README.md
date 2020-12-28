@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 # aks-nexus-velero
 
-[![Build environment](https://github.com/adamrushuk/aks-nexus-velero/workflows/build/badge.svg)](https://github.com/adamrushuk/aks-nexus-velero/actions?query=workflow%3A%22build)
+[![Build environment](https://github.com/adamrushuk/devops-lab/workflows/build/badge.svg)](https://github.com/adamrushuk/devops-lab/actions?query=workflow%3A%22build)
 
 This is the main repo I use to test Kubernetes /  DevOps applications, products, and processes. It's essentially my
 playground in Azure.

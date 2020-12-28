@@ -9,7 +9,7 @@ on:
     types: [started]
 
   # trigger via webhook
-  # https://github.com/adamrushuk/aks-nexus-velero/blob/master/TriggerCustomAction.ps1#L28
+  # https://github.com/adamrushuk/devops-lab/blob/master/TriggerCustomAction.ps1#L28
   repository_dispatch:
     types: [build]
 
@@ -257,7 +257,7 @@ jobs:
     - name: Unregister NuGet proxy repo
       run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
 
-    # Shows at the bottom of a run: https://github.com/adamrushuk/aks-nexus-velero/runs/1035347513?check_suite_focus=true
+    # Shows at the bottom of a run: https://github.com/adamrushuk/devops-lab/runs/1035347513?check_suite_focus=true
     - name: Pester report
       # TODO: remove continue-on-error once bug is fixed
       continue-on-error: true
