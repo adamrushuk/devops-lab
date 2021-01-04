@@ -35,4 +35,5 @@ EOF
 cat .tflint.hcl
 
 # run tflint
-TFLINT_LOG=debug ./tflint "$TF_WORKING_DIR" --disable-rule=$DISABLED_RULES
+# expand array for disabled rules
+TFLINT_LOG=debug ./tflint "$TF_WORKING_DIR" --disable-rule="${DISABLED_RULES[*]}"
