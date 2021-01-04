@@ -271,6 +271,7 @@ jobs:
 
     # Notify
     - name: Notify slack
+      continue-on-error: true
       env:
         SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
