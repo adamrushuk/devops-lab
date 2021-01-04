@@ -6,6 +6,9 @@
 set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
+# vars
+DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days")
+
 message="Downloading tflint and azurerm plugin"
 echo "STARTED: $message..."
 
@@ -32,4 +35,4 @@ EOF
 cat .tflint.hcl
 
 # run tflint
-TFLINT_LOG=debug ./tflint "$TF_WORKING_DIR"
+TFLINT_LOG=debug ./tflint "$TF_WORKING_DIR" --disable-rule=$DISABLED_RULES
