@@ -29,12 +29,6 @@ resource "helm_release" "argocd" {
     value = var.argocd_image_tag
   }
 
-  # TODO: test this works
-  # argocd.thehypepipe.co.uk
-  # ref:
-  # - https://www.xspdf.com/resolution/53846273.html
-  # - https://helm.sh/docs/chart_best_practices/values/
-  # - https://helm.sh/docs/intro/using_helm/#the-format-and-limitations-of---set
   set {
     name  = "server.ingress.hosts[0]"
     value = "argocd.${var.dns_zone_name}"
@@ -48,5 +42,12 @@ resource "helm_release" "argocd" {
   set {
     name  = "server.ingress.tls[0].secretName"
     value = "argocd-ingress-tls"
+  }
+
+  # Argo CD's externally facing base URL
+  # used for logout destination and when configuring SSO
+  set {
+    name  = "server.config.url"
+    value = "https://argocd.${var.dns_zone_name}"
   }
 }
