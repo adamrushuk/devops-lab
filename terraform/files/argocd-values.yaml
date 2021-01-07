@@ -11,12 +11,7 @@ server:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: "nginx"
+      nginx.org/hsts: "false"
       # (examples in docs are wrong) DO NOT use passthrough if ingress has tls settings
       # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    # hosts:
-    #   - argocd.thehypepipe.co.uk
-    tls:
-      - secretName: argocd-ingress-tls
-        # hosts:
-        #   - argocd.thehypepipe.co.uk
