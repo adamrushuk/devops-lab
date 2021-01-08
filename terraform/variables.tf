@@ -35,7 +35,7 @@ variable "velero_chart_version" {
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 variable "nexus_image_tag" {
-  default = "3.29.0"
+  default = "3.29.2"
 }
 
 # https://github.com/adamrushuk/charts/releases
