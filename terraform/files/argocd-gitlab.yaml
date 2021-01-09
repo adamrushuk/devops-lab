@@ -1,10 +1,10 @@
----
 # https://argoproj.github.io/argo-cd/user-guide/helm/
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  # ! MUST match the existing helm release name
+  # ! MUST match the existing helm release name: https://argoproj.github.io/argo-cd/user-guide/helm/#helm-release-name
   name: ar-gitlab
+  # namespace of argo cd deployment
   namespace: argocd
 spec:
   project: default
@@ -15,7 +15,7 @@ spec:
     helm:
       # target helm version
       version: v3
-      # releaseName: ar-gitlab
+      # values file path is relative from the source.path folder
       valueFiles:
       - ar-values-dev.yaml
   destination:
