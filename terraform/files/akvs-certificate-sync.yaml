@@ -34,3 +34,21 @@ spec:
       name: argocd-ingress-tls      # kubernetes secret name
       type: kubernetes.io/tls       # kubernetes secret type
       chainOrder: ensureserverfirst
+---
+
+apiVersion: spv.no/v1alpha1
+kind: AzureKeyVaultSecret
+metadata:
+  name: gitlab-certificate-sync
+  namespace: gitlab                 # cert dest namespace
+spec:
+  vault:
+    name: __KEY_VAULT_NAME__        # name of key vault
+    object:
+      name: __KEY_VAULT_CERT_NAME__ # key vault certificate name
+      type: certificate
+  output:
+    secret:
+      name: gitlab-tls              # kubernetes secret name
+      type: kubernetes.io/tls       # kubernetes secret type
+      chainOrder: ensureserverfirst
