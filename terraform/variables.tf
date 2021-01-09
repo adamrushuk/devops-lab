@@ -18,7 +18,7 @@ variable "kubernetes_version" {
 # https://github.com/kubernetes/ingress-nginx/blob/ingress-nginx-3.11.0/charts/ingress-nginx/Chart.yaml#L3
 # helm search repo ingress-nginx/ingress-nginx
 variable "nginx_chart_version" {
-  default = "3.16.1"
+  default = "3.19.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -79,6 +79,7 @@ variable "kured_image_tag" {
 
 # argo cd
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
+# helm search repo argo/argo-cd
 variable "argocd_chart_version" {
   default = "2.11.0"
 }
