@@ -84,7 +84,7 @@ resource "null_resource" "argocd_configure" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
       ARGOCD_ADMIN_PASSWORD = var.argocd_admin_password
-      ARGOCD_FQDN = var.argo_fqdn
+      ARGOCD_FQDN = var.argocd_fqdn
       HELM_CHART_REPO_DEPLOY_PRIVATE_KEY = var.helm_chart_repo_deploy_private_key
       KUBECONFIG = var.aks_config_path
       REPO_URL = "git@github.com:adamrushuk/charts-private.git"
