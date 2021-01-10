@@ -90,7 +90,7 @@ jobs:
         chmod -R +x ./scripts/
         echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
         echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
-        echo "ARGO_FQDN=argo.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
+        echo "ARGOCD_FQDN=argo.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
         echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
         echo "DOCKER_FQDN=docker.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
         echo "TERRAFORM_STORAGE_ACCOUNT=${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001" >> $GITHUB_ENV
