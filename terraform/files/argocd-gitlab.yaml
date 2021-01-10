@@ -23,6 +23,6 @@ spec:
     namespace: gitlab
   syncPolicy:
     # sync options which modifies sync behavior
-    syncOptions:
-      # namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster
-      - CreateNamespace=true
+    syncOptions: {}
+      # # namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster
+      # - CreateNamespace=true
