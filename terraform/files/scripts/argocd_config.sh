@@ -46,9 +46,8 @@ echo "Showing Argo CD cluster info..."
 # Add SSH repo connection
 # Save repo private key
 echo -e "$HELM_CHART_REPO_DEPLOY_PRIVATE_KEY" > "$REPO_SSH_PRIVATE_KEY_PATH"
-ssh-keygen -lf "$REPO_SSH_PRIVATE_KEY_PATH"
-ls -lah
 chmod 600 "$REPO_SSH_PRIVATE_KEY_PATH"
+ls -lah "$REPO_SSH_PRIVATE_KEY_PATH"
 ssh-keygen -lf "$REPO_SSH_PRIVATE_KEY_PATH"
 
 # ! TODO: Temp debugging, remove and change key once fixed
