@@ -338,7 +338,11 @@ variable "argocd_fqdn" {
 }
 
 variable "helm_chart_repo_deploy_private_key" {
-  default = "__HELM_CHART_REPO_DEPLOY_PRIVATE_KEY__"
+  # default = "__HELM_CHART_REPO_DEPLOY_PRIVATE_KEY__"
+
+  default = <<EOT
+  __HELM_CHART_REPO_DEPLOY_PRIVATE_KEY__
+  EOT
 }
 
 
