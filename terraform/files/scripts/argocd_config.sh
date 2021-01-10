@@ -25,12 +25,17 @@ echo "Getting default admin password..."
 DEFAULT_ARGO_ADMIN_PASSWORD=$(kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2)
 
 # Login
-echo "Logging in to Argo CD..."
-"$ARGOCD_PATH" login "$ARGOCD_FQDN" --grpc-web --username admin --password "$DEFAULT_ARGO_ADMIN_PASSWORD"
+echo "Logging in to Argo CD with default password..."
+if ! "$ARGOCD_PATH" login "$ARGOCD_FQDN" --grpc-web --username admin --password "$DEFAULT_ARGO_ADMIN_PASSWORD"; then
 
-# Update admin password
-echo "Updating default admin password..."
-"$ARGOCD_PATH" account update-password --grpc-web --account admin --current-password "$DEFAULT_ARGO_ADMIN_PASSWORD" --new-password "$ARGOCD_ADMIN_PASSWORD"
+    # Update admin password
+    echo "Updating default admin password..."
+    "$ARGOCD_PATH" account update-password --grpc-web --account admin --current-password "$DEFAULT_ARGO_ADMIN_PASSWORD" --new-password "$ARGOCD_ADMIN_PASSWORD"
+else
+    echo "ERROR: Logging in to Argo CD with default password..."
+    echo "Attempting login with new admin password..."
+    "$ARGOCD_PATH" login "$ARGOCD_FQDN" --grpc-web --username admin --password "$ARGOCD_ADMIN_PASSWORD"
+fi
 
 # Show info
 echo "Showing Argo CD cluster info..."
