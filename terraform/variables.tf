@@ -325,8 +325,20 @@ variable "cert_sync_yaml_path" {
 
 
 # argo cd
+variable "argocd_admin_password" {
+  default = "__ARGOCD_ADMIN_PASSWORD__"
+}
+
 variable "argocd_cert_sync_yaml_path" {
   default = "files/argocd-akvs-certificate-sync.yaml"
+}
+
+variable "argocd_fqdn" {
+  default = "__ARGOCD_FQDN__"
+}
+
+variable "helm_chart_repo_deploy_private_key" {
+  default = "__HELM_CHART_REPO_DEPLOY_PRIVATE_KEY__"
 }
 
 

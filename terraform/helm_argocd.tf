@@ -72,4 +72,33 @@ resource "helm_release" "argocd" {
     name  = "server.config.url"
     value = "https://argocd.${var.dns_zone_name}"
   }
+
+  depends_on = [
+    null_resource.argocd_cert_sync
+  ]
+}
+
+# post-install config
+resource "null_resource" "argocd_configure" {
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    environment = {
+      ARGOCD_ADMIN_PASSWORD = var.argocd_admin_password
+      ARGOCD_FQDN = var.argo_fqdn
+      HELM_CHART_REPO_DEPLOY_PRIVATE_KEY = var.helm_chart_repo_deploy_private_key
+      KUBECONFIG = var.aks_config_path
+      REPO_URL = "git@github.com:adamrushuk/charts-private.git"
+    }
+
+    command = <<EOT
+      # export KUBECONFIG=${var.aks_config_path}
+      # kubectl apply -f ${var.argocd_cert_sync_yaml_path}
+      ./files/scripts/argocd_config.sh"
+    EOT
+  }
+
+  depends_on = [
+    local_file.kubeconfig,
+    helm_release.argocd
+  ]
 }
