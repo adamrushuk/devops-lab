@@ -12,7 +12,7 @@ REPO_SSH_PRIVATE_KEY_PATH="./id_ed25519_argocd"
 
 # Install
 VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-curl -SL -o "$ARGOCD_PATH" "https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64"
+curl -sSL -o "$ARGOCD_PATH" "https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64"
 chmod +x "$ARGOCD_PATH"
 
 # Show version
@@ -27,12 +27,11 @@ DEFAULT_ARGO_ADMIN_PASSWORD=$(kubectl get pods -n argocd -l app.kubernetes.io/na
 # Login
 echo "Logging in to Argo CD with default password..."
 if "$ARGOCD_PATH" login "$ARGOCD_FQDN" --grpc-web --username admin --password "$DEFAULT_ARGO_ADMIN_PASSWORD"; then
-
-    # Update admin password
+    # Update default admin password
     echo "Updating default admin password..."
     "$ARGOCD_PATH" account update-password --grpc-web --account admin --current-password "$DEFAULT_ARGO_ADMIN_PASSWORD" --new-password "$ARGOCD_ADMIN_PASSWORD"
 else
-    echo "ERROR: Logging in to Argo CD with default password..."
+    echo "WARNING: Failed to log into Argo CD using default password..."
     echo "Attempting login with new admin password..."
     "$ARGOCD_PATH" login "$ARGOCD_FQDN" --grpc-web --username admin --password "$ARGOCD_ADMIN_PASSWORD"
 fi
@@ -47,15 +46,8 @@ echo "Showing Argo CD cluster info..."
 # Save repo private key
 echo -e "$HELM_CHART_REPO_DEPLOY_PRIVATE_KEY" > "$REPO_SSH_PRIVATE_KEY_PATH"
 chmod 600 "$REPO_SSH_PRIVATE_KEY_PATH"
-ls -lah "$REPO_SSH_PRIVATE_KEY_PATH"
+echo "Showing public key fingerprint..."
 ssh-keygen -lf "$REPO_SSH_PRIVATE_KEY_PATH"
-
-# ! TODO: Temp debugging, remove and change key once fixed
-echo "TEMP DEBUGGING...REMOVE AFTERWARDS!!!!..."
-echo "echo HELM_CHART_REPO_DEPLOY_PRIVATE_KEY..."
-echo "$HELM_CHART_REPO_DEPLOY_PRIVATE_KEY"
-echo "cat REPO_SSH_PRIVATE_KEY_PATH..."
-cat "$REPO_SSH_PRIVATE_KEY_PATH"
 
 # Add a Git repository via SSH using a private key for authentication
 # [OPTIONAL] use "--insecure-ignore-host-key" during testing with self-signed certs
