@@ -2,8 +2,8 @@
 apiVersion: spv.no/v1alpha1
 kind: AzureKeyVaultSecret
 metadata:
-  name: certificate-sync
-  namespace: nexus                  # cert dest namespace
+  name: argocd-certificate-sync
+  namespace: argocd                 # cert dest namespace
 spec:
   vault:
     name: __KEY_VAULT_NAME__        # name of key vault
@@ -12,6 +12,6 @@ spec:
       type: certificate
   output:
     secret:
-      name: __K8S_TLS_SECRET_NAME__ # kubernetes secret name
+      name: argocd-ingress-tls      # kubernetes secret name
       type: kubernetes.io/tls       # kubernetes secret type
       chainOrder: ensureserverfirst

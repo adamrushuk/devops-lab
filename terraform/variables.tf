@@ -321,3 +321,17 @@ variable "akv2k8s_exception_yaml_path" {
 variable "cert_sync_yaml_path" {
   default = "files/akvs-certificate-sync.yaml"
 }
+
+
+
+# argo cd
+variable "argocd_cert_sync_yaml_path" {
+  default = "files/argocd-akvs-certificate-sync.yaml"
+}
+
+
+
+# gitlab
+variable "gitlab_cert_sync_yaml_path" {
+  default = "files/gitlab-akvs-certificate-sync.yaml"
+}
