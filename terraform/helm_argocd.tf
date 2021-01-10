@@ -91,8 +91,6 @@ resource "null_resource" "argocd_configure" {
     }
 
     command = <<-EOT
-      # export KUBECONFIG=${var.aks_config_path}
-      # kubectl apply -f ${var.argocd_cert_sync_yaml_path}
       chmod -R +x ./files/scripts
       ls -lah ./files/scripts
       ./files/scripts/argocd_config.sh
