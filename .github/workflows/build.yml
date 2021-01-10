@@ -301,6 +301,7 @@ jobs:
       run: |
         echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
         echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
+        echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
 
 
     # Login
