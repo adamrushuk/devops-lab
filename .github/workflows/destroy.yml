@@ -50,7 +50,7 @@ env:
   # terraform
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
-  TF_VERSION: "0.12.29" # "latest" is supported
+  TF_VERSION: "0.12.30" # "latest" is supported
   TF_WORKING_DIR: terraform
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
