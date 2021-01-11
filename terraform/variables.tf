@@ -349,3 +349,7 @@ EOT
 variable "gitlab_cert_sync_yaml_path" {
   default = "files/gitlab-akvs-certificate-sync.yaml"
 }
+
+variable "gitlab_argocd_app_path" {
+  default = "files/argocd-gitlab.yaml"
+}

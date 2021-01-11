@@ -23,7 +23,7 @@ resource "null_resource" "argocd_cert_sync" {
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = <<EOT
+    command     = <<-EOT
       export KUBECONFIG=${var.aks_config_path}
       kubectl apply -f ${var.argocd_cert_sync_yaml_path}
     EOT
@@ -100,5 +100,23 @@ resource "null_resource" "argocd_configure" {
   depends_on = [
     local_file.kubeconfig,
     helm_release.argocd
+  ]
+}
+
+# create argo app definitions
+resource "null_resource" "argocd_apps" {
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    environment = {
+      KUBECONFIG = var.aks_config_path
+    }
+    command     = <<-EOT
+      kubectl apply -f ${var.gitlab_argocd_app_path}
+    EOT
+  }
+
+  depends_on = [
+    local_file.kubeconfig,
+    null_resource.argocd_configure
   ]
 }
