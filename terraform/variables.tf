@@ -16,9 +16,11 @@ variable "kubernetes_version" {
 # https://kubernetes.github.io/ingress-nginx/deploy/#using-helm
 # https://github.com/kubernetes/ingress-nginx/releases
 # https://github.com/kubernetes/ingress-nginx/blob/ingress-nginx-3.11.0/charts/ingress-nginx/Chart.yaml#L3
+#
+# helm repo update
 # helm search repo ingress-nginx/ingress-nginx
 variable "nginx_chart_version" {
-  default = "3.19.0"
+  default = "3.20.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -30,7 +32,7 @@ variable "cert_manager_chart_version" {
 # https://github.com/vmware-tanzu/helm-charts/releases
 # helm search repo vmware-tanzu/velero
 variable "velero_chart_version" {
-  default = "2.14.4"
+  default = "2.14.5"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
@@ -62,13 +64,13 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.5.0"
+  default = "4.5.1"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.2.1"
+  default = "2.3.1"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
@@ -81,12 +83,12 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "2.11.0"
+  default = "2.11.1"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 variable "argocd_image_tag" {
-  default = "v1.8.1"
+  default = "v1.8.2"
 }
 #endregion Versions
 
