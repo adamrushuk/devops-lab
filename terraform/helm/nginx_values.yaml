@@ -13,20 +13,6 @@ controller:
     redirect-to-https: "false"
     ssl-redirect: "false"
 
-  ## Annotations to be added to the controller config configuration configmap
-  ##
-  configAnnotations: {}
-
-  # Will add custom headers before sending traffic to backends according to https://github.com/kubernetes/ingress-nginx/tree/master/docs/examples/customization/custom-headers
-  proxySetHeaders: {}
-
-  # Will add custom headers before sending response traffic to the client according to: https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#add-headers
-  addHeaders: {}
-
-  # Bare-metal considerations via the host network https://kubernetes.github.io/ingress-nginx/deploy/baremetal/#via-the-host-network
-  # Ingress status was blank because there is no Service exposing the NGINX Ingress controller in a configuration using the host network, the default --publish-service flag used in standard cloud setups does not apply
-  reportNodeInternalIp: false
-
   ## Allows customization of the source of the IP address or FQDN to report
   ## in the ingress status field. By default, it reads the information provided
   ## by the service. If disable, the status field reports the IP address of the
@@ -40,7 +26,6 @@ controller:
     ## Must be <namespace>/<service_name>
     ##
     pathOverride: ""
-
 
   ## Additional command line arguments to pass to nginx-ingress-controller
   ## E.g. to specify the default SSL certificate you can use

@@ -19,6 +19,7 @@ variable "kubernetes_version" {
 #
 # helm repo update
 # helm search repo ingress-nginx/ingress-nginx
+# * also update terraform/helm/nginx_values.yaml
 variable "nginx_chart_version" {
   default = "3.20.0"
 }
@@ -31,6 +32,7 @@ variable "cert_manager_chart_version" {
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 # helm search repo vmware-tanzu/velero
+# * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
   default = "2.14.5"
 }
