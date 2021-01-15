@@ -53,5 +53,7 @@ resource "helm_release" "nexus" {
     value = var.nexus_tls_secret_name
   }
 
-  depends_on = [helm_release.nginx]
+  depends_on = [
+    null_resource.nginx_ready
+  ]
 }

@@ -74,7 +74,8 @@ resource "helm_release" "argocd" {
   }
 
   depends_on = [
-    null_resource.argocd_cert_sync
+    null_resource.argocd_cert_sync,
+    null_resource.nginx_ready
   ]
 }
 
