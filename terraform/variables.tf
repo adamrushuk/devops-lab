@@ -21,7 +21,7 @@ variable "kubernetes_version" {
 # helm search repo ingress-nginx/ingress-nginx
 # * also update terraform/helm/nginx_values.yaml
 variable "nginx_chart_version" {
-  default = "3.20.0"
+  default = "3.19.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
