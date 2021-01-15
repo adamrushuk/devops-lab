@@ -22,29 +22,3 @@ resource "helm_release" "nginx" {
   timeout    = 600
   values     = ["${file("helm/nginx_values.yaml")}"]
 }
-
-# wait /fix for documented warning
-# https://kubernetes.github.io/ingress-nginx/deploy/
-# The first time the ingress controller starts, two Jobs create the SSL Certificate used by the admission webhook.
-# For this reason, there is an initial delay of up to two minutes until it is possible to create and validate Ingress
-# definitions.
-resource "null_resource" "nginx_ready" {
-  provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
-    environment = {
-      KUBECONFIG = var.aks_config_path
-    }
-
-    command     = <<EOT
-      kubectl wait --namespace ingress \
-        --for=condition=ready pod \
-        --selector=app.kubernetes.io/component=controller \
-        --timeout=120s
-    EOT
-  }
-
-  depends_on = [
-    local_file.kubeconfig,
-    helm_release.nginx
-  ]
-}
