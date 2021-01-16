@@ -165,7 +165,7 @@ variable "sla_sku" {
 
 variable "aks_container_insights_enabled" {
   description = "Should Container Insights monitoring be enabled"
-  default     = true
+  default     = false
 }
 
 variable "aks_config_path" {
