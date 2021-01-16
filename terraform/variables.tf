@@ -21,8 +21,7 @@ variable "kubernetes_version" {
 # helm search repo ingress-nginx/ingress-nginx
 # * also update terraform/helm/nginx_values.yaml
 variable "nginx_chart_version" {
-  # ! > "3.19.0" breaks the build
-  default = "3.19.0"
+  default = "3.20.1"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -60,6 +59,7 @@ variable "akv2k8s_chart_version" {
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
+# TODO: change to 3.0.0
 variable "aad_pod_identity_chart_version" {
   default = "2.1.0"
 }

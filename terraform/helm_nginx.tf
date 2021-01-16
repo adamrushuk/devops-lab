@@ -22,4 +22,9 @@ resource "helm_release" "nginx" {
   timeout    = 600
   atomic     = true
   values     = ["${file("helm/nginx_values.yaml")}"]
+
+  set {
+    name  = "controller.admissionWebhooks.enabled"
+    value = false
+  }
 }
