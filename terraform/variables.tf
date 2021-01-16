@@ -205,6 +205,7 @@ variable "agent_pool_profile_vm_size" {
   # 2 x CPU, 7GB RAM, 8 x Data Disks
   # https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series?toc=/azure/virtual-machines/linux/toc.json&bc=/azure/virtual-machines/linux/breadcrumb/toc.json#dsv2-series
 
+  # ! Standard_B4ms can cause performance issues
   # Standard_B4ms   - £0.140863 per hour
   # 4 x CPU, 16GB RAM, 8 x Data Disks
 
@@ -213,7 +214,7 @@ variable "agent_pool_profile_vm_size" {
 
   # Standard_F8s_v2 - £0.301104 per hour
   # 8 x CPU, 16GB RAM, 16 x Data Disks
-  default = "Standard_B4ms"
+  default = "Standard_D4s_v3"
 }
 
 variable "agent_pool_profile_os_type" {
