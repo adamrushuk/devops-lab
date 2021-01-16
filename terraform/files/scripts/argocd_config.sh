@@ -9,15 +9,16 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 # Vars
 ARGOCD_PATH="./argocd"
 REPO_SSH_PRIVATE_KEY_PATH="./id_ed25519_argocd"
+export ARGOCD_OPTS="--grpc-web"
 
 # Install
-VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+VERSION="v1.8.2"
 curl -sSL -o "$ARGOCD_PATH" "https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64"
 chmod +x "$ARGOCD_PATH"
 
 # Show version
 echo "Showing Argo CD version info..."
-"$ARGOCD_PATH" version --grpc-web --server "$ARGOCD_FQDN"
+"$ARGOCD_PATH" version --server "$ARGOCD_FQDN"
 
 # Get default admin password
 # default password is server pod name, eg: "argocd-server-89c6cd7d4-xxxxx"
@@ -26,14 +27,14 @@ DEFAULT_ARGO_ADMIN_PASSWORD=$(kubectl get pods -n argocd -l app.kubernetes.io/na
 
 # Login
 echo "Logging in to Argo CD with default password..."
-if "$ARGOCD_PATH" login "$ARGOCD_FQDN" --grpc-web --username admin --password "$DEFAULT_ARGO_ADMIN_PASSWORD"; then
+if "$ARGOCD_PATH" login "$ARGOCD_FQDN" --username admin --password "$DEFAULT_ARGO_ADMIN_PASSWORD"; then
     # Update default admin password
     echo "Updating default admin password..."
-    "$ARGOCD_PATH" account update-password --grpc-web --account admin --current-password "$DEFAULT_ARGO_ADMIN_PASSWORD" --new-password "$ARGOCD_ADMIN_PASSWORD"
+    "$ARGOCD_PATH" account update-password --account admin --current-password "$DEFAULT_ARGO_ADMIN_PASSWORD" --new-password "$ARGOCD_ADMIN_PASSWORD"
 else
     echo "WARNING: Failed to log into Argo CD using default password..."
     echo "Attempting login with new admin password..."
-    "$ARGOCD_PATH" login "$ARGOCD_FQDN" --grpc-web --username admin --password "$ARGOCD_ADMIN_PASSWORD"
+    "$ARGOCD_PATH" login "$ARGOCD_FQDN" --username admin --password "$ARGOCD_ADMIN_PASSWORD"
 fi
 
 # Show info
