@@ -48,6 +48,7 @@ variable "nexus_chart_version" {
   default = "0.2.8"
 }
 
+# https://github.com/SparebankenVest/azure-key-vault-to-kubernetes
 # https://github.com/SparebankenVest/public-helm-charts/releases
 # https://github.com/SparebankenVest/helm-charts/tree/gh-pages/akv2k8s
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
@@ -66,7 +67,7 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.5.1"
+  default = "4.5.3"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
@@ -85,7 +86,7 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "2.11.0"
+  default = "2.11.2"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
