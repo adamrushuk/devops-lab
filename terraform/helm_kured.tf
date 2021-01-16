@@ -22,6 +22,7 @@ resource "helm_release" "kured" {
   repository = "https://weaveworks.github.io/kured"
   version    = var.kured_chart_version
   timeout    = 600
+  atomic     = true
 
   values = ["${file("helm/kured_values.yaml")}"]
 

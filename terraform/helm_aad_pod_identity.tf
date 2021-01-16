@@ -44,21 +44,23 @@ resource "helm_release" "aad_pod_identity" {
   repository = "https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts"
   version    = var.aad_pod_identity_chart_version
   timeout    = 600
+  atomic     = true
 
   values = [
     file("helm/aad_pod_identity_values.yaml"),
     data.template_file.azureIdentities.rendered
   ]
 
+  # should only be required for helm v2
   set {
     name  = "installCRDs"
-    value = "true"
+    value = "false"
   }
 
   # allow Kubenet: https://azure.github.io/aad-pod-identity/docs/configure/aad_pod_identity_on_kubenet/
   set {
     name  = "nmi.allowNetworkPluginKubenet"
-    value = "true"
+    value = "false"
   }
 
   # https://github.com/Azure/aad-pod-identity/wiki/Debugging#increasing-the-verbosity-of-the-logs

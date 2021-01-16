@@ -82,6 +82,7 @@ resource "helm_release" "external_dns" {
   repository = "https://charts.bitnami.com/bitnami"
   version    = var.external_dns_chart_version
   timeout    = 600
+  atomic     = true
   # values     = [file("helm/NOT_USED.yaml")]
 
   set {

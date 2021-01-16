@@ -44,6 +44,7 @@ resource "helm_release" "argocd" {
   repository = "https://argoproj.github.io/argo-helm"
   version    = var.argocd_chart_version
   timeout    = 600
+  atomic     = true
   values     = ["${file("${path.module}/files/argocd-values.yaml")}"]
 
   set {
@@ -83,11 +84,11 @@ resource "null_resource" "argocd_configure" {
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
-      ARGOCD_ADMIN_PASSWORD = var.argocd_admin_password
-      ARGOCD_FQDN = var.argocd_fqdn
+      ARGOCD_ADMIN_PASSWORD              = var.argocd_admin_password
+      ARGOCD_FQDN                        = var.argocd_fqdn
       HELM_CHART_REPO_DEPLOY_PRIVATE_KEY = var.helm_chart_repo_deploy_private_key
-      KUBECONFIG = var.aks_config_path
-      REPO_URL = "git@github.com:adamrushuk/charts-private.git"
+      KUBECONFIG                         = var.aks_config_path
+      REPO_URL                           = "git@github.com:adamrushuk/charts-private.git"
     }
 
     command = <<-EOT
@@ -110,7 +111,7 @@ resource "null_resource" "argocd_apps" {
     environment = {
       KUBECONFIG = var.aks_config_path
     }
-    command     = <<-EOT
+    command = <<-EOT
       kubectl apply -f ${var.gitlab_argocd_app_path}
     EOT
   }

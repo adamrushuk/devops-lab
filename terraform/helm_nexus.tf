@@ -20,6 +20,7 @@ resource "helm_release" "nexus" {
   repository = "https://adamrushuk.github.io/charts/"
   version    = var.nexus_chart_version
   timeout    = 600
+  atomic     = true
 
   values = ["${file("helm/nexus_values.yaml")}"]
 

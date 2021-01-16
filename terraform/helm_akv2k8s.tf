@@ -101,6 +101,7 @@ resource "helm_release" "akv2k8s" {
   repository = "http://charts.spvapi.no"
   version    = var.akv2k8s_chart_version
   timeout    = 600
+  atomic     = true
 
   set {
     name  = "controller.logLevel"
