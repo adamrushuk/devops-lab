@@ -11,13 +11,13 @@ terraform {
   # versioning syntax: https://www.terraform.io/docs/configuration/modules.html#module-versions
   required_providers {
     # https://github.com/hashicorp/terraform-provider-helm/releases
-    helm = "1.3.2"
+    helm = "2.0.1"
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
     kubernetes = "1.13.3"
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
-    azuread = "1.1.1"
+    azuread = "1.2.2"
 
     random = "~> 2.2" # ~> 2.2 = 2.X.Y
     tls    = "~> 2.1"
@@ -31,7 +31,7 @@ terraform {
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
   # ! WARNING: "2.39.0" was a bit flakey, so stay on "2.38.0" for the time being
-  version = "2.38.0"
+  version = "2.43.0"
   features {}
 }
 
