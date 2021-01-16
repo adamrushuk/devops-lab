@@ -98,26 +98,6 @@ jobs:
         echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
         echo "VELERO_STORAGE_RG=${{ env.PREFIX }}-rg-velero-dev-001" >> $GITHUB_ENV
 
-    # # Show event info
-    # - name: Show triggered event data
-    #   run: pwsh -command "./scripts/Get-EventData.ps1"
-    #   env:
-    #     GITHUB_CONTEXT: ${{ toJson(github) }}
-
-    # # Linting multiple languages
-    # - name: Lint Code Base
-    #   uses: github/super-linter@v3
-    #   env:
-    #     DEFAULT_BRANCH: develop
-    #     # VALIDATE_ALL_CODEBASE: false
-    #     VALIDATE_ANSIBLE: true
-    #     VALIDATE_BASH: true
-    #     VALIDATE_POWERSHELL: true
-    #     VALIDATE_SHELL_SHFMT: true
-    #     VALIDATE_TERRAFORM: true
-    #     VALIDATE_TERRAFORM_TERRASCAN: true
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
     # Login
     - name: Login to Azure
@@ -297,7 +277,6 @@ jobs:
     # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
     - name: Init tasks - inc Env var concatenation (Workaround)
       # * NOTE: different syntax required for Windows agents
-      # ! Docs say to use "$env:GITHUB_PATH", but only "$env:GITHUB_ENV" worked for me
       run: |
         echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
         echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
