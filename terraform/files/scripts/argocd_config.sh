@@ -17,7 +17,7 @@ curl -sSL -o "$ARGOCD_PATH" "https://github.com/argoproj/argo-cd/releases/downlo
 chmod +x "$ARGOCD_PATH"
 
 # Show version
-echo "Showing Argo CD version info..."
+echo "Showing Argo CD version info for [$ARGOCD_FQDN]..."
 "$ARGOCD_PATH" version --server "$ARGOCD_FQDN"
 
 # Get default admin password
