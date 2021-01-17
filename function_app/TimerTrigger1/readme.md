@@ -25,7 +25,7 @@ Ensure you have a `local.settings.json` file with the following settings (replac
 
 Full instructions here: https://docs.microsoft.com/en-us/azure/azure-functions/functions-develop-vs-code?tabs=csharp#run-functions-locally
 
-Ensure the [Azure Functions Core Tools are installed](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Ccsharp%2Cbash#install-the-azure-functions-core-tools), 
+Ensure the [Azure Functions Core Tools are installed](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Ccsharp%2Cbash#install-the-azure-functions-core-tools),
 
 ```powershell
 # install prereqs

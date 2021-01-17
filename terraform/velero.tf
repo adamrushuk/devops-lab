@@ -88,13 +88,13 @@ EOT
 
 resource "helm_release" "velero" {
   count      = var.velero_enabled ? 1 : 0
-  atomic     = true
   chart      = "velero"
   name       = "velero"
   namespace  = kubernetes_namespace.velero[0].metadata[0].name
   repository = "https://vmware-tanzu.github.io/helm-charts"
   version    = var.velero_chart_version
   timeout    = 600
+  atomic     = true
 
   values = ["${file("helm/velero_values.yaml")}"]
 

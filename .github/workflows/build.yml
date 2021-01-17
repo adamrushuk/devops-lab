@@ -1,5 +1,5 @@
 # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
-name: Build environment
+name: build
 
 # name of GitHub event that triggers workflow
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
@@ -9,7 +9,7 @@ on:
     types: [started]
 
   # trigger via webhook
-  # https://github.com/adamrushuk/aks-nexus-velero/blob/master/TriggerCustomAction.ps1#L28
+  # https://github.com/adamrushuk/devops-lab/blob/master/TriggerCustomAction.ps1#L28
   repository_dispatch:
     types: [build]
 
@@ -22,7 +22,7 @@ on:
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 env:
   # prefix: used for some globally unique name requirements
-  PREFIX: rush
+  PREFIX: arshz
 
   # debug
   CI_DEBUG: false
@@ -37,21 +37,18 @@ env:
   # prod or staging.
   # "" disables cert-manager annotations (use if you already have an existing TLS secret)
   CERT_API_ENVIRONMENT: ""
-  DEMO_USER_USERNAME: demo_user
-  # DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
-  DNS_DOMAIN_NAME: nexus.thehypepipe.co.uk
   DNS_RG_NAME: rg-dns
-  DOCKER_FQDN: docker.thehypepipe.co.uk
   EMAIL_ADDRESS: certadmin@domain.com
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   K8S_TLS_SECRET_NAME: tls-secret
-  KEY_VAULT_NAME: kv-rush-iz6y
   KEY_VAULT_CERT_NAME: wildcard-thehypepipe-co-uk
+  KEY_VAULT_NAME: kv-rush-iz6y
   KEY_VAULT_RESOURCE_GROUP_NAME: rg-keyvault-acmebot
-  LOCATION: uksouth
+  # NOTE: "eastus" is cheaper than "uksouth"
+  LOCATION: eastus
+  NEXUS_USER_USERNAME: demo_user
   ROOT_DOMAIN_NAME: thehypepipe.co.uk
-  # NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
   # STORAGE_KEY: 'env var set by Get-StorageKey.ps1'
   VELERO_ENABLED: true
   WEAVE_SCOPE_ENABLED: false
@@ -60,7 +57,7 @@ env:
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
   TF_PLAN: "tfplan"
-  TF_VERSION: "0.12.29" # "latest" is supported
+  TF_VERSION: "0.12.30" # "latest" is supported
   TF_WORKING_DIR: ./terraform
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
@@ -70,7 +67,7 @@ jobs:
   build-and-deploy:
 
     # always pin versions
-    # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
+    # view installed software: https://docs.github.com/en/free-pro-team@latest/actions/reference/specifications-for-github-hosted-runners#supported-software
     runs-on: ubuntu-18.04
 
     # only run if owner triggered action
@@ -91,32 +88,15 @@ jobs:
     - name: Init tasks - inc Env var concatenation (Workaround)
       run: |
         chmod -R +x ./scripts/
-        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
         echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
+        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
+        echo "ARGOCD_FQDN=argocd.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
+        echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
+        echo "DOCKER_FQDN=docker.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
         echo "TERRAFORM_STORAGE_ACCOUNT=${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001" >> $GITHUB_ENV
         echo "TERRAFORM_STORAGE_RG=${{ env.PREFIX }}-rg-tfstate-dev-001" >> $GITHUB_ENV
-        echo "VELERO_STORAGE_RG=${{ env.PREFIX }}-rg-velero-dev-001" >> $GITHUB_ENV
         echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
-
-    # # Show event info
-    # - name: Show triggered event data
-    #   run: pwsh -command "./scripts/Get-EventData.ps1"
-    #   env:
-    #     GITHUB_CONTEXT: ${{ toJson(github) }}
-
-    # # Linting multiple languages
-    # - name: Lint Code Base
-    #   uses: github/super-linter@v3
-    #   env:
-    #     DEFAULT_BRANCH: develop
-    #     # VALIDATE_ALL_CODEBASE: false
-    #     VALIDATE_ANSIBLE: true
-    #     VALIDATE_BASH: true
-    #     VALIDATE_POWERSHELL: true
-    #     VALIDATE_SHELL_SHFMT: true
-    #     VALIDATE_TERRAFORM: true
-    #     VALIDATE_TERRAFORM_TERRASCAN: true
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        echo "VELERO_STORAGE_RG=${{ env.PREFIX }}-rg-velero-dev-001" >> $GITHUB_ENV
 
 
     # Login
@@ -140,6 +120,8 @@ jobs:
     - name: Replace tokens in Terraform config files
       run: pwsh -command "./scripts/Replace-Tokens.ps1"
       env:
+        ARGOCD_ADMIN_PASSWORD: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
+        HELM_CHART_REPO_DEPLOY_PRIVATE_KEY: ${{ secrets.HELM_CHART_REPO_DEPLOY_PRIVATE_KEY }}
         IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
 
     - name: Create zip file of Function App
@@ -218,7 +200,7 @@ jobs:
       run: ./scripts/ansible.sh
       env:
         NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
-        DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
+        NEXUS_USER_PASSWORD: ${{ secrets.NEXUS_USER_PASSWORD }}
 
 
     # Docker
@@ -226,8 +208,8 @@ jobs:
       uses: Azure/docker-login@v1
       with:
         login-server: ${{ env.DOCKER_FQDN }}
-        username: ${{ env.DEMO_USER_USERNAME }}
-        password: ${{ secrets.DEMO_USER_PASSWORD }}
+        username: ${{ env.NEXUS_USER_USERNAME }}
+        password: ${{ secrets.NEXUS_USER_PASSWORD }}
 
     - name: Push images to Docker repo
       run: ./scripts/push_docker_images.sh
@@ -256,7 +238,7 @@ jobs:
     - name: Unregister NuGet proxy repo
       run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
 
-    # Shows at the bottom of a run: https://github.com/adamrushuk/aks-nexus-velero/runs/1035347513?check_suite_focus=true
+    # Shows at the bottom of a run: https://github.com/adamrushuk/devops-lab/runs/1035347513?check_suite_focus=true
     - name: Pester report
       # TODO: remove continue-on-error once bug is fixed
       continue-on-error: true
@@ -270,6 +252,7 @@ jobs:
 
     # Notify
     - name: Notify slack
+      continue-on-error: true
       env:
         SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
@@ -291,10 +274,14 @@ jobs:
     - uses: actions/checkout@v2
 
     # Init tasks - inc Env var concatenation
+    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
     - name: Init tasks - inc Env var concatenation (Workaround)
+      # * NOTE: different syntax required for Windows agents
       run: |
-        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
-        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
+        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
+        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
+        echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
+
 
     # Login
     - name: Login to Azure
@@ -307,7 +294,10 @@ jobs:
 
     # Velero CLI
     - name: Test Velero CLI
-      if: ${{ env.VELERO_ENABLED == true }}
+      #  NOTE: Some functions cast values to a string to perform comparisons
+      # https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#functions
+      # ! WARNING: only single quotes work for boolean comparison
+      if: env.VELERO_ENABLED == 'true'
       run: |
         az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing --admin
 

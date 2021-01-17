@@ -1,5 +1,5 @@
 azureIdentities:
-  - name: "velero"
+  "velero":
     # if not defined, then the azure identity will be deployed in the same namespace as the chart
     namespace: ""
     # type 0: MSI, type 1: Service Principal

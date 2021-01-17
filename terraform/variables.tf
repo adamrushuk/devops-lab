@@ -16,26 +16,30 @@ variable "kubernetes_version" {
 # https://kubernetes.github.io/ingress-nginx/deploy/#using-helm
 # https://github.com/kubernetes/ingress-nginx/releases
 # https://github.com/kubernetes/ingress-nginx/blob/ingress-nginx-3.11.0/charts/ingress-nginx/Chart.yaml#L3
+#
+# helm repo update
 # helm search repo ingress-nginx/ingress-nginx
+# * also update terraform/helm/nginx_values.yaml
 variable "nginx_chart_version" {
-  default = "3.11.0"
+  default = "3.20.1"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.0.4"
+  default = "v1.1.0"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 # helm search repo vmware-tanzu/velero
+# * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.13.7"
+  default = "2.14.5"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 variable "nexus_image_tag" {
-  default = "3.28.1"
+  default = "3.29.2"
 }
 
 # https://github.com/adamrushuk/charts/releases
@@ -44,6 +48,7 @@ variable "nexus_chart_version" {
   default = "0.2.8"
 }
 
+# https://github.com/SparebankenVest/azure-key-vault-to-kubernetes
 # https://github.com/SparebankenVest/public-helm-charts/releases
 # https://github.com/SparebankenVest/helm-charts/tree/gh-pages/akv2k8s
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
@@ -55,14 +60,38 @@ variable "akv2k8s_chart_version" {
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "2.0.3"
+  default = "3.0.0"
 }
 
 # https://bitnami.com/stack/external-dns/helm
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.0.0"
+  default = "4.5.3"
+}
+
+# https://github.com/weaveworks/kured/tree/master/charts/kured
+# helm search repo kured/kured
+variable "kured_chart_version" {
+  default = "2.3.1"
+}
+
+# https://github.com/weaveworks/kured#kubernetes--os-compatibility
+variable "kured_image_tag" {
+  default = "1.4.4"
+}
+
+
+# argo cd
+# https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
+# helm search repo argo/argo-cd
+variable "argocd_chart_version" {
+  default = "2.11.0"
+}
+
+# https://hub.docker.com/r/argoproj/argocd/tags
+variable "argocd_image_tag" {
+  default = "v1.8.2"
 }
 #endregion Versions
 
@@ -135,7 +164,7 @@ variable "sla_sku" {
 
 variable "aks_container_insights_enabled" {
   description = "Should Container Insights monitoring be enabled"
-  default     = true
+  default     = false
 }
 
 variable "aks_config_path" {
@@ -166,8 +195,25 @@ variable "agent_pool_profile_name" {
 }
 
 variable "agent_pool_profile_vm_size" {
+  # https://azureprice.net/?region=ukwest&currency=GBP
+  # Standard_D2s_v3 - £0.086455 per hour
+  # 2 x CPU, 8GB RAM, 4 x Data Disks
   # https://docs.microsoft.com/en-us/azure/virtual-machines/dv3-dsv3-series#dsv3-series
-  default = "Standard_D2s_v3"
+
+  # Standard_DS2_v2 - £0.130429 per hour
+  # 2 x CPU, 7GB RAM, 8 x Data Disks
+  # https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series?toc=/azure/virtual-machines/linux/toc.json&bc=/azure/virtual-machines/linux/breadcrumb/toc.json#dsv2-series
+
+  # ! Standard_B4ms can cause performance issues
+  # Standard_B4ms   - £0.140863 per hour
+  # 4 x CPU, 16GB RAM, 8 x Data Disks
+
+  # Standard_D4s_v3 - £0.172911 per hour
+  # 4 x CPU, 16GB RAM, 8 x Data Disks
+
+  # Standard_F8s_v2 - £0.301104 per hour
+  # 8 x CPU, 16GB RAM, 16 x Data Disks
+  default = "Standard_D4s_v3"
 }
 
 variable "agent_pool_profile_os_type" {
@@ -280,4 +326,36 @@ variable "akv2k8s_exception_yaml_path" {
 
 variable "cert_sync_yaml_path" {
   default = "files/akvs-certificate-sync.yaml"
+}
+
+
+
+# argo cd
+variable "argocd_admin_password" {
+  default = "__ARGOCD_ADMIN_PASSWORD__"
+}
+
+variable "argocd_cert_sync_yaml_path" {
+  default = "files/argocd-akvs-certificate-sync.yaml"
+}
+
+variable "argocd_fqdn" {
+  default = "__ARGOCD_FQDN__"
+}
+
+variable "helm_chart_repo_deploy_private_key" {
+  default = <<-EOT
+__HELM_CHART_REPO_DEPLOY_PRIVATE_KEY__
+EOT
+}
+
+
+
+# gitlab
+variable "gitlab_cert_sync_yaml_path" {
+  default = "files/gitlab-akvs-certificate-sync.yaml"
+}
+
+variable "gitlab_argocd_app_path" {
+  default = "files/argocd-gitlab.yaml"
 }

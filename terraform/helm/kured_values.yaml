@@ -1,0 +1,31 @@
+configuration:
+  # alertFilterRegexp: ""         # alert names to ignore when checking for active alerts
+  # blockingPodSelector: []       # label selector identifying pods whose presence should prevent reboots
+  endTime: "17:00"              # only reboot before this time of day (default "23:59")
+  # lockAnnotation: ""            # annotation in which to record locking node (default "weave.works/kured-node-lock")
+  # lockTtl: 0                    # force clean annotation after this ammount of time (default 0, disabled)
+  # messageTemplateDrain: ""      # slack message template when notifying about a node being drained (default "Draining node %s")
+  # messageTemplateReboot: ""     # slack message template when notifying about a node being rebooted (default "Rebooted node %s")
+  # period: ""                    # reboot check period (default 1h0m0s)
+  # prometheusUrl: ""             # Prometheus instance to probe for active alerts
+  rebootDays: [mo,tu,we,th,fr]  # only reboot on these days (default [su,mo,tu,we,th,fr,sa])
+  # rebootSentinel: ""            # path to file whose existence signals need to reboot (default "/var/run/reboot-required")
+  # slackChannel: ""              # slack channel for reboot notfications
+  # slackHookUrl: ""              # slack hook URL for reboot notfications
+  # slackUsername: ""             # slack username for reboot notfications (default "kured")
+  startTime: "09:00"                 # only reboot after this time of day (default "0:00")
+  timeZone: "Europe/London"                  # time-zone to use (valid zones from "time" golang package)
+
+nodeSelector:
+  kubernetes.io/os: linux
+
+extraArgs: {}
+
+extraEnvVars:
+#  - name: slackHookUrl
+#    valueFrom:
+#      secretKeyRef:
+#        name: secret_name
+#        key: secret_key
+#  - name: regularEnvVariable
+#    value: 123

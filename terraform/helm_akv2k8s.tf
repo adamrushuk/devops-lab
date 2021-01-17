@@ -43,8 +43,7 @@ resource "local_file" "kubeconfig" {
 resource "null_resource" "akv2k8s_crds" {
   triggers = {
     # always_run = "${timestamp()}"
-    akv2k8s_yaml_contents   = filemd5(var.akv2k8s_yaml_path)
-    cert_sync_yaml_contents = filemd5(var.cert_sync_yaml_path)
+    akv2k8s_yaml_contents = filemd5(var.akv2k8s_yaml_path)
   }
 
   provisioner "local-exec" {
@@ -53,7 +52,6 @@ resource "null_resource" "akv2k8s_crds" {
       export KUBECONFIG=${var.aks_config_path}
       # https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
       kubectl apply -f ${var.akv2k8s_yaml_path}
-      kubectl apply -f ${var.cert_sync_yaml_path}
     EOT
   }
 
@@ -103,9 +101,31 @@ resource "helm_release" "akv2k8s" {
   repository = "http://charts.spvapi.no"
   version    = var.akv2k8s_chart_version
   timeout    = 600
+  atomic     = true
 
   set {
     name  = "controller.logLevel"
     value = "debug"
   }
+}
+
+# https://www.terraform.io/docs/provisioners/local-exec.html
+resource "null_resource" "akv2k8s_cert_sync" {
+  triggers = {
+    # always_run = "${timestamp()}"
+    cert_sync_yaml_contents = filemd5(var.cert_sync_yaml_path)
+  }
+
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    command     = <<EOT
+      export KUBECONFIG=${var.aks_config_path}
+      kubectl apply -f ${var.cert_sync_yaml_path}
+    EOT
+  }
+
+  depends_on = [
+    local_file.kubeconfig,
+    helm_release.akv2k8s
+  ]
 }

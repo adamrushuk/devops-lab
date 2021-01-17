@@ -11,26 +11,26 @@ terraform {
   # versioning syntax: https://www.terraform.io/docs/configuration/modules.html#module-versions
   required_providers {
     # https://github.com/hashicorp/terraform-provider-helm/releases
-    helm = "1.3.2"
+    helm = "2.0.1"
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
-    kubernetes = "1.13.2"
+    kubernetes = "1.13.3"
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
-    azuread = "1.0.0"
+    azuread = "1.2.2"
 
     random = "~> 2.2" # ~> 2.2 = 2.X.Y
     tls    = "~> 2.1"
   }
 
   # 0.12.X
-  required_version = "~> 0.12.29" # https://github.com/hashicorp/terraform/releases
+  required_version = "~> 0.12.30" # https://github.com/hashicorp/terraform/releases
 }
 
 # must include blank features block
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
-  version = "2.37.0"
+  version = "2.43.0"
   features {}
 }
 
@@ -46,7 +46,6 @@ provider "kubernetes" {
 
 provider "helm" {
   kubernetes {
-    load_config_file       = false
     host                   = module.aks.full_object.kube_admin_config[0].host
     client_certificate     = base64decode(module.aks.full_object.kube_admin_config[0].client_certificate)
     client_key             = base64decode(module.aks.full_object.kube_admin_config[0].client_key)

@@ -20,5 +20,11 @@ resource "helm_release" "nginx" {
   repository = "https://kubernetes.github.io/ingress-nginx"
   version    = var.nginx_chart_version
   timeout    = 600
+  atomic     = true
   values     = ["${file("helm/nginx_values.yaml")}"]
+
+  set {
+    name  = "controller.admissionWebhooks.enabled"
+    value = false
+  }
 }

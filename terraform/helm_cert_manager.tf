@@ -11,6 +11,7 @@ resource "helm_release" "cert_manager" {
   repository = "https://charts.jetstack.io"
   version    = var.cert_manager_chart_version
   timeout    = 600
+  atomic     = true
 
   set {
     name  = "global.logLevel"

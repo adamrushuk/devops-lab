@@ -59,7 +59,7 @@ az storage account create `
   --https-only true `
   --kind BlobStorage `
   --access-tier Hot
-  
+
 # Create Blob Container
 az storage container create -n $blobContainerName --public-access off --account-name $storageAccountName
 ```

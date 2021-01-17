@@ -1,4 +1,4 @@
-# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.13.6/charts/velero/values.yaml
+# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.14.1/charts/velero/values.yaml
 
 ##
 ## Configuration settings that directly affect the Velero deployment YAML.
@@ -31,6 +31,10 @@ podLabels: {}
 
 # Resource requests/limits to specify for the Velero deployment. Optional.
 resources: {}
+
+# Configure the dnsPolicy of the Velero deployment
+# See: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+dnsPolicy: ClusterFirst
 
 # Init containers to add to the Velero deployment's pod spec. At least one plugin provider image is required.
 # https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/releases
@@ -70,6 +74,7 @@ extraVolumeMounts: []
 # Settings for Velero's prometheus metrics. Enabled by default.
 metrics:
   enabled: true
+  scrapeInterval: 30s
 
   # Pod annotations for Prometheus
   podAnnotations:
@@ -77,8 +82,17 @@ metrics:
     prometheus.io/port: "8085"
     prometheus.io/path: "/metrics"
 
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+
 # Install CRDs as a templates. Enabled by default.
 installCRDs: true
+
+# Enable/disable all helm hooks annotations
+# You should disable this if using a deploy tool that doesn't support helm hooks,
+# such as ArgoCD
+enableHelmHooks: true
 
 ##
 ## End of deployment-related settings.
@@ -202,15 +216,30 @@ credentials:
   # credentials. Set to false if, for example, using kube2iam or
   # kiam to provide IAM credentials for the Velero pod.
   useSecret: true
+  # Name of the secret to create if `useSecret` is true and `existingSecret` is empty
+  name:
   # Name of a pre-existing secret (if any) in the Velero namespace
   # that should be used to get IAM account credentials. Optional.
   existingSecret: velero-credentials
-  # Data to be stored in the Velero secret, if `useSecret` is
-  # true and `existingSecret` is empty. This should be the contents
-  # of your IAM credentials file.
+  # Data to be stored in the Velero secret, if `useSecret` is true and `existingSecret` is empty.
+  # As of the current Velero release, Velero only uses one secret key/value at a time.
+  # The key must be named `cloud`, and the value corresponds to the entire content of your IAM credentials file.
+  # Note that the format will be different for different providers, please check their documentation.
+  # Here is a list of documentation for plugins maintained by the Velero team:
+  # [AWS] https://github.com/vmware-tanzu/velero-plugin-for-aws/blob/main/README.md
+  # [GCP] https://github.com/vmware-tanzu/velero-plugin-for-gcp/blob/main/README.md
+  # [Azure] https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/blob/main/README.md
   secretContents: {}
+  #  cloud: |
+  #    [default]
+  #    aws_access_key_id=<REDACTED>
+  #    aws_secret_access_key=<REDACTED>
   # additional key/value pairs to be used as environment variables such as "DIGITALOCEAN_TOKEN: <your-key>". Values will be stored in the secret.
   extraEnvVars: {}
+  # Name of a pre-existing secret (if any) in the Velero namespace
+  # that will be used to load environment variables into velero and restic.
+  # Secret should be in format - https://kubernetes.io/docs/concepts/configuration/secret/#use-case-as-container-environment-variables
+  extraSecretRef: ""
 
 # Whether to create backupstoragelocation crd, if false => do not create a default backup location
 backupsEnabled: true
@@ -236,6 +265,10 @@ restic:
   # Extra volumeMounts for the Restic daemonset. Optional.
   extraVolumeMounts: []
 
+  # Configure the dnsPolicy of the Restic daemonset
+  # See: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+  dnsPolicy: ClusterFirst
+
   # SecurityContext to use for the Velero deployment. Optional.
   # Set fsGroup for `AWS IAM Roles for Service Accounts`
   # see more informations at: https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
@@ -247,6 +280,8 @@ restic:
 # schedules:
 #   mybackup:
 #     labels:
+#       myenv: foo
+#     annotations:
 #       myenv: foo
 #     schedule: "0 0 * * *"
 #     template:

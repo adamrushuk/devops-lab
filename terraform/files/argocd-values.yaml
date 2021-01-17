@@ -1,0 +1,17 @@
+installCRDs: false
+
+server:
+  # this is required to disable SSL redirection, as ingress handles this
+  extraArgs:
+    - --insecure
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      nginx.org/hsts: "false"
+      # (examples in docs are wrong) DO NOT use passthrough if ingress has tls settings
+      # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      # nginx.ingress.kubernetes.io/ssl-passthrough: "true"

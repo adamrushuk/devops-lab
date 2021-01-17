@@ -1,96 +1,81 @@
-![Build environment](https://github.com/adamrushuk/aks-nexus-velero/workflows/Build%20environment/badge.svg)
-
+<!-- omit in toc -->
 # aks-nexus-velero
 
-Provisions an AKS cluster, deploys Nexus Repository OSS, configures Velero backups.
+[![Build environment](https://github.com/adamrushuk/devops-lab/workflows/build/badge.svg)](https://github.com/adamrushuk/devops-lab/actions?query=workflow%3A%22build)
 
+This is the main repo I use to test Kubernetes /  DevOps applications, products, and processes. It's essentially my
+playground in Azure.
+
+I started off with a Kubernetes cluster, Nexus Repository OSS, and Velero for backups, but there are *loads* more
+being used now.
+
+<!-- omit in toc -->
 ## Contents
 
-- [aks-nexus-velero](#aks-nexus-velero)
-  - [Contents](#contents)
-  - [Getting Started](#getting-started)
-    - [Assumptions](#assumptions)
-    - [Azure Secrets](#azure-secrets)
-  - [Login to Nexus Console](#login-to-nexus-console)
+- [Getting Started](#getting-started)
+  - [Prereqs](#prereqs)
+    - [Configure DNS Zone](#configure-dns-zone)
+    - [Configure Key Vault / LetsEncrypt TLS Certificate](#configure-key-vault--letsencrypt-tls-certificate)
+  - [Configure Azure Authentication](#configure-azure-authentication)
+  - [Create Secrets](#create-secrets)
+  - [Running the Build workflow](#running-the-build-workflow)
+  - [Running the Destroy workflow](#running-the-destroy-workflow)
 
 ## Getting Started
 
-Before you start the `build` GitHub Action workflow, you need to create the following Secrets within
-[GitHub Settings](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets):
+Follow the sections below to prepare and configure your environment, ready to run your first build:
 
-### Assumptions
+### Prereqs
 
-<!-- TODO -->
+DNS zones and TLS certs are typically created out-of-band (outside of the main build automation), so we'll create
+these only once, and they will exist across multiple builds.
 
-- Configure Azure Service Principle for Terraform, and grant permission to manage AAD:
-https://www.terraform.io/docs/providers/azuread/guides/service_principal_configuration.html#granting-administrator-permissions
+#### Configure DNS Zone
 
-These API permissions are required for your Terraform Service Principle:
+Use the [Setting up ExternalDNS for Services on Azure tutorial](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/azure.md)
+ to create and configure your DNS zone, as we will be using ExternalDNS within the kubernetes cluster to
+dynamically update DNS records.
 
-**Azure Active Directory Graph**  
-Application Permissions:
+#### Configure Key Vault / LetsEncrypt TLS Certificate
 
-1. Application.ReadWrite.All - Read and write all applications
-1. Directory.Read.All - Read directory data
+Use the [keyvault-acmebot Getting Started guide](https://github.com/shibayan/keyvault-acmebot#getting-started) to
+deploy AcmeBot and configure a wildcard certificate for your domain.
 
-Delegated Permissions:  
+### Configure Azure Authentication
 
-1. User.Read - Sign in and read user profile
+Before the [`build`](./.github/workflows/build.yml) GitHub Action workflow can be run, authentication needs to be
+configured for Azure.
 
-### Azure Secrets
+1. [Create a Service Principal with a Client Secret](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/guides/service_principal_client_secret#creating-the-application-and-service-principal).
 
-<!-- TODO -->
+1. [Grant permissions to manage Azure Active Directory](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/guides/service_principal_configuration#azure-active-directory-permissions).
+
+### Create Secrets
+
+Once Azure authentication has been configured, the Service Principle credential values can be [passed as environment variables](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/guides/service_principal_client_secret#configuring-the-service-principal-in-terraform).
+
+[Use these instructions](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) to create the following secrets for your repository:
 
 - `ARM_CLIENT_ID`
 - `ARM_CLIENT_SECRET`
 - `ARM_SUBSCRIPTION_ID`
 - `ARM_TENANT_ID`
 
-## Login to Nexus Console
+### Running the Build workflow
 
-Follow the steps below to update AKS credentials, get the Nexus admin password, then login and update the password:
+Now that Azure authentication has been configured with corresponding secrets, the build workflow is ready to be run:
 
-1. Import the AKS Cluster credentials:
+1. Navigate to the [build workflow](../../actions?query=workflow%3Abuild).
+1. Click the `Run workflow` drop-down button.
+1. Select the desired branch.
+1. Click the `Run workflow` button.
 
-    ```bash
-    # Vars
-    PREFIX="rush"
-    AKS_CLUSTER_NAME="$PREFIX-aks-001"
-    AKS_RG_NAME="$PREFIX-rg-aks-dev-001"
+### Running the Destroy workflow
 
-    # AKS Cluster credentials
-    az aks get-credentials --resource-group $AKS_RG_NAME --name $AKS_CLUSTER_NAME --overwrite-existing --admin
+There will be ongoing costs if the environment is left running, so to avoid unexpected bills the destroy workflow
+should be run once testing has been completed:
 
-    # [OPTIONAL] View AKS Dashboard
-    az aks browse --resource-group $AKS_RG_NAME --name $AKS_CLUSTER_NAME
-    ```
-
-1. Get the auto-generated admin password from within the Nexus container:
-
-    ```bash
-    # Get pod name
-    pod_name=$(kubectl get pod --namespace nexus -l app=nexus -o jsonpath="{.items[0].metadata.name}")
-
-    # Get admin password from pod
-    admin_password=$(kubectl exec -n ingress -it $pod_name -- cat /nexus-data/admin.password)
-    echo "$admin_password"
-
-    # [OPTIONAL] Enter pod shell, then output admin password
-    kubectl exec -n ingress -it $pod_name -- /bin/bash
-    echo -e "\nadmin password: \n$(cat /nexus-data/admin.password)\n"
-    ```
-
-1. Open the Nexus web console
-
-    ```bash
-    # Set URL
-    nexus_host=$(kubectl get ingress -A -o jsonpath="{.items[0].spec.rules[0].host}")
-    nexus_base_url="https://$nexus_host"
-
-    # Sign in as admin, using auto-generated admin password from prereqs section
-    echo "$nexus_base_url"
-    ```
-
-1. Click `Sign in` in top right corner, then login using admin password.
-1. Update admin password.
-1. Enable anonymous access (to avoid using credential during repo testing).
+1. Navigate to the [destroy workflow](../../actions?query=workflow%3Adestroy).
+1. Click the `Run workflow` drop-down button.
+1. Select the desired branch.
+1. Click the `Run workflow` button.
