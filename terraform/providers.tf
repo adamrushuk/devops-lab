@@ -24,7 +24,7 @@ terraform {
   }
 
   # 0.12.X
-  required_version = "~> 0.12.29" # https://github.com/hashicorp/terraform/releases
+  required_version = "~> 0.12.30" # https://github.com/hashicorp/terraform/releases
 }
 
 # must include blank features block
