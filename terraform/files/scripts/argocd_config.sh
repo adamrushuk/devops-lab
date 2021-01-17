@@ -10,11 +10,19 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 ARGOCD_PATH="./argocd"
 REPO_SSH_PRIVATE_KEY_PATH="./id_ed25519_argocd"
 export ARGOCD_OPTS="--grpc-web"
+ARGOCD_HEALTH_CHECK_URL="https://$ARGOCD_FQDN/healthz"
 
 # Install
 VERSION="v1.8.2"
 curl -sSL -o "$ARGOCD_PATH" "https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64"
 chmod +x "$ARGOCD_PATH"
+
+# Wait for URL to be responsive
+ARGOCD_HEALTH_CHECK_URL="https://$ARGOCD_FQDN/healthz"
+while [[ "$(curl -s -o /dev/null -w ''%{http_code}''  $ARGOCD_HEALTH_CHECK_URL)" != "200" ]]; do
+    echo "Checking ArgoCD is ready on [$ARGOCD_HEALTH_CHECK_URL]..."
+    sleep 10
+done
 
 # Show version
 echo "Showing Argo CD version info for [$ARGOCD_FQDN]..."
