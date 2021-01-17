@@ -18,9 +18,9 @@ curl -sSL -o "$ARGOCD_PATH" "https://github.com/argoproj/argo-cd/releases/downlo
 chmod +x "$ARGOCD_PATH"
 
 # Wait for URL to be responsive
-ARGOCD_HEALTH_CHECK_URL="https://$ARGOCD_FQDN/healthz"
+echo "Checking ArgoCD is ready on [$ARGOCD_HEALTH_CHECK_URL]..."
 while [[ "$(curl -s -o /dev/null -w ''%{http_code}''  $ARGOCD_HEALTH_CHECK_URL)" != "200" ]]; do
-    echo "Checking ArgoCD is ready on [$ARGOCD_HEALTH_CHECK_URL]..."
+    echo "Still waiting for ArgoCD to be ready on [$ARGOCD_HEALTH_CHECK_URL]..."
     sleep 10
 done
 
