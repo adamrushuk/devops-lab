@@ -120,3 +120,12 @@ resource "null_resource" "argocd_apps" {
     null_resource.argocd_configure
   ]
 }
+
+# TODO: remove temp output
+data "azuread_application" "argocd" {
+  display_name = "AR-Dev_ArgoCD"
+}
+
+output "azure_ad_object_id" {
+  value = data.azuread_application.argocd
+}
