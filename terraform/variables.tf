@@ -34,7 +34,7 @@ variable "cert_manager_chart_version" {
 # helm search repo vmware-tanzu/velero
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.14.5"
+  default = "2.14.7"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
@@ -67,7 +67,7 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.5.3"
+  default = "4.5.4"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
@@ -86,12 +86,12 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "2.11.0"
+  default = "2.11.3"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 variable "argocd_image_tag" {
-  default = "v1.8.2"
+  default = "v1.8.3"
 }
 #endregion Versions
 
