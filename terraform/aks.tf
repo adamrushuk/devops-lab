@@ -54,7 +54,7 @@ resource "azurerm_log_analytics_solution" "aks" {
 # https://registry.terraform.io/modules/adamrushuk/aks/azurerm/latest
 module "aks" {
   source  = "adamrushuk/aks/azurerm"
-  version = "0.4.2"
+  version = "0.5.0"
 
   kubernetes_version   = var.kubernetes_version
   location             = azurerm_resource_group.aks.location
@@ -80,4 +80,7 @@ module "aks" {
 
   # add-ons
   log_analytics_workspace_id = var.aks_container_insights_enabled == true ? azurerm_log_analytics_workspace.aks[0].id : ""
+
+  # Add existing group to the new AKS cluster admin group
+  aks_admin_group_member_name = var.aks_admins_aad_group_name
 }

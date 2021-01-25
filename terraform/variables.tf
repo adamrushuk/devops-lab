@@ -150,8 +150,8 @@ variable "azurerm_kubernetes_cluster_name" {
   default = "__AKS_CLUSTER_NAME__"
 }
 
-variable "aad_group_name" {
-  description = "Name of the Azure AD group for cluster-admin access"
+variable "aks_admins_aad_group_name" {
+  description = "Name an existing Azure AD group for AKS admins"
   type        = string
   default     = "AKS-Admins"
 }
