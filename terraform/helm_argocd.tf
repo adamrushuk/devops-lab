@@ -129,3 +129,94 @@ data "azuread_application" "argocd" {
 output "azure_ad_object_id" {
   value = data.azuread_application.argocd
 }
+
+# https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
+resource "azuread_application" "argocd" {
+  display_name               = "ArgoCD"
+  prevent_duplicate_names    = true
+  homepage                   = "https://argocd.${var.dns_zone_name}"
+  identifier_uris            = ["https://argocd.${var.dns_zone_name}/api/dex/callback"]
+  reply_urls                 = ["https://argocd.${var.dns_zone_name}/api/dex/callback"]
+  available_to_other_tenants = false
+  oauth2_allow_implicit_flow = false
+  # type                       = "webapp/api"
+  # owners                     = ["00000004-0000-0000-c000-000000000000"]
+  group_membership_claims    = "All"
+
+  # TODO: are "required_resource_access" blocks needed?
+  # required_resource_access {
+  #   # Microsoft Graph App ID
+  #   resource_app_id = "00000003-0000-0000-c000-000000000000"
+
+  #   resource_access {
+  #     id   = "..."
+  #     type = "Role"
+  #   }
+
+  #   resource_access {
+  #     id   = "..."
+  #     type = "Scope"
+  #   }
+
+  #   resource_access {
+  #     id   = "..."
+  #     type = "Scope"
+  #   }
+  # }
+
+  # required_resource_access {
+  #   # AAD Graph API App ID
+  #   resource_app_id = "00000002-0000-0000-c000-000000000000"
+
+  #   resource_access {
+  #     id   = "..."
+  #     type = "Scope"
+  #   }
+  # }
+
+  # app_role {
+  #   allowed_member_types = [
+  #     "User"
+  #   ]
+
+  #   description  = "User"
+  #   display_name = "User"
+  #   is_enabled   = true
+  #   value        = ""
+  # }
+
+  oauth2_permissions {
+    admin_consent_description  = "Allow the application to access Argo CD on behalf of the signed-in user."
+    admin_consent_display_name = "Access Argo CD on behalf of the signed-in user"
+    is_enabled                 = true
+    type                       = "User"
+    user_consent_description   = "Allow the application to access Argo CD on your behalf."
+    user_consent_display_name  = "Access Argo CD"
+    value                      = "user_impersonation"
+  }
+
+  # oauth2_permissions {
+  #   admin_consent_description  = "Administer the example application"
+  #   admin_consent_display_name = "Administer"
+  #   is_enabled                 = true
+  #   type                       = "Admin"
+  #   value                      = "administer"
+  # }
+
+  # optional_claims {
+  #   access_token {
+  #     name = "myclaim"
+  #   }
+
+  #   access_token {
+  #     name = "otherclaim"
+  #   }
+
+  #   id_token {
+  #     name                  = "userclaim"
+  #     source                = "user"
+  #     essential             = true
+  #     additional_properties = ["emit_as_roles"]
+  #   }
+  # }
+}
