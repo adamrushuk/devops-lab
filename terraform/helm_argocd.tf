@@ -121,13 +121,17 @@ resource "null_resource" "argocd_apps" {
   ]
 }
 
-# TODO: remove temp output
-data "azuread_application" "argocd" {
+# TODO: remove temp outputs
+data "azuread_application" "argocd_manual" {
   display_name = "AR-Dev_ArgoCD"
 }
 
-output "azure_ad_object_id" {
-  value = data.azuread_application.argocd
+output "azure_ad_object_manual" {
+  value = data.azuread_application.argocd_manual
+}
+
+output "azure_ad_object_argocd" {
+  value = azuread_application.argocd
 }
 
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
@@ -139,8 +143,8 @@ resource "azuread_application" "argocd" {
   reply_urls                 = ["https://argocd.${var.dns_zone_name}/api/dex/callback"]
   available_to_other_tenants = false
   oauth2_allow_implicit_flow = false
-  # type                       = "webapp/api"
-  # owners                     = ["00000004-0000-0000-c000-000000000000"]
+  type                       = "webapp/api"
+  owners                     = ["00000004-0000-0000-c000-000000000000"]
   group_membership_claims    = "All"
 
   # TODO: are "required_resource_access" blocks needed?
