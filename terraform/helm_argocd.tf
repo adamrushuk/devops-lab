@@ -144,7 +144,7 @@ resource "azuread_application" "argocd" {
   available_to_other_tenants = false
   oauth2_allow_implicit_flow = false
   type                       = "webapp/api"
-  owners                     = ["00000004-0000-0000-c000-000000000000"]
+  owners                     = ["cc9375df-8e64-4e24-8ab2-45e02c01a111"]
   group_membership_claims    = "All"
 
   # TODO: are "required_resource_access" blocks needed?
