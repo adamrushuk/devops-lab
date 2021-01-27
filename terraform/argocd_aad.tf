@@ -3,8 +3,16 @@ data "azuread_application" "argocd_manual" {
   display_name = "AR-Dev_ArgoCD"
 }
 
-output "azure_ad_object_manual" {
+output "azure_app_object_manual" {
   value = data.azuread_application.argocd_manual
+}
+
+data "azuread_service_principal" "argocd_manual" {
+  display_name = "AR-Dev_ArgoCD"
+}
+
+output "azure_sp_object_manual" {
+  value = data.azuread_service_principal.argocd_manual
 }
 
 output "azure_ad_object_argocd" {
@@ -144,6 +152,7 @@ resource "azuread_application" "argocd" {
 #   ]
 # }
 
+# TODO: change id to argocd
 resource "azuread_service_principal" "this" {
   //https://github.com/Azure/azure-cli/issues/9250
   application_id = azuread_application.argocd.application_id
@@ -159,8 +168,8 @@ resource "azuread_service_principal" "this" {
   provisioner "local-exec" {
     command = "az ad sp update --id ${azuread_application.argocd.application_id} --set preferredSingleSignOnMode='saml'"
   }
-  depends_on = [
-    azuread_application.argocd
-  ]
+  # depends_on = [
+  #   azuread_application.argocd
+  # ]
 }
 
