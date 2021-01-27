@@ -117,22 +117,22 @@ resource "azuread_application" "argocd" {
   #   value                      = "administer"
   # }
 
-  # optional_claims {
-  #   access_token {
-  #     name = "myclaim"
-  #   }
+  optional_claims {
+    access_token {
+      name = "email"
+    }
 
-  #   access_token {
-  #     name = "otherclaim"
-  #   }
+    # access_token {
+    #   name = "otherclaim"
+    # }
 
-  #   id_token {
-  #     name                  = "userclaim"
-  #     source                = "user"
-  #     essential             = true
-  #     additional_properties = ["emit_as_roles"]
-  #   }
-  # }
+    id_token {
+      name                  = "userprincipalname"
+      source                = "user"
+      essential             = true
+      # additional_properties = ["emit_as_roles"]
+    }
+  }
 }
 
 # Test adding SP to make an Enterprise App
