@@ -94,9 +94,9 @@ resource "azuread_application" "argocd" {
   //https://github.com/Azure/azure-cli/issues/11534
   //https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-optional-claims
   //Optional Claims for tokens
-  provisioner "local-exec" {
-    command = "az rest --method PATCH --uri 'https://graph.microsoft.com/v1.0/applications/${self.object_id}' --body '{\"optionalClaims\": {\"saml2Token\": [{\"name\": \"groups\", \"additionalProperties\": [\"sam_account_name\"]}]}}'"
-  }
+  # provisioner "local-exec" {
+  #   command = "az rest --method PATCH --uri 'https://graph.microsoft.com/v1.0/applications/${self.object_id}' --body '{\"optionalClaims\": {\"saml2Token\": [{\"name\": \"groups\", \"additionalProperties\": [\"sam_account_name\"]}]}}'"
+  # }
 
 
   # oauth2_permissions {
@@ -148,9 +148,9 @@ resource "azuread_service_principal" "this" {
   //https://github.com/Azure/azure-cli/issues/9250
   application_id = azuread_application.argocd.application_id
   tags = [
-    "WindowsAzureActiveDirectoryIntegratedApp"
-    # "WindowsAzureActiveDirectoryCustomSingleSignOnApplication",
-    # "WindowsAzureActiveDirectoryGalleryApplicationNonPrimaryV1"
+    "WindowsAzureActiveDirectoryIntegratedApp",
+    "WindowsAzureActiveDirectoryCustomSingleSignOnApplication",
+    "WindowsAzureActiveDirectoryGalleryApplicationNonPrimaryV1"
   ]
   // We need to wait because Azure Graph API returns a 200 before its call-able #eventualconsistancy...
   provisioner "local-exec" {
