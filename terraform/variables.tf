@@ -21,7 +21,7 @@ variable "kubernetes_version" {
 # helm search repo ingress-nginx/ingress-nginx
 # * also update terraform/helm/nginx_values.yaml
 variable "nginx_chart_version" {
-  default = "3.20.1"
+  default = "3.22.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -54,7 +54,7 @@ variable "nexus_chart_version" {
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
 # helm search repo spv-charts/akv2k8s
 variable "akv2k8s_chart_version" {
-  default = "1.1.26"
+  default = "1.1.28"
 }
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
@@ -67,7 +67,7 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.5.4"
+  default = "4.6.0"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
@@ -86,7 +86,7 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "2.11.3"
+  default = "2.11.6"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
