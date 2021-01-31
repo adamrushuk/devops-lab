@@ -157,10 +157,10 @@ jobs:
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Terraform Lint
-      run: ./scripts/tflint.sh
-      env:
-        TF_WORKING_DIR: ${{ env.TF_WORKING_DIR }}
+    #- name: Terraform Lint
+      #run: ./scripts/tflint.sh
+      #env:
+      #  TF_WORKING_DIR: ${{ env.TF_WORKING_DIR }}
 
     - name: Terraform Plan
       id: plan
