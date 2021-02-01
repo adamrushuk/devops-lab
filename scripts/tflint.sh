@@ -21,7 +21,7 @@ if [ ${#DISABLED_RULES[@]} -gt 0 ]; then
     echo "DISABLED_RULES were defined: [${DISABLED_RULES[*]}]."
 
     # expand array for disabled rules
-    TF_FLAGS+=(--disable-rule=${DISABLED_RULES[*]})
+    TF_FLAGS+=(--disable-rule=(${DISABLED_RULES[*]}))
 else
     echo "DISABLED_RULES were not defined. Skipping."
 fi
