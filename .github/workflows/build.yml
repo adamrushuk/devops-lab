@@ -149,18 +149,10 @@ jobs:
     #     filter_mode: "nofilter" # Optional. Check all files, not just the diff
     #     flags: "--module" # Optional. Add custom tflint flags
 
-    # - name: Terraform Lint
-    #   uses: rickardl/tflint-action@v1.5
-    #   with:
-    #     tflint_action_comment: true
-    #     tflint_action_folder: ${{ env.TF_WORKING_DIR }}
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    #- name: Terraform Lint
-      #run: ./scripts/tflint.sh
-      #env:
-      #  TF_WORKING_DIR: ${{ env.TF_WORKING_DIR }}
+    - name: Terraform Lint
+      run: ./scripts/tflint.sh
+      env:
+        TF_WORKING_DIR: ${{ env.TF_WORKING_DIR }}
 
     - name: Terraform Plan
       id: plan
