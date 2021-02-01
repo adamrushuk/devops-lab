@@ -21,7 +21,15 @@ if [ ${#DISABLED_RULES[@]} -gt 0 ]; then
     echo "DISABLED_RULES were defined: [${DISABLED_RULES[*]}]."
 
     # expand array for disabled rules
-    TF_FLAGS+=(--disable-rule=(${DISABLED_RULES[*]}))
+    # ! DOES NOT WORK
+    # TF_FLAGS+=(--disable-rule=(${DISABLED_RULES[*]}))
+
+    # repeat flag multiple times
+    for rule in "${DISABLED_RULES[@]}"; do
+        echo "$rule"
+        TF_FLAGS+=(--disable-rule="$rule")
+    done
+
 else
     echo "DISABLED_RULES were not defined. Skipping."
 fi
@@ -53,4 +61,5 @@ cat .tflint.hcl
 
 # run tflint
 # TFLINT_LOG=debug ./tflint "$TF_WORKING_DIR" --disable-rule="${DISABLED_RULES[*]}"
+echo "Running tflint with the following flags: [$TF_FLAGS]"
 ./tflint "${TF_FLAGS[@]}"
