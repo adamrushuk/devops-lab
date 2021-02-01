@@ -1,6 +1,7 @@
 #! /usr/bin/env bash
 #
 # installs and runs tflint with tflint-ruleset-azurerm plugin
+# rules: https://github.com/terraform-linters/tflint-ruleset-azurerm/blob/master/docs/rules/
 
 # ensure strict mode and predictable failure
 set -euo pipefail
@@ -13,11 +14,11 @@ TFLINT_RULESET_AZURERM_VERSION="${TFLINT_RULESET_AZURERM_VERSION:-v0.7.0}"
 TF_FLAGS=("$TF_WORKING_DIR")
 export TFLINT_LOG=debug
 # use empty array to skip adding disabled rules, eg: "DISABLED_RULES=()"
-DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days")
+DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days" "azurerm_kubernetes_cluster_node_pool_invalid_vm_size")
 
 # use dynamic flags
 if [ ${#DISABLED_RULES[@]} -gt 0 ]; then
-    echo "Excluding DISABLED_RULES [${DISABLED_RULES[*]}]..."
+    echo "DISABLED_RULES were defined: [${DISABLED_RULES[*]}]."
 
     # expand array for disabled rules
     TF_FLAGS+=(--disable-rule="${DISABLED_RULES[*]}")
