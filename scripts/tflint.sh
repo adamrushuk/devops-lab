@@ -7,7 +7,8 @@ set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
 # vars
-DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days")
+# DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days")
+DISABLED_RULES=("")
 # Set local vars from env var, with default fallbacks
 TFLINT_VERSION="${TFLINT_VERSION:-v0.23.1}"
 TFLINT_RULESET_AZURERM_VERSION="${TFLINT_RULESET_AZURERM_VERSION:-v0.7.0}"
