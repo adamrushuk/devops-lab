@@ -22,7 +22,7 @@ if [ ${#DISABLED_RULES[@]} -gt 0 ]; then
 
     # repeat flag multiple times
     for rule in "${DISABLED_RULES[@]}"; do
-        echo "$rule"
+        echo "Adding [$rule] to flags"
         TF_FLAGS+=(--disable-rule="$rule")
     done
 
