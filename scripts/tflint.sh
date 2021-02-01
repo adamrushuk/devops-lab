@@ -12,7 +12,7 @@ DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days")
 TFLINT_VERSION="${TFLINT_VERSION:-v0.23.1}"
 TFLINT_RULESET_AZURERM_VERSION="${TFLINT_RULESET_AZURERM_VERSION:-v0.7.0}"
 
-message="Downloading tflint and azurerm plugin"
+message="Downloading tflint ($TFLINT_VERSION) and azurerm plugin ($TFLINT_RULESET_AZURERM_VERSION)"
 echo "STARTED: $message..."
 
 # download tflint
