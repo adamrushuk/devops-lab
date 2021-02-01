@@ -7,8 +7,9 @@ set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
 # vars
+export TFLINT_LOG=debug
 # DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days")
-DISABLED_RULES=("")
+DISABLED_RULES=()
 # Set local vars from env var, with default fallbacks
 TFLINT_VERSION="${TFLINT_VERSION:-v0.23.1}"
 TFLINT_RULESET_AZURERM_VERSION="${TFLINT_RULESET_AZURERM_VERSION:-v0.7.0}"
@@ -38,6 +39,16 @@ plugin "azurerm" {
 EOF
 cat .tflint.hcl
 
+# add dynamic flags
+TF_FLAGS=("$TF_WORKING_DIR")
+
+if [ ${#DISABLED_RULES[@]} -gt 0 ]; then
+    echo "Adding DISABLED_RULES..."
+
+    # expand array for disabled rules
+    TF_FLAGS+=(--disable-rule="${DISABLED_RULES[*]}")
+fi
+
 # run tflint
-# expand array for disabled rules
-TFLINT_LOG=debug ./tflint "$TF_WORKING_DIR" --disable-rule="${DISABLED_RULES[*]}"
+# TFLINT_LOG=debug ./tflint "$TF_WORKING_DIR" --disable-rule="${DISABLED_RULES[*]}"
+./tflint "${TF_FLAGS[@]}"
