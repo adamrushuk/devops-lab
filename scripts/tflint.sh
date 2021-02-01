@@ -18,7 +18,7 @@ DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days")
 
 # use dynamic flags
 if [ ${#DISABLED_RULES[@]} -gt 0 ]; then
-    echo "DISABLED_RULES were defined: [${DISABLED_RULES[*]}]."
+    echo "${#DISABLED_RULES[@]} DISABLED_RULES were defined: [${DISABLED_RULES[*]}]."
 
     # repeat flag multiple times
     for rule in "${DISABLED_RULES[@]}"; do
