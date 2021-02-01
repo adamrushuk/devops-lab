@@ -13,6 +13,17 @@ DISABLED_RULES=()
 # Set local vars from env var, with default fallbacks
 TFLINT_VERSION="${TFLINT_VERSION:-v0.23.1}"
 TFLINT_RULESET_AZURERM_VERSION="${TFLINT_RULESET_AZURERM_VERSION:-v0.7.0}"
+TF_FLAGS=("$TF_WORKING_DIR")
+
+# use dynamic flags
+if [ ${#DISABLED_RULES[@]} -gt 0 ]; then
+    echo "Excluding DISABLED_RULES [${DISABLED_RULES[*]}]..."
+
+    # expand array for disabled rules
+    TF_FLAGS+=(--disable-rule="${DISABLED_RULES[*]}")
+else
+    echo "DISABLED_RULES were not defined. Skipping."
+fi
 
 message="Downloading tflint ($TFLINT_VERSION) and azurerm plugin ($TFLINT_RULESET_AZURERM_VERSION)"
 echo "STARTED: $message..."
@@ -38,16 +49,6 @@ plugin "azurerm" {
 }
 EOF
 cat .tflint.hcl
-
-# add dynamic flags
-TF_FLAGS=("$TF_WORKING_DIR")
-
-if [ ${#DISABLED_RULES[@]} -gt 0 ]; then
-    echo "Adding DISABLED_RULES..."
-
-    # expand array for disabled rules
-    TF_FLAGS+=(--disable-rule="${DISABLED_RULES[*]}")
-fi
 
 # run tflint
 # TFLINT_LOG=debug ./tflint "$TF_WORKING_DIR" --disable-rule="${DISABLED_RULES[*]}"
