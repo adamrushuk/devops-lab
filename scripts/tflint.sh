@@ -14,15 +14,11 @@ TFLINT_RULESET_AZURERM_VERSION="${TFLINT_RULESET_AZURERM_VERSION:-v0.7.0}"
 TF_FLAGS=("$TF_WORKING_DIR")
 export TFLINT_LOG=debug
 # use empty array to skip adding disabled rules, eg: "DISABLED_RULES=()"
-DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days" "azurerm_kubernetes_cluster_node_pool_invalid_vm_size")
+DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days")
 
 # use dynamic flags
 if [ ${#DISABLED_RULES[@]} -gt 0 ]; then
     echo "DISABLED_RULES were defined: [${DISABLED_RULES[*]}]."
-
-    # expand array for disabled rules
-    # ! DOES NOT WORK
-    # TF_FLAGS+=(--disable-rule=(${DISABLED_RULES[*]}))
 
     # repeat flag multiple times
     for rule in "${DISABLED_RULES[@]}"; do
@@ -60,6 +56,5 @@ EOF
 cat .tflint.hcl
 
 # run tflint
-# TFLINT_LOG=debug ./tflint "$TF_WORKING_DIR" --disable-rule="${DISABLED_RULES[*]}"
-echo "Running tflint with the following flags: [$TF_FLAGS]"
+echo "Running tflint with the following flags: [${TF_FLAGS[*]}]"
 ./tflint "${TF_FLAGS[@]}"
