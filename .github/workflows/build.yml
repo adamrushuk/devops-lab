@@ -60,9 +60,9 @@ env:
   TF_VERSION: "0.12.30" # "latest" is supported
   TF_WORKING_DIR: ./terraform
   # https://github.com/terraform-linters/tflint-ruleset-azurerm/releases
-  TFLINT_RULESET_AZURERM_VERSION: "v0.7.0"
+  TFLINT_RULESET_AZURERM_VERSION: "v0.8.2"
   # https://github.com/terraform-linters/tflint/releases
-  TFLINT_VERSION: "v0.23.1"
+  TFLINT_VERSION: "v0.24.1"
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
   # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
