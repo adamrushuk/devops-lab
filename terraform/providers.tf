@@ -14,7 +14,7 @@ terraform {
     helm = "2.0.2"
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
-    kubernetes = "2.0.1"
+    kubernetes = "2.0.2"
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = "1.3.0"
@@ -30,7 +30,7 @@ terraform {
 # must include blank features block
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
-  version = "2.45.1"
+  version = "2.46.1"
   features {}
 }
 
