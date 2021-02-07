@@ -6,7 +6,7 @@
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location uksouth --output table
 variable "kubernetes_version" {
-  default = "1.16.15"
+  default = "1.17.16"
 }
 
 # Helm charts
