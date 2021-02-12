@@ -93,7 +93,7 @@ resource "null_resource" "argocd_configure" {
 
     command = <<-EOT
       chmod -R +x ./files/scripts
-      timeout 5m ./files/scripts/argocd_config.sh
+      timeout 10m ./files/scripts/argocd_config.sh
     EOT
   }
 
