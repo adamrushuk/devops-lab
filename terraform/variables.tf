@@ -27,7 +27,7 @@ variable "nginx_chart_version" {
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.1.0"
+  default = "v1.2.0"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
@@ -60,7 +60,7 @@ variable "akv2k8s_chart_version" {
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "3.0.2"
+  default = "3.0.3"
 }
 
 # https://bitnami.com/stack/external-dns/helm
@@ -86,7 +86,7 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "2.12.0"
+  default = "2.14.0"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags

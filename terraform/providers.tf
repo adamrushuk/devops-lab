@@ -30,7 +30,7 @@ terraform {
 # must include blank features block
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
-  version = "2.46.1"
+  version = "2.47.0"
   features {}
 }
 
