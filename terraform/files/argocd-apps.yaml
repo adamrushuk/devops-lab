@@ -1,0 +1,30 @@
+# App of Apps pattern
+# https://argoproj.github.io/argo-cd/operator-manual/cluster-bootstrapping/
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-apps
+  # namespace of argo cd deployment
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:adamrushuk/charts-private.git
+    targetRevision: main
+    path: charts/argocd-apps
+    helm:
+      # target helm version
+      # * NOT required if "Chart.yaml" helm metadata contains "apiVersion: v2"
+      # version: v3
+
+      # values file path is relative from the source.path folder
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy: {}
+    # # sync options which modifies sync behavior
+    # syncOptions:
+    #   # namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster
+    #   - CreateNamespace=true

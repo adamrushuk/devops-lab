@@ -103,15 +103,20 @@ resource "null_resource" "argocd_configure" {
   ]
 }
 
-# create argo app definitions
+# create argo apps definition
+# https://argoproj.github.io/argo-cd/operator-manual/cluster-bootstrapping/
 resource "null_resource" "argocd_apps" {
+  triggers = {
+    argocd_app_yaml_contents = filemd5(var.argocd_apps_path)
+  }
+
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
       KUBECONFIG = var.aks_config_path
     }
     command = <<-EOT
-      kubectl apply -f ${var.gitlab_argocd_app_path}
+      kubectl apply -f ${var.argocd_apps_path}
     EOT
   }
 

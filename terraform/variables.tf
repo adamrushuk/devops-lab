@@ -349,13 +349,16 @@ __HELM_CHART_REPO_DEPLOY_PRIVATE_KEY__
 EOT
 }
 
-
+variable "argocd_apps_path" {
+  default = "files/argocd-apps.yaml"
+}
 
 # gitlab
 variable "gitlab_cert_sync_yaml_path" {
   default = "files/gitlab-akvs-certificate-sync.yaml"
 }
 
-variable "gitlab_argocd_app_path" {
-  default = "files/argocd-gitlab.yaml"
-}
+# TODO: remove if no longer required
+# variable "gitlab_argocd_app_path" {
+#   default = "files/argocd-gitlab.yaml"
+# }
