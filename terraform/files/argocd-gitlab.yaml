@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: git@github.com:adamrushuk/charts-private.git
     targetRevision: main
-    path: gitlab-https
+    path: charts/gitlab-https
     helm:
       # target helm version
       version: v3
