@@ -131,7 +131,6 @@ https://argocd.thehypepipe.co.uk/auth/login
 
 # Create a "Sign SAML assertion" SAML Signing Cert (SHA-256)
 # Download and base64 the cert, ready for the ConfigMap yaml
-cat /mnt/c/Users/adamr/code/devops-lab/terraform/argocd_sso/ArgoCD.cer | base64 | clip.exe
 
 # Login URL (ssoURL)
 https://login.microsoftonline.com/<TENANT_ID>/saml2
@@ -166,7 +165,7 @@ data:
     g, $ARGO_ADMIN_GROUP_ID, role:admin
 EOF
 
-# Apply RBAC patch for default admin and readonly roles
+# Apply yaml RBAC patch for default admin and readonly roles
 kubectl patch configmap/argocd-rbac-cm --namespace argocd --type merge --patch "$(cat argocd-rbac-cm-patch.yaml)"
 
 
@@ -177,7 +176,11 @@ ARGO_FQDN="argocd.thehypepipe.co.uk"
 TENANT_ID=$(az account show --query "tenantId" --output tsv)
 # assumes SAML Signing Certificate has been downloaded/saved as "ArgoCD.cer" (choosing Certificate (Base64) option)
 SAML_CERT_BASE64=$(cat ArgoCD.cer | base64)
-echo $SAML_CERT_BASE64
+echo "$SAML_CERT_BASE64"
+
+# created indented string ready for caData YAML multi-line block
+SAML_CERT_BASE64_INDENTED=$(cat ArgoCD.cer | base64 | sed 's/^/          /')
+echo "$SAML_CERT_BASE64_INDENTED"
 
 cat > argocd-cm-sso-patch.yaml << EOF
 # Patch ConfigMap to add dex SSO config
@@ -195,14 +198,14 @@ data:
         entityIssuer: https://$ARGO_FQDN/api/dex/callback
         ssoURL: https://login.microsoftonline.com/$TENANT_ID/saml2
         caData: |
-          $SAML_CERT_BASE64
+$SAML_CERT_BASE64_INDENTED
         redirectURI: https://$ARGO_FQDN/api/dex/callback
         usernameAttr: email
         emailAttr: email
         groupsAttr: Group
 EOF
 
-# Apply SSO patch 
+# Apply SSO patch
 kubectl patch configmap/argocd-cm --namespace argocd --type merge --patch "$(cat argocd-cm-sso-patch.yaml)"
 
 ```
