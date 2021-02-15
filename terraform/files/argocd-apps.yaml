@@ -23,8 +23,10 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
-  syncPolicy: {}
-    # # sync options which modifies sync behavior
+  syncPolicy:
+    # https://argoproj.github.io/argo-cd/user-guide/auto_sync/#automated-sync-policy
+    automated: {}
+    # sync options which modifies sync behavior
     # syncOptions:
     #   # namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster
     #   - CreateNamespace=true
