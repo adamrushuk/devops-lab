@@ -17,7 +17,7 @@ terraform {
     kubernetes = "2.0.2"
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
-    azuread = "1.3.0"
+    azuread = "1.4.0"
 
     random = "~> 2.2" # ~> 2.2 = 2.X.Y
     tls    = "~> 2.1"
@@ -30,7 +30,7 @@ terraform {
 # must include blank features block
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
-  version = "2.47.0"
+  version = "2.48.0"
   features {}
 }
 

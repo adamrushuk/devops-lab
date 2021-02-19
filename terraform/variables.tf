@@ -67,13 +67,13 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.6.0"
+  default = "4.8.0"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.3.1"
+  default = "2.3.2"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
@@ -86,7 +86,7 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "2.14.0"
+  default = "2.14.6"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags

@@ -78,14 +78,6 @@ EOT
   depends_on = [kubernetes_namespace.velero]
 }
 
-# Manually test new values:
-# helm upgrade \
-#     velero vmware-tanzu/velero \
-#     --install --atomic \
-#     --namespace velero \
-#     --reuse-values \
-#     -f terraform/helm/velero_values.yaml
-
 resource "helm_release" "velero" {
   count      = var.velero_enabled ? 1 : 0
   chart      = "velero"
