@@ -11,7 +11,7 @@ terraform {
   # versioning syntax: https://www.terraform.io/docs/configuration/modules.html#module-versions
   required_providers {
     # https://github.com/hashicorp/terraform-provider-helm/releases
-    helm = "2.0.2"
+    helm = "2.0.3"
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
     kubernetes = "2.0.2"
@@ -30,7 +30,7 @@ terraform {
 # must include blank features block
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
-  version = "2.47.0"
+  version = "2.51.0"
   features {}
 }
 
