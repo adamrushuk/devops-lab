@@ -13,4 +13,5 @@ data:
   # (Nested groups work fine)
   # g, <AZURE_AD_GROUP_ID>, role:admin
   policy.csv: |
+    g, admin, role:admin
     g, $ARGO_ADMIN_GROUP_ID, role:admin
