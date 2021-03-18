@@ -88,7 +88,7 @@ resource "helm_release" "velero" {
   timeout    = 600
   atomic     = true
 
-  values = ["${file("helm/velero_values.yaml")}"]
+  values = [file("helm/velero_values.yaml")]
 
   set {
     name  = "configuration.backupStorageLocation.config.resourceGroup"

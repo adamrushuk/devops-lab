@@ -45,7 +45,7 @@ resource "helm_release" "argocd" {
   version    = var.argocd_chart_version
   timeout    = 600
   atomic     = true
-  values     = ["${file("${path.module}/files/argocd-values.yaml")}"]
+  values     = [file("${path.module}/files/argocd-values.yaml")]
 
   set {
     name  = "global.image.tag"

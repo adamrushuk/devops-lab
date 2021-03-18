@@ -22,7 +22,7 @@ resource "helm_release" "nexus" {
   timeout    = 600
   atomic     = true
 
-  values = ["${file("helm/nexus_values.yaml")}"]
+  values = [file("helm/nexus_values.yaml")]
 
   set {
     name  = "image.tag"
