@@ -59,6 +59,10 @@ env:
   TF_PLAN: "tfplan"
   TF_VERSION: "0.12.30" # "latest" is supported
   TF_WORKING_DIR: ./terraform
+  # https://github.com/terraform-linters/tflint-ruleset-azurerm/releases
+  TFLINT_RULESET_AZURERM_VERSION: "v0.8.2"
+  # https://github.com/terraform-linters/tflint/releases
+  TFLINT_VERSION: "v0.24.1"
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
   # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
@@ -139,28 +143,12 @@ jobs:
         terraform validate
       working-directory: ${{ env.TF_WORKING_DIR }}
 
-    # - name: tflint
-    #   uses: reviewdog/action-tflint@v1.4.2
-    #   with:
-    #     github_token: ${{ secrets.github_token }}
-    #     working_directory: ${{ env.TF_WORKING_DIR }}
-    #     reporter: github-pr-check # Optional. Change reporter
-    #     fail_on_error: "true" # Optional. Fail action if errors are found
-    #     filter_mode: "nofilter" # Optional. Check all files, not just the diff
-    #     flags: "--module" # Optional. Add custom tflint flags
-
-    # - name: Terraform Lint
-    #   uses: rickardl/tflint-action@v1.5
-    #   with:
-    #     tflint_action_comment: true
-    #     tflint_action_folder: ${{ env.TF_WORKING_DIR }}
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Terraform Lint
       run: ./scripts/tflint.sh
       env:
         TF_WORKING_DIR: ${{ env.TF_WORKING_DIR }}
+        TFLINT_RULESET_AZURERM_VERSION: ${{ env.TFLINT_RULESET_AZURERM_VERSION }}
+        TFLINT_VERSION: ${{ env.TFLINT_VERSION }}
 
     - name: Terraform Plan
       id: plan
@@ -188,8 +176,8 @@ jobs:
       run: ./scripts/wait.sh
 
 
+    # Ansible
     # TODO: enable Ansible Lint once this issue has been resolved: https://github.com/ansible/ansible-lint-action/issues/36
-    # # Ansible
     # - name: Lint Ansible Playbook
     #   uses: ansible/ansible-lint-action@6c8c141
     #   with:

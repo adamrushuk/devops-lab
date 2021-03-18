@@ -11,13 +11,13 @@ terraform {
   # versioning syntax: https://www.terraform.io/docs/configuration/modules.html#module-versions
   required_providers {
     # https://github.com/hashicorp/terraform-provider-helm/releases
-    helm = "2.0.1"
+    helm = "2.0.3"
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
-    kubernetes = "1.13.3"
+    kubernetes = "2.0.2"
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
-    azuread = "1.2.2"
+    azuread = "1.4.0"
 
     random = "~> 2.2" # ~> 2.2 = 2.X.Y
     tls    = "~> 2.1"
@@ -30,14 +30,13 @@ terraform {
 # must include blank features block
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
-  version = "2.43.0"
+  version = "2.51.0"
   features {}
 }
 
 # use statically defined credentials
 # https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs#statically-defined-credentials
 provider "kubernetes" {
-  load_config_file       = false # when you wish not to load the local config file
   host                   = module.aks.full_object.kube_admin_config[0].host
   client_certificate     = base64decode(module.aks.full_object.kube_admin_config[0].client_certificate)
   client_key             = base64decode(module.aks.full_object.kube_admin_config[0].client_key)

@@ -6,7 +6,7 @@
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location uksouth --output table
 variable "kubernetes_version" {
-  default = "1.16.15"
+  default = "1.17.16"
 }
 
 # Helm charts
@@ -21,20 +21,20 @@ variable "kubernetes_version" {
 # helm search repo ingress-nginx/ingress-nginx
 # * also update terraform/helm/nginx_values.yaml
 variable "nginx_chart_version" {
-  default = "3.20.1"
+  default = "3.23.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.1.0"
+  default = "v1.2.0"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 # helm search repo vmware-tanzu/velero
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.14.5"
+  default = "2.14.8"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
@@ -54,31 +54,31 @@ variable "nexus_chart_version" {
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
 # helm search repo spv-charts/akv2k8s
 variable "akv2k8s_chart_version" {
-  default = "1.1.26"
+  default = "1.1.28"
 }
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "3.0.0"
+  default = "3.0.3"
 }
 
 # https://bitnami.com/stack/external-dns/helm
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.5.3"
+  default = "4.8.0"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.3.1"
+  default = "2.3.2"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
 variable "kured_image_tag" {
-  default = "1.4.4"
+  default = "1.5.1"
 }
 
 
@@ -86,12 +86,12 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "2.11.0"
+  default = "2.14.6"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 variable "argocd_image_tag" {
-  default = "v1.8.2"
+  default = "v1.8.4"
 }
 #endregion Versions
 
@@ -150,8 +150,8 @@ variable "azurerm_kubernetes_cluster_name" {
   default = "__AKS_CLUSTER_NAME__"
 }
 
-variable "aad_group_name" {
-  description = "Name of the Azure AD group for cluster-admin access"
+variable "aks_admins_aad_group_name" {
+  description = "Name an existing Azure AD group for AKS admins"
   type        = string
   default     = "AKS-Admins"
 }
@@ -349,13 +349,16 @@ __HELM_CHART_REPO_DEPLOY_PRIVATE_KEY__
 EOT
 }
 
-
+variable "argocd_apps_path" {
+  default = "files/argocd-apps.yaml"
+}
 
 # gitlab
 variable "gitlab_cert_sync_yaml_path" {
   default = "files/gitlab-akvs-certificate-sync.yaml"
 }
 
-variable "gitlab_argocd_app_path" {
-  default = "files/argocd-gitlab.yaml"
-}
+# TODO: remove if no longer required
+# variable "gitlab_argocd_app_path" {
+#   default = "files/argocd-gitlab.yaml"
+# }

@@ -1,9 +1,11 @@
 # Misc
-terraform/.terraform
+.terraform
+terraform.tfstate*
 localonly
 credentials*
 /temp
 *.egg-info
+*.cer
 
 # Azure Functions artifacts
 bin

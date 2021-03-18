@@ -54,7 +54,7 @@ resource "azurerm_log_analytics_solution" "aks" {
 # https://registry.terraform.io/modules/adamrushuk/aks/azurerm/latest
 module "aks" {
   source  = "adamrushuk/aks/azurerm"
-  version = "0.4.2"
+  version = "0.7.0"
 
   kubernetes_version   = var.kubernetes_version
   location             = azurerm_resource_group.aks.location
@@ -67,17 +67,20 @@ module "aks" {
 
   # override defaults
   default_node_pool = {
-    name  = var.agent_pool_profile_name
-    count = var.agent_pool_node_count
-    # availability_zones  = null
-    vm_size             = var.agent_pool_profile_vm_size
-    enable_auto_scaling = var.agent_pool_enable_auto_scaling
-    max_count           = var.agent_pool_node_max_count
-    max_pods            = 90
-    min_count           = var.agent_pool_node_min_count
-    os_disk_size_gb     = var.agent_pool_profile_disk_size_gb
+    name                 = var.agent_pool_profile_name
+    count                = var.agent_pool_node_count
+    orchestrator_version = var.kubernetes_version
+    vm_size              = var.agent_pool_profile_vm_size
+    enable_auto_scaling  = var.agent_pool_enable_auto_scaling
+    max_count            = var.agent_pool_node_max_count
+    max_pods             = 90
+    min_count            = var.agent_pool_node_min_count
+    os_disk_size_gb      = var.agent_pool_profile_disk_size_gb
   }
 
   # add-ons
   log_analytics_workspace_id = var.aks_container_insights_enabled == true ? azurerm_log_analytics_workspace.aks[0].id : ""
+
+  # Add existing group to the new AKS cluster admin group
+  aks_admin_group_member_name = var.aks_admins_aad_group_name
 }

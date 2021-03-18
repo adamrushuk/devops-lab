@@ -1,9 +1,9 @@
-# https://argoproj.github.io/argo-cd/user-guide/helm/
+# App of Apps pattern
+# https://argoproj.github.io/argo-cd/operator-manual/cluster-bootstrapping/
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  # ! MUST match the existing helm release name: https://argoproj.github.io/argo-cd/user-guide/helm/#helm-release-name
-  name: ar-gitlab
+  name: argocd-apps
   # namespace of argo cd deployment
   namespace: argocd
 spec:
@@ -11,18 +11,22 @@ spec:
   source:
     repoURL: git@github.com:adamrushuk/charts-private.git
     targetRevision: main
-    path: charts/gitlab-https
+    path: charts/argocd-apps
     helm:
       # target helm version
-      version: v3
+      # * NOT required if "Chart.yaml" helm metadata contains "apiVersion: v2"
+      # version: v3
+
       # values file path is relative from the source.path folder
       valueFiles:
-        - ar-values-dev.yaml
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: gitlab
-  syncPolicy: {}
-    # # sync options which modifies sync behavior
+    namespace: argocd
+  syncPolicy:
+    # https://argoproj.github.io/argo-cd/user-guide/auto_sync/#automated-sync-policy
+    automated: {}
+    # sync options which modifies sync behavior
     # syncOptions:
     #   # namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster
     #   - CreateNamespace=true
