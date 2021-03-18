@@ -1,4 +1,9 @@
 terraform {
+
+  # https://github.com/hashicorp/terraform/releases
+  # 0.13.X
+  required_version = "~> 0.13.6"
+
   # terraform remote state
   backend "azurerm" {
     access_key           = "__STORAGE_KEY__"
@@ -8,34 +13,64 @@ terraform {
   }
 
   # providers (pin all versions)
-  # versioning syntax: https://www.terraform.io/docs/configuration/modules.html#module-versions
+  # versioning syntax: https://www.terraform.io/docs/language/expressions/version-constraints.html#version-constraint-syntax
   required_providers {
-    # https://github.com/hashicorp/terraform-provider-helm/releases
-    helm = "2.0.3"
 
-    # https://github.com/hashicorp/terraform-provider-kubernetes/releases
-    kubernetes = "2.0.2"
+    # https://github.com/terraform-providers/terraform-provider-azurerm/releases
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = "2.51.0"
+    }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
-    azuread = "1.4.0"
+    azuread = {
+      source = "hashicorp/azuread"
+      version = "1.4.0"
+    }
 
-    random = "~> 2.2" # ~> 2.2 = 2.X.Y
-    tls    = "~> 2.1"
+    # https://github.com/hashicorp/terraform-provider-kubernetes/releases
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.0.3"
+    }
+
+    # https://github.com/hashicorp/terraform-provider-helm/releases
+    helm = {
+      source = "hashicorp/helm"
+      version = "2.0.3"
+    }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 2.2"
+    }
+
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 2.1"
+    }
+
+    local = {
+      source = "hashicorp/local"
+    }
+
+    null = {
+      source = "hashicorp/null"
+    }
+
+    template = {
+      source = "hashicorp/template"
+    }
   }
-
-  # 0.12.X
-  required_version = "~> 0.12.30" # https://github.com/hashicorp/terraform/releases
 }
 
 # must include blank features block
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
-  version = "2.51.0"
   features {}
 }
 
-# use statically defined credentials
-# https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs#statically-defined-credentials
+# https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs#credentials-config
 provider "kubernetes" {
   host                   = module.aks.full_object.kube_admin_config[0].host
   client_certificate     = base64decode(module.aks.full_object.kube_admin_config[0].client_certificate)
@@ -43,6 +78,7 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(module.aks.full_object.kube_admin_config[0].cluster_ca_certificate)
 }
 
+# https://registry.terraform.io/providers/hashicorp/helm/latest/docs#credentials-config
 provider "helm" {
   kubernetes {
     host                   = module.aks.full_object.kube_admin_config[0].host

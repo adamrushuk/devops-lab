@@ -57,7 +57,7 @@ env:
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
   TF_PLAN: "tfplan"
-  TF_VERSION: "0.12.30" # "latest" is supported
+  TF_VERSION: "0.13.6" # "latest" is supported
   TF_WORKING_DIR: ./terraform
   # https://github.com/terraform-linters/tflint-ruleset-azurerm/releases
   TFLINT_RULESET_AZURERM_VERSION: "v0.8.2"
