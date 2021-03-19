@@ -78,7 +78,7 @@ variable "kured_chart_version" {
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
 variable "kured_image_tag" {
-  default = "1.6.0"
+  default = "1.6.1"
 }
 
 
