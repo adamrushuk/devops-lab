@@ -6,7 +6,7 @@
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location uksouth --output table
 variable "kubernetes_version" {
-  default = "1.17.16"
+  default = "1.18.14"
 }
 
 # Helm charts
@@ -21,7 +21,7 @@ variable "kubernetes_version" {
 # helm search repo ingress-nginx/ingress-nginx
 # * also update terraform/helm/nginx_values.yaml
 variable "nginx_chart_version" {
-  default = "3.23.0"
+  default = "3.24.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -34,12 +34,12 @@ variable "cert_manager_chart_version" {
 # helm search repo vmware-tanzu/velero
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.14.8"
+  default = "2.15.0"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 variable "nexus_image_tag" {
-  default = "3.29.2"
+  default = "3.30.0"
 }
 
 # https://github.com/adamrushuk/charts/releases
@@ -54,7 +54,7 @@ variable "nexus_chart_version" {
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
 # helm search repo spv-charts/akv2k8s
 variable "akv2k8s_chart_version" {
-  default = "1.1.28"
+  default = "2.0.7"
 }
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
@@ -67,18 +67,18 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.8.0"
+  default = "4.9.1"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.3.2"
+  default = "2.4.0"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
 variable "kured_image_tag" {
-  default = "1.5.1"
+  default = "1.6.0"
 }
 
 
@@ -86,12 +86,12 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "2.14.6"
+  default = "2.17.1"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 variable "argocd_image_tag" {
-  default = "v1.8.4"
+  default = "v1.8.7"
 }
 #endregion Versions
 
