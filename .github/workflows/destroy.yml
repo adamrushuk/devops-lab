@@ -123,6 +123,13 @@ jobs:
         terraform destroy -no-color -auto-approve
       working-directory: ${{ env.TF_WORKING_DIR }}
 
+    - name: Terraform logs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Terraform logs
+        path: ${{ env.TF_WORKING_DIR }}/${{ env.TF_LOG_PATH }}
+      if: always()
+
     # Cleanup
     - name: Delete Storage
       run: ./scripts/storage_delete.sh
