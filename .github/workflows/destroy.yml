@@ -49,6 +49,8 @@ env:
   # terraform
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
+  TF_LOG_PATH: terraform.log
+  TF_LOG: DEBUG
   TF_VERSION: "0.13.6" # "latest" is supported
   TF_WORKING_DIR: terraform
 
