@@ -2,8 +2,7 @@ terraform {
 
   # https://github.com/hashicorp/terraform/releases
   # https://github.com/hashicorp/terraform/blob/main/CHANGELOG.md
-  # 0.14.X
-  required_version = "~> 0.14.9"
+  required_version = ">= 0.13"
 
   # terraform remote state
   backend "azurerm" {
@@ -19,13 +18,13 @@ terraform {
 
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "~> 2.52.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
-      source = "hashicorp/azuread"
+      source  = "hashicorp/azuread"
       version = "~> 1.4.0"
     }
 
@@ -37,7 +36,7 @@ terraform {
 
     # https://github.com/hashicorp/terraform-provider-helm/releases
     helm = {
-      source = "hashicorp/helm"
+      source  = "hashicorp/helm"
       version = "~> 2.0.3"
     }
 
@@ -52,17 +51,17 @@ terraform {
     }
 
     local = {
-      source = "hashicorp/local"
+      source  = "hashicorp/local"
       version = "~> 2.0"
     }
 
     null = {
-      source = "hashicorp/null"
+      source  = "hashicorp/null"
       version = "~> 3.0"
     }
 
     template = {
-      source = "hashicorp/template"
+      source  = "hashicorp/template"
       version = "~> 2.0"
     }
   }
