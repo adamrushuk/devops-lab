@@ -2,8 +2,8 @@ terraform {
 
   # https://github.com/hashicorp/terraform/releases
   # https://github.com/hashicorp/terraform/blob/main/CHANGELOG.md
-  # 0.13.X
-  required_version = "~> 0.13.6"
+  # 0.14.X
+  required_version = "~> 0.14.9"
 
   # terraform remote state
   backend "azurerm" {
