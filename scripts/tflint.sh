@@ -14,7 +14,7 @@ TFLINT_RULESET_AZURERM_VERSION="${TFLINT_RULESET_AZURERM_VERSION:-v0.7.0}"
 TF_FLAGS=("$TF_WORKING_DIR")
 export TFLINT_LOG=debug
 # use empty array to skip adding disabled rules, eg: "DISABLED_RULES=()"
-DISABLED_RULES=("azurerm_log_analytics_workspace_invalid_retention_in_days")
+DISABLED_RULES=()
 
 # use dynamic flags
 if [ ${#DISABLED_RULES[@]} -gt 0 ]; then
