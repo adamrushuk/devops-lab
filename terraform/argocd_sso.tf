@@ -20,7 +20,7 @@ resource "azuread_application" "argocd" {
   available_to_other_tenants = false
   oauth2_allow_implicit_flow = false
   # owners                     = []
-  group_membership_claims    = "All"
+  group_membership_claims = "All"
 
   # you can check manually created app reg info in the app reg manifest tab
   # reference: https://github.com/mjisaak/azure-active-directory/blob/master/README.md#well-known-appids
@@ -68,6 +68,8 @@ resource "azuread_service_principal" "argocd" {
 data "azurerm_client_config" "current" {
 }
 
+
+# argocd-cm patch
 # https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file
 data "template_file" "argocd_cm" {
   template = file(var.argocd_cm_yaml_path)
@@ -81,6 +83,7 @@ data "template_file" "argocd_cm" {
 resource "null_resource" "argocd_cm" {
   triggers = {
     yaml_contents = filemd5(var.argocd_cm_yaml_path)
+    sp_app_id     = azuread_service_principal.argocd.application_id
   }
 
   provisioner "local-exec" {
@@ -90,6 +93,39 @@ resource "null_resource" "argocd_cm" {
     }
     command = <<EOT
       kubectl patch configmap/argocd-cm --namespace argocd --type merge --patch "${data.template_file.argocd_cm.rendered}"
+    EOT
+  }
+
+  depends_on = [
+    local_file.kubeconfig,
+    null_resource.argocd_configure
+  ]
+}
+
+
+# argocd-secret patch
+# https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file
+data "template_file" "argocd_secret" {
+  template = file(var.argocd_secret_yaml_path)
+  vars = {
+    clientSecretBase64 = base64encode(random_password.argocd.result)
+  }
+}
+
+# https://www.terraform.io/docs/provisioners/local-exec.html
+resource "null_resource" "argocd_secret" {
+  triggers = {
+    yaml_contents = filemd5(var.argocd_secret_yaml_path)
+    clientSecret  = random_password.argocd.result
+  }
+
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    environment = {
+      KUBECONFIG = var.aks_config_path
+    }
+    command = <<EOT
+      kubectl patch secret/argocd-secret --namespace argocd --type merge --patch "${data.template_file.argocd_secret.rendered}"
     EOT
   }
 

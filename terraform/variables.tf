@@ -353,6 +353,10 @@ variable "argocd_cm_yaml_path" {
   default = "files/argocd-cm-patch.tmpl.yaml"
 }
 
+variable "argocd_secret_yaml_path" {
+  default = "files/argocd-secret-patch.tmpl.yaml"
+}
+
 
 
 # gitlab
