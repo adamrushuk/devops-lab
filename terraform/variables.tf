@@ -323,6 +323,10 @@ variable "nexus_cert_sync_yaml_path" {
 
 
 # argo cd
+variable "argocd_admins_aad_group_name" {
+  default = "ArgoCD_Admins"
+}
+
 variable "argocd_admin_password" {
   default = "__ARGOCD_ADMIN_PASSWORD__"
 }
@@ -355,6 +359,10 @@ variable "argocd_cm_yaml_path" {
 
 variable "argocd_secret_yaml_path" {
   default = "files/argocd-secret-patch.tmpl.yaml"
+}
+
+variable "argocd_rbac_cm_yaml_path" {
+  default = "files/argocd-rbac-cm-patch.tmpl.yaml"
 }
 
 

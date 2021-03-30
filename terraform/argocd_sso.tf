@@ -134,3 +134,41 @@ resource "null_resource" "argocd_secret" {
     null_resource.argocd_configure
   ]
 }
+
+
+# argocd-rbac-cm patch
+data "azuread_group" "argocd_admins" {
+  display_name     = var.argocd_admins_aad_group_name
+  security_enabled = true
+}
+
+# https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file
+data "template_file" "argocd_rbac_cm" {
+  template = file(var.argocd_rbac_cm_yaml_path)
+  vars = {
+    argoAdminGroupId = azuread_group.argocd_admins.id
+  }
+}
+
+# https://www.terraform.io/docs/provisioners/local-exec.html
+resource "null_resource" "argocd_rbac_cm" {
+  triggers = {
+    yaml_contents    = filemd5(var.argocd_rbac_cm_yaml_path)
+    argoAdminGroupId = azuread_group.argocd_admins.id
+  }
+
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    environment = {
+      KUBECONFIG = var.aks_config_path
+    }
+    command = <<EOT
+      kubectl patch configmap/argocd-rbac-cm --namespace argocd --type merge --patch "${data.template_file.argocd_rbac_cm.rendered}"
+    EOT
+  }
+
+  depends_on = [
+    local_file.kubeconfig,
+    null_resource.argocd_configure
+  ]
+}
