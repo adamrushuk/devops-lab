@@ -350,7 +350,7 @@ variable "argocd_app_reg_name" {
 }
 
 variable "argocd_cm_yaml_path" {
-  default = "argocd-cm-patch.tmpl.yaml"
+  default = "files/argocd-cm-patch.tmpl.yaml"
 }
 
 
@@ -359,8 +359,3 @@ variable "argocd_cm_yaml_path" {
 variable "gitlab_cert_sync_yaml_path" {
   default = "files/gitlab-akvs-certificate-sync.yaml"
 }
-
-# TODO: remove if no longer required
-# variable "gitlab_argocd_app_path" {
-#   default = "files/argocd-gitlab.yaml"
-# }
