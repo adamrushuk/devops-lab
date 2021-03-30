@@ -345,6 +345,16 @@ variable "argocd_apps_path" {
   default = "files/argocd-apps.yaml"
 }
 
+variable "argocd_app_reg_name" {
+  default = "sp_argocd_oidc"
+}
+
+variable "argocd_cm_yaml_path" {
+  default = "argocd-cm-patch.tmpl.yaml"
+}
+
+
+
 # gitlab
 variable "gitlab_cert_sync_yaml_path" {
   default = "files/gitlab-akvs-certificate-sync.yaml"
