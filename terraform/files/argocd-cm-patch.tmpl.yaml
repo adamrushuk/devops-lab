@@ -3,7 +3,7 @@ data:
     name: Azure
     issuer: https://login.microsoftonline.com/${tenantId}/v2.0
     clientID: ${appClientId}
-    clientSecret: $oidc.azure.clientSecret
+    clientSecret: \$oidc.azure.clientSecret
     requestedIDTokenClaims:
       groups:
         essential: true
