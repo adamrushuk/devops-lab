@@ -125,6 +125,9 @@ resource "null_resource" "argocd_secret" {
       KUBECONFIG = var.aks_config_path
     }
     command = <<EOT
+      # mask secret in log output
+      echo "::add-mask::${data.template_file.argocd_secret.rendered}"
+
       kubectl patch secret/argocd-secret --namespace argocd --type merge --patch "${data.template_file.argocd_secret.rendered}"
     EOT
   }
