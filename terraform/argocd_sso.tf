@@ -113,6 +113,8 @@ data "template_file" "argocd_secret" {
 }
 
 # https://www.terraform.io/docs/provisioners/local-exec.html
+# * uses "experiments = [provider_sensitive_attrs]" to hide output
+# https://www.terraform.io/docs/language/expressions/references.html#sensitive-resource-attributes
 resource "null_resource" "argocd_secret" {
   triggers = {
     yaml_contents = filemd5(var.argocd_secret_yaml_path)
@@ -125,9 +127,6 @@ resource "null_resource" "argocd_secret" {
       KUBECONFIG = var.aks_config_path
     }
     command = <<EOT
-      # mask secret in log output
-      echo "::add-mask::${base64encode(random_password.argocd.result)}"
-
       kubectl patch secret/argocd-secret --namespace argocd --type merge --patch "${data.template_file.argocd_secret.rendered}"
     EOT
   }
