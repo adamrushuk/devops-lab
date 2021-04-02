@@ -89,4 +89,8 @@ provider "helm" {
     client_key             = base64decode(module.aks.full_object.kube_admin_config[0].client_key)
     cluster_ca_certificate = base64decode(module.aks.full_object.kube_admin_config[0].cluster_ca_certificate)
   }
+
+  experiments {
+    manifest = true
+  }
 }
