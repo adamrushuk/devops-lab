@@ -126,7 +126,7 @@ resource "null_resource" "argocd_secret" {
     }
     command = <<EOT
       # mask secret in log output
-      echo "::add-mask::${data.template_file.argocd_secret.rendered}"
+      echo "::add-mask::${base64encode(random_password.argocd.result)}"
 
       kubectl patch secret/argocd-secret --namespace argocd --type merge --patch "${data.template_file.argocd_secret.rendered}"
     EOT
