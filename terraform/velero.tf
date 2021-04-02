@@ -88,6 +88,10 @@ resource "helm_release" "velero" {
   timeout    = 600
   atomic     = true
 
+  experiments {
+    manifest = true
+  }
+
   values = [file("helm/velero_values.yaml")]
 
   set {
