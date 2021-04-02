@@ -32,8 +32,8 @@ resource "helm_release" "kured" {
   }
 
   # increase testing period frequency, when testing with "sudo touch /var/run/reboot-required"
-  set {
-    name  = "configuration.period"
-    value = "1m"
-  }
+  # set {
+  #   name  = "configuration.period"
+  #   value = "1m"
+  # }
 }
