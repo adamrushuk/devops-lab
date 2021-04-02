@@ -43,35 +43,37 @@ resource "kubernetes_namespace" "external_dns" {
   depends_on = [module.aks]
 }
 
-data "template_file" "azureIdentity_external_dns" {
-  template = file(var.azureidentity_external_dns_yaml_path)
-  vars = {
-    managedIdentityResourceID = azurerm_user_assigned_identity.external_dns.id
-    managedIdentityClientID   = azurerm_user_assigned_identity.external_dns.client_id
-  }
-}
+# TODO: remove if azure.userAssignedIdentityID works in helm_release.external_dns
+# data "template_file" "azureIdentity_external_dns" {
+#   template = file(var.azureidentity_external_dns_yaml_path)
+#   vars = {
+#     managedIdentityResourceID = azurerm_user_assigned_identity.external_dns.id
+#     managedIdentityClientID   = azurerm_user_assigned_identity.external_dns.client_id
+#   }
+# }
 
 # https://www.terraform.io/docs/provisioners/local-exec.html
-resource "null_resource" "azureIdentity_external_dns" {
-  triggers = {
-    # always_run = "${timestamp()}"
-    azureidentity_external_dns_yaml_contents = filemd5(var.azureidentity_external_dns_yaml_path)
-  }
+# TODO: remove if azure.userAssignedIdentityID works in helm_release.external_dns
+# resource "null_resource" "azureIdentity_external_dns" {
+#   triggers = {
+#     # always_run = "${timestamp()}"
+#     azureidentity_external_dns_yaml_contents = filemd5(var.azureidentity_external_dns_yaml_path)
+#   }
 
-  provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
-    command     = <<EOT
-      export KUBECONFIG=${var.aks_config_path}
-      echo "${data.template_file.azureIdentity_external_dns.rendered}" | kubectl apply -f -
-    EOT
-  }
+#   provisioner "local-exec" {
+#     interpreter = ["/bin/bash", "-c"]
+#     command     = <<EOT
+#       export KUBECONFIG=${var.aks_config_path}
+#       echo "${data.template_file.azureIdentity_external_dns.rendered}" | kubectl apply -f -
+#     EOT
+#   }
 
-  depends_on = [
-    local_file.kubeconfig,
-    kubernetes_namespace.external_dns,
-    helm_release.aad_pod_identity
-  ]
-}
+#   depends_on = [
+#     local_file.kubeconfig,
+#     kubernetes_namespace.external_dns,
+#     helm_release.aad_pod_identity
+#   ]
+# }
 
 # https://github.com/bitnami/charts/tree/master/bitnami/external-dns
 # https://bitnami.com/stack/external-dns/helm
@@ -84,6 +86,12 @@ resource "helm_release" "external_dns" {
   timeout    = 600
   atomic     = true
   # values     = [file("helm/NOT_USED.yaml")]
+
+  # adds msi pod identity binding
+  set {
+    name  = "azure.userAssignedIdentityID"
+    value = azurerm_user_assigned_identity.external_dns.client_id
+  }
 
   set {
     name  = "logLevel"

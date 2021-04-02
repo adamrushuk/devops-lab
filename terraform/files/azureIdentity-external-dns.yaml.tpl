@@ -1,4 +1,5 @@
 # https://github.com/Azure/aad-pod-identity
+# TODO: delete if azure.userAssignedIdentityID works in helm_release.external_dns
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentity
 metadata:
