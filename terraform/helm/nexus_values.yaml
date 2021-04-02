@@ -7,7 +7,7 @@ nexus:
   dockerPort: 5000
   nexusPort: 8081
 
-  storageSize: 8Gi
+  storageSize: 10Gi
 
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -24,4 +24,4 @@ image:
   repository: sonatype/nexus3
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "3.27.0"
+  tag: "3.29.2"
