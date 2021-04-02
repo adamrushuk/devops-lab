@@ -1,7 +1,8 @@
 terraform {
 
   # https://www.terraform.io/docs/language/expressions/references.html#sensitive-resource-attributes
-  experiments = [provider_sensitive_attrs]
+  # TODO: this currently makes builds fail intermittently
+  # experiments = [provider_sensitive_attrs]
 
   # https://github.com/hashicorp/terraform/releases
   # https://github.com/hashicorp/terraform/blob/main/CHANGELOG.md
