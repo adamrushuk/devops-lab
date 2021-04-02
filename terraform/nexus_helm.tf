@@ -21,8 +21,10 @@ resource "null_resource" "nexus_cert_sync" {
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = <<EOT
-      export KUBECONFIG=${var.aks_config_path}
+    environment = {
+      KUBECONFIG = var.aks_config_path
+    }
+    command = <<EOT
       kubectl apply -f ${var.nexus_cert_sync_yaml_path}
     EOT
   }
