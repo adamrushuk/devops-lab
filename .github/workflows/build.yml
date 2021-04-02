@@ -70,7 +70,6 @@ env:
 
 jobs:
   build-and-deploy:
-
     # always pin versions
     # view installed software: https://docs.github.com/en/free-pro-team@latest/actions/reference/specifications-for-github-hosted-runners#supported-software
     runs-on: ubuntu-18.04
@@ -78,166 +77,155 @@ jobs:
     # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
     environment:
       name: dev_environment
-      url: https://argocd.thehypepipe.co.uk/
+      url: "https://argocd.${{ env.ROOT_DOMAIN_NAME }}"
 
     # only run if owner triggered action
     if: github.actor == github.event.repository.owner.login
 
     steps:
-
-    # Checkout
-    # https://github.com/marketplace/actions/checkout
-    - uses: actions/checkout@v2
+      # Checkout
+      # https://github.com/marketplace/actions/checkout
+      - uses: actions/checkout@v2
       # specify different branch
       # NOT required as I've changed the default branch to develop
       # with:
       #   ref: develop
 
-    # Init tasks - inc Env var concatenation
-    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
-    - name: Init tasks - inc Env var concatenation (Workaround)
-      run: |
-        chmod -R +x ./scripts/
-        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
-        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
-        echo "ARGOCD_FQDN=argocd.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
-        echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
-        echo "DOCKER_FQDN=docker.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
-        echo "TERRAFORM_STORAGE_ACCOUNT=${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001" >> $GITHUB_ENV
-        echo "TERRAFORM_STORAGE_RG=${{ env.PREFIX }}-rg-tfstate-dev-001" >> $GITHUB_ENV
-        echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
-        echo "VELERO_STORAGE_RG=${{ env.PREFIX }}-rg-velero-dev-001" >> $GITHUB_ENV
+      # Init tasks - inc Env var concatenation
+      # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
+      - name: Init tasks - inc Env var concatenation (Workaround)
+        run: |
+          chmod -R +x ./scripts/
+          echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
+          echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
+          echo "ARGOCD_FQDN=argocd.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
+          echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
+          echo "DOCKER_FQDN=docker.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
+          echo "TERRAFORM_STORAGE_ACCOUNT=${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001" >> $GITHUB_ENV
+          echo "TERRAFORM_STORAGE_RG=${{ env.PREFIX }}-rg-tfstate-dev-001" >> $GITHUB_ENV
+          echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
+          echo "VELERO_STORAGE_RG=${{ env.PREFIX }}-rg-velero-dev-001" >> $GITHUB_ENV
 
+      # Login
+      - name: Login to Azure
+        run: ./scripts/azure_login.sh
 
-    # Login
-    - name: Login to Azure
-      run: ./scripts/azure_login.sh
+      # This is required when developing after the initial build, and the AKS cluster may have been stopped
+      # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform apply tasks
+      - name: Start AKS Cluster
+        continue-on-error: true
+        run: ./scripts/start_aks_cluster.sh
 
-    # This is required when developing after the initial build, and the AKS cluster may have been stopped
-    # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform apply tasks
-    - name: Start AKS Cluster
-      continue-on-error: true
-      run: ./scripts/start_aks_cluster.sh
+      # Prereqs
+      - name: Create Storage Account for Terraform state
+        run: ./scripts/storage_create.sh
 
+      - name: Lookup Storage Key
+        run: ./scripts/storage_key.sh
 
-    # Prereqs
-    - name: Create Storage Account for Terraform state
-      run: ./scripts/storage_create.sh
+      - name: Replace tokens in Terraform config files
+        run: pwsh -command "./scripts/Replace-Tokens.ps1"
+        env:
+          ARGOCD_ADMIN_PASSWORD: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
+          HELM_CHART_REPO_DEPLOY_PRIVATE_KEY: ${{ secrets.HELM_CHART_REPO_DEPLOY_PRIVATE_KEY }}
+          IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
 
-    - name: Lookup Storage Key
-      run: ./scripts/storage_key.sh
+      - name: Create zip file of Function App
+        run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
 
-    - name: Replace tokens in Terraform config files
-      run: pwsh -command "./scripts/Replace-Tokens.ps1"
-      env:
-        ARGOCD_ADMIN_PASSWORD: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
-        HELM_CHART_REPO_DEPLOY_PRIVATE_KEY: ${{ secrets.HELM_CHART_REPO_DEPLOY_PRIVATE_KEY }}
-        IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
+      # Terraform
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
 
-    - name: Create zip file of Function App
-      run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
+      - name: Terraform Init / Validate
+        run: |
+          terraform init
+          terraform validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
 
+      - name: Terraform Lint
+        run: ./scripts/tflint.sh
+        env:
+          TF_WORKING_DIR: ${{ env.TF_WORKING_DIR }}
+          TFLINT_RULESET_AZURERM_VERSION: ${{ env.TFLINT_RULESET_AZURERM_VERSION }}
+          TFLINT_VERSION: ${{ env.TFLINT_VERSION }}
 
-    # Terraform
-    - uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: ${{ env.TF_VERSION }}
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out=${{ env.TF_PLAN }}
+        working-directory: ${{ env.TF_WORKING_DIR }}
 
-    - name: Terraform Init / Validate
-      run: |
-        terraform init
-        terraform validate
-      working-directory: ${{ env.TF_WORKING_DIR }}
+      - name: Terraform Apply
+        run: ./scripts/terraform_apply.sh
+        # only apply if changes are present
+        # https://www.terraform.io/docs/commands/plan.html#detailed-exitcode
+        # if: steps.plan.outputs.exitcode == 2
+        env:
+          TF_PLAN: ${{ env.TF_PLAN }}
 
-    - name: Terraform Lint
-      run: ./scripts/tflint.sh
-      env:
-        TF_WORKING_DIR: ${{ env.TF_WORKING_DIR }}
-        TFLINT_RULESET_AZURERM_VERSION: ${{ env.TFLINT_RULESET_AZURERM_VERSION }}
-        TFLINT_VERSION: ${{ env.TFLINT_VERSION }}
+      # Kubernetes
+      - name: Deploy kubernetes manifests
+        run: ./scripts/k8s_manifests_apply.sh
 
-    - name: Terraform Plan
-      id: plan
-      run: terraform plan -out=${{ env.TF_PLAN }}
-      working-directory: ${{ env.TF_WORKING_DIR }}
+      - name: Wait for resources to be "Ready"
+        run: ./scripts/wait.sh
 
-    - name: Terraform Apply
-      run: ./scripts/terraform_apply.sh
-      # only apply if changes are present
-      # https://www.terraform.io/docs/commands/plan.html#detailed-exitcode
-      # if: steps.plan.outputs.exitcode == 2
-      env:
-        TF_PLAN: ${{ env.TF_PLAN }}
+      # Ansible
+      - name: Run Ansible playbook
+        run: ./scripts/ansible.sh
+        env:
+          NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
+          NEXUS_USER_PASSWORD: ${{ secrets.NEXUS_USER_PASSWORD }}
 
+      # Docker
+      - name: Docker repo login
+        uses: Azure/docker-login@v1
+        with:
+          login-server: ${{ env.DOCKER_FQDN }}
+          username: ${{ env.NEXUS_USER_USERNAME }}
+          password: ${{ secrets.NEXUS_USER_PASSWORD }}
 
-    # Kubernetes
-    - name: Deploy kubernetes manifests
-      run: ./scripts/k8s_manifests_apply.sh
+      - name: Push images to Docker repo
+        run: ./scripts/push_docker_images.sh
 
-    - name: Wait for resources to be "Ready"
-      run: ./scripts/wait.sh
+      # TODO: Remove once issue has been fixed
+      # https://github.com/terraform-providers/terraform-provider-azurerm/issues/8546
+      - name: Restart Function App
+        run: az functionapp restart --name "${{ env.PREFIX }}-funcapp" --resource-group "${{ env.PREFIX }}-rg-function-app"
 
+      # Pester tests
+      - name: Run Pester tests
+        continue-on-error: true
+        run: pwsh -command "./scripts/Start-Test.ps1"
 
-    # Ansible
-    - name: Run Ansible playbook
-      run: ./scripts/ansible.sh
-      env:
-        NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
-        NEXUS_USER_PASSWORD: ${{ secrets.NEXUS_USER_PASSWORD }}
+      - name: Archive test artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: test results
+          path: test/pester-test-results.xml
+        if: always()
 
+      # remove NuGet proxy repo so pester report step doesnt fail
+      - name: Unregister NuGet proxy repo
+        run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
 
-    # Docker
-    - name: Docker repo login
-      uses: Azure/docker-login@v1
-      with:
-        login-server: ${{ env.DOCKER_FQDN }}
-        username: ${{ env.NEXUS_USER_USERNAME }}
-        password: ${{ secrets.NEXUS_USER_PASSWORD }}
+      # Shows at the bottom of a run: https://github.com/adamrushuk/devops-lab/runs/1035347513?check_suite_focus=true
+      - name: Pester report
+        uses: zyborg/pester-tests-report@v1
+        with:
+          test_results_path: test/pester-test-results.xml
+          report_name: pester_tests
+          report_title: Pester Tests
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Push images to Docker repo
-      run: ./scripts/push_docker_images.sh
-
-
-    # TODO: Remove once issue has been fixed
-    # https://github.com/terraform-providers/terraform-provider-azurerm/issues/8546
-    - name: Restart Function App
-      run: az functionapp restart --name "${{ env.PREFIX }}-funcapp" --resource-group "${{ env.PREFIX }}-rg-function-app"
-
-
-    # Pester tests
-    - name: Run Pester tests
-      continue-on-error: true
-      run: pwsh -command "./scripts/Start-Test.ps1"
-
-    - name: Archive test artifacts
-      uses: actions/upload-artifact@v1
-      with:
-        name: test results
-        path: test/pester-test-results.xml
-      if: always()
-
-    # remove NuGet proxy repo so pester report step doesnt fail
-    - name: Unregister NuGet proxy repo
-      run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
-
-    # Shows at the bottom of a run: https://github.com/adamrushuk/devops-lab/runs/1035347513?check_suite_focus=true
-    - name: Pester report
-      uses: zyborg/pester-tests-report@v1
-      with:
-        test_results_path: test/pester-test-results.xml
-        report_name: pester_tests
-        report_title: Pester Tests
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-
-
-    # Notify
-    - name: Notify slack
-      continue-on-error: true
-      env:
-        SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Build complete"
-
+      # Notify
+      - name: Notify slack
+        continue-on-error: true
+        env:
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Build complete"
 
   # used for any windows-only tasks
   test-windows:
@@ -250,42 +238,41 @@ jobs:
     if: github.actor == github.event.repository.owner.login
 
     steps:
-    # Checkout
-    - uses: actions/checkout@v2
+      # Checkout
+      - uses: actions/checkout@v2
 
-    # Init tasks - inc Env var concatenation
-    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
-    - name: Init tasks - inc Env var concatenation (Workaround)
-      # * NOTE: different syntax required for Windows agents
-      run: |
-        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
-        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
-        echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
+      # Init tasks - inc Env var concatenation
+      # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
+      - name: Init tasks - inc Env var concatenation (Workaround)
+        # * NOTE: different syntax required for Windows agents
+        run: |
+          echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
+          echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
+          echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
 
+      # Login
+      - name: Login to Azure
+        run: ./scripts/azure_login.ps1
 
-    # Login
-    - name: Login to Azure
-      run: ./scripts/azure_login.ps1
+      # Chocolatey
+      - name: Test Nexus Chocolatey proxy repo
+        run: |
+          choco install velero --source "https://${{ env.DNS_DOMAIN_NAME }}/repository/chocolatey-proxy/"
 
-    # Chocolatey
-    - name: Test Nexus Chocolatey proxy repo
-      run: |
-        choco install velero --source "https://${{ env.DNS_DOMAIN_NAME }}/repository/chocolatey-proxy/"
+      # Velero CLI
+      - name: Test Velero CLI
+        #  NOTE: Some functions cast values to a string to perform comparisons
+        # https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#functions
+        # ! WARNING: only single quotes work for boolean comparison
+        if: env.VELERO_ENABLED == 'true'
+        run: |
+          az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing --admin
 
-    # Velero CLI
-    - name: Test Velero CLI
-      #  NOTE: Some functions cast values to a string to perform comparisons
-      # https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#functions
-      # ! WARNING: only single quotes work for boolean comparison
-      if: env.VELERO_ENABLED == 'true'
-      run: |
-        az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing --admin
+          echo "`nVelero version info:"
+          velero version || true
 
-        echo "`nVelero version info:"
-        velero version || true
+          echo "`nVelero backup location info:"
+          velero backup-location get
 
-        echo "`nVelero backup location info:"
-        velero backup-location get
-
-        echo "`nVelero backup info:"
-        velero backup get
+          echo "`nVelero backup info:"
+          velero backup get
