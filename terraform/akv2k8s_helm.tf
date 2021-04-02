@@ -71,4 +71,6 @@ resource "helm_release" "akv2k8s" {
     name  = "controller.logLevel"
     value = "debug"
   }
+
+  depends_on = [helm_release.aad_pod_identity]
 }
