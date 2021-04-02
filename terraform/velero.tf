@@ -87,8 +87,12 @@ resource "helm_release" "velero" {
   version    = var.velero_chart_version
   timeout    = 600
   atomic     = true
-
   values = [file("helm/velero_values.yaml")]
+
+  set {
+    name  = "image.tag"
+    value = var.velero_image_tag
+  }
 
   set {
     name  = "configuration.backupStorageLocation.config.resourceGroup"
