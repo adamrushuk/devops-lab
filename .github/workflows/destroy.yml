@@ -118,7 +118,7 @@ jobs:
       with:
         terraform_version: ${{ env.TF_VERSION }}
 
-    - name: Terraform destroy
+    - name: 💀 Terraform destroy
       run: |
         terraform init
         terraform destroy -no-color -auto-approve

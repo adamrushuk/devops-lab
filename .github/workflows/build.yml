@@ -151,12 +151,12 @@ jobs:
           TFLINT_RULESET_AZURERM_VERSION: ${{ env.TFLINT_RULESET_AZURERM_VERSION }}
           TFLINT_VERSION: ${{ env.TFLINT_VERSION }}
 
-      - name: Terraform Plan
+      - name: 👀 Terraform Plan
         id: plan
         run: terraform plan -out=${{ env.TF_PLAN }}
         working-directory: ${{ env.TF_WORKING_DIR }}
 
-      - name: Terraform Apply
+      - name: 🚀 Terraform Apply
         run: ./scripts/terraform_apply.sh
         # only apply if changes are present
         # https://www.terraform.io/docs/commands/plan.html#detailed-exitcode
@@ -195,7 +195,7 @@ jobs:
         run: az functionapp restart --name "${{ env.PREFIX }}-funcapp" --resource-group "${{ env.PREFIX }}-rg-function-app"
 
       # Pester tests
-      - name: Run Pester tests
+      - name: 🧪 Run Pester tests
         continue-on-error: true
         run: pwsh -command "./scripts/Start-Test.ps1"
 
