@@ -10,25 +10,49 @@ data "azurerm_key_vault" "kv" {
   resource_group_name = var.key_vault_resource_group_name
 }
 
-resource "azurerm_key_vault_access_policy" "aks" {
-  key_vault_id = data.azurerm_key_vault.kv.id
+# Legacy key vault access policy method
+# https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy-portal
+# resource "azurerm_key_vault_access_policy" "aks" {
+#   key_vault_id = data.azurerm_key_vault.kv.id
 
-  tenant_id = data.azurerm_subscription.current.tenant_id
-  object_id = module.aks.kubelet_identity[0].object_id
+#   tenant_id = data.azurerm_subscription.current.tenant_id
+#   object_id = module.aks.kubelet_identity[0].object_id
 
-  certificate_permissions = [
-    "get"
-  ]
+#   certificate_permissions = [
+#     "get"
+#   ]
 
-  key_permissions = [
-    "get"
-  ]
+#   key_permissions = [
+#     "get"
+#   ]
 
-  secret_permissions = [
-    "get"
-  ]
+#   secret_permissions = [
+#     "get"
+#   ]
+# }
+
+# Provide key vault access to akv2k8s via Azure role-based access control
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment
+resource "azurerm_role_assignment" "aks_mi_kv_certs" {
+  scope                = data.azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Certificates Officer"
+  principal_id         = module.aks.kubelet_identity[0].object_id
+  description          = "Perform any action on the keys of a key vault, except manage permissions"
 }
 
+resource "azurerm_role_assignment" "aks_mi_kv_keys" {
+  scope                = data.azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Crypto User"
+  principal_id         = module.aks.kubelet_identity[0].object_id
+  description          = "Perform cryptographic operations using keys"
+}
+
+resource "azurerm_role_assignment" "aks_mi_kv_secrets" {
+  scope                = data.azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = module.aks.kubelet_identity[0].object_id
+  description          = "Provides read-only access to secret contents"
+}
 
 # Requires "kube_admin_config_raw" as has AAD Auth enabled
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#kube_admin_config_raw
