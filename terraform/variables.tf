@@ -65,7 +65,7 @@ variable "akv2k8s_chart_version" {
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "3.0.3"
+  default = "4.0.0"
 }
 
 # https://bitnami.com/stack/external-dns/helm
@@ -78,7 +78,7 @@ variable "external_dns_chart_version" {
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.4.0"
+  default = "2.4.1"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility

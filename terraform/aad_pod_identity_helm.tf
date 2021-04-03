@@ -51,13 +51,7 @@ resource "helm_release" "aad_pod_identity" {
     data.template_file.azureIdentities.rendered
   ]
 
-  # should only be required for helm v2
-  set {
-    name  = "installCRDs"
-    value = "false"
-  }
-
-  # allow Kubenet: https://azure.github.io/aad-pod-identity/docs/configure/aad_pod_identity_on_kubenet/
+  # enable if using Kubenet: https://azure.github.io/aad-pod-identity/docs/configure/aad_pod_identity_on_kubenet/
   set {
     name  = "nmi.allowNetworkPluginKubenet"
     value = "false"
