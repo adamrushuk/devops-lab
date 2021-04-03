@@ -6,12 +6,8 @@
 set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
-# Prereqs as this is a preview feature: https://docs.microsoft.com/en-us/azure/aks/start-stop-cluster
-# Install the aks-preview extension
-az extension add --name aks-preview
-
-# Update the extension to make sure you have the latest version installed
-az extension update --name aks-preview
+# info
+az version
 
 # Check AKS power state
 aks_power_state=$(az aks show --name "$AKS_CLUSTER_NAME" --resource-group "$AKS_RG_NAME" --output tsv --query 'powerState.code')

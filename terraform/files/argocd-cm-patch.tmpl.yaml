@@ -1,0 +1,13 @@
+data:
+  oidc.config: |
+    name: Azure
+    issuer: https://login.microsoftonline.com/${tenantId}/v2.0
+    clientID: ${appClientId}
+    clientSecret: \$oidc.azure.clientSecret
+    requestedIDTokenClaims:
+      groups:
+        essential: true
+    requestedScopes:
+      - openid
+      - profile
+      - email

@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# aks-nexus-velero
+# DevOps Lab
 
 [![Build environment](https://github.com/adamrushuk/devops-lab/workflows/build/badge.svg)](https://github.com/adamrushuk/devops-lab/actions?query=workflow%3A%22build)
 

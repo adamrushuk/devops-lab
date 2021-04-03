@@ -49,7 +49,10 @@ env:
   # terraform
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
-  TF_VERSION: "0.12.30" # "latest" is supported
+  TF_LOG_PATH: terraform.log
+  TF_LOG: TRACE
+  # https://github.com/hashicorp/terraform/releases
+  TF_VERSION: "0.14.9"
   TF_WORKING_DIR: terraform
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
@@ -115,11 +118,18 @@ jobs:
       with:
         terraform_version: ${{ env.TF_VERSION }}
 
-    - name: Terraform destroy
+    - name: 💀 Terraform destroy
       run: |
         terraform init
         terraform destroy -no-color -auto-approve
       working-directory: ${{ env.TF_WORKING_DIR }}
+
+    - name: Terraform logs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Terraform logs
+        path: ${{ env.TF_WORKING_DIR }}/${{ env.TF_LOG_PATH }}
+      if: always()
 
     # Cleanup
     - name: Delete Storage

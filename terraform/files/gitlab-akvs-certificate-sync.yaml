@@ -1,5 +1,5 @@
 # https://akv2k8s.io/tutorials/sync/2-certificate/
-apiVersion: spv.no/v1alpha1
+apiVersion: spv.no/v2beta1
 kind: AzureKeyVaultSecret
 metadata:
   name: gitlab-certificate-sync

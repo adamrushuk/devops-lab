@@ -60,8 +60,10 @@ resource "null_resource" "azureIdentity_external_dns" {
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = <<EOT
-      export KUBECONFIG=${var.aks_config_path}
+    environment = {
+      KUBECONFIG = var.aks_config_path
+    }
+    command = <<EOT
       echo "${data.template_file.azureIdentity_external_dns.rendered}" | kubectl apply -f -
     EOT
   }
@@ -84,6 +86,12 @@ resource "helm_release" "external_dns" {
   timeout    = 600
   atomic     = true
   # values     = [file("helm/NOT_USED.yaml")]
+
+  # specify user-assigned managed identity
+  set {
+    name  = "azure.userAssignedIdentityID"
+    value = azurerm_user_assigned_identity.external_dns.client_id
+  }
 
   set {
     name  = "logLevel"

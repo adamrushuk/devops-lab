@@ -1,0 +1,5 @@
+data:
+  policy.default: role:readonly
+  policy.csv: |
+    g, admin, role:admin
+    g, ${argoAdminGroupId}, role:admin

@@ -24,7 +24,7 @@ resource "helm_release" "kured" {
   timeout    = 600
   atomic     = true
 
-  values = ["${file("helm/kured_values.yaml")}"]
+  values = [file("helm/kured_values.yaml")]
 
   set {
     name  = "image.tag"

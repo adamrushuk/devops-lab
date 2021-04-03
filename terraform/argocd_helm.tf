@@ -23,8 +23,10 @@ resource "null_resource" "argocd_cert_sync" {
 
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = <<-EOT
-      export KUBECONFIG=${var.aks_config_path}
+    environment = {
+      KUBECONFIG = var.aks_config_path
+    }
+    command = <<-EOT
       kubectl apply -f ${var.argocd_cert_sync_yaml_path}
     EOT
   }
@@ -45,7 +47,7 @@ resource "helm_release" "argocd" {
   version    = var.argocd_chart_version
   timeout    = 600
   atomic     = true
-  values     = ["${file("${path.module}/files/argocd-values.yaml")}"]
+  values     = [file("${path.module}/files/argocd-values.yaml")]
 
   set {
     name  = "global.image.tag"

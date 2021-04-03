@@ -12,6 +12,30 @@ resource "kubernetes_namespace" "nexus" {
   depends_on = [module.aks]
 }
 
+# https://www.terraform.io/docs/provisioners/local-exec.html
+resource "null_resource" "nexus_cert_sync" {
+  triggers = {
+    # always_run = "${timestamp()}"
+    cert_sync_yaml_contents = filemd5(var.nexus_cert_sync_yaml_path)
+  }
+
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    environment = {
+      KUBECONFIG = var.aks_config_path
+    }
+    command = <<EOT
+      kubectl apply -f ${var.nexus_cert_sync_yaml_path}
+    EOT
+  }
+
+  depends_on = [
+    local_file.kubeconfig,
+    helm_release.akv2k8s,
+    kubernetes_namespace.nexus
+  ]
+}
+
 # https://www.terraform.io/docs/providers/helm/r/release.html
 resource "helm_release" "nexus" {
   chart      = "sonatype-nexus"
@@ -22,7 +46,7 @@ resource "helm_release" "nexus" {
   timeout    = 600
   atomic     = true
 
-  values = ["${file("helm/nexus_values.yaml")}"]
+  values = [file("helm/nexus_values.yaml")]
 
   set {
     name  = "image.tag"
