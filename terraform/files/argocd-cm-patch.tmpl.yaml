@@ -11,3 +11,4 @@ data:
       - openid
       - profile
       - email
+  test: testData

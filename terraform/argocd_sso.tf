@@ -73,13 +73,15 @@ data "azurerm_client_config" "current" {
 
 # argocd-cm patch
 # https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file
-data "template_file" "argocd_cm" {
-  template = file(var.argocd_cm_yaml_path)
-  vars = {
-    tenantId    = data.azurerm_client_config.current.tenant_id
-    appClientId = azuread_service_principal.argocd.application_id
-  }
-}
+# data "template_file" "argocd_cm" {
+#   template = file(var.argocd_cm_yaml_path)
+#   vars = {
+#     tenantId    = data.azurerm_client_config.current.tenant_id
+#     appClientId = azuread_service_principal.argocd.application_id
+#   }
+# }
+
+# TODO: use templatefile
 
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "argocd_cm" {
@@ -94,7 +96,13 @@ resource "null_resource" "argocd_cm" {
       KUBECONFIG = var.aks_config_path
     }
     command = <<EOT
-      kubectl patch configmap/argocd-cm --namespace argocd --type merge --patch "${data.template_file.argocd_cm.rendered}"
+      kubectl patch configmap/argocd-cm --namespace argocd --type merge --patch "${
+        templatefile(var.argocd_cm_yaml_path,
+        {
+          "tenantId"    = data.azurerm_client_config.current.tenant_id
+          "appClientId" = azuread_service_principal.argocd.application_id
+        })
+      }"
     EOT
   }
 
