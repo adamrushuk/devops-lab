@@ -89,7 +89,7 @@ resource "null_resource" "argocd_cm" {
     }
     # https://www.terraform.io/docs/language/functions/templatefile.html
     command = <<EOT
-      kubectl patch configmap/argocd-cm --namespace argocd --type merge --patch "${ARGOCD_CM_PATCH_YAML}"
+      kubectl patch configmap/argocd-cm --namespace argocd --type merge --patch "$ARGOCD_CM_PATCH_YAML"
     EOT
   }
 
