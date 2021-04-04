@@ -52,17 +52,19 @@ resource "azuread_application" "argocd" {
   }
 }
 
+# TODO: add "SelfServiceAppAccess" tag to enable self-service options in Enterprise App
+resource "azuread_service_principal" "argocd" {
+  application_id = azuread_application.argocd.application_id
+}
+
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_password
 resource "azuread_application_password" "argocd" {
   application_object_id = azuread_application.argocd.id
   description           = "argocd_secret"
   value                 = random_password.argocd.result
   end_date              = "2099-01-01T01:02:03Z"
-}
 
-# TODO: add "SelfServiceAppAccess" tag to enable self-service options in Enterprise App
-resource "azuread_service_principal" "argocd" {
-  application_id = azuread_application.argocd.application_id
+  depends_on = [azuread_service_principal.argocd]
 }
 
 data "azurerm_client_config" "current" {
