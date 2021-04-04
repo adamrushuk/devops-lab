@@ -70,6 +70,8 @@ resource "azuread_application_password" "argocd" {
 data "azurerm_client_config" "current" {
 }
 
+
+# argocd-cm patch
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "argocd_cm" {
   triggers = {
@@ -81,11 +83,13 @@ resource "null_resource" "argocd_cm" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
       KUBECONFIG = var.aks_config_path
-      ARGOCD_CM_PATCH_YAML = templatefile(var.argocd_cm_yaml_path,
+      ARGOCD_CM_PATCH_YAML = templatefile(
+        var.argocd_cm_yaml_path,
         {
           "tenantId"    = data.azurerm_client_config.current.tenant_id
           "appClientId" = azuread_service_principal.argocd.application_id
-      })
+        }
+      )
     }
     # https://www.terraform.io/docs/language/functions/templatefile.html
     command = <<EOT
@@ -101,14 +105,6 @@ resource "null_resource" "argocd_cm" {
 
 
 # argocd-secret patch
-# https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file
-data "template_file" "argocd_secret" {
-  template = file(var.argocd_secret_yaml_path)
-  vars = {
-    clientSecretBase64 = base64encode(random_password.argocd.result)
-  }
-}
-
 # https://www.terraform.io/docs/provisioners/local-exec.html
 # * uses "experiments = [provider_sensitive_attrs]" to hide output
 # https://www.terraform.io/docs/language/expressions/references.html#sensitive-resource-attributes
@@ -122,9 +118,15 @@ resource "null_resource" "argocd_secret" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
       KUBECONFIG = var.aks_config_path
+      ARGOCD_SECRET_PATCH_YAML = templatefile(
+        var.argocd_secret_yaml_path,
+        {
+          "clientSecretBase64" = base64encode(random_password.argocd.result)
+        }
+      )
     }
     command = <<EOT
-      kubectl patch secret/argocd-secret --namespace argocd --type merge --patch "${data.template_file.argocd_secret.rendered}"
+      kubectl patch secret/argocd-secret --namespace argocd --type merge --patch "$ARGOCD_SECRET_PATCH_YAML"
     EOT
   }
 
@@ -141,14 +143,6 @@ data "azuread_group" "argocd_admins" {
   security_enabled = true
 }
 
-# https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file
-data "template_file" "argocd_rbac_cm" {
-  template = file(var.argocd_rbac_cm_yaml_path)
-  vars = {
-    argoAdminGroupId = data.azuread_group.argocd_admins.id
-  }
-}
-
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "argocd_rbac_cm" {
   triggers = {
@@ -160,9 +154,15 @@ resource "null_resource" "argocd_rbac_cm" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
       KUBECONFIG = var.aks_config_path
+      ARGOCD_RBAC_CM_PATCH_YAML = templatefile(
+        var.argocd_rbac_cm_yaml_path,
+        {
+          "argoAdminGroupId" = data.azuread_group.argocd_admins.id
+        }
+      )
     }
     command = <<EOT
-      kubectl patch configmap/argocd-rbac-cm --namespace argocd --type merge --patch "${data.template_file.argocd_rbac_cm.rendered}"
+      kubectl patch configmap/argocd-rbac-cm --namespace argocd --type merge --patch "$ARGOCD_RBAC_CM_PATCH_YAML"
     EOT
   }
 

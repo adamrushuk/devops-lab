@@ -43,18 +43,9 @@ resource "kubernetes_namespace" "external_dns" {
   depends_on = [module.aks]
 }
 
-data "template_file" "azureIdentity_external_dns" {
-  template = file(var.azureidentity_external_dns_yaml_path)
-  vars = {
-    managedIdentityResourceID = azurerm_user_assigned_identity.external_dns.id
-    managedIdentityClientID   = azurerm_user_assigned_identity.external_dns.client_id
-  }
-}
-
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "azureIdentity_external_dns" {
   triggers = {
-    # always_run = "${timestamp()}"
     azureidentity_external_dns_yaml_contents = filemd5(var.azureidentity_external_dns_yaml_path)
   }
 
@@ -62,9 +53,16 @@ resource "null_resource" "azureIdentity_external_dns" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
       KUBECONFIG = var.aks_config_path
+      AZUREIDENTITY_EXTERNAL_DNS_YAML = templatefile(
+        var.azureidentity_external_dns_yaml_path,
+        {
+          "managedIdentityResourceID" = azurerm_user_assigned_identity.external_dns.id
+          "managedIdentityClientID"   = azurerm_user_assigned_identity.external_dns.client_id
+        }
+      )
     }
     command = <<EOT
-      echo "${data.template_file.azureIdentity_external_dns.rendered}" | kubectl apply -f -
+      kubectl apply -f "$AZUREIDENTITY_EXTERNAL_DNS_YAML"
     EOT
   }
 
