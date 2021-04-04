@@ -81,16 +81,15 @@ resource "null_resource" "argocd_cm" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
       KUBECONFIG = var.aks_config_path
-    }
-    # https://www.terraform.io/docs/language/functions/templatefile.html
-    command = <<EOT
-      kubectl patch configmap/argocd-cm --namespace argocd --type merge --patch "${
-        templatefile(var.argocd_cm_yaml_path,
+      ARGOCD_CM_PATCH_YAML = templatefile(var.argocd_cm_yaml_path,
         {
           "tenantId"    = data.azurerm_client_config.current.tenant_id
           "appClientId" = azuread_service_principal.argocd.application_id
-        })
-      }"
+      })
+    }
+    # https://www.terraform.io/docs/language/functions/templatefile.html
+    command = <<EOT
+      kubectl patch configmap/argocd-cm --namespace argocd --type merge --patch "${ARGOCD_CM_PATCH_YAML}"
     EOT
   }
 
