@@ -62,7 +62,7 @@ resource "null_resource" "azureIdentity_external_dns" {
       )
     }
     command = <<EOT
-      kubectl apply -f "$AZUREIDENTITY_EXTERNAL_DNS_YAML"
+      echo "$AZUREIDENTITY_EXTERNAL_DNS_YAML" | kubectl apply -f -
     EOT
   }
 
