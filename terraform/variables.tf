@@ -6,7 +6,7 @@
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location uksouth --output table
 variable "kubernetes_version" {
-  default = "1.18.14"
+  default = "1.19.7"
 }
 
 # Helm charts
@@ -21,7 +21,7 @@ variable "kubernetes_version" {
 # helm search repo ingress-nginx/ingress-nginx
 # * also update terraform/helm/nginx_values.yaml
 variable "nginx_chart_version" {
-  default = "3.26.0"
+  default = "3.27.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -34,7 +34,7 @@ variable "cert_manager_chart_version" {
 # helm search repo vmware-tanzu/velero
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.15.0"
+  default = "2.16.0"
 }
 
 # https://hub.docker.com/r/velero/velero/tags
@@ -78,7 +78,7 @@ variable "external_dns_chart_version" {
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.4.1"
+  default = "2.4.2"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
