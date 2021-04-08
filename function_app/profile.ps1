@@ -56,9 +56,10 @@ function Send-IftttAppNotification {
         value3 = $Value3
     }
 
-    Invoke-RestMethod -Method Get -Uri $webhookUrl -Body $body -ResponseHeadersVariable responseHeaders -StatusCodeVariable statusCode
+    # TEMP removal of "StatusCodeVariable" until PowerShell 7 function app issues are resolved
+    Invoke-RestMethod -Method Get -Uri $webhookUrl -Body $body -ResponseHeadersVariable responseHeaders #-StatusCodeVariable statusCode
 
-    Write-Host "Status Code: [$statusCode]"
+    # Write-Host "Status Code: [$statusCode]"
     Write-Host "Response Headers:`n"
     $responseHeaders | Out-String
 }
