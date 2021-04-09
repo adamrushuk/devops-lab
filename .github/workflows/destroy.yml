@@ -52,7 +52,7 @@ env:
   TF_LOG_PATH: terraform.log
   TF_LOG: TRACE
   # https://github.com/hashicorp/terraform/releases
-  TF_VERSION: "0.14.9"
+  TF_VERSION: "0.14.10"
   TF_WORKING_DIR: terraform
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
