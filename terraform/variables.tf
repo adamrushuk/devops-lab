@@ -39,7 +39,7 @@ variable "velero_chart_version" {
 
 # https://hub.docker.com/r/velero/velero/tags
 variable "velero_image_tag" {
-  default = "v1.5.4"
+  default = "v1.6.0"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
@@ -72,7 +72,7 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.9.4"
+  default = "4.10.0"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
