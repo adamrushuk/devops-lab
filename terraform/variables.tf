@@ -34,7 +34,7 @@ variable "cert_manager_chart_version" {
 # helm search repo vmware-tanzu/velero
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.16.0"
+  default = "2.17.0"
 }
 
 # https://hub.docker.com/r/velero/velero/tags

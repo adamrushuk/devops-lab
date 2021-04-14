@@ -1,4 +1,4 @@
-# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.15.0/charts/velero/values.yaml
+# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.17.0/charts/velero/values.yaml
 
 ##
 ## Configuration settings that directly affect the Velero deployment YAML.
@@ -9,7 +9,7 @@
 image:
   # https://hub.docker.com/r/velero/velero/tags
   repository: velero/velero
-  tag: v1.5.3
+  tag: v1.6.0
   # Digest value example: sha256:d238835e151cec91c6a811fe3a89a66d3231d9f64d09e5f3c49552672d271f38. If used, it will
   # take precedence over the image.tag.
   # digest:
@@ -50,7 +50,7 @@ dnsPolicy: ClusterFirst
 initContainers:
   - name: velero-plugin-for-microsoft-azure
     # https://hub.docker.com/r/velero/velero-plugin-for-microsoft-azure/tags
-    image: velero/velero-plugin-for-microsoft-azure:v1.1.2
+    image: velero/velero-plugin-for-microsoft-azure:v1.2.0
     imagePullPolicy: IfNotPresent
     volumeMounts:
       - mountPath: /target
@@ -221,6 +221,7 @@ serviceAccount:
     create: true
     name:
     annotations:
+    labels:
 
 # Info about the secret to be used by the Velero deployment, which
 # should contain credentials for the cloud provider IAM account you've
