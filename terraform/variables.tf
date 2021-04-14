@@ -91,7 +91,7 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "3.0.0"
+  default = "3.1.0"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
