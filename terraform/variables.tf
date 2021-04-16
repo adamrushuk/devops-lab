@@ -6,7 +6,7 @@
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location uksouth --output table
 variable "kubernetes_version" {
-  default = "1.19.7"
+  default = "1.19.9"
 }
 
 # Helm charts
@@ -27,14 +27,14 @@ variable "nginx_chart_version" {
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.3.0"
+  default = "v1.3.1"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 # helm search repo vmware-tanzu/velero
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.17.0"
+  default = "2.17.2"
 }
 
 # https://hub.docker.com/r/velero/velero/tags
@@ -91,12 +91,12 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "3.1.0"
+  default = "3.1.1"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 variable "argocd_image_tag" {
-  default = "v2.0.0"
+  default = "v2.0.1"
 }
 #endregion Versions
 
