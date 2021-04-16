@@ -4,9 +4,9 @@
 #region Versions
 # version used for both main AKS API service, and default node pool
 # https://github.com/Azure/AKS/releases
-# az aks get-versions --location uksouth --output table
+# az aks get-versions --location eastus --output table
 variable "kubernetes_version" {
-  default = "1.19.9"
+  default = "1.19.7"
 }
 
 # Helm charts
