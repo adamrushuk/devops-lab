@@ -6,7 +6,7 @@
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location eastus --output table
 variable "kubernetes_version" {
-  default = "1.19.7"
+  default = "1.19.9"
 }
 
 # Helm charts
@@ -34,7 +34,7 @@ variable "cert_manager_chart_version" {
 # helm search repo vmware-tanzu/velero
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.17.2"
+  default = "2.18.2"
 }
 
 # https://hub.docker.com/r/velero/velero/tags
@@ -72,13 +72,13 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "4.10.0"
+  default = "4.11.0"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.4.2"
+  default = "2.4.3"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility

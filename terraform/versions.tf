@@ -41,7 +41,7 @@ terraform {
     # https://github.com/hashicorp/terraform-provider-helm/releases
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.1.0"
+      version = "~> 2.1.1"
     }
 
     random = {
