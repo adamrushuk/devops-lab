@@ -47,6 +47,7 @@ resource "helm_release" "aad_pod_identity" {
   atomic     = true
 
   values = [
+    # see default values: /helm/aad_pod_identity_default_values.yaml
     file("helm/aad_pod_identity_values.yaml"),
     data.template_file.azureIdentities.rendered
   ]
