@@ -95,7 +95,7 @@ variable "argocd_chart_version" {
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 variable "argocd_image_tag" {
-  default = "v2.0.1"
+  default = "v2.0.2"
 }
 #endregion Versions
 
