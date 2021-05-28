@@ -190,9 +190,15 @@ jobs:
         run: ./scripts/push_docker_images.sh
 
       # TODO: Remove once issue has been fixed
+      - name: Fix Function App version
+        run: pwsh -command "./scripts/Fix-FunctionApp.ps1"
+        env:
+          FUNCTION_APP_NAME: "${{ env.PREFIX }}-funcapp"
+          FUNCTION_APP_RG: "${{ env.PREFIX }}-rg-function-app"
+
       # https://github.com/terraform-providers/terraform-provider-azurerm/issues/8546
-      - name: Restart Function App
-        run: az functionapp restart --name "${{ env.PREFIX }}-funcapp" --resource-group "${{ env.PREFIX }}-rg-function-app"
+      # - name: Restart Function App
+      #   run: az functionapp restart --name "${{ env.PREFIX }}-funcapp" --resource-group "${{ env.PREFIX }}-rg-function-app"
 
       # Pester tests
       - name: 🧪 Run Pester tests
