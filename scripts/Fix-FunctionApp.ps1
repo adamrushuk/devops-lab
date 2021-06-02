@@ -9,6 +9,9 @@ $function = az functionapp show --name $env:FUNCTION_APP_NAME --resource-group $
 if ($function.siteConfig.powerShellVersion -ne "~7") {
     Write-Host "Updating powershell version to ~7..."
     az functionapp update --name $env:FUNCTION_APP_NAME --resource-group $env:FUNCTION_APP_RG --set "siteConfig.powerShellVersion=~7"
+
+    # Restart Function App
+    # az functionapp restart --name $env:FUNCTION_APP_NAME --resource-group $env:FUNCTION_APP_RG
 } else {
     Write-Host "Powershell version already set to to ~7"
 }
