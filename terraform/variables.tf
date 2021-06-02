@@ -64,7 +64,7 @@ variable "akv2k8s_chart_version" {
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "4.1.0"
+  default = "4.1.1"
 }
 
 # https://bitnami.com/stack/external-dns/helm
