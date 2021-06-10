@@ -45,8 +45,8 @@ RUN if [ "${INSTALL_AZURE_CLI}" = "true" ]; then bash /tmp/library-scripts/azcli
 
 # Install Terraform, tflint, Go, PowerShell, and other useful tools
 # TODO: move this into main "RUN" layer above
-ARG TERRAFORM_VERSION=0.15.5
-ARG TFLINT_VERSION=0.18.0
+ARG TERRAFORM_VERSION=1.0.0
+ARG TFLINT_VERSION=0.29.0
 RUN bash /tmp/library-scripts/terraform-debian.sh "${TERRAFORM_VERSION}" "${TFLINT_VERSION}" \
     && bash /tmp/library-scripts/powershell-debian.sh \
     && bash /tmp/library-scripts/kubectl-helm-debian.sh \
