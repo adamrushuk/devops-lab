@@ -2,9 +2,11 @@
 
 Used for Splunk related testing.
 
-## Install
+## Installation
 
 ### Terraform
+
+Build an AKS cluster:
 
 ```bash
 # Init
@@ -28,23 +30,25 @@ terraform destroy
 There is a current issue with [Admin Installation for All Namespaces](https://github.com/splunk/splunk-operator/issues/206),
 so use the [non-admin user method](https://github.com/splunk/splunk-operator/blob/develop/docs/Install.md#installation-using-a-non-admin-user).
 
+#### Install
+
+Install the Splunk Operator as a non-admin user.
+
 ```bash
-# install
+# create namespace
 kubectl create namespace splunk-operator
-kubectl apply -f https://github.com/splunk/splunk-operator/releases/download/1.0.0/splunk-operator-install.yaml --namespace splunk-operator
 
-
-# install custom resource definitions
+# an admin needs to install the CRDs
 kubectl apply -f https://github.com/splunk/splunk-operator/releases/download/1.0.1/splunk-operator-crds.yaml
-kubectl apply -f wget -O splunk-operator.yaml https://github.com/splunk/splunk-operator/releases/download/1.0.1/splunk-operator-install.yaml
-kubectl apply -f https://github.com/splunk/splunk-operator/releases/download/1.0.1/splunk-operator-cluster.yaml
-
-
 
 # install splunk operator into namespace
-kubectl create namespace splunk-operator
-kubectl config set-context --current --namespace=<NAMESPACE>
-kubectl apply -f https://github.com/splunk/splunk-operator/releases/download/1.0.1/splunk-operator-noadmin.yaml
+# v1.0.1 doesnt currently work - I've raised this issue: https://github.com/splunk/splunk-operator/issues/373
+kubectl apply -f https://github.com/splunk/splunk-operator/releases/download/1.0.1/splunk-operator-noadmin.yaml  --namespace splunk-operator
+
+
+# 1.0.0 works
+kubectl apply -f https://github.com/splunk/splunk-operator/releases/download/1.0.0/splunk-operator-crds.yaml
+kubectl apply -f https://github.com/splunk/splunk-operator/releases/download/1.0.0/splunk-operator-noadmin.yaml --namespace splunk-operator
 ```
 
 ### Splunk Deployments
