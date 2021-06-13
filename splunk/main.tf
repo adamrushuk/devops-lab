@@ -42,9 +42,10 @@ locals {
   # version used for both main AKS API service, and default node pool
   # https://github.com/Azure/AKS/releases
   # az aks get-versions --location uksouth --output table
-  kubernetes_version  = "1.20.7"
+  kubernetes_version  = "1.18.19"
   location            = "uksouth"
-  prefix              = "ar${random_string.aks.result}" # aks dns_prefix must start with a letter
+  # prefix              = "ar${random_string.aks.result}" # aks dns_prefix must start with a letter
+  prefix              = "arsplunk" # aks dns_prefix must start with a letter
   resource_group_name = "${local.prefix}-rg-azurerm-kubernetes-cluster"
   name                = "${local.prefix}-aks-cluster"
 
