@@ -6,7 +6,7 @@
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location eastus --output table
 variable "kubernetes_version" {
-  default = "1.19.11"
+  default = "1.20.7"
 }
 
 # Helm charts
@@ -26,7 +26,7 @@ variable "nginx_chart_version" {
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.3.1"
+  default = "v1.4.0"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
@@ -43,7 +43,7 @@ variable "velero_image_tag" {
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 variable "nexus_image_tag" {
-  default = "3.30.1"
+  default = "3.31.0"
 }
 
 # https://github.com/adamrushuk/charts/releases
@@ -71,13 +71,13 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "5.0.3"
+  default = "5.1.1"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.6.0"
+  default = "2.7.0"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
