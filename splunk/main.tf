@@ -5,7 +5,7 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 2.63.0"
+      version = "~> 2.64.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
@@ -42,7 +42,7 @@ locals {
   # version used for both main AKS API service, and default node pool
   # https://github.com/Azure/AKS/releases
   # az aks get-versions --location uksouth --output table
-  kubernetes_version  = "1.18.19"
+  kubernetes_version  = "1.20.7"
   location            = "uksouth"
   # prefix              = "ar${random_string.aks.result}" # aks dns_prefix must start with a letter
   prefix              = "arsplunk" # aks dns_prefix must start with a letter
