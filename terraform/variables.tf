@@ -20,7 +20,7 @@ variable "kubernetes_version" {
 # helm repo update
 # helm search repo ingress-nginx/ingress-nginx
 variable "nginx_chart_version" {
-  default = "3.33.0"
+  default = "3.34.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -95,7 +95,7 @@ variable "argocd_chart_version" {
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 variable "argocd_image_tag" {
-  default = "v2.0.3"
+  default = "v2.0.4"
 }
 #endregion Versions
 
