@@ -15,7 +15,7 @@ resource "azuread_application" "argocd" {
   display_name            = var.argocd_app_reg_name
   identifier_uris         = ["https://${var.argocd_app_reg_name}"]
   sign_in_audience        = "AzureADMyOrg"
-  group_membership_claims = "All"
+  group_membership_claims = ["All"]
   prevent_duplicate_names = true
 
   web {
@@ -65,7 +65,7 @@ resource "azuread_service_principal" "argocd" {
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_password
 resource "azuread_application_password" "argocd" {
   application_object_id = azuread_application.argocd.id
-  description           = "argocd_secret"
+  display_name          = "argocd_secret"
   value                 = random_password.argocd.result
   end_date              = "2099-01-01T01:02:03Z"
 
