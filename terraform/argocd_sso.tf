@@ -12,15 +12,20 @@ resource "random_password" "argocd" {
 
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
 resource "azuread_application" "argocd" {
-  display_name               = var.argocd_app_reg_name
-  prevent_duplicate_names    = true
-  homepage                   = "https://${var.argocd_fqdn}"
-  identifier_uris            = ["https://${var.argocd_app_reg_name}"]
-  reply_urls                 = ["https://${var.argocd_fqdn}/auth/callback"]
-  available_to_other_tenants = false
-  oauth2_allow_implicit_flow = false
-  # owners                     = []
+  display_name            = var.argocd_app_reg_name
+  identifier_uris         = ["https://${var.argocd_app_reg_name}"]
+  sign_in_audience        = "AzureADMyOrg"
   group_membership_claims = "All"
+  prevent_duplicate_names = true
+
+  web {
+    homepage_url  = "https://${var.argocd_fqdn}"
+    redirect_uris = ["https://${var.argocd_fqdn}/auth/callback"]
+
+    implicit_grant {
+      access_token_issuance_enabled = false
+    }
+  }
 
   # you can check manually created app reg info in the app reg manifest tab
   # reference: https://github.com/mjisaak/azure-active-directory/blob/master/README.md#well-known-appids
@@ -52,33 +57,25 @@ resource "azuread_application" "argocd" {
   }
 }
 
-# https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_password
-resource "azuread_application_password" "argocd" {
-  application_object_id = azuread_application.argocd.id
-  description           = "argocd_secret"
-  value                 = random_password.argocd.result
-  end_date              = "2099-01-01T01:02:03Z"
-}
-
 # TODO: add "SelfServiceAppAccess" tag to enable self-service options in Enterprise App
 resource "azuread_service_principal" "argocd" {
   application_id = azuread_application.argocd.application_id
 }
 
-data "azurerm_client_config" "current" {
+# https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_password
+resource "azuread_application_password" "argocd" {
+  application_object_id = azuread_application.argocd.id
+  display_name          = "argocd_secret"
+  value                 = random_password.argocd.result
+  end_date              = "2099-01-01T01:02:03Z"
+
+  depends_on = [azuread_service_principal.argocd]
 }
+
+data "azurerm_client_config" "current" {}
 
 
 # argocd-cm patch
-# https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file
-data "template_file" "argocd_cm" {
-  template = file(var.argocd_cm_yaml_path)
-  vars = {
-    tenantId    = data.azurerm_client_config.current.tenant_id
-    appClientId = azuread_service_principal.argocd.application_id
-  }
-}
-
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "argocd_cm" {
   triggers = {
@@ -90,9 +87,17 @@ resource "null_resource" "argocd_cm" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
       KUBECONFIG = var.aks_config_path
+      ARGOCD_CM_PATCH_YAML = templatefile(
+        var.argocd_cm_yaml_path,
+        {
+          "tenantId"    = data.azurerm_client_config.current.tenant_id
+          "appClientId" = azuread_service_principal.argocd.application_id
+        }
+      )
     }
+    # https://www.terraform.io/docs/language/functions/templatefile.html
     command = <<EOT
-      kubectl patch configmap/argocd-cm --namespace argocd --type merge --patch "${data.template_file.argocd_cm.rendered}"
+      kubectl patch configmap/argocd-cm --namespace argocd --type merge --patch "$ARGOCD_CM_PATCH_YAML"
     EOT
   }
 
@@ -104,14 +109,6 @@ resource "null_resource" "argocd_cm" {
 
 
 # argocd-secret patch
-# https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file
-data "template_file" "argocd_secret" {
-  template = file(var.argocd_secret_yaml_path)
-  vars = {
-    clientSecretBase64 = base64encode(random_password.argocd.result)
-  }
-}
-
 # https://www.terraform.io/docs/provisioners/local-exec.html
 # * uses "experiments = [provider_sensitive_attrs]" to hide output
 # https://www.terraform.io/docs/language/expressions/references.html#sensitive-resource-attributes
@@ -125,9 +122,15 @@ resource "null_resource" "argocd_secret" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
       KUBECONFIG = var.aks_config_path
+      ARGOCD_SECRET_PATCH_YAML = templatefile(
+        var.argocd_secret_yaml_path,
+        {
+          "clientSecretBase64" = base64encode(random_password.argocd.result)
+        }
+      )
     }
     command = <<EOT
-      kubectl patch secret/argocd-secret --namespace argocd --type merge --patch "${data.template_file.argocd_secret.rendered}"
+      kubectl patch secret/argocd-secret --namespace argocd --type merge --patch "$ARGOCD_SECRET_PATCH_YAML"
     EOT
   }
 
@@ -144,14 +147,6 @@ data "azuread_group" "argocd_admins" {
   security_enabled = true
 }
 
-# https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file
-data "template_file" "argocd_rbac_cm" {
-  template = file(var.argocd_rbac_cm_yaml_path)
-  vars = {
-    argoAdminGroupId = data.azuread_group.argocd_admins.id
-  }
-}
-
 # https://www.terraform.io/docs/provisioners/local-exec.html
 resource "null_resource" "argocd_rbac_cm" {
   triggers = {
@@ -163,9 +158,15 @@ resource "null_resource" "argocd_rbac_cm" {
     interpreter = ["/bin/bash", "-c"]
     environment = {
       KUBECONFIG = var.aks_config_path
+      ARGOCD_RBAC_CM_PATCH_YAML = templatefile(
+        var.argocd_rbac_cm_yaml_path,
+        {
+          "argoAdminGroupId" = data.azuread_group.argocd_admins.id
+        }
+      )
     }
     command = <<EOT
-      kubectl patch configmap/argocd-rbac-cm --namespace argocd --type merge --patch "${data.template_file.argocd_rbac_cm.rendered}"
+      kubectl patch configmap/argocd-rbac-cm --namespace argocd --type merge --patch "$ARGOCD_RBAC_CM_PATCH_YAML"
     EOT
   }
 

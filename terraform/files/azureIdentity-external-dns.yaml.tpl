@@ -1,4 +1,5 @@
 # https://github.com/Azure/aad-pod-identity
+# https://azure.github.io/aad-pod-identity/docs/concepts/azureidentity/
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentity
 metadata:
@@ -9,6 +10,7 @@ spec:
   resourceID: ${managedIdentityResourceID}
   clientID: ${managedIdentityClientID}
 ---
+# https://azure.github.io/aad-pod-identity/docs/concepts/azureidentitybinding/
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentityBinding
 metadata:

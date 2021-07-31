@@ -13,7 +13,7 @@ export ARGOCD_OPTS="--grpc-web"
 ARGOCD_HEALTH_CHECK_URL="https://$ARGOCD_FQDN/healthz"
 
 # Install
-VERSION="v1.8.2"
+VERSION="v2.0.5"
 curl -sSL -o "$ARGOCD_PATH" "https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64"
 chmod +x "$ARGOCD_PATH"
 
@@ -29,9 +29,10 @@ echo "Showing Argo CD version info for [$ARGOCD_FQDN]..."
 "$ARGOCD_PATH" version --server "$ARGOCD_FQDN"
 
 # Get default admin password
-# default password is server pod name, eg: "argocd-server-89c6cd7d4-xxxxx"
+# Argo CD v1.9 and later: https://argoproj.github.io/argo-cd/getting_started/#4-login-using-the-cli
+# check secret called "argocd-initial-admin-secret"
 echo "Getting default admin password..."
-DEFAULT_ARGO_ADMIN_PASSWORD=$(kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2)
+DEFAULT_ARGO_ADMIN_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
 
 # Login
 echo "Logging in to Argo CD with default password..."
