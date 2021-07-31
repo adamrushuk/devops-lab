@@ -94,6 +94,7 @@ variable "argocd_chart_version" {
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
+# * also update cli version: terraform/files/scripts/argocd_config.sh#L16
 variable "argocd_image_tag" {
   default = "v2.0.5"
 }
