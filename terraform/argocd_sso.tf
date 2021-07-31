@@ -15,7 +15,7 @@ resource "azuread_application" "argocd" {
   display_name            = var.argocd_app_reg_name
   identifier_uris         = ["https://${var.argocd_app_reg_name}"]
   sign_in_audience        = "AzureADMyOrg"
-  group_membership_claims = ["All"]
+  group_membership_claims = "All"
   prevent_duplicate_names = true
 
   web {
