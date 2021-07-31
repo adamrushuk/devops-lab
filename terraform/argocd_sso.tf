@@ -12,15 +12,20 @@ resource "random_password" "argocd" {
 
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
 resource "azuread_application" "argocd" {
-  display_name               = var.argocd_app_reg_name
-  prevent_duplicate_names    = true
-  homepage                   = "https://${var.argocd_fqdn}"
-  identifier_uris            = ["https://${var.argocd_app_reg_name}"]
-  reply_urls                 = ["https://${var.argocd_fqdn}/auth/callback"]
-  available_to_other_tenants = false
-  oauth2_allow_implicit_flow = false
-  # owners                     = []
+  display_name            = var.argocd_app_reg_name
+  identifier_uris         = ["https://${var.argocd_app_reg_name}"]
+  sign_in_audience        = "AzureADMyOrg"
   group_membership_claims = "All"
+  prevent_duplicate_names = true
+
+  web {
+    homepage_url  = "https://${var.argocd_fqdn}"
+    redirect_uris = ["https://${var.argocd_fqdn}/auth/callback"]
+
+    implicit_grant {
+      access_token_issuance_enabled = false
+    }
+  }
 
   # you can check manually created app reg info in the app reg manifest tab
   # reference: https://github.com/mjisaak/azure-active-directory/blob/master/README.md#well-known-appids
@@ -67,8 +72,7 @@ resource "azuread_application_password" "argocd" {
   depends_on = [azuread_service_principal.argocd]
 }
 
-data "azurerm_client_config" "current" {
-}
+data "azurerm_client_config" "current" {}
 
 
 # argocd-cm patch
