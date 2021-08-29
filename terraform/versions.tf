@@ -29,7 +29,8 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.0.1"
+      # TODO: update to "2.0.1"
+      version = "~> 1.6.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
