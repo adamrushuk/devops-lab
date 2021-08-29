@@ -6,6 +6,11 @@
 set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
+# Manual Testing
+# ARGOCD_FQDN="argocd.thehypepipe.co.uk"
+# ARGOCD_PATH="argocd"
+# ARGOCD_ADMIN_PASSWORD="[SEE VAULT]"
+
 # Vars
 ARGOCD_PATH="./argocd"
 REPO_SSH_PRIVATE_KEY_PATH="./id_ed25519_argocd"
@@ -24,10 +29,6 @@ while [[ "$(curl -s -o /dev/null -w ''%{http_code}''  $ARGOCD_HEALTH_CHECK_URL)"
     sleep 10
 done
 
-# Show version
-echo "Showing Argo CD version info for [$ARGOCD_FQDN]..."
-"$ARGOCD_PATH" version --server "$ARGOCD_FQDN"
-
 # Get default admin password
 # Argo CD v1.9 and later: https://argoproj.github.io/argo-cd/getting_started/#4-login-using-the-cli
 # check secret called "argocd-initial-admin-secret"
@@ -45,6 +46,10 @@ else
     echo "Attempting login with new admin password..."
     "$ARGOCD_PATH" login "$ARGOCD_FQDN" --username admin --password "$ARGOCD_ADMIN_PASSWORD"
 fi
+
+# Show version
+echo "Showing Argo CD version info for [$ARGOCD_FQDN]..."
+"$ARGOCD_PATH" version "$ARGOCD_FQDN"
 
 # Show info
 echo "Showing Argo CD cluster info..."
