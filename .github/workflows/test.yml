@@ -58,7 +58,7 @@ jobs:
     # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
     - name: BASH - Concatenate env vars (Workaround)
       run: |
-        echo "MY_CONCATENATED_BASH_VAR=${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-bash-stepvalue01 >> $GITHUB_ENV
+        echo "MY_CONCATENATED_BASH_VAR=${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-bash-stepvalue01" >> $GITHUB_ENV
 
     - name: PWSH - Concatenate env vars (Workaround)
       # override the default bash shell, as running on ubuntu
