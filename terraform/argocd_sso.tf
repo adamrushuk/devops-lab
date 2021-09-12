@@ -57,6 +57,8 @@ resource "azuread_application" "argocd" {
   }
 }
 
+data "azuread_client_config" "current" {}
+
 resource "azuread_service_principal" "argocd" {
   application_id                = azuread_application.argocd.application_id
   owners                        = [data.azuread_client_config.current.object_id]
