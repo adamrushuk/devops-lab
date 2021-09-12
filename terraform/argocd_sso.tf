@@ -2,13 +2,14 @@
 #
 # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/microsoft/#azure-ad-app-registration-auth-using-oidc
 
-resource "random_password" "argocd" {
-  length  = 32
-  special = false
-  keepers = {
-    service_principal = azuread_application.argocd.id
-  }
-}
+# TODO: remove after testing with "azuread_application_password.argocd.result"
+# resource "random_password" "argocd" {
+#   length  = 32
+#   special = false
+#   keepers = {
+#     service_principal = azuread_application.argocd.id
+#   }
+# }
 
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
 resource "azuread_application" "argocd" {
@@ -119,7 +120,7 @@ resource "null_resource" "argocd_cm" {
 resource "null_resource" "argocd_secret" {
   triggers = {
     yaml_contents = filemd5(var.argocd_secret_yaml_path)
-    clientSecret  = random_password.argocd.result
+    clientSecret  = azuread_application_password.argocd.result
   }
 
   provisioner "local-exec" {
@@ -129,7 +130,7 @@ resource "null_resource" "argocd_secret" {
       ARGOCD_SECRET_PATCH_YAML = templatefile(
         var.argocd_secret_yaml_path,
         {
-          "clientSecretBase64" = base64encode(random_password.argocd.result)
+          "clientSecretBase64" = base64encode(azuread_application_password.argocd.result)
         }
       )
     }
