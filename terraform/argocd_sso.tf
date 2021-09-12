@@ -71,7 +71,7 @@ resource "azuread_service_principal" "argocd" {
 resource "azuread_application_password" "argocd" {
   application_object_id = azuread_application.argocd.id
   display_name          = "argocd_secret"
-  value                 = random_password.argocd.result
+  # value                 = random_password.argocd.result
   end_date              = "2099-01-01T01:02:03Z"
   depends_on            = [azuread_service_principal.argocd]
 }
