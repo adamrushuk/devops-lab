@@ -2,7 +2,7 @@
 #
 # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/microsoft/#azure-ad-app-registration-auth-using-oidc
 
-# TODO: remove after testing with "azuread_application_password.argocd.result"
+# TODO: remove after testing with "azuread_application_password.argocd.value"
 # resource "random_password" "argocd" {
 #   length  = 32
 #   special = false
@@ -120,7 +120,7 @@ resource "null_resource" "argocd_cm" {
 resource "null_resource" "argocd_secret" {
   triggers = {
     yaml_contents = filemd5(var.argocd_secret_yaml_path)
-    clientSecret  = azuread_application_password.argocd.result
+    clientSecret  = azuread_application_password.argocd.value
   }
 
   provisioner "local-exec" {
@@ -130,7 +130,7 @@ resource "null_resource" "argocd_secret" {
       ARGOCD_SECRET_PATCH_YAML = templatefile(
         var.argocd_secret_yaml_path,
         {
-          "clientSecretBase64" = base64encode(azuread_application_password.argocd.result)
+          "clientSecretBase64" = base64encode(azuread_application_password.argocd.value)
         }
       )
     }
