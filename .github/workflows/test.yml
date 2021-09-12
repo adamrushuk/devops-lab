@@ -29,7 +29,7 @@ env:
   MY_WORKFLOW_VAR: work
 
   # TODO Currently Unsupported: Cannot concatenante at Workflow level
-  MY_WORKFLOW_VAR2: "${{ env.MY_WORKFLOW_VAR }}-workvalue01"
+  MY_WORKFLOW_VAR2: "${MY_WORKFLOW_VAR}-workvalue02"
 
 jobs:
   build:
@@ -42,7 +42,7 @@ jobs:
       MY_JOB_VAR: job
 
       # TODO Currently Unsupported: Cannot concatenante at Job level
-      MY_WORK_JOB_VAR: "${{ env.MY_WORKFLOW_VAR }}"
+      # MY_WORK_JOB_VAR: "${{ env.MY_WORKFLOW_VAR }}-test"
 
     steps:
     # Checkout
