@@ -2,15 +2,6 @@
 #
 # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/microsoft/#azure-ad-app-registration-auth-using-oidc
 
-# TODO: remove after testing with "azuread_application_password.argocd.value"
-# resource "random_password" "argocd" {
-#   length  = 32
-#   special = false
-#   keepers = {
-#     service_principal = azuread_application.argocd.id
-#   }
-# }
-
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
 resource "azuread_application" "argocd" {
   display_name            = var.argocd_app_reg_name
@@ -72,13 +63,11 @@ resource "azuread_service_principal" "argocd" {
 resource "azuread_application_password" "argocd" {
   application_object_id = azuread_application.argocd.id
   display_name          = "argocd_secret"
-  # value                 = random_password.argocd.result
   end_date              = "2099-01-01T01:02:03Z"
-  depends_on            = [azuread_service_principal.argocd]
+  # depends_on            = [azuread_service_principal.argocd] # TODO: is this still required?
 }
 
 data "azurerm_client_config" "current" {}
-
 
 # argocd-cm patch
 # https://www.terraform.io/docs/provisioners/local-exec.html
