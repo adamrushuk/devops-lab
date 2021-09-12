@@ -29,7 +29,7 @@ env:
   MY_WORKFLOW_VAR: work
 
   # TODO Currently Unsupported: Cannot concatenante at Workflow level
-  MY_WORKFLOW_VAR2: "${MY_WORKFLOW_VAR}-workvalue02"
+  MY_CONCATENATED_WORKFLOW_VAR: "${MY_WORKFLOW_VAR}-workflowvalue02"
 
 jobs:
   build:
@@ -66,7 +66,7 @@ jobs:
       shell: pwsh
       # pwsh requires double quotes when setting env vars
       run: |
-        echo "MY_CONCATENATED_PWSH_VAR=${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-pwsh-stepvalue01" >> $GITHUB_ENV
+        echo "MY_CONCATENATED_PWSH_VAR=${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-pwsh-stepvalue01" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
 
     - name: Output event data
       shell: pwsh
@@ -77,6 +77,7 @@ jobs:
         Write-Output "MY_WORKFLOW_VAR is: [$env:MY_WORKFLOW_VAR]"
         Write-Output "MY_JOB_VAR is: [$env:MY_JOB_VAR]"
         Write-Output "MY_STEP_VAR is: [$env:MY_STEP_VAR]"
+        Write-Output "MY_CONCATENATED_WORKFLOW_VAR is: [$env:MY_CONCATENATED_WORKFLOW_VAR]"
         Write-Output "MY_CONCATENATED_BASH_VAR is: [$env:MY_CONCATENATED_BASH_VAR]"
         Write-Output "MY_CONCATENATED_PWSH_VAR is: [$env:MY_CONCATENATED_PWSH_VAR]"
         Write-Output "SLACK_JSON is: [$env:SLACK_JSON]"
