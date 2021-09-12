@@ -66,7 +66,7 @@ jobs:
       shell: pwsh
       # pwsh requires double quotes when setting env vars
       run: |
-        echo ""MY_CONCATENATED_PWSH_VAR=${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-pwsh-stepvalue01" >> $GITHUB_ENV
+        echo "MY_CONCATENATED_PWSH_VAR=${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-pwsh-stepvalue01" >> $GITHUB_ENV
 
     - name: Output event data
       shell: pwsh
