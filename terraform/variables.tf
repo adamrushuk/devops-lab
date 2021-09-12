@@ -43,7 +43,7 @@ variable "velero_image_tag" {
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 variable "nexus_image_tag" {
-  default = "3.33.1"
+  default = "3.34.0"
 }
 
 # https://github.com/adamrushuk/charts/releases
@@ -71,7 +71,7 @@ variable "aad_pod_identity_chart_version" {
 # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
 # helm search repo bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "5.4.4"
+  default = "5.4.6"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
@@ -90,13 +90,13 @@ variable "kured_image_tag" {
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 variable "argocd_chart_version" {
-  default = "3.17.5"
+  default = "3.17.6"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
-# * also update cli version: terraform/files/scripts/argocd_config.sh#L16
+# * also update cli version: terraform/files/scripts/argocd_config.sh#L21
 variable "argocd_image_tag" {
-  default = "v2.1.1"
+  default = "v2.1.2"
 }
 #endregion Versions
 

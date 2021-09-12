@@ -18,7 +18,7 @@ export ARGOCD_OPTS="--grpc-web"
 ARGOCD_HEALTH_CHECK_URL="https://$ARGOCD_FQDN/healthz"
 
 # Install
-VERSION="v2.1.1"
+VERSION="v2.1.2"
 curl -sSL -o "$ARGOCD_PATH" "https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64"
 chmod +x "$ARGOCD_PATH"
 
