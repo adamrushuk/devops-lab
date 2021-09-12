@@ -57,7 +57,7 @@ resource "azuread_service_principal" "argocd" {
   description                   = "Argo CD Service Principle"
   notes                         = "Operational notes can go here"
   preferred_single_sign_on_mode = "oidc"
-  tags                          = ["notApiConsumer", "webApp"]
+  # tags                          = ["notApiConsumer", "webApp"]
 }
 
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_password
