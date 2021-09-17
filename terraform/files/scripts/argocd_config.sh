@@ -24,7 +24,7 @@ chmod +x "$ARGOCD_PATH"
 
 # Wait for URL to be responsive
 echo "Checking ArgoCD is ready on [$ARGOCD_HEALTH_CHECK_URL]..."
-while [[ "$(curl -s -o /dev/null -w ''%{http_code}''  $ARGOCD_HEALTH_CHECK_URL)" != "200" ]]; do
+while [[ "$(curl --silent --output /dev/null --write-out ''%{http_code}'' --url "$ARGOCD_HEALTH_CHECK_URL")" != "200" ]]; do
     echo "Still waiting for ArgoCD to be ready on [$ARGOCD_HEALTH_CHECK_URL]..."
     sleep 10
 done
