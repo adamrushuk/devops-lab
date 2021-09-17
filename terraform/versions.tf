@@ -23,19 +23,19 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 2.76.0"
+      version = "~> 2.77.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.2.1"
+      version = "~> 2.3.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.4.1"
+      version = "~> 2.5.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-helm/releases
