@@ -9,6 +9,7 @@ resource "azuread_application" "argocd" {
   sign_in_audience        = "AzureADMyOrg"
   group_membership_claims = ["All"]
   prevent_duplicate_names = true
+  logo_image              = filebase64("${path.module}/files/argocd-logo.png")
 
   web {
     homepage_url  = "https://${var.argocd_fqdn}"
