@@ -2,6 +2,14 @@
 #
 # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/microsoft/#azure-ad-app-registration-auth-using-oidc
 
+# https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/application_published_app_ids
+data "azuread_application_published_app_ids" "well_known" {}
+
+resource "azuread_service_principal" "msgraph" {
+  application_id = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
+  use_existing   = true
+}
+
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
 resource "azuread_application" "argocd" {
   display_name            = var.argocd_app_reg_name
@@ -24,13 +32,26 @@ resource "azuread_application" "argocd" {
   # reference: https://github.com/mjisaak/azure-active-directory/blob/master/README.md#well-known-appids
   required_resource_access {
     # Microsoft Graph
-    resource_app_id = "00000003-0000-0000-c000-000000000000"
+    resource_app_id = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
 
-    # User.Read - e1fe6dd8-ba31-4d61-89e7-88639da4683d - Sign in and read user profile
+    # TODO: cleanup comments
+    # # User.Read - e1fe6dd8-ba31-4d61-89e7-88639da4683d - Sign in and read user profile
+    # resource_access {
+    #   id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+    #   type = "Scope"
+    # }
+
+    # Oauth2Permissions are delegated permissions, type=Scope
     resource_access {
-      id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+      id   = azuread_service_principal.msgraph.oauth2_permission_scope_ids["User.Read"]
       type = "Scope"
     }
+
+    # # application permissions, type=Role
+    # resource_access {
+    #   id   = azuread_service_principal.msgraph.app_role_ids["User.Read.All"]
+    #   type = "Role"
+    # }
   }
 
   optional_claims {
