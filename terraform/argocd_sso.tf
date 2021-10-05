@@ -34,13 +34,6 @@ resource "azuread_application" "argocd" {
     # Microsoft Graph
     resource_app_id = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
 
-    # TODO: cleanup comments
-    # # User.Read - e1fe6dd8-ba31-4d61-89e7-88639da4683d - Sign in and read user profile
-    # resource_access {
-    #   id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
-    #   type = "Scope"
-    # }
-
     # Oauth2Permissions are delegated permissions, type=Scope
     resource_access {
       id   = azuread_service_principal.msgraph.oauth2_permission_scope_ids["User.Read"]
