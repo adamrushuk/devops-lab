@@ -29,7 +29,7 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.5.0"
+      version = "~> 2.4.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
