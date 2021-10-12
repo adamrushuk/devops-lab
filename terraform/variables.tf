@@ -26,7 +26,7 @@ variable "nginx_chart_version" {
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.5.3"
+  default = "v1.5.4"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
@@ -64,7 +64,7 @@ variable "akv2k8s_chart_version" {
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "4.1.5"
+  default = "4.1.6"
 }
 
 # https://bitnami.com/stack/external-dns/helm
@@ -77,12 +77,12 @@ variable "external_dns_chart_version" {
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.9.1"
+  default = "2.10.0"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
 variable "kured_image_tag" {
-  default = "1.7.0"
+  default = "1.8.0"
 }
 
 
