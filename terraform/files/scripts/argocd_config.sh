@@ -14,7 +14,7 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 # Vars
 ARGOCD_PATH="./argocd"
 REPO_SSH_PRIVATE_KEY_PATH="./id_ed25519_argocd"
-# export ARGOCD_OPTS="--grpc-web"
+export ARGOCD_OPTS="--grpc-web"
 ARGOCD_HEALTH_CHECK_URL="https://$ARGOCD_FQDN/healthz"
 
 # Install
