@@ -14,12 +14,12 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 # Vars
 ARGOCD_PATH="./argocd"
 REPO_SSH_PRIVATE_KEY_PATH="./id_ed25519_argocd"
-export ARGOCD_OPTS="--grpc-web"
+# export ARGOCD_OPTS="--grpc-web"
 ARGOCD_HEALTH_CHECK_URL="https://$ARGOCD_FQDN/healthz"
 
 # Install
 # https://github.com/argoproj/argo-cd/releases/
-VERSION="v2.1.3"
+VERSION="v2.1.5"
 curl -sSL -o "$ARGOCD_PATH" "https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64"
 chmod +x "$ARGOCD_PATH"
 
