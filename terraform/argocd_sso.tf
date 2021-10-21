@@ -13,7 +13,7 @@ resource "azuread_service_principal" "msgraph" {
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
 resource "azuread_application" "argocd" {
   display_name            = var.argocd_app_reg_name
-  identifier_uris         = ["https://${var.argocd_app_reg_name}"]
+  identifier_uris         = ["https://${var.argocd_fqdn}"]
   sign_in_audience        = "AzureADMyOrg"
   group_membership_claims = ["All"]
   prevent_duplicate_names = true
