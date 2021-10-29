@@ -40,6 +40,7 @@ resource "azuread_application" "argocd" {
       type = "Scope"
     }
 
+    # ? keeping for future reference
     # # application permissions, type=Role
     # resource_access {
     #   id   = azuread_service_principal.msgraph.app_role_ids["User.Read.All"]
@@ -80,7 +81,6 @@ resource "azuread_application_password" "argocd" {
   application_object_id = azuread_application.argocd.id
   display_name          = "argocd_secret"
   end_date              = "2099-01-01T01:02:03Z"
-  # depends_on            = [azuread_service_principal.argocd] # TODO: is this still required?
 }
 
 data "azurerm_client_config" "current" {}
