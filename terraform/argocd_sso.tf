@@ -2,21 +2,22 @@
 #
 # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/microsoft/#azure-ad-app-registration-auth-using-oidc
 
-resource "random_password" "argocd" {
-  length  = 32
-  special = false
-  keepers = {
-    service_principal = azuread_application.argocd.id
-  }
+# https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/application_published_app_ids
+data "azuread_application_published_app_ids" "well_known" {}
+
+resource "azuread_service_principal" "msgraph" {
+  application_id = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
+  use_existing   = true
 }
 
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
 resource "azuread_application" "argocd" {
   display_name            = var.argocd_app_reg_name
-  identifier_uris         = ["https://${var.argocd_app_reg_name}"]
+  identifier_uris         = ["https://${var.argocd_fqdn}"]
   sign_in_audience        = "AzureADMyOrg"
-  group_membership_claims = "All"
+  group_membership_claims = ["All"]
   prevent_duplicate_names = true
+  logo_image              = filebase64("${path.module}/files/argocd-logo.png")
 
   web {
     homepage_url  = "https://${var.argocd_fqdn}"
@@ -31,13 +32,20 @@ resource "azuread_application" "argocd" {
   # reference: https://github.com/mjisaak/azure-active-directory/blob/master/README.md#well-known-appids
   required_resource_access {
     # Microsoft Graph
-    resource_app_id = "00000003-0000-0000-c000-000000000000"
+    resource_app_id = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
 
-    # User.Read - e1fe6dd8-ba31-4d61-89e7-88639da4683d - Sign in and read user profile
+    # Oauth2Permissions are delegated permissions, type=Scope
     resource_access {
-      id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+      id   = azuread_service_principal.msgraph.oauth2_permission_scope_ids["User.Read"]
       type = "Scope"
     }
+
+    # ? keeping for future reference
+    # # application permissions, type=Role
+    # resource_access {
+    #   id   = azuread_service_principal.msgraph.app_role_ids["User.Read.All"]
+    #   type = "Role"
+    # }
   }
 
   optional_claims {
@@ -57,23 +65,25 @@ resource "azuread_application" "argocd" {
   }
 }
 
-# TODO: add "SelfServiceAppAccess" tag to enable self-service options in Enterprise App
+data "azuread_client_config" "current" {}
+
 resource "azuread_service_principal" "argocd" {
-  application_id = azuread_application.argocd.application_id
+  application_id                = azuread_application.argocd.application_id
+  owners                        = [data.azuread_client_config.current.object_id]
+  description                   = "Argo CD Service Principle"
+  notes                         = "Operational notes can go here"
+  preferred_single_sign_on_mode = "oidc"
+  # tags                          = ["notApiConsumer", "webApp"]
 }
 
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_password
 resource "azuread_application_password" "argocd" {
   application_object_id = azuread_application.argocd.id
   display_name          = "argocd_secret"
-  value                 = random_password.argocd.result
   end_date              = "2099-01-01T01:02:03Z"
-
-  depends_on = [azuread_service_principal.argocd]
 }
 
 data "azurerm_client_config" "current" {}
-
 
 # argocd-cm patch
 # https://www.terraform.io/docs/provisioners/local-exec.html
@@ -115,7 +125,7 @@ resource "null_resource" "argocd_cm" {
 resource "null_resource" "argocd_secret" {
   triggers = {
     yaml_contents = filemd5(var.argocd_secret_yaml_path)
-    clientSecret  = random_password.argocd.result
+    clientSecret  = azuread_application_password.argocd.value
   }
 
   provisioner "local-exec" {
@@ -125,7 +135,7 @@ resource "null_resource" "argocd_secret" {
       ARGOCD_SECRET_PATCH_YAML = templatefile(
         var.argocd_secret_yaml_path,
         {
-          "clientSecretBase64" = base64encode(random_password.argocd.result)
+          "clientSecretBase64" = base64encode(azuread_application_password.argocd.value)
         }
       )
     }

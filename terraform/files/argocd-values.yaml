@@ -1,5 +1,3 @@
-installCRDs: false
-
 server:
   # this is required to disable SSL redirection, as ingress handles this
   extraArgs:

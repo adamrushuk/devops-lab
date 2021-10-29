@@ -1,5 +1,5 @@
 # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
-name: Webhook
+name: Test-Workflow
 
 # name of GitHub event that triggers workflow
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows#external-events-repository_dispatch
@@ -28,8 +28,8 @@ on:
 env:
   MY_WORKFLOW_VAR: work
 
-  # UNSUPPORTED: Cannot concatenante at Workflow level
-  # MY_WORKFLOW_VAR2: ${{ env.MY_WORKFLOW_VAR }}-workvalue01
+  # TODO Currently Unsupported: Cannot concatenante at Workflow level
+  MY_CONCATENATED_WORKFLOW_VAR: "$MY_WORKFLOW_VAR-workflowvalue02"
 
 jobs:
   build:
@@ -41,8 +41,8 @@ jobs:
     env:
       MY_JOB_VAR: job
 
-      # UNSUPPORTED: Cannot concatenante at Job level
-      # MY_WORK_JOB_VAR: ${{ env.MY_WORKFLOW_VAR }}
+      # TODO Currently Unsupported: Cannot concatenante at Job level
+      # MY_WORK_JOB_VAR: "${{ env.MY_WORKFLOW_VAR }}-test"
 
     steps:
     # Checkout
@@ -58,7 +58,7 @@ jobs:
     # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
     - name: BASH - Concatenate env vars (Workaround)
       run: |
-        echo "MY_CONCATENATED_BASH_VAR=${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-bash-stepvalue01 >> $GITHUB_ENV
+        echo "MY_CONCATENATED_BASH_VAR=${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-bash-stepvalue01" >> $GITHUB_ENV
 
     - name: PWSH - Concatenate env vars (Workaround)
       # override the default bash shell, as running on ubuntu
@@ -66,7 +66,7 @@ jobs:
       shell: pwsh
       # pwsh requires double quotes when setting env vars
       run: |
-        echo ""MY_CONCATENATED_PWSH_VAR=${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-pwsh-stepvalue01" >> $GITHUB_ENV
+        echo "MY_CONCATENATED_PWSH_VAR=${{ env.MY_WORKFLOW_VAR }}-${{ env.MY_JOB_VAR }}-pwsh-stepvalue01" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
 
     - name: Output event data
       shell: pwsh
@@ -77,6 +77,7 @@ jobs:
         Write-Output "MY_WORKFLOW_VAR is: [$env:MY_WORKFLOW_VAR]"
         Write-Output "MY_JOB_VAR is: [$env:MY_JOB_VAR]"
         Write-Output "MY_STEP_VAR is: [$env:MY_STEP_VAR]"
+        Write-Output "MY_CONCATENATED_WORKFLOW_VAR is: [$env:MY_CONCATENATED_WORKFLOW_VAR]"
         Write-Output "MY_CONCATENATED_BASH_VAR is: [$env:MY_CONCATENATED_BASH_VAR]"
         Write-Output "MY_CONCATENATED_PWSH_VAR is: [$env:MY_CONCATENATED_PWSH_VAR]"
         Write-Output "SLACK_JSON is: [$env:SLACK_JSON]"
