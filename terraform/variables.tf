@@ -6,7 +6,7 @@
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location eastus --output table
 variable "kubernetes_version" {
-  default = "1.20.9"
+  default = "1.21.2"
 }
 
 # Helm charts
@@ -26,7 +26,7 @@ variable "nginx_chart_version" {
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.5.4"
+  default = "v1.6.1"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
