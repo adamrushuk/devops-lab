@@ -1,5 +1,6 @@
 # Misc
 .terraform
+.terraform.*
 terraform.tfstate*
 localonly
 credentials*
