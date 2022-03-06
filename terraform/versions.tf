@@ -23,7 +23,7 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 2.97.0"
+      version = "~> 2.98.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases

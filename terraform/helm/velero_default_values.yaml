@@ -1,4 +1,4 @@
-# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.27.3/charts/velero/values.yaml
+# source: https://github.com/vmware-tanzu/helm-charts/blob/velero-2.28.0/charts/velero/values.yaml
 
 ##
 ## Configuration settings that directly affect the Velero deployment YAML.
@@ -8,7 +8,7 @@
 # enabling restic). Required.
 image:
   repository: velero/velero
-  tag: v1.7.1
+  tag: v1.8.0
   # Digest value example: sha256:d238835e151cec91c6a811fe3a89a66d3231d9f64d09e5f3c49552672d271f38.
   # If used, it will take precedence over the image.tag.
   # digest:
@@ -131,6 +131,9 @@ kubectl:
     # digest:
     # kubectl image tag. If used, it will take precedence over the cluster Kubernetes version.
     # tag: 1.16.15
+  # Container Level Security Context for the 'kubectl' container of the crd jobs. Optional.
+  # See: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  containerSecurityContext: {}
   # Resource requests/limits to specify for the upgrade/cleanup job. Optional
   resources: {}
   # Annotations to set for the upgrade/cleanup job. Optional.
@@ -378,7 +381,7 @@ restic:
 #     annotations:
 #       myenv: foo
 #     schedule: "0 0 * * *"
-#     useOwnerReferencesInBackup: true
+#     useOwnerReferencesInBackup: false
 #     template:
 #       ttl: "240h"
 #       includedNamespaces:
@@ -393,7 +396,7 @@ schedules: {}
 #       velero.io/plugin-config: ""
 #       velero.io/restic: RestoreItemAction
 #     data:
-#       image: velero/velero-restic-restore-helper:v1.7.1
+#       image: velero/velero-restic-restore-helper:v1.8.0
 configMaps: {}
 
 ##

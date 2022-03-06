@@ -1,5 +1,5 @@
 # velero helm values
-# source (with full comments): https://github.com/vmware-tanzu/helm-charts/blob/velero-2.27.3/charts/velero/values.yaml
+# source (with full comments): https://github.com/vmware-tanzu/helm-charts/blob/main/charts/velero/values.yaml
 
 # https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/releases
 initContainers:
@@ -11,13 +11,11 @@ initContainers:
       - mountPath: /target
         name: plugins
 
-
 # BackupStorageLocation and VolumeSnapshotLocation
 configuration:
   provider: azure
   backupStorageLocation:
     name: default
-    provider:
     bucket: velero
   volumeSnapshotLocation:
     name: default
