@@ -24,7 +24,7 @@ env:
   PREFIX: arshz
 
   # debug
-  CI_DEBUG: false
+  CI_DEBUG: true
 
   # azure creds
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
