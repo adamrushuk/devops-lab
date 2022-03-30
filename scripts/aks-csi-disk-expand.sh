@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/azuredisk-csi-driver/master/deploy/example/pvc-azuredisk-csi.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/azuredisk-csi-driver/master/deploy/example/nginx-pod-azuredisk.yaml
 
@@ -7,10 +9,9 @@ kubectl exec -it nginx-azuredisk -- df -h /mnt/azuredisk
     Filesystem                Size      Used Available Use% Mounted on
     /dev/sdd                  9.7G     36.0K      9.7G   0% /mnt/azuredisk
 
-# delete pod top unattach disk
+# ! this step ONLY required when using AKS v1.20 or below
+# [optional] delete pod to unattach disk
 kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/azuredisk-csi-driver/master/deploy/example/nginx-pod-azuredisk.yaml
-
-
 
 # TODO: add code that waits for disk state to be "unattached"
 # where tag is: "kubernetes.io-created-for-pvc-name": "pvc-azuredisk"
@@ -22,8 +23,6 @@ while true; do
     sleep 2
 done
 
-
-
 # expand pvc
 kubectl patch pvc pvc-azuredisk --type merge --patch '{"spec": {"resources": {"requests": {"storage": "15Gi"}}}}'
 
@@ -32,6 +31,4 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/azuredisk-csi
 
 # check disk size in pod
 kubectl exec -it nginx-azuredisk -- df -h /mnt/azuredisk
-
-
 

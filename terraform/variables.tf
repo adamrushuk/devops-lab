@@ -26,7 +26,7 @@ variable "nginx_chart_version" {
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.7.1"
+  default = "v1.7.2"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
@@ -34,17 +34,17 @@ variable "cert_manager_chart_version" {
 # * also update terraform/helm/velero_default_values.yaml
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.28.0"
+  default = "2.29.4"
 }
 
 # https://hub.docker.com/r/velero/velero/tags
 variable "velero_image_tag" {
-  default = "v1.8.0"
+  default = "v1.8.1"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 variable "nexus_image_tag" {
-  default = "3.38.0"
+  default = "3.38.1"
 }
 
 # https://github.com/adamrushuk/charts/releases
@@ -78,27 +78,28 @@ variable "external_dns_chart_version" {
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.11.2"
+  default = "2.12.1"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
 variable "kured_image_tag" {
-  default = "1.8.1"
+  default = "1.9.2"
 }
 
 
 # argo cd
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
+# helm search repo -l argo/argo-cd | head -n 20
 # * also update terraform/helm/argocd_default_values.yaml
 variable "argocd_chart_version" {
-  default = "3.35.0"
+  default = "3.35.4"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 # * also update cli version: terraform/files/scripts/argocd_config.sh#L22
 variable "argocd_image_tag" {
-  default = "v2.3.0"
+  default = "v2.2.8"
 }
 #endregion Versions
 

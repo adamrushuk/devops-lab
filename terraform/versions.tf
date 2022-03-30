@@ -21,27 +21,28 @@ terraform {
   required_providers {
 
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
+    # v2.99.0 is the last release in the 2.x line
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 2.98.0"
+      version = "~> 2.99.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.18.0"
+      version = "~> 2.19.1"
     }
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.8.0"
+      version = "~> 2.9.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-helm/releases
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.4.1"
+      version = "~> 2.5.0"
     }
 
     random = {
