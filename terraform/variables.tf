@@ -93,13 +93,13 @@ variable "kured_image_tag" {
 # helm search repo -l argo/argo-cd | head -n 20
 # * also update terraform/helm/argocd_default_values.yaml
 variable "argocd_chart_version" {
-  default = "3.35.4"
+  default = "4.3.0"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 # * also update cli version: terraform/files/scripts/argocd_config.sh#L22
 variable "argocd_image_tag" {
-  default = "v2.2.8"
+  default = "v2.3.3"
 }
 #endregion Versions
 
