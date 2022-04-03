@@ -1,4 +1,5 @@
-# https://github.com/argoproj/argo-helm/blob/argo-cd-4.3.0/charts/argo-cd/values.yaml
+# https://github.com/argoproj/argo-helm/blob/argo-cd-4.4.1/charts/argo-cd/values.yaml
+
 
 ## Argo CD configuration
 ## Ref: https://github.com/argoproj/argo-cd
@@ -397,7 +398,7 @@ dex:
     # -- Dex image repository
     repository: ghcr.io/dexidp/dex
     # -- Dex image tag
-    tag: v2.30.0
+    tag: v2.30.2
     # -- Dex imagePullPolicy
     imagePullPolicy: IfNotPresent
   initImage:
@@ -779,6 +780,18 @@ redis-ha:
     # -- Redis tag
     tag: 6.2.6-alpine
 
+# External Redis parameters
+externalRedis:
+  # -- External Redis server host
+  host: ""
+  # -- External Redis password
+  password: ""
+  # -- External Redis server port
+  port: 6379
+  # -- The name of an existing secret with Redis credentials (must contain key `redis-password`).
+  # When it's set, the `externalRedis.password` parameter is ignored
+  existingSecret: ""
+
 ## Server
 server:
   # -- Argo CD server name
@@ -1142,7 +1155,7 @@ server:
   # @default -- See [values.yaml]
   config:
     # Argo CD's externally facing base URL (optional). Required when configuring SSO
-    url: https://argocd.example.com
+    url: ""
     # Argo CD instance label key
     application.instanceLabelKey: argocd.argoproj.io/instance
 
