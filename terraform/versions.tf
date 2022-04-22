@@ -75,7 +75,12 @@ terraform {
 # must include blank features block
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
-  features {}
+  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/features-block
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
 # https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs#credentials-config
