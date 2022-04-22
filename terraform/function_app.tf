@@ -99,10 +99,6 @@ resource "azurerm_linux_function_app" "func_app" {
   functions_extension_version = "~4"
   tags                        = var.tags
 
-  application_stack {
-    powershell_core_version = 7
-  }
-
   identity {
     type = "SystemAssigned"
   }
@@ -110,6 +106,10 @@ resource "azurerm_linux_function_app" "func_app" {
   site_config {
     # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_function_app#application_insights_key
     application_insights_key = azurerm_application_insights.appinsights.instrumentation_key
+
+    application_stack {
+      powershell_core_version = 7
+    }
   }
 
   # https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings
@@ -136,5 +136,5 @@ resource "azurerm_linux_function_app" "func_app" {
 resource "azurerm_role_assignment" "func_app" {
   scope                = data.azurerm_resource_group.aks_node_rg.id
   role_definition_name = "Reader"
-  principal_id         = azurerm_function_app.func_app.identity.0.principal_id
+  principal_id         = azurerm_linux_function_app.func_app.identity.0.principal_id
 }
