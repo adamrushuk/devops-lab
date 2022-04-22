@@ -5,14 +5,15 @@ resource "azurerm_resource_group" "func_app" {
   tags     = var.tags
 }
 
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account
 resource "azurerm_storage_account" "func_app" {
-  name                     = "${var.prefix}stfuncapp"
-  resource_group_name      = azurerm_resource_group.func_app.name
-  location                 = azurerm_resource_group.func_app.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  allow_blob_public_access = false
-  tags                     = var.tags
+  name                            = "${var.prefix}stfuncapp"
+  resource_group_name             = azurerm_resource_group.func_app.name
+  location                        = azurerm_resource_group.func_app.location
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
+  allow_nested_items_to_be_public = false
+  tags                            = var.tags
 }
 
 resource "azurerm_storage_container" "func_app" {
