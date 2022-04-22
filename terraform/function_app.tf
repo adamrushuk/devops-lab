@@ -62,6 +62,8 @@ data "azurerm_storage_account_sas" "func_app" {
     create  = false
     update  = false
     process = false
+    tag     = false
+    filter  = false
   }
 }
 
