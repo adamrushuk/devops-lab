@@ -31,7 +31,7 @@ resource "null_resource" "gitlab_cert_sync" {
   }
 
   depends_on = [
-    local_file.kubeconfig,
+    local_sensitive_file.kubeconfig,
     helm_release.akv2k8s,
     kubernetes_namespace.gitlab
   ]

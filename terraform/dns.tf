@@ -67,7 +67,7 @@ resource "null_resource" "azureIdentity_external_dns" {
   }
 
   depends_on = [
-    local_file.kubeconfig,
+    local_sensitive_file.kubeconfig,
     kubernetes_namespace.external_dns,
     helm_release.aad_pod_identity
   ]

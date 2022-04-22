@@ -56,9 +56,10 @@ resource "azurerm_role_assignment" "aks_mi_kv_secrets" {
 
 # Requires "kube_admin_config_raw" as has AAD Auth enabled
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#kube_admin_config_raw
-resource "local_file" "kubeconfig" {
-  sensitive_content = module.aks.full_object.kube_admin_config_raw
-  filename          = var.aks_config_path
+# https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/sensitive_file
+resource "local_sensitive_file" "kubeconfig" {
+  content  = module.aks.full_object.kube_admin_config_raw
+  filename = var.aks_config_path
 
   depends_on = [module.aks]
 }

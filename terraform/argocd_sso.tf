@@ -112,7 +112,7 @@ resource "null_resource" "argocd_cm" {
   }
 
   depends_on = [
-    local_file.kubeconfig,
+    local_sensitive_file.kubeconfig,
     null_resource.argocd_configure
   ]
 }
@@ -145,7 +145,7 @@ resource "null_resource" "argocd_secret" {
   }
 
   depends_on = [
-    local_file.kubeconfig,
+    local_sensitive_file.kubeconfig,
     null_resource.argocd_configure
   ]
 }
@@ -181,7 +181,7 @@ resource "null_resource" "argocd_rbac_cm" {
   }
 
   depends_on = [
-    local_file.kubeconfig,
+    local_sensitive_file.kubeconfig,
     null_resource.argocd_configure
   ]
 }
