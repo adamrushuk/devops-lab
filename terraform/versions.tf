@@ -24,25 +24,25 @@ terraform {
     # v2.99.0 is the last release in the 2.x line
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.0.2"
+      version = "~> 3.3.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.19.1"
+      version = "~> 2.21.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.9.0"
+      version = "~> 2.10.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-helm/releases
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.5.0"
+      version = "~> 2.5.1"
     }
 
     random = {

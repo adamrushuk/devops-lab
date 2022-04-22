@@ -19,14 +19,15 @@ variable "kubernetes_version" {
 #
 # helm repo update
 # helm search repo ingress-nginx/ingress-nginx
+# helm search repo -l ingress-nginx/ingress-nginx | head -5
 variable "nginx_chart_version" {
-  default = "4.0.19"
+  default = "4.1.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.7.2"
+  default = "v1.8.0"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
@@ -59,13 +60,13 @@ variable "nexus_chart_version" {
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
 # helm search repo spv-charts/akv2k8s
 variable "akv2k8s_chart_version" {
-  default = "2.1.0"
+  default = "2.2.0"
 }
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "4.1.8"
+  default = "4.1.9"
 }
 
 # https://bitnami.com/stack/external-dns/helm
@@ -93,7 +94,7 @@ variable "kured_image_tag" {
 # helm search repo -l argo/argo-cd | head -n 20
 # * also update terraform/helm/argocd_default_values.yaml
 variable "argocd_chart_version" {
-  default = "4.4.1"
+  default = "4.5.7"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
