@@ -6,7 +6,7 @@ terraform {
 
   # https://github.com/hashicorp/terraform/releases
   # https://github.com/hashicorp/terraform/blob/main/CHANGELOG.md
-  required_version = ">= 0.13"
+  required_version = ">= 1.0"
 
   # terraform remote state
   backend "azurerm" {
@@ -21,22 +21,21 @@ terraform {
   required_providers {
 
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
-    # v2.99.0 is the last release in the 2.x line
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.3.0"
+      version = "~> 3.5.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.21.0"
+      version = "~> 2.22.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.10.0"
+      version = "~> 2.11.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-helm/releases
@@ -52,12 +51,12 @@ terraform {
 
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 3.1"
+      version = "~> 3.3"
     }
 
     local = {
       source  = "hashicorp/local"
-      version = "~> 2.1"
+      version = "~> 2.2"
     }
 
     null = {
@@ -65,6 +64,8 @@ terraform {
       version = "~> 3.1"
     }
 
+    # TODO: remove template provider as deprecated (superseded by the templatefile function)
+    # https://registry.terraform.io/providers/hashicorp/template/latest/docs#deprecation
     template = {
       source  = "hashicorp/template"
       version = "~> 2.2"

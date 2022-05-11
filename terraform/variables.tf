@@ -21,7 +21,7 @@ variable "kubernetes_version" {
 # helm search repo ingress-nginx/ingress-nginx
 # helm search repo -l ingress-nginx/ingress-nginx | head -5
 variable "nginx_chart_version" {
-  default = "4.1.0"
+  default = "4.1.1"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -79,7 +79,7 @@ variable "external_dns_chart_version" {
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.13.0"
+  default = "2.14.0"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
@@ -94,7 +94,7 @@ variable "kured_image_tag" {
 # helm search repo -l argo/argo-cd | head -n 20
 # * also update terraform/helm/argocd_default_values.yaml
 variable "argocd_chart_version" {
-  default = "4.5.7"
+  default = "4.6.0"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
