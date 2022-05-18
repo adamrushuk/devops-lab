@@ -35,7 +35,7 @@ variable "cert_manager_chart_version" {
 # * also update terraform/helm/velero_default_values.yaml
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.29.4"
+  default = "2.29.5"
 }
 
 # https://hub.docker.com/r/velero/velero/tags
@@ -45,7 +45,7 @@ variable "velero_image_tag" {
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 variable "nexus_image_tag" {
-  default = "3.38.0"
+  default = "3.38.1"
 }
 
 # https://github.com/adamrushuk/charts/releases
@@ -79,7 +79,7 @@ variable "external_dns_chart_version" {
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.14.0"
+  default = "2.14.1"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility

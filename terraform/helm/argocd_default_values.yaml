@@ -1,4 +1,4 @@
-# https://github.com/argoproj/argo-helm/blob/argo-cd-4.5.7/charts/argo-cd/values.yaml
+# https://github.com/argoproj/argo-helm/blob/argo-cd-4.6.0/charts/argo-cd/values.yaml
 
 ## Argo CD configuration
 ## Ref: https://github.com/argoproj/argo-cd
