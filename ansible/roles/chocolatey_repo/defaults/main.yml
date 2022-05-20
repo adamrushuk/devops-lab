@@ -26,10 +26,11 @@ chocolatey_proxy_repo_request_body:
       timeout:
       enableCircularRedirects: false
       enableCookies: false
+      useTrustStore: false
     authentication:
   routingRuleName:
   nugetProxy:
     queryCacheItemMaxAge: 3600
+    nugetVersion: V2
   format: nuget
   type: proxy
-
