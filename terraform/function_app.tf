@@ -108,20 +108,20 @@ resource "azurerm_linux_function_app" "func_app" {
     application_insights_key = azurerm_application_insights.appinsights.instrumentation_key
 
     application_stack {
-      powershell_core_version = 7
+      powershell_core_version = 7.2
     }
   }
 
   # https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings
   app_settings = {
     # "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.appinsights.instrumentation_key
-    "FUNCTION_APP_EDIT_MODE"           = "readonly"
-    "FUNCTIONS_WORKER_RUNTIME_VERSION" = "~7"
-    "FUNCTIONS_WORKER_RUNTIME"         = "powershell"
-    "HASH"                             = base64encode(filesha256("${path.module}/files/function_app.zip"))
-    "IFTTT_WEBHOOK_KEY"                = var.ifttt_webhook_key
-    "WEBSITE_RUN_FROM_PACKAGE"         = "https://${azurerm_storage_account.func_app.name}.blob.core.windows.net/${azurerm_storage_container.func_app.name}/${azurerm_storage_blob.func_app.name}${data.azurerm_storage_account_sas.func_app.sas}"
-    "WEEKDAY_ALLOWED_TIME_RANGE"       = "06:30 -> 09:00"
+    # "FUNCTIONS_WORKER_RUNTIME_VERSION" = "~7"
+    # "FUNCTIONS_WORKER_RUNTIME"         = "powershell"
+    "FUNCTION_APP_EDIT_MODE"     = "readonly"
+    "HASH"                       = base64encode(filesha256("${path.module}/files/function_app.zip"))
+    "IFTTT_WEBHOOK_KEY"          = var.ifttt_webhook_key
+    "WEBSITE_RUN_FROM_PACKAGE"   = "https://${azurerm_storage_account.func_app.name}.blob.core.windows.net/${azurerm_storage_container.func_app.name}/${azurerm_storage_blob.func_app.name}${data.azurerm_storage_account_sas.func_app.sas}"
+    "WEEKDAY_ALLOWED_TIME_RANGE" = "06:30 -> 09:00"
   }
 
   # lifecycle {
