@@ -170,12 +170,12 @@ jobs:
       - name: Wait for resources to be "Ready"
         run: ./scripts/wait.sh
 
-      # # Ansible
-      # - name: Run Ansible playbook
-      #   run: ./scripts/ansible.sh
-      #   env:
-      #     NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
-      #     NEXUS_USER_PASSWORD: ${{ secrets.NEXUS_USER_PASSWORD }}
+      # Ansible
+      - name: Run Ansible playbook
+        run: ./scripts/ansible.sh
+        env:
+          NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
+          NEXUS_USER_PASSWORD: ${{ secrets.NEXUS_USER_PASSWORD }}
 
       # Docker
       - name: Docker repo login
