@@ -21,7 +21,7 @@ variable "kubernetes_version" {
 # helm search repo ingress-nginx/ingress-nginx
 # helm search repo -l ingress-nginx/ingress-nginx | head -5
 variable "nginx_chart_version" {
-  default = "4.1.1"
+  default = "4.1.2"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -35,7 +35,7 @@ variable "cert_manager_chart_version" {
 # * also update terraform/helm/velero_default_values.yaml
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.29.5"
+  default = "2.29.6"
 }
 
 # https://hub.docker.com/r/velero/velero/tags
@@ -66,7 +66,7 @@ variable "akv2k8s_chart_version" {
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "4.1.9"
+  default = "4.1.10"
 }
 
 # https://bitnami.com/stack/external-dns/helm
@@ -94,13 +94,13 @@ variable "kured_image_tag" {
 # helm search repo -l argo/argo-cd | head -n 20
 # * also update terraform/helm/argocd_default_values.yaml
 variable "argocd_chart_version" {
-  default = "4.6.0"
+  default = "4.6.5"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 # * also update cli version: terraform/files/scripts/argocd_config.sh#L22
 variable "argocd_image_tag" {
-  default = "v2.3.3"
+  default = "v2.3.4"
 }
 #endregion Versions
 

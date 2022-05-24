@@ -57,7 +57,7 @@ env:
   TF_INPUT: "false"
   TF_PLAN: "tfplan"
   # https://github.com/hashicorp/terraform/releases
-  TF_VERSION: "1.1.9"
+  TF_VERSION: "1.2.1"
   TF_WORKING_DIR: ./terraform
   # https://github.com/terraform-linters/tflint-ruleset-azurerm/releases
   TFLINT_RULESET_AZURERM_VERSION: "v0.16.0"

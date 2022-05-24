@@ -19,7 +19,7 @@ ARGOCD_HEALTH_CHECK_URL="https://$ARGOCD_FQDN/healthz"
 
 # Install
 # https://github.com/argoproj/argo-cd/releases/
-VERSION="v2.3.3"
+VERSION="v2.3.4"
 curl -sSL -o "$ARGOCD_PATH" "https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64"
 chmod +x "$ARGOCD_PATH"
 
