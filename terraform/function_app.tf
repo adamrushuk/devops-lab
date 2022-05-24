@@ -93,11 +93,11 @@ resource "azurerm_linux_function_app" "func_app" {
   location                    = azurerm_resource_group.func_app.location
   resource_group_name         = azurerm_resource_group.func_app.name
   service_plan_id             = azurerm_service_plan.func_app.id
-  https_only                  = true
   storage_account_access_key  = azurerm_storage_account.func_app.primary_access_key
   storage_account_name        = azurerm_storage_account.func_app.name
   functions_extension_version = "~4"
   tags                        = var.tags
+  # https_only                  = true
 
   identity {
     type = "SystemAssigned"
