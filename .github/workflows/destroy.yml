@@ -113,8 +113,9 @@ jobs:
       env:
         IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
 
-    - name: Create zip file of Function App
-      run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
+    # TODO remove
+    # - name: Create zip file of Function App
+    #   run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
 
     # Terraform
     - uses: hashicorp/setup-terraform@v1
