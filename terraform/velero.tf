@@ -2,23 +2,11 @@
 
 # Prereqs
 # https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/blob/master/README.md#Create-Azure-storage-account-and-blob-container
-resource "azurerm_resource_group" "velero" {
-  count    = var.velero_enabled ? 1 : 0
-  name     = var.velero_resource_group_name
-  location = var.location
-  tags     = var.tags
-
-  lifecycle {
-    ignore_changes = [
-      tags
-    ]
-  }
-}
 
 resource "azurerm_storage_account" "velero" {
   count                     = var.velero_enabled ? 1 : 0
   name                      = var.velero_storage_account_name
-  resource_group_name       = azurerm_resource_group.velero[0].name
+  resource_group_name       = azurerm_resource_group.aks.name
   location                  = azurerm_resource_group.velero[0].location
   account_kind              = "BlobStorage"
   account_tier              = "Standard"
@@ -87,7 +75,7 @@ resource "helm_release" "velero" {
   version    = var.velero_chart_version
   timeout    = 600
   atomic     = true
-  values = [file("helm/velero_values.yaml")]
+  values     = [file("helm/velero_values.yaml")]
 
   set {
     name  = "image.tag"
@@ -96,7 +84,7 @@ resource "helm_release" "velero" {
 
   set {
     name  = "configuration.backupStorageLocation.config.resourceGroup"
-    value = azurerm_resource_group.velero[0].name
+    value = azurerm_resource_group.aks.name
   }
 
   set {
@@ -106,7 +94,7 @@ resource "helm_release" "velero" {
 
   set {
     name  = "configuration.volumeSnapshotLocation.config.resourceGroup"
-    value = azurerm_resource_group.velero[0].name
+    value = azurerm_resource_group.aks.name
   }
 
   set {

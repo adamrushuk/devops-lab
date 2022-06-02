@@ -1,14 +1,9 @@
 # Function App for reporting on VMs left running outside allowed time range
-resource "azurerm_resource_group" "func_app" {
-  name     = "${var.prefix}-rg-function-app"
-  location = var.location
-  tags     = var.tags
-}
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account
 resource "azurerm_storage_account" "func_app" {
   name                            = "${var.prefix}stfuncapp"
-  resource_group_name             = azurerm_resource_group.func_app.name
+  resource_group_name             = azurerm_resource_group.aks.name
   location                        = azurerm_resource_group.func_app.location
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
@@ -41,7 +36,7 @@ resource "azurerm_storage_blob" "func_app" {
 resource "azurerm_service_plan" "func_app" {
   name                = "${var.prefix}-funcapp"
   location            = azurerm_resource_group.func_app.location
-  resource_group_name = azurerm_resource_group.func_app.name
+  resource_group_name = azurerm_resource_group.aks.name
   os_type             = "Linux"
   sku_name            = "Y1"
   tags                = var.tags
@@ -51,7 +46,7 @@ resource "azurerm_service_plan" "func_app" {
 resource "azurerm_application_insights" "appinsights" {
   name                = "${var.prefix}-funcapp"
   location            = var.location
-  resource_group_name = azurerm_resource_group.func_app.name
+  resource_group_name = azurerm_resource_group.aks.name
   application_type    = "web"
   tags                = var.tags
 }
@@ -61,7 +56,7 @@ resource "azurerm_application_insights" "appinsights" {
 resource "azurerm_linux_function_app" "func_app" {
   name                          = "${var.prefix}-funcapp"
   location                      = azurerm_resource_group.func_app.location
-  resource_group_name           = azurerm_resource_group.func_app.name
+  resource_group_name           = azurerm_resource_group.aks.name
   service_plan_id               = azurerm_service_plan.func_app.id
   storage_account_name          = azurerm_storage_account.func_app.name
   storage_uses_managed_identity = true
