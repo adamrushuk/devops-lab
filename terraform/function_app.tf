@@ -4,7 +4,7 @@
 resource "azurerm_storage_account" "func_app" {
   name                            = "${var.prefix}stfuncapp"
   resource_group_name             = azurerm_resource_group.aks.name
-  location                        = azurerm_resource_group.func_app.location
+  location                        = azurerm_resource_group.aks.location
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
@@ -35,7 +35,7 @@ resource "azurerm_storage_blob" "func_app" {
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/service_plan
 resource "azurerm_service_plan" "func_app" {
   name                = "${var.prefix}-funcapp"
-  location            = azurerm_resource_group.func_app.location
+  location            = azurerm_resource_group.aks.location
   resource_group_name = azurerm_resource_group.aks.name
   os_type             = "Linux"
   sku_name            = "Y1"
@@ -55,7 +55,7 @@ resource "azurerm_application_insights" "appinsights" {
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_function_app
 resource "azurerm_linux_function_app" "func_app" {
   name                          = "${var.prefix}-funcapp"
-  location                      = azurerm_resource_group.func_app.location
+  location                      = azurerm_resource_group.aks.location
   resource_group_name           = azurerm_resource_group.aks.name
   service_plan_id               = azurerm_service_plan.func_app.id
   storage_account_name          = azurerm_storage_account.func_app.name

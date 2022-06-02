@@ -7,7 +7,7 @@ resource "azurerm_storage_account" "velero" {
   count                     = var.velero_enabled ? 1 : 0
   name                      = var.velero_storage_account_name
   resource_group_name       = azurerm_resource_group.aks.name
-  location                  = azurerm_resource_group.velero[0].location
+  location                  = azurerm_resource_group.aks.location
   account_kind              = "BlobStorage"
   account_tier              = "Standard"
   account_replication_type  = "LRS"
