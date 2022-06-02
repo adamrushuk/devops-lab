@@ -1,5 +1,7 @@
 # powershell function app example
 
+**IMPORTANT**: It can take a while for the `HttpTrigger1` function to show within the `Function App > Function` screen.
+
 ## usage
 
 ```bash
