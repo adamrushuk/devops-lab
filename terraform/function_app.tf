@@ -60,9 +60,9 @@ resource "azurerm_linux_function_app" "func_app" {
   service_plan_id               = azurerm_service_plan.func_app.id
   storage_account_name          = azurerm_storage_account.func_app.name
   storage_uses_managed_identity = true
+  enabled                       = true
+  https_only                    = true
   tags                          = var.tags
-  # enabled                       = true
-  # https_only                    = true
 
   identity {
     type = "SystemAssigned"
@@ -79,12 +79,9 @@ resource "azurerm_linux_function_app" "func_app" {
 
   # https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings
   app_settings = {
-    # "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.appinsights.instrumentation_key
-    # "FUNCTIONS_WORKER_RUNTIME_VERSION" = "~7"
-    # "FUNCTIONS_WORKER_RUNTIME"         = "powershell"
-    # "FUNCTION_APP_EDIT_MODE"           = "readonly"
-    # "HASH"                             = base64encode(filesha256("${path.module}/files/function_app.zip"))
-    # "WEBSITE_RUN_FROM_PACKAGE"   = "https://${azurerm_storage_account.func_app.name}.blob.core.windows.net/${azurerm_storage_container.func_app.name}/${azurerm_storage_blob.func_app.name}${data.azurerm_storage_account_sas.func_app.sas}"
+    # The Function app will only use the code in the blob if the computed hash matches the hash you specify in the app settings. The computed hash takes the SHA256 hash of the file and then base64 encodes it
+    # "HASH"                       = base64encode(filesha256("${path.module}/files/function_app.zip"))
+    "FUNCTION_APP_EDIT_MODE"     = "readwrite"
     "WEBSITE_RUN_FROM_PACKAGE"   = azurerm_storage_blob.func_app.url
     "IFTTT_WEBHOOK_KEY"          = var.ifttt_webhook_key
     "WEEKDAY_ALLOWED_TIME_RANGE" = "06:30 -> 09:00"
