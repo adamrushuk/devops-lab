@@ -63,7 +63,6 @@ resource "azurerm_linux_function_app" "func_app" {
   location                      = azurerm_resource_group.func_app.location
   resource_group_name           = azurerm_resource_group.func_app.name
   service_plan_id               = azurerm_service_plan.func_app.id
-  storage_account_access_key    = azurerm_storage_account.func_app.primary_access_key
   storage_account_name          = azurerm_storage_account.func_app.name
   storage_uses_managed_identity = true
   tags                          = var.tags
