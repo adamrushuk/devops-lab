@@ -30,7 +30,7 @@ data "archive_file" "func_app" {
 
 resource "azurerm_storage_blob" "func_app" {
   # name will be "[filehash].zip" (filehash is the SHA256 hash of the file)
-  name                   = "${filesha256(data.archive_file.example.output_path)}.zip"
+  name                   = "${filesha256(data.archive_file.func_app.output_path)}.zip"
   storage_account_name   = azurerm_storage_account.func_app.name
   storage_container_name = azurerm_storage_container.func_app.name
   source                 = data.archive_file.func_app.output_path
