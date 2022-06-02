@@ -129,8 +129,9 @@ jobs:
           HELM_CHART_REPO_DEPLOY_PRIVATE_KEY: ${{ secrets.HELM_CHART_REPO_DEPLOY_PRIVATE_KEY }}
           IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
 
-      - name: Create zip file of Function App
-        run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
+      # TODO: investigate impact of removing this
+      # - name: Create zip file of Function App
+      #   run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
 
       # Terraform
       - uses: hashicorp/setup-terraform@v1
@@ -143,6 +144,13 @@ jobs:
           terraform validate
         working-directory: ${{ env.TF_WORKING_DIR }}
 
+      - name: tfsec
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          working_directory: ${{ env.TF_WORKING_DIR }}
+          soft_fail: true
+
+      # TODO: investigate impact of removing this
       - name: Terraform Lint
         run: ./scripts/tflint.sh
         env:
