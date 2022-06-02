@@ -21,7 +21,7 @@ variable "kubernetes_version" {
 # helm search repo ingress-nginx/ingress-nginx
 # helm search repo -l ingress-nginx/ingress-nginx | head -5
 variable "nginx_chart_version" {
-  default = "4.1.2"
+  default = "4.1.3"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
@@ -35,7 +35,7 @@ variable "cert_manager_chart_version" {
 # * also update terraform/helm/velero_default_values.yaml
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.29.6"
+  default = "2.29.7"
 }
 
 # https://hub.docker.com/r/velero/velero/tags
@@ -70,16 +70,17 @@ variable "aad_pod_identity_chart_version" {
 }
 
 # https://bitnami.com/stack/external-dns/helm
-# https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
+# https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml
 # helm search repo bitnami/external-dns
+# helm search repo -l bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "5.4.8"
+  default = "6.5.1"
 }
 
 # https://github.com/weaveworks/kured/tree/master/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
-  default = "2.14.1"
+  default = "2.14.2"
 }
 
 # https://github.com/weaveworks/kured#kubernetes--os-compatibility
