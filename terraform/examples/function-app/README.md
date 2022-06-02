@@ -21,6 +21,8 @@ terraform output function_url
 
 # test function
 eval curl $(terraform output --raw function_url)?Name=Adam
+eval curl $(terraform output --raw function_url)?Name=Tasha
+
 
 # CLEANUP
 terraform destroy
