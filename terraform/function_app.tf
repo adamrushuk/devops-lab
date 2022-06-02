@@ -101,7 +101,7 @@ resource "azurerm_linux_function_app" "func_app" {
 resource "azurerm_role_assignment" "func_app_storage" {
   principal_id         = azurerm_linux_function_app.func_app.identity[0].principal_id
   role_definition_name = "Storage Blob Data Contributor"
-  scope                = azurerm_storage_account.example.id
+  scope                = azurerm_storage_account.func_app.id
 }
 
 # Give Function App Reader role for the AKS cluster node resource group
