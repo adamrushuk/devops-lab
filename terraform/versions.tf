@@ -64,6 +64,12 @@ terraform {
       version = "~> 3.1"
     }
 
+    # https://registry.terraform.io/providers/hashicorp/archive/latest
+    archive = {
+      source  = "hashicorp/archive"
+      version = "2.2.0"
+    }
+
     # TODO: remove template provider as deprecated (superseded by the templatefile function)
     # https://registry.terraform.io/providers/hashicorp/template/latest/docs#deprecation
     template = {
