@@ -50,7 +50,7 @@ module "aks" {
   name                 = var.azurerm_kubernetes_cluster_name
   sla_sku              = var.sla_sku
   aad_auth_enabled     = true
-  azure_policy_enabled = false
+  azure_policy_enabled = true
   tags                 = var.tags
 
   # override defaults
