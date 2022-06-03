@@ -41,6 +41,7 @@ resource "azurerm_storage_account" "example" {
   location                 = azurerm_resource_group.example.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  min_tls_version          = "TLS1_2"
 }
 
 resource "azurerm_storage_container" "example" {
@@ -98,6 +99,12 @@ resource "azurerm_linux_function_app" "example" {
     "WEBSITE_RUN_FROM_PACKAGE" = azurerm_storage_blob.example.url
   }
 
+  lifecycle {
+    # required to ignore the auto-generated "hidden-link:" tags
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 resource "azurerm_role_assignment" "example" {
