@@ -44,11 +44,13 @@ resource "azurerm_service_plan" "func_app" {
 }
 
 # Application Insights used for logs and monitoring
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_insights
 resource "azurerm_application_insights" "appinsights" {
   name                = "${var.prefix}-funcapp"
   location            = var.location
   resource_group_name = azurerm_resource_group.aks.name
   application_type    = "web"
+  workspace_id        = azurerm_log_analytics_workspace.aks[0].id
   tags                = var.tags
 }
 
