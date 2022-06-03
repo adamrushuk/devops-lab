@@ -84,7 +84,6 @@ resource "azurerm_linux_function_app" "func_app" {
   app_settings = {
     # The Function app will only use the code in the blob if the computed hash matches the hash you specify in the app settings. The computed hash takes the SHA256 hash of the file and then base64 encodes it
     # "HASH"                       = base64encode(filesha256("${path.module}/files/function_app.zip"))
-    "FUNCTION_APP_EDIT_MODE"     = "readwrite"
     "WEBSITE_RUN_FROM_PACKAGE"   = azurerm_storage_blob.func_app.url
     "IFTTT_WEBHOOK_KEY"          = var.ifttt_webhook_key
     "WEEKDAY_ALLOWED_TIME_RANGE" = "06:30 -> 09:00"
