@@ -1,9 +1,5 @@
 terraform {
 
-  # https://www.terraform.io/docs/language/expressions/references.html#sensitive-resource-attributes
-  # TODO: this currently makes builds fail intermittently
-  # experiments = [provider_sensitive_attrs]
-
   # https://github.com/hashicorp/terraform/releases
   # https://github.com/hashicorp/terraform/blob/main/CHANGELOG.md
   required_version = ">= 1.0"
@@ -23,7 +19,7 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.8.0"
+      version = "~> 3.9.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
@@ -85,6 +81,7 @@ provider "azurerm" {
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/features-block
   features {
     resource_group {
+      # required to cleanup velero snapshot(s) from resource group
       prevent_deletion_if_contains_resources = false
     }
   }

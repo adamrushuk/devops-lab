@@ -1,4 +1,4 @@
-# https://github.com/argoproj/argo-helm/blob/argo-cd-4.6.5/charts/argo-cd/values.yaml
+# https://github.com/argoproj/argo-helm/blob/argo-cd-4.8.2/charts/argo-cd/values.yaml
 
 ## Argo CD configuration
 ## Ref: https://github.com/argoproj/argo-cd
@@ -363,6 +363,9 @@ controller:
     # minAvailable: 1
     # maxUnavailable: 0
 
+  # -- Secrets with credentials to pull images from a private registry
+  imagePullSecrets: []
+
 ## Dex
 dex:
   # -- Enable dex
@@ -578,6 +581,9 @@ dex:
     # minAvailable: 1
     # maxUnavailable: 0
 
+  # -- Secrets with credentials to pull images from a private registry
+  imagePullSecrets: []
+
 ## Redis
 redis:
   # -- Enable redis
@@ -766,6 +772,9 @@ redis:
     # minAvailable: 1
     # maxUnavailable: 0
 
+  # -- Secrets with credentials to pull images from a private registry
+  imagePullSecrets: []
+
 # This key configures Redis-HA subchart and when enabled (redis-ha.enabled=true)
 # the custom redis deployment is omitted
 # Check the redis-ha chart for more properties
@@ -775,6 +784,12 @@ redis-ha:
   exporter:
     # -- If `true`, the prometheus exporter sidecar is enabled
     enabled: true
+    # -- Exporter image
+    # @default -- `nil` (follows subchart default)
+    image: ~
+    # -- Exporter tag
+    # @default -- `nil` (follows subchart default)
+    tag: ~
   persistentVolume:
     # -- Configures persistency on Redis nodes
     enabled: false
@@ -785,16 +800,41 @@ redis-ha:
     # @default -- See [values.yaml]
     config:
       # -- Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. `""`  is disabled
+      # @default -- `'""'`
       save: '""'
   haproxy:
     # -- Enabled HAProxy LoadBalancing/Proxy
     enabled: true
+    image:
+      # -- HAProxy Image Repository
+      # @default -- `nil` (follows subchart default)
+      repository: ~
+      # -- HAProxy Image Tag
+      # @default -- `nil` (follows subchart default)
+      tag: ~
     metrics:
       # -- HAProxy enable prometheus metric scraping
       enabled: true
   image:
+    # -- Redis image repository
+    # @default -- `nil` (follows subchart default)
+    repository: ~
     # -- Redis tag
     tag: 6.2.6-alpine
+
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  topologySpreadConstraints:
+    # -- Enable Redis HA topology spread constraints
+    enabled: false
+    # -- Max skew of pods tolerated
+    # @default -- `""` (defaults to `1`)
+    maxSkew: ""
+    # -- Topology key for spread
+    # @default -- `""` (defaults to `topology.kubernetes.io/zone`)
+    topologyKey: ""
+    # -- Enforcement policy, hard or soft
+    # @default -- `""` (defaults to `ScheduleAnyway`)
+    whenUnsatisfiable: ""
 
 # External Redis parameters
 externalRedis:
@@ -1441,6 +1481,9 @@ server:
     # minAvailable: 1
     # maxUnavailable: 0
 
+  # -- Secrets with credentials to pull images from a private registry
+  imagePullSecrets: []
+
 ## Repo Server
 repoServer:
   # -- Repo server name
@@ -1695,6 +1738,9 @@ repoServer:
     enabled: false
     # minAvailable: 1
     # maxUnavailable: 0
+
+  # -- Secrets with credentials to pull images from a private registry
+  imagePullSecrets: []
 
 ## Argo Configs
 configs:
@@ -2189,6 +2235,8 @@ notifications:
 
   # -- Set the logging level. (One of: `debug`, `info`, `warn`, `error`)
   logLevel: info
+  # -- Application controller log format. Either `text` or `json`
+  logFormat: text
 
   # -- Extra arguments to provide to the controller
   extraArgs: []

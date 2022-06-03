@@ -1,6 +1,5 @@
 # Variables
 
-
 #region Versions
 # version used for both main AKS API service, and default node pool
 # https://github.com/Azure/AKS/releases
@@ -95,7 +94,7 @@ variable "kured_image_tag" {
 # helm search repo -l argo/argo-cd | head -n 20
 # * also update terraform/helm/argocd_default_values.yaml
 variable "argocd_chart_version" {
-  default = "4.6.5"
+  default = "4.8.2"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
