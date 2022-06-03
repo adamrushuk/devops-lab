@@ -144,13 +144,13 @@ jobs:
           terraform validate
         working-directory: ${{ env.TF_WORKING_DIR }}
 
-      - name: tfsec
+      - name: Run tfsec security scan
         uses: aquasecurity/tfsec-action@v1.0.0
         with:
           working_directory: ${{ env.TF_WORKING_DIR }}
           soft_fail: true
 
-      - name: Run Checkov action
+      - name: Run Checkov security scan
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
