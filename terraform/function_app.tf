@@ -88,6 +88,13 @@ resource "azurerm_linux_function_app" "func_app" {
     "IFTTT_WEBHOOK_KEY"          = var.ifttt_webhook_key
     "WEEKDAY_ALLOWED_TIME_RANGE" = "06:30 -> 09:00"
   }
+
+  lifecycle {
+    # required to ignore the auto-generated "hidden-link:" tags
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 # Give Function App access to function zip blob
