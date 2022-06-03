@@ -12,14 +12,8 @@ resource "azurerm_storage_account" "velero" {
   account_tier              = "Standard"
   account_replication_type  = "LRS"
   enable_https_traffic_only = true
-
-  tags = var.tags
-
-  lifecycle {
-    ignore_changes = [
-      tags
-    ]
-  }
+  min_tls_version           = "TLS1_2"
+  tags                      = var.tags
 }
 
 resource "azurerm_storage_container" "velero" {
