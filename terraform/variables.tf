@@ -241,10 +241,6 @@ variable "velero_enabled" {
   default     = "__VELERO_ENABLED__"
 }
 
-variable "velero_resource_group_name" {
-  default = "__VELERO_STORAGE_RG__"
-}
-
 variable "velero_storage_account_name" {
   default = "__VELERO_STORAGE_ACCOUNT__"
 }
