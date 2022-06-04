@@ -50,6 +50,10 @@ jobs:
         chmod -R +x ./scripts/
         ./scripts/azure_login.sh
 
+    # Debug
+    - name: Debug
+      run: pwsh -command "Get-Module az* -ListAvailable"
+
     # Cleanup
     - name: Delete all resource groups
       run: pwsh -command "./scripts/cleanup.ps1"
