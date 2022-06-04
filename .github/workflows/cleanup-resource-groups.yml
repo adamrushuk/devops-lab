@@ -63,7 +63,7 @@ jobs:
       with:
         azPSVersion: "latest"
         inlineScript: |
-          ./scripts/cleanup.ps1
+          ./scripts/cleanup.ps1 -ResourceGroupPrefix "${{ env.PREFIX }}"
 
     # Notify
     - name: Notify slack
