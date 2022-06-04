@@ -44,26 +44,19 @@ jobs:
     # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#example-using-versioned-actions
     - uses: actions/checkout@v2
 
-    # Login
-    - name: Login to Azure
+    # Init tasks
+    - name: Init
       run: |
         chmod -R +x ./scripts/
-        ./scripts/azure_login.sh
 
-    # # Debug
-    # - name: Debug
-    #   run: pwsh -command "Get-Module az* -ListAvailable"
-
-    # # Cleanup
-    # - name: Delete all resource groups
-    #   run: pwsh -command "./scripts/cleanup.ps1"
-
+    # Cleanup
     - name: Delete all resource groups
       uses: azure/powershell@v1
       with:
         azPSVersion: "latest"
         inlineScript: |
-          ./scripts/cleanup.ps1 -ResourceGroupPrefix "${{ env.PREFIX }}"
+          ./scripts/azure_login.ps1
+          ./scripts/Delete-ResourceGroups.ps1 -Prefixes "${{ env.PREFIX }}" -MaxLimit 2
 
     # Notify
     - name: Notify slack
