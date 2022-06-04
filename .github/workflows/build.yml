@@ -152,7 +152,7 @@ jobs:
           directory: ${{ env.TF_WORKING_DIR }}
           # check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
           # optional: skip a specific check_id. can be comma separated list
-          skip_check: CKV2_AZURE_1,CKV_AZURE_4,CKV_AZURE_6,CKV2_AZURE_21,CKV_AZURE_33,CKV_AZURE_35,CKV_AZURE_117,CKV_AZURE_141
+          skip_check: CKV2_AZURE_1,CKV_AZURE_4,CKV_AZURE_6,CKV2_AZURE_8,CKV2_AZURE_21,CKV_AZURE_33,CKV_AZURE_35,CKV_AZURE_117,CKV_AZURE_141
           quiet: true # optional: display only failed checks
           soft_fail: true # optional: do not return an error code if there are failed checks
           framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
