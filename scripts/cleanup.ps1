@@ -16,7 +16,7 @@ $taskMessage = "Deleting all devops lab resource groups"
 Write-Output "STARTED: $taskMessage..."
 
 Write-Output "Found these resource groups:"
-$resourceGroupsToDelete = Get-AzResourceGroup -Name "$ResourceGroupPrefix*" -WhatIf
+$resourceGroupsToDelete = Get-AzResourceGroup -Name "$ResourceGroupPrefix*"
 $resourceGroupsToDelete.ResourceGroupName
 
 Write-Output "Deleting 'AsJob' for async removal..."
