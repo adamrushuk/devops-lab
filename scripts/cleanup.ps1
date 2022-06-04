@@ -1,3 +1,4 @@
+# TODO: delete this file if not required
 # cleanup all resource groups
 # useful after failed build/destroy workflows
 
