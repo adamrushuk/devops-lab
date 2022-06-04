@@ -204,7 +204,7 @@ jobs:
         run: pwsh -command "./scripts/Fix-FunctionApp.ps1"
         env:
           FUNCTION_APP_NAME: "${{ env.PREFIX }}-funcapp"
-          FUNCTION_APP_RG: "${{ env.PREFIX }}-rg-function-app"
+          FUNCTION_APP_RG: "${{ env.PREFIX }}-rg-aks-dev-001"
 
       # Pester tests
       - name: 🧪 Run Pester tests
