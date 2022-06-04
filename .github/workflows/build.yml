@@ -200,11 +200,11 @@ jobs:
         run: ./scripts/push_docker_images.sh
 
       # TODO: Remove once issue has been fixed
-      # - name: Fix Function App version
-      #   run: pwsh -command "./scripts/Fix-FunctionApp.ps1"
-      #   env:
-      #     FUNCTION_APP_NAME: "${{ env.PREFIX }}-funcapp"
-      #     FUNCTION_APP_RG: "${{ env.PREFIX }}-rg-function-app"
+      - name: Fix Function App version
+        run: pwsh -command "./scripts/Fix-FunctionApp.ps1"
+        env:
+          FUNCTION_APP_NAME: "${{ env.PREFIX }}-funcapp"
+          FUNCTION_APP_RG: "${{ env.PREFIX }}-rg-function-app"
 
       # Pester tests
       - name: 🧪 Run Pester tests
