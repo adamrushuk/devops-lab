@@ -161,14 +161,6 @@ jobs:
           # log_level: DEBUG # optional: set log level. Default WARNING
           # config_file: path/this_file
 
-      # TODO: investigate impact of removing this
-      # - name: Terraform Lint
-      #   run: ./scripts/tflint.sh
-      #   env:
-      #     TF_WORKING_DIR: ${{ env.TF_WORKING_DIR }}
-      #     TFLINT_RULESET_AZURERM_VERSION: ${{ env.TFLINT_RULESET_AZURERM_VERSION }}
-      #     TFLINT_VERSION: ${{ env.TFLINT_VERSION }}
-
       - name: 👀 Terraform Plan
         id: plan
         run: terraform plan -out=${{ env.TF_PLAN }}
