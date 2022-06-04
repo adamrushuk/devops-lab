@@ -18,8 +18,9 @@ being used now.
     - [Configure Key Vault / LetsEncrypt TLS Certificate](#configure-key-vault--letsencrypt-tls-certificate)
   - [Configure Azure Authentication](#configure-azure-authentication)
   - [Create Secrets](#create-secrets)
-  - [Running the Build workflow](#running-the-build-workflow)
-  - [Running the Destroy workflow](#running-the-destroy-workflow)
+  - [Update the Workflow Environment Variables](#update-the-workflow-environment-variables)
+  - [Running the Build Workflow](#running-the-build-workflow)
+  - [Running the Destroy Workflow](#running-the-destroy-workflow)
 
 ## Getting Started
 
@@ -61,7 +62,11 @@ Once Azure authentication has been configured, the Service Principle credential 
 - `ARM_SUBSCRIPTION_ID`
 - `ARM_TENANT_ID`
 
-### Running the Build workflow
+### Update the Workflow Environment Variables
+
+TODO - update key vault and dns env vars.
+
+### Running the Build Workflow
 
 Now that Azure authentication has been configured with corresponding secrets, the build workflow is ready to be run:
 
@@ -70,7 +75,7 @@ Now that Azure authentication has been configured with corresponding secrets, th
 1. Select the desired branch.
 1. Click the `Run workflow` button.
 
-### Running the Destroy workflow
+### Running the Destroy Workflow
 
 There will be ongoing costs if the environment is left running, so to avoid unexpected bills the destroy workflow
 should be run once testing has been completed:
