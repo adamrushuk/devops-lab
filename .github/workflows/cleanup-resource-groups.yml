@@ -1,0 +1,63 @@
+# cleanup - (useful after failed build/destroy workflows)
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+# https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: cleanup
+
+# name of GitHub event that triggers workflow
+# https://help.github.com/en/actions/reference/events-that-trigger-workflows#watch-event-watch
+on:
+  # trigger via webhook
+  # https://github.com/adamrushuk/devops-lab/blob/master/TriggerCustomAction.ps1#L28
+  repository_dispatch:
+    types: [cleanup]
+
+  # enable manual workflow
+  # https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#manually-running-a-workflow
+  workflow_dispatch:
+    inputs: {}
+
+# global environment variables
+# https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
+env:
+  # prefix: used for some globally unique name requirements
+  PREFIX: arshz
+  # azure creds
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+jobs:
+  cleanup:
+
+    # always pin versions
+    # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
+    runs-on: ubuntu-18.04
+
+    # only run if owner triggered action
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+    # Checkout
+    # Reference the major version of a release
+    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#example-using-versioned-actions
+    - uses: actions/checkout@v2
+
+    # Login
+    - name: Login to Azure
+      run: |
+        chmod -R +x ./scripts/
+        ./scripts/azure_login.sh
+
+    # Cleanup
+    - name: Delete all resource groups
+      run: pwsh -command "./scripts/cleanup.ps1"
+
+    # Notify
+    - name: Notify slack
+      continue-on-error: true
+      env:
+        SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      run: ./scripts/send_slack_message.sh "[devops-lab] Cleanup complete"
