@@ -61,6 +61,7 @@ jobs:
     - name: Delete all resource groups
       uses: azure/powershell@v1
       with:
+        azPSVersion: "latest"
         inlineScript: |
           ./scripts/cleanup.ps1
 
