@@ -56,7 +56,7 @@ jobs:
         azPSVersion: "latest"
         inlineScript: |
           ./scripts/azure_login.ps1
-          ./scripts/Delete-ResourceGroups.ps1 -Prefixes "${{ env.PREFIX }}" -MaxLimit 2
+          ./scripts/Delete-ResourceGroups.ps1 -Prefixes "${{ env.PREFIX }}" -MaxLimit 2 -WhatIf
 
     # Notify
     - name: Notify slack
