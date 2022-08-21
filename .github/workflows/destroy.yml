@@ -40,7 +40,7 @@ env:
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   K8S_TLS_SECRET_NAME: tls-secret
-  KEY_VAULT_NAME: kv-rush-iz6y
+  KEY_VAULT_NAME: kv-rush-aqy2
   KEY_VAULT_CERT_NAME: wildcard-thehypepipe-co-uk
   KEY_VAULT_RESOURCE_GROUP_NAME: rg-keyvault-acmebot
   # NOTE: "eastus" is cheaper than "uksouth"

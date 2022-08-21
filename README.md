@@ -39,8 +39,8 @@ dynamically update DNS records.
 
 #### Configure Key Vault / LetsEncrypt TLS Certificate
 
-Use the [keyvault-acmebot Getting Started guide](https://github.com/shibayan/keyvault-acmebot#getting-started) to
-deploy AcmeBot and configure a wildcard certificate for your domain.
+Use the [keyvault-acmebot Getting Started guide](https://github.com/shibayan/keyvault-acmebot/wiki/Getting-Started) to
+deploy AcmeBot and configure a wildcard certificate for your domain (eg: `*.domain.com`).
 
 ### Configure Azure Authentication
 
