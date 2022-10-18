@@ -78,14 +78,14 @@ variable "external_dns_chart_version" {
 }
 
 # https://github.com/kubereboot/charts/tree/main/charts/kured
-# helm search repo kured/kured
+# helm search repo kubereboot/kured
 variable "kured_chart_version" {
-  default = "2.14.2"
+  default = "4.0.2"
 }
 
 # https://github.com/kubereboot/kured#kubernetes--os-compatibility
 variable "kured_image_tag" {
-  default = "1.9.2"
+  default = "1.10.2"
 }
 
 
