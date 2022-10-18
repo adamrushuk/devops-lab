@@ -4,8 +4,9 @@
 # version used for both main AKS API service, and default node pool
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location eastus --output table
+# pwsh -c "(az aks get-versions --location uksouth | convertfrom-json).orchestrators | where default"
 variable "kubernetes_version" {
-  default = "1.21.9"
+  default = "1.23.12"
 }
 
 # Helm charts
