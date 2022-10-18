@@ -4,7 +4,7 @@
 # version used for both main AKS API service, and default node pool
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location eastus --output table
-# pwsh -c "(az aks get-versions --location uksouth | convertfrom-json).orchestrators | where default"
+# pwsh -Command "(az aks get-versions --location uksouth | convertfrom-json).orchestrators | where default"
 variable "kubernetes_version" {
   default = "1.23.12"
 }
@@ -77,13 +77,13 @@ variable "external_dns_chart_version" {
   default = "6.5.1"
 }
 
-# https://github.com/weaveworks/kured/tree/master/charts/kured
+# https://github.com/kubereboot/charts/tree/main/charts/kured
 # helm search repo kured/kured
 variable "kured_chart_version" {
   default = "2.14.2"
 }
 
-# https://github.com/weaveworks/kured#kubernetes--os-compatibility
+# https://github.com/kubereboot/kured#kubernetes--os-compatibility
 variable "kured_image_tag" {
   default = "1.9.2"
 }
