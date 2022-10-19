@@ -26,7 +26,7 @@ env:
 
 jobs:
   stop_aks_cluster:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
 
     # only run if owner triggered action
     if: github.actor == github.event.repository.owner.login
