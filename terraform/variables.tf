@@ -45,7 +45,7 @@ variable "nexus_image_tag" {
 # https://github.com/adamrushuk/charts/releases
 # helm search repo adamrushuk/sonatype-nexus
 variable "nexus_chart_version" {
-  default = "0.2.8"
+  default = "0.3.0"
 }
 
 # https://github.com/SparebankenVest/azure-key-vault-to-kubernetes
