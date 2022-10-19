@@ -19,25 +19,25 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.9.0"
+      version = "~> 3.27.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.22.0"
+      version = "~> 2.29.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.11.0"
+      version = "~> 2.14.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-helm/releases
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.5.1"
+      version = "~> 2.7.1"
     }
 
     random = {
@@ -75,7 +75,6 @@ terraform {
   }
 }
 
-# must include blank features block
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/features-block
@@ -103,9 +102,4 @@ provider "helm" {
     client_key             = base64decode(module.aks.full_object.kube_admin_config[0].client_key)
     cluster_ca_certificate = base64decode(module.aks.full_object.kube_admin_config[0].cluster_ca_certificate)
   }
-
-  # TODO: currently has issues when enabled
-  # experiments {
-  #   manifest = true
-  # }
 }
