@@ -84,7 +84,7 @@ jobs:
     steps:
       # Checkout
       # https://github.com/marketplace/actions/checkout
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       # specify different branch
       # NOT required as I've changed the default branch to develop
       # with:
@@ -251,7 +251,7 @@ jobs:
 
     steps:
       # Checkout
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Init tasks - inc Env var concatenation
       # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
