@@ -252,7 +252,7 @@ jobs:
           # artifact: test-results             # artifact name
           name: Pester Tests Results           # Name of the check run which will be created
           path: 'test/pester-test-results.xml' # Path to test results (inside artifact .zip)
-          reporter: dotnet-trx                 # Format of test results
+          reporter: java-junit                 # Format of test results
 
       # Notify
       - name: Notify slack

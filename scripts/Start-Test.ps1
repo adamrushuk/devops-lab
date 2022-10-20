@@ -18,7 +18,7 @@ $taskMessage = "Installing Pester "
 Write-Verbose "STARTED: $taskMessage..."
 try {
     Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
-    Install-Module -Name "Pester" -Scope "CurrentUser" -Repository "PSGallery" -MinimumVersion 5.1.0 -Verbose
+    Install-Module -Name "Pester" -Scope "CurrentUser" -Repository "PSGallery" -MinimumVersion 5.3.0 -Verbose
 
     Write-Verbose "FINISHED: $taskMessage."
 }
@@ -32,7 +32,7 @@ $taskMessage = "Running Pester tests"
 Write-Verbose "STARTED: $taskMessage..."
 try {
     $testScripts = Get-ChildItem -Path "*.tests.ps1"
-    Invoke-Pester -Script $testScripts -PassThru -OutputFormat "NUnitXml" -OutputFile "pester-test-results.xml" -Verbose -ErrorAction "Stop"
+    Invoke-Pester -Script $testScripts -PassThru -OutputFormat "JUnitXml" -OutputFile "pester-test-results.xml" -Verbose -ErrorAction "Stop"
 
     Write-Verbose "FINISHED: $taskMessage."
 }
