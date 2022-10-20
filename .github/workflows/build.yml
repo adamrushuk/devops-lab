@@ -229,7 +229,7 @@ jobs:
       - name: Archive test artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: test results
+          name: test-results
           path: test/pester-test-results.xml
         if: always()
 
@@ -239,13 +239,20 @@ jobs:
 
       # Shows at the bottom of a run: https://github.com/adamrushuk/devops-lab/runs/1035347513?check_suite_focus=true
       # https://github.com/zyborg/pester-tests-report
-      - name: Pester report
-        uses: zyborg/pester-tests-report@v1
+      # - name: Pester report
+      #   uses: zyborg/pester-tests-report@v1
+      #   with:
+      #     test_results_path: test/pester-test-results.xml
+      #     report_name: pester_tests
+      #     report_title: Pester Tests
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: dorny/test-reporter@v1
         with:
-          test_results_path: test/pester-test-results.xml
-          report_name: pester_tests
-          report_title: Pester Tests
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          artifact: test-results            # artifact name
+          name: Pester Tests                # Name of the check run which will be created
+          path: '*.xml'                     # Path to test results (inside artifact .zip)
+          reporter: dotnet-trx              # Format of test results
 
       # Notify
       - name: Notify slack
