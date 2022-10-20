@@ -4,7 +4,8 @@
   shell: |
     podName=$(kubectl get pod --namespace {{ nexus_namespace }} -l app.kubernetes.io/name=sonatype-nexus -o jsonpath="{.items[0].metadata.name}")
 
-    kubectl cp --namespace {{ nexus_namespace }} {{role_path}}/files/get_admin_password.sh "$podName":/tmp/get_admin_password.sh
+    # kubectl cp --namespace {{ nexus_namespace }} {{role_path}}/files/get_admin_password.sh "$podName":/tmp/get_admin_password.sh
+    cat {{role_path}}/files/get_admin_password.sh | kubectl exec -i -n {{ nexus_namespace }} "$podName" "--" sh -c "cat > /tmp/get_admin_password.sh"
 
     kubectl exec --namespace {{ nexus_namespace }} "$podName" -- sh -c "chmod +x /tmp/get_admin_password.sh; timeout {{ admin_password_script_timeout_mins }}m /tmp/get_admin_password.sh"
 
