@@ -76,7 +76,7 @@ jobs:
 
     # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
     environment:
-      name: dev_environment
+      name: dev
       url: "https://argocd.${{ env.ROOT_DOMAIN_NAME }}"
 
     # only run if owner triggered action
@@ -268,6 +268,10 @@ jobs:
 
     # https://github.com/actions/virtual-environments
     runs-on: windows-2022
+
+    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
+    environment:
+      name: dev
 
     # only run if owner triggered action
     if: github.actor == github.event.repository.owner.login
