@@ -17,6 +17,11 @@ on:
   workflow_dispatch:
     inputs: {}
 
+# permissions for oidc login
+# https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect
+permissions:
+  id-token: write # This is required for requesting the JWT
+
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 env:
@@ -68,6 +73,10 @@ jobs:
     # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
     runs-on: ubuntu-22.04
 
+    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
+    environment:
+      name: dev
+
     # only run if owner triggered action
     if: github.actor == github.event.repository.owner.login
 
@@ -95,8 +104,17 @@ jobs:
         echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
 
     # Login
-    - name: Login to Azure
-      run: ./scripts/azure_login.sh
+    # - name: Login to Azure
+    #   run: ./scripts/azure_login.sh
+
+    # https://github.com/Azure/login
+    - name: OIDC Login to Azure Public Cloud (az cli and az powershell)
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.ARM_CLIENT_ID }}
+        tenant-id: ${{ secrets.ARM_TENANT_ID }}
+        subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        enable-AzPSSession: true
 
     # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform resource destroy tasks
     - name: Start AKS Cluster
@@ -111,10 +129,6 @@ jobs:
       run: pwsh -command "./scripts/Replace-Tokens.ps1"
       env:
         IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
-
-    # TODO remove
-    # - name: Create zip file of Function App
-    #   run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
 
     # Terraform
     - uses: hashicorp/setup-terraform@v2
