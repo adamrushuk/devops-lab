@@ -6,10 +6,11 @@ terraform {
 
   # terraform remote state
   backend "azurerm" {
-    access_key           = "__STORAGE_KEY__"
+    # access_key           = "__STORAGE_KEY__" # TODO Remove once OIDC working
     container_name       = "terraform"
     key                  = "terraform.tfstate"
     storage_account_name = "__TERRAFORM_STORAGE_ACCOUNT__"
+    use_oidc             = true
   }
 
   # providers (pin all versions)
@@ -77,6 +78,8 @@ terraform {
 
 # https://github.com/terraform-providers/terraform-provider-azurerm/releases
 provider "azurerm" {
+  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_oidc#configuring-the-service-principal-in-terraform
+  use_oidc = true
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/features-block
   features {
     resource_group {
