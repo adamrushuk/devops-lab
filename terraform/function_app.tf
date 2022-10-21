@@ -87,7 +87,7 @@ resource "azurerm_linux_function_app" "func_app" {
     # "HASH"                       = base64encode(filesha256("${path.module}/files/function_app.zip"))
     "WEBSITE_RUN_FROM_PACKAGE"   = azurerm_storage_blob.func_app.url
     "IFTTT_WEBHOOK_KEY"          = var.ifttt_webhook_key
-    "WEEKDAY_ALLOWED_TIME_RANGE" = "06:30 -> 09:00"
+    "WEEKDAY_ALLOWED_TIME_RANGE" = "06:30 -> 08:00"
   }
 
   lifecycle {
