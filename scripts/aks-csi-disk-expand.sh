@@ -31,4 +31,3 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/azuredisk-csi
 
 # check disk size in pod
 kubectl exec -it nginx-azuredisk -- df -h /mnt/azuredisk
-

@@ -1,31 +1,27 @@
+# See http://pre-commit.com for more information
+# See http://pre-commit.com/hooks.html for more hooks
+#
+# Install git hooks
+#   pre-commit install
+# Update this file:
+#   pre-commit autoupdate
+# Apply to all files without committing:
+#   pre-commit run --all-files
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0 # "<VERSION>" gets replaced with latest repo release versions by running "pre-commit autoupdate"
-    hooks:
-      - id: check-merge-conflict
-      # - id: trailing-whitespace # find way to ignore markdown files (.md)
-      # - id: check-yaml
-      - id: check-added-large-files
-      - id: detect-private-key
-
-  - repo: https://github.com/antonbabenko/pre-commit-terraform.git
-    rev: v1.45.0 # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.76.0
     hooks:
       - id: terraform_docs
       - id: terraform_fmt
-      - id: terraform_validate
-      - id: terraform_tflint
-      - id: terraform_tfsec
-
-  # ! WIP: unhandled errors running tflint with pre-commit
-  # - repo: https://github.com/gruntwork-io/pre-commit
-  #   rev: v0.1.12 # Get the latest from: https://github.com/gruntwork-io/pre-commit/releases
-  #   hooks:
-  #     - id: tflint
-  #       args:
-  #         - "terraform"
-  #         # - "--module"
-  #         # - "--deep"
-  #         - "--config=.tflint.hcl"
-  # #     # - id: terraform-validate
-  # #     # - id: terraform-fmt
+      # - id: terraform_validate # this downloads ALL modules locally and takes too long
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: trailing-whitespace

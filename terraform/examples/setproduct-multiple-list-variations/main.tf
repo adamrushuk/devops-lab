@@ -74,8 +74,8 @@ locals {
 
   role_scopes_map_of_maps = {
     for role_scope in local.role_scopes_product : "${role_scope[0]}-${role_scope[1]}" => {
-        "role_name" = role_scope[0],
-        "scope" = role_scope[1]
+      "role_name" = role_scope[0],
+      "scope"     = role_scope[1]
     }
   }
 
