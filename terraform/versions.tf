@@ -9,6 +9,7 @@ terraform {
     # access_key           = "__STORAGE_KEY__" # TODO Remove once OIDC working
     container_name       = "terraform"
     key                  = "terraform.tfstate"
+    resource_group_name  = "__TERRAFORM_STORAGE_RG__"
     storage_account_name = "__TERRAFORM_STORAGE_ACCOUNT__"
     use_oidc             = true
   }
