@@ -104,11 +104,8 @@ jobs:
         echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
 
     # Login
-    # - name: Login to Azure
-    #   run: ./scripts/azure_login.sh
-
     # https://github.com/Azure/login
-    - name: OIDC Login to Azure Public Cloud (az cli and az powershell)
+    - name: Login via OIDC to Azure Public Cloud (az cli and az powershell)
       uses: azure/login@v1
       with:
         client-id: ${{ secrets.ARM_CLIENT_ID }}
