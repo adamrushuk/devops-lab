@@ -58,7 +58,7 @@ Once Azure authentication has been configured, the Service Principle credential 
 [Use these instructions](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) to create the following secrets for your repository:
 
 - `ARM_CLIENT_ID`
-- `ARM_CLIENT_SECRET`
+- `ARM_CLIENT_SECRET` # TODO: Remove this once OIDC auth has been configured throughout
 - `ARM_SUBSCRIPTION_ID`
 - `ARM_TENANT_ID`
 

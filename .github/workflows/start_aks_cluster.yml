@@ -20,7 +20,7 @@ env:
 
   # azure creds
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }} # TODO Remove once OIDC working
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
@@ -47,8 +47,14 @@ jobs:
           echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
 
       # Login
-      - name: Login to Azure
-        run: ./scripts/azure_login.sh
+      # https://github.com/Azure/login
+      - name: Login via OIDC to Azure Public Cloud (az cli and az powershell)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
 
       # Start
       # Prereqs: https://docs.microsoft.com/en-us/azure/aks/start-stop-cluster

@@ -24,7 +24,7 @@ env:
   PREFIX: arshz
   # azure creds
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }} # TODO Remove once OIDC working
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
@@ -49,13 +49,22 @@ jobs:
       run: |
         chmod -R +x ./scripts/
 
+    # Login
+    # https://github.com/Azure/login
+    - name: Login via OIDC to Azure Public Cloud (az cli and az powershell)
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.ARM_CLIENT_ID }}
+        tenant-id: ${{ secrets.ARM_TENANT_ID }}
+        subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        enable-AzPSSession: true
+
     # Cleanup
     - name: Delete all resource groups
       uses: azure/powershell@v1
       with:
         azPSVersion: "latest"
         inlineScript: |
-          ./scripts/azure_login.ps1
           ./scripts/Delete-ResourceGroups.ps1 -Prefixes "${{ env.PREFIX }}" -MaxLimit 2 -WhatIf
 
     # Notify
