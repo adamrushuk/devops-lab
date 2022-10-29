@@ -23,9 +23,3 @@ taskMessage="Creating Storage Container"
 echo "STARTED: $taskMessage..."
 az storage container create --name "terraform" --account-name "$TERRAFORM_STORAGE_ACCOUNT"
 echo "FINISHED: $taskMessage."
-
-# Get latest supported AKS version
-taskMessage="Finding latest supported AKS version"
-echo "STARTED: $taskMessage..."
-az aks get-versions -l "$LOCATION" --query "orchestrators[-1].orchestratorVersion" -o tsv
-echo "FINISHED: $taskMessage."
