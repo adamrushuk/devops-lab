@@ -53,12 +53,13 @@ configured for Azure.
 
 ### Create Secrets
 
+TODO: Update this for OIDC auth (federated credential): https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_oidc#configuring-the-service-principal-in-terraform
+
 Once Azure authentication has been configured, the Service Principle credential values can be [passed as environment variables](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/guides/service_principal_client_secret#configuring-the-service-principal-in-terraform).
 
 [Use these instructions](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) to create the following secrets for your repository:
 
 - `ARM_CLIENT_ID`
-- `ARM_CLIENT_SECRET` # TODO: Remove this once OIDC auth has been configured throughout
 - `ARM_SUBSCRIPTION_ID`
 - `ARM_TENANT_ID`
 
