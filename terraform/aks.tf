@@ -39,6 +39,9 @@ resource "azurerm_log_analytics_solution" "aks" {
 }
 
 # AKS
+# TODO: change to use direct resources and enable "oidc_issuer_enabled"
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#oidc_issuer_enabled
+#
 # https://registry.terraform.io/modules/adamrushuk/aks/azurerm/latest
 module "aks" {
   source  = "adamrushuk/aks/azurerm"
