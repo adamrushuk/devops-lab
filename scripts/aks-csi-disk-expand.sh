@@ -13,15 +13,55 @@ kubectl exec -it nginx-azuredisk -- df -h /mnt/azuredisk
 # [optional] delete pod to unattach disk
 kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/azuredisk-csi-driver/master/deploy/example/nginx-pod-azuredisk.yaml
 
-# TODO: add code that waits for disk state to be "unattached"
-# where tag is: "kubernetes.io-created-for-pvc-name": "pvc-azuredisk"
-PVC_NAME='pvc-azuredisk'
+
+
+# Waits for an AKS disk to report "Unattached"
+
+# vars
+SUBSCRIPTION_NAME=""
+AKS_CLUSTER_RESOURCEGROUP_NAME=""
+AKS_CLUSTER_NAME=""
+PVC_NAME="pvc-azuredisk"
+
+# login
+az login
+az account set --subscription "$SUBSCRIPTION_NAME"
+
+# get cluster and associated "node resource group" (where resources live)
+DISK_RESOURCEGROUP_NAME=$(az aks show --name "$AKS_CLUSTER_NAME" --resource-group "$AKS_CLUSTER_RESOURCEGROUP_NAME" --query "nodeResourceGroup" --output tsv)
+
+# define reusable function
+get_disk_info() {
+    az disk list --resource-group "$DISK_RESOURCEGROUP_NAME" --query "[?tags.\"kubernetes.io-created-for-pvc-name\" == '$PVC_NAME' ].{state:diskState, diskSizeGb:diskSizeGb, name:name, pvcname:tags.\"kubernetes.io-created-for-pvc-name\"}" --output table
+}
+
+# get disk associated with AKS PVC name
+echo 'Waiting for disk to become "Unattached"...'
+get_disk_info
+
+# wait for disk state to detach
+START_TIME=$SECONDS
+
 while true; do
-    # body
-    az disk list --query "[?tags.\"kubernetes.io-created-for-pvc-name\" == '$PVC_NAME'].{state:diskState, diskSizeGb:diskSizeGb, name:name, pvcname:tags.\"kubernetes.io-created-for-pvc-name\"}" -o table
-    echo
-    sleep 2
+    # get disk info
+    DISK_OUTPUT=$(get_disk_info)
+
+    # check disk state
+    if echo "$DISK_OUTPUT" | grep Attached; then
+        sleep 10
+    elif echo "$DISK_OUTPUT" | grep Unattached; then
+        echo "Disk is now Unattached."
+        break
+    fi
 done
+
+ELAPSED_TIME=$(($SECONDS - $START_TIME))
+echo "Disk took [$(($ELAPSED_TIME / 60))m$(($ELAPSED_TIME % 60))s] to change states"
+
+# final disk info
+get_disk_info
+
+
 
 # expand pvc
 kubectl patch pvc pvc-azuredisk --type merge --patch '{"spec": {"resources": {"requests": {"storage": "15Gi"}}}}'
