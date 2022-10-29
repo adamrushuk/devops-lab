@@ -2,11 +2,10 @@ terraform {
 
   # https://github.com/hashicorp/terraform/releases
   # https://github.com/hashicorp/terraform/blob/main/CHANGELOG.md
-  required_version = ">= 1.0"
+  required_version = ">= 1.3"
 
   # terraform remote state
   backend "azurerm" {
-    # access_key           = "__STORAGE_KEY__" # TODO Remove once OIDC working
     container_name       = "terraform"
     key                  = "terraform.tfstate"
     resource_group_name  = "__TERRAFORM_STORAGE_RG__"
@@ -21,7 +20,7 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.27.0"
+      version = "~> 3.29.1"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
@@ -81,6 +80,12 @@ terraform {
 provider "azurerm" {
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_oidc#configuring-the-service-principal-in-terraform
   use_oidc = true
+
+  # TODO test "storage_use_azuread"
+  # Should the AzureRM Provider use AzureAD to connect to the Storage Blob & Queue API's, rather than the SharedKey from the Storage Account?
+  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs#storage_use_azuread
+  # storage_use_azuread = true
+
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/features-block
   features {
     resource_group {
