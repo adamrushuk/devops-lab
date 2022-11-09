@@ -4,7 +4,7 @@
 # version used for both main AKS API service, and default node pool
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location eastus --output table
-# pwsh -Command "(az aks get-versions --location uksouth | convertfrom-json).orchestrators | where default"
+# az aks get-versions --location uksouth --output tsv --query "orchestrators | [?default].orchestratorVersion"
 variable "kubernetes_version" {
   default = "1.23.12"
 }
@@ -39,7 +39,7 @@ variable "velero_image_tag" {
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 variable "nexus_image_tag" {
-  default = "3.42.0"
+  default = "3.43.0"
 }
 
 # https://github.com/adamrushuk/charts/releases
@@ -59,7 +59,7 @@ variable "akv2k8s_chart_version" {
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "4.1.10"
+  default = "4.1.14"
 }
 
 # https://bitnami.com/stack/external-dns/helm
@@ -67,7 +67,7 @@ variable "aad_pod_identity_chart_version" {
 # helm search repo bitnami/external-dns
 # helm search repo -l bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "6.10.2"
+  default = "6.11.3"
 }
 
 # https://github.com/kubereboot/charts/tree/main/charts/kured
@@ -88,13 +88,13 @@ variable "kured_image_tag" {
 # helm search repo -l argo/argo-cd | head -n 20
 # * also update terraform/helm/argocd_default_values.yaml
 variable "argocd_chart_version" {
-  default = "5.6.0"
+  default = "5.13.6"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 # * also update cli version: terraform/files/scripts/argocd_config.sh#L22
 variable "argocd_image_tag" {
-  default = "v2.4.15"
+  default = "v2.5.2"
 }
 #endregion Versions
 
