@@ -73,12 +73,12 @@ variable "external_dns_chart_version" {
 # https://github.com/kubereboot/charts/tree/main/charts/kured
 # helm search repo kubereboot/kured
 variable "kured_chart_version" {
-  default = "4.0.2"
+  default = "4.1.0"
 }
 
 # https://github.com/kubereboot/kured#kubernetes--os-compatibility
 variable "kured_image_tag" {
-  default = "1.10.2"
+  default = "1.11.0"
 }
 
 
@@ -159,12 +159,6 @@ variable "aks_admins_aad_group_name" {
   default     = "AKS-Admins"
 }
 
-variable "sla_sku" {
-  description = "Define the SLA under which the managed master control plane of AKS is running"
-  type        = string
-  default     = "Free"
-}
-
 variable "aks_container_insights_enabled" {
   description = "Should Container Insights monitoring be enabled"
   default     = true
@@ -174,29 +168,7 @@ variable "aks_config_path" {
   default = "./azurek8s_config"
 }
 
-
-
 # Agent Pool
-variable "agent_pool_node_count" {
-  default = 1
-}
-
-variable "agent_pool_enable_auto_scaling" {
-  default = false
-}
-
-variable "agent_pool_node_min_count" {
-  default = null
-}
-
-variable "agent_pool_node_max_count" {
-  default = null
-}
-
-variable "agent_pool_profile_name" {
-  default = "default"
-}
-
 variable "agent_pool_profile_vm_size" {
   # https://azureprice.net/?region=ukwest&currency=GBP
   # Standard_D2s_v3 - £0.086455 per hour
@@ -217,14 +189,6 @@ variable "agent_pool_profile_vm_size" {
   # Standard_F8s_v2 - £0.301104 per hour
   # 8 x CPU, 16GB RAM, 16 x Data Disks
   default = "Standard_D4s_v3"
-}
-
-variable "agent_pool_profile_os_type" {
-  default = "Linux"
-}
-
-variable "agent_pool_profile_disk_size_gb" {
-  default = 30
 }
 
 
