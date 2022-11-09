@@ -16,7 +16,7 @@ data "azurerm_key_vault" "kv" {
 #   key_vault_id = data.azurerm_key_vault.kv.id
 
 #   tenant_id = data.azurerm_subscription.current.tenant_id
-#   object_id = module.aks.kubelet_identity[0].object_id
+#   object_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
 
 #   certificate_permissions = [
 #     "get"
@@ -36,21 +36,21 @@ data "azurerm_key_vault" "kv" {
 resource "azurerm_role_assignment" "aks_mi_kv_certs" {
   scope                = data.azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Certificates Officer"
-  principal_id         = module.aks.kubelet_identity[0].object_id
+  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   description          = "Perform any action on the keys of a key vault, except manage permissions"
 }
 
 resource "azurerm_role_assignment" "aks_mi_kv_keys" {
   scope                = data.azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Crypto User"
-  principal_id         = module.aks.kubelet_identity[0].object_id
+  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   description          = "Perform cryptographic operations using keys"
 }
 
 resource "azurerm_role_assignment" "aks_mi_kv_secrets" {
   scope                = data.azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = module.aks.kubelet_identity[0].object_id
+  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   description          = "Provides read-only access to secret contents"
 }
 
@@ -58,10 +58,10 @@ resource "azurerm_role_assignment" "aks_mi_kv_secrets" {
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#kube_admin_config_raw
 # https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/sensitive_file
 resource "local_sensitive_file" "kubeconfig" {
-  content  = module.aks.full_object.kube_admin_config_raw
+  content  = azurerm_kubernetes_cluster.aks.kube_admin_config_raw
   filename = var.aks_config_path
 
-  depends_on = [module.aks]
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 # https://www.terraform.io/docs/providers/kubernetes/r/namespace.html
@@ -73,7 +73,7 @@ resource "kubernetes_namespace" "akv2k8s" {
     delete = "15m"
   }
 
-  depends_on = [module.aks]
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html

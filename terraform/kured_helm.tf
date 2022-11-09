@@ -11,7 +11,7 @@ resource "kubernetes_namespace" "kured" {
     delete = "15m"
   }
 
-  depends_on = [module.aks]
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html

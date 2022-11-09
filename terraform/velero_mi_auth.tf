@@ -1,7 +1,7 @@
 # velero managed identity auth
 resource "azurerm_user_assigned_identity" "velero" {
   count               = var.velero_enabled ? 1 : 0
-  resource_group_name = module.aks.node_resource_group
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
   location            = var.location
   name                = "mi-velero"
 }

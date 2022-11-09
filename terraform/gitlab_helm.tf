@@ -10,7 +10,7 @@ resource "kubernetes_namespace" "gitlab" {
     delete = "15m"
   }
 
-  depends_on = [module.aks]
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 # https://www.terraform.io/docs/provisioners/local-exec.html

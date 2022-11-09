@@ -34,7 +34,7 @@ resource "kubernetes_namespace" "velero" {
     delete = "15m"
   }
 
-  depends_on = [module.aks]
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 resource "kubernetes_secret" "velero_credentials" {
@@ -51,7 +51,7 @@ resource "kubernetes_secret" "velero_credentials" {
   data = {
     cloud = <<EOT
 AZURE_SUBSCRIPTION_ID=${data.azurerm_subscription.current.subscription_id}
-AZURE_RESOURCE_GROUP=${module.aks.node_resource_group}
+AZURE_RESOURCE_GROUP=${azurerm_kubernetes_cluster.aks.node_resource_group}
 AZURE_CLOUD_NAME=AzurePublicCloud
 EOT
   }
