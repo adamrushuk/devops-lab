@@ -53,13 +53,13 @@ terraform {
     # https://github.com/hashicorp/terraform-provider-tls/releases
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 3.4"
+      version = "~> 4.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-local/releases
     local = {
       source  = "hashicorp/local"
-      version = "~> 4.0"
+      version = "~> 2.2"
     }
 
     # https://github.com/hashicorp/terraform-provider-null/releases
