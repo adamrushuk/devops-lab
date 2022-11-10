@@ -68,6 +68,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     orchestrator_version = var.kubernetes_version
     vm_size              = var.agent_pool_profile_vm_size
     node_count           = 1
+    max_pods             = 90
   }
 
   linux_profile {
