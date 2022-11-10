@@ -18,7 +18,7 @@ env:
   # debug
   CI_DEBUG: true
 
-  # azure creds (used of OIDC auth)
+  # azure creds (used with OIDC auth)
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
@@ -27,16 +27,20 @@ jobs:
   stop_aks_cluster:
     runs-on: ubuntu-22.04
 
+    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
+    environment:
+      name: dev
+
     # only run if owner triggered action
     if: github.actor == github.event.repository.owner.login
 
     steps:
       # Checkout
       - uses: actions/checkout@v3
-        # specify different branch
-        # NOT required as I've changed the default branch to develop
-        # with:
-        #   ref: develop
+      # specify different branch
+      # NOT required as I've changed the default branch to develop
+      # with:
+      #   ref: develop
 
       # Init tasks - inc env var concatenation
       - name: Init tasks - inc Env var concatenation (Workaround)

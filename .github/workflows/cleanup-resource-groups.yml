@@ -28,7 +28,7 @@ permissions:
 env:
   # prefix: used for some globally unique name requirements
   PREFIX: arshz
-  # azure creds (used of OIDC auth)
+  # azure creds (used with OIDC auth)
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
@@ -38,6 +38,10 @@ jobs:
     # always pin versions
     # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
     runs-on: ubuntu-22.04
+
+    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
+    environment:
+      name: dev
 
     # only run if owner triggered action
     if: github.actor == github.event.repository.owner.login
