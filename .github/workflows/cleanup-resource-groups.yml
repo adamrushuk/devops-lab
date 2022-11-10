@@ -73,7 +73,7 @@ jobs:
         with:
           azPSVersion: "latest"
           inlineScript: |
-            ./scripts/Delete-ResourceGroups.ps1 -Prefixes "${{ env.PREFIX }}" -MaxLimit 2 -WhatIf
+            ./scripts/cleanup.ps1 -ResourceGroupPrefix "${{ env.PREFIX }}"
 
       # Notify
       - name: Notify slack
