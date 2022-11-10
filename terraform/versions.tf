@@ -6,11 +6,14 @@ terraform {
 
   # terraform remote state
   backend "azurerm" {
-    container_name       = "terraform"
-    key                  = "terraform.tfstate"
-    resource_group_name  = "__TERRAFORM_STORAGE_RG__"
-    storage_account_name = "__TERRAFORM_STORAGE_ACCOUNT__"
-    use_oidc             = true
+    container_name = "terraform"
+    key            = "terraform.tfstate"
+    use_oidc       = true # or use "ARM_USE_OIDC" env var
+    # requires "Storage Blob Data Contributor" on the container
+    use_azuread_auth = true
+    # TODO remove
+    # resource_group_name  = "__TERRAFORM_STORAGE_RG__"
+    # storage_account_name = "__TERRAFORM_STORAGE_ACCOUNT__"
   }
 
   # providers (pin all versions)

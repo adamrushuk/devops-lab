@@ -21,7 +21,7 @@ on:
 # https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect
 permissions:
   id-token: write # This is required for requesting the JWT
-  contents: read  # This is required for actions/checkout
+  contents: read # This is required for actions/checkout
 
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
@@ -64,6 +64,10 @@ env:
   # https://github.com/hashicorp/terraform/releases
   TF_VERSION: "1.3.4"
   TF_WORKING_DIR: ./terraform
+  # azurerm provider oidc
+  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_oidc
+  # https://developer.hashicorp.com/terraform/language/settings/backends/azurerm#oidc_request_token
+  ARM_USE_OIDC: "true"
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
   # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
@@ -125,8 +129,9 @@ jobs:
       - name: Create Storage Account for Terraform state
         run: ./scripts/storage_create.sh
 
-      - name: Lookup Storage Key
-        run: ./scripts/storage_key.sh
+      # TODO remove this step
+      # - name: Lookup Storage Key
+      #   run: ./scripts/storage_key.sh
 
       - name: Replace tokens in Terraform config files
         run: pwsh -command "./scripts/Replace-Tokens.ps1"
@@ -143,7 +148,13 @@ jobs:
 
       - name: Terraform Init / Validate
         run: |
-          terraform init
+          echo 'Running terraform init...'
+          terraform init \
+            -backend-config="resource_group_name=$TERRAFORM_STORAGE_RG" \
+            -backend-config="storage_account_name=$TERRAFORM_STORAGE_ACCOUNT"
+
+          # validate
+          echo 'Running terraform validate...'
           terraform validate
         working-directory: ${{ env.TF_WORKING_DIR }}
 
