@@ -17,6 +17,12 @@ on:
   workflow_dispatch:
     inputs: {}
 
+# permissions for oidc login
+# https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 env:
@@ -29,7 +35,6 @@ env:
 
 jobs:
   cleanup:
-
     # always pin versions
     # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
     runs-on: ubuntu-22.04
@@ -38,38 +43,38 @@ jobs:
     if: github.actor == github.event.repository.owner.login
 
     steps:
-    # Checkout
-    # Reference the major version of a release
-    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#example-using-versioned-actions
-    - uses: actions/checkout@v3
+      # Checkout
+      # Reference the major version of a release
+      # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#example-using-versioned-actions
+      - uses: actions/checkout@v3
 
-    # Init tasks
-    - name: Init
-      run: |
-        chmod -R +x ./scripts/
+      # Init tasks
+      - name: Init
+        run: |
+          chmod -R +x ./scripts/
 
-    # Login
-    # https://github.com/Azure/login
-    - name: Login via OIDC to Azure Public Cloud (az cli and az powershell)
-      uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.ARM_CLIENT_ID }}
-        tenant-id: ${{ secrets.ARM_TENANT_ID }}
-        subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        enable-AzPSSession: true
+      # Login
+      # https://github.com/Azure/login
+      - name: Login via OIDC to Azure Public Cloud (az cli and az powershell)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
 
-    # Cleanup
-    - name: Delete all resource groups
-      uses: azure/powershell@v1
-      with:
-        azPSVersion: "latest"
-        inlineScript: |
-          ./scripts/Delete-ResourceGroups.ps1 -Prefixes "${{ env.PREFIX }}" -MaxLimit 2 -WhatIf
+      # Cleanup
+      - name: Delete all resource groups
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            ./scripts/Delete-ResourceGroups.ps1 -Prefixes "${{ env.PREFIX }}" -MaxLimit 2 -WhatIf
 
-    # Notify
-    - name: Notify slack
-      continue-on-error: true
-      env:
-        SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      run: ./scripts/send_slack_message.sh "[devops-lab] Cleanup complete"
+      # Notify
+      - name: Notify slack
+        continue-on-error: true
+        env:
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: ./scripts/send_slack_message.sh "[devops-lab] Cleanup complete"
