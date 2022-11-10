@@ -106,6 +106,7 @@ jobs:
           echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
           echo "DOCKER_FQDN=docker.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
           echo "TERRAFORM_STORAGE_ACCOUNT=${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001" >> $GITHUB_ENV
+          echo "TERRAFORM_STORAGE_CONTAINER=terraform" >> $GITHUB_ENV
           echo "TERRAFORM_STORAGE_RG=${{ env.PREFIX }}-rg-tfstate-dev-001" >> $GITHUB_ENV
           echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
 

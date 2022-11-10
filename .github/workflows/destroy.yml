@@ -103,6 +103,7 @@ jobs:
           echo "ARGOCD_FQDN=argocd.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
           echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
           echo "TERRAFORM_STORAGE_ACCOUNT=${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001" >> $GITHUB_ENV
+          echo "TERRAFORM_STORAGE_CONTAINER=terraform" >> $GITHUB_ENV
           echo "TERRAFORM_STORAGE_RG=${{ env.PREFIX }}-rg-tfstate-dev-001" >> $GITHUB_ENV
           echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
 
@@ -138,7 +139,12 @@ jobs:
 
       - name: 💀 Terraform destroy
         run: |
-          terraform init
+          echo 'Running terraform init...'
+          terraform init \
+            -backend-config="resource_group_name=$TERRAFORM_STORAGE_RG" \
+            -backend-config="storage_account_name=$TERRAFORM_STORAGE_ACCOUNT"
+
+          echo 'Running terraform destroy...'
           terraform destroy -no-color -auto-approve
         working-directory: ${{ env.TF_WORKING_DIR }}
 
