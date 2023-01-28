@@ -163,7 +163,7 @@ jobs:
 
       # https://github.com/aquasecurity/tfsec-action
       - name: Run tfsec security scan
-        uses: aquasecurity/tfsec-action@v1.0.2
+        uses: aquasecurity/tfsec-action@v1.0.3
         with:
           working_directory: ${{ env.TF_WORKING_DIR }}
           soft_fail: true
