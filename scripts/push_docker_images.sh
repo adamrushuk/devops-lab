@@ -24,18 +24,18 @@ if [[ "$repos" == "[]" ]]; then
     echo -e "\nFINISHED: $message."
 
     message="Tagging images..."
-    docker image tag busybox "$DOCKER_SERVER/busybox"
-    docker image tag nginxdemos/hello "$DOCKER_SERVER/hello"
+    docker image tag busybox "$DOCKER_FQDN/busybox"
+    docker image tag nginxdemos/hello "$DOCKER_FQDN/hello"
     echo -e "\nFINISHED: $message."
 
     message="Listing images..."
-    docker image ls "$DOCKER_SERVER/busybox"
-    docker image ls "$DOCKER_SERVER/hello"
+    docker image ls "$DOCKER_FQDN/busybox"
+    docker image ls "$DOCKER_FQDN/hello"
     echo -e "\nFINISHED: $message."
 
     message="Pushing images..."
-    docker push "$DOCKER_SERVER/busybox"
-    docker push "$DOCKER_SERVER/hello"
+    docker push "$DOCKER_FQDN/busybox"
+    docker push "$DOCKER_FQDN/hello"
     echo -e "\nFINISHED: $message."
 
     echo -e "\nFINISHED: $main_message."
