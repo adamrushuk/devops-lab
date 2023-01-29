@@ -6,10 +6,10 @@
 name: tfsec
 
 on:
-  push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+  # push:
+  #   branches: [ "develop" ]
+  # pull_request:
+  #   branches: [ "develop" ]
   schedule:
     - cron: '44 10 * * 5'
 
