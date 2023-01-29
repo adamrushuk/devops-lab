@@ -6,6 +6,10 @@
 set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
+# Info
+echo "Ansible version info..."
+ansible --version
+
 # Init
 # Get AKS Cluster credentials
 message="Merging AKS credentials"

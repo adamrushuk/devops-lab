@@ -9,7 +9,7 @@ resource "kubernetes_namespace" "nexus" {
     delete = "15m"
   }
 
-  depends_on = [module.aks]
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 # https://www.terraform.io/docs/provisioners/local-exec.html
@@ -30,7 +30,7 @@ resource "null_resource" "nexus_cert_sync" {
   }
 
   depends_on = [
-    local_file.kubeconfig,
+    local_sensitive_file.kubeconfig,
     helm_release.akv2k8s,
     kubernetes_namespace.nexus
   ]

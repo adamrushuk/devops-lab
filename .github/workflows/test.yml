@@ -36,7 +36,7 @@ jobs:
 
     # always pin versions
     # # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
 
     env:
       MY_JOB_VAR: job
@@ -46,7 +46,7 @@ jobs:
 
     steps:
     # Checkout
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     # Show event info
     - name: Show triggered event data
@@ -87,4 +87,4 @@ jobs:
       env:
         SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Test notification"
+      run: ./scripts/send_slack_message.sh "[devops-lab] Test notification"

@@ -1,102 +1,100 @@
 # Variables
 
-
 #region Versions
 # version used for both main AKS API service, and default node pool
 # https://github.com/Azure/AKS/releases
 # az aks get-versions --location eastus --output table
+# az aks get-versions --location uksouth --output tsv --query "orchestrators | [?default].orchestratorVersion"
 variable "kubernetes_version" {
-  default = "1.21.2"
+  default = "1.24.6"
 }
 
 # Helm charts
-# Migrated to newer kubernetes nginx helm chart:
-# https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx#migrating-from-stablenginx-ingress
-#
-# https://kubernetes.github.io/ingress-nginx/deploy/#using-helm
 # https://github.com/kubernetes/ingress-nginx/releases
-# https://github.com/kubernetes/ingress-nginx/blob/ingress-nginx-3.11.0/charts/ingress-nginx/Chart.yaml#L3
-#
 # helm repo update
 # helm search repo ingress-nginx/ingress-nginx
+# helm search repo -l ingress-nginx/ingress-nginx | head -5
 variable "nginx_chart_version" {
-  default = "4.0.6"
+  default = "4.3.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.6.1"
+  default = "v1.11.0"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 # helm search repo vmware-tanzu/velero
+# * also update terraform/helm/velero_default_values.yaml
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.26.1"
+  default = "3.1.0"
 }
 
 # https://hub.docker.com/r/velero/velero/tags
 variable "velero_image_tag" {
-  default = "v1.7.0"
+  default = "v1.10.0"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 variable "nexus_image_tag" {
-  default = "3.36.0"
+  default = "3.45.1"
 }
 
 # https://github.com/adamrushuk/charts/releases
 # helm search repo adamrushuk/sonatype-nexus
 variable "nexus_chart_version" {
-  default = "0.2.8"
+  default = "0.3.1"
 }
 
 # https://github.com/SparebankenVest/azure-key-vault-to-kubernetes
-# https://github.com/SparebankenVest/public-helm-charts/releases
 # https://github.com/SparebankenVest/helm-charts/tree/gh-pages/akv2k8s
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
 # helm search repo spv-charts/akv2k8s
 variable "akv2k8s_chart_version" {
-  default = "2.1.0"
+  default = "2.3.2"
 }
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "4.1.6"
+  default = "4.1.15"
 }
 
 # https://bitnami.com/stack/external-dns/helm
-# https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml#L21
+# https://github.com/bitnami/charts/blob/master/bitnami/external-dns/Chart.yaml
 # helm search repo bitnami/external-dns
+# helm search repo -l bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "5.4.8"
+  default = "6.13.1"
 }
 
-# https://github.com/weaveworks/kured/tree/master/charts/kured
-# helm search repo kured/kured
+# https://github.com/kubereboot/charts/tree/main/charts/kured
+# helm search repo kubereboot/kured
 variable "kured_chart_version" {
-  default = "2.10.0"
+  default = "4.2.0"
 }
 
-# https://github.com/weaveworks/kured#kubernetes--os-compatibility
+# https://kured.dev/docs/installation/#kubernetes--os-compatibility
 variable "kured_image_tag" {
-  default = "1.8.0"
+  default = "1.12.0"
 }
 
 
 # argo cd
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
+# helm search repo -l argo/argo-cd | head -n 20
+# * also update terraform/helm/argocd_default_values.yaml
 variable "argocd_chart_version" {
-  default = "3.26.3"
+  default = "5.19.11"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 # * also update cli version: terraform/files/scripts/argocd_config.sh#L22
 variable "argocd_image_tag" {
-  default = "v2.1.6"
+  default = "v2.5.9"
 }
 #endregion Versions
 
@@ -161,44 +159,16 @@ variable "aks_admins_aad_group_name" {
   default     = "AKS-Admins"
 }
 
-variable "sla_sku" {
-  description = "Define the SLA under which the managed master control plane of AKS is running"
-  type        = string
-  default     = "Free"
-}
-
 variable "aks_container_insights_enabled" {
   description = "Should Container Insights monitoring be enabled"
-  default     = false
+  default     = true
 }
 
 variable "aks_config_path" {
   default = "./azurek8s_config"
 }
 
-
-
 # Agent Pool
-variable "agent_pool_node_count" {
-  default = 1
-}
-
-variable "agent_pool_enable_auto_scaling" {
-  default = false
-}
-
-variable "agent_pool_node_min_count" {
-  default = null
-}
-
-variable "agent_pool_node_max_count" {
-  default = null
-}
-
-variable "agent_pool_profile_name" {
-  default = "default"
-}
-
 variable "agent_pool_profile_vm_size" {
   # https://azureprice.net/?region=ukwest&currency=GBP
   # Standard_D2s_v3 - £0.086455 per hour
@@ -221,24 +191,12 @@ variable "agent_pool_profile_vm_size" {
   default = "Standard_D4s_v3"
 }
 
-variable "agent_pool_profile_os_type" {
-  default = "Linux"
-}
-
-variable "agent_pool_profile_disk_size_gb" {
-  default = 30
-}
-
 
 
 # Velero
 variable "velero_enabled" {
   description = "Should Velero be enabled"
   default     = "__VELERO_ENABLED__"
-}
-
-variable "velero_resource_group_name" {
-  default = "__VELERO_STORAGE_RG__"
 }
 
 variable "velero_storage_account_name" {

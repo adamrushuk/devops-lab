@@ -11,7 +11,7 @@ resource "kubernetes_namespace" "kured" {
     delete = "15m"
   }
 
-  depends_on = [module.aks]
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
@@ -19,7 +19,7 @@ resource "helm_release" "kured" {
   chart      = "kured"
   name       = "kured"
   namespace  = kubernetes_namespace.kured.metadata[0].name
-  repository = "https://weaveworks.github.io/kured"
+  repository = "https://kubereboot.github.io/charts/"
   version    = var.kured_chart_version
   timeout    = 600
   atomic     = true

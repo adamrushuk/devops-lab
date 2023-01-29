@@ -27,20 +27,20 @@
       validate_certs: false
 
   tasks:
-  # ROLES
-  - import_role:
-      name: init
-  - import_role:
-      name: user
-  - import_role:
-      name: nuget_repo
-  - import_role:
-      name: chocolatey_repo
-  - import_role:
-      name: docker_repo
-  - import_role:
-      name: helm_repo
-#   - import_role:
-#       name: pypi_repo
-  - import_role:
-      name: raw_repo
+    # ROLES
+    - import_role:
+        name: init
+    - import_role:
+        name: user
+    - import_role:
+        name: nuget_repo
+    - import_role:
+        name: chocolatey_repo
+    - import_role:
+        name: docker_repo
+    - import_role:
+        name: helm_repo
+    #   - import_role:
+    #       name: pypi_repo
+    - import_role:
+        name: raw_repo

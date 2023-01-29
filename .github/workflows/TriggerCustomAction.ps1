@@ -34,7 +34,7 @@ param(
 
     $GithubUserName = "adamrushuk",
 
-    $GithubRepo = "aks-nexus-velero",
+    $GithubRepo = "devops-lab",
 
     [ValidateSet("test", "build", "deallocate_vmss", "start_vmss", "destroy")]
     $CustomEventAction = "test"

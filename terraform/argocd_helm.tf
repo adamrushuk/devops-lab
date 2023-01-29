@@ -11,7 +11,7 @@ resource "kubernetes_namespace" "argocd" {
     delete = "15m"
   }
 
-  depends_on = [module.aks]
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 # https://www.terraform.io/docs/provisioners/local-exec.html
@@ -32,7 +32,7 @@ resource "null_resource" "argocd_cert_sync" {
   }
 
   depends_on = [
-    local_file.kubeconfig,
+    local_sensitive_file.kubeconfig,
     helm_release.akv2k8s,
     kubernetes_namespace.argocd
   ]
@@ -100,7 +100,7 @@ resource "null_resource" "argocd_configure" {
   }
 
   depends_on = [
-    local_file.kubeconfig,
+    local_sensitive_file.kubeconfig,
     helm_release.argocd
   ]
 }
@@ -123,7 +123,7 @@ resource "null_resource" "argocd_apps" {
   }
 
   depends_on = [
-    local_file.kubeconfig,
+    local_sensitive_file.kubeconfig,
     null_resource.argocd_configure
   ]
 }

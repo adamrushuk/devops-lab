@@ -89,7 +89,7 @@ Describe "Integration Tests" {
         $expectedIssuerName = "Let's Encrypt Authority"
 
         # Get common cert info
-        . ../scripts/Get-CertInfo.ps1
+        . ./scripts/Get-CertInfo.ps1
         $certResult = Get-CertInfo -ComputerName $hostname -Port $port
 
         # DEBUG Output

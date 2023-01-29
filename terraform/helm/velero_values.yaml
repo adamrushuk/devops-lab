@@ -1,23 +1,21 @@
 # velero helm values
-# source (with full comments): https://github.com/vmware-tanzu/helm-charts/blob/velero-2.17.0/charts/velero/values.yaml
+# source (with full comments): https://github.com/vmware-tanzu/helm-charts/blob/main/charts/velero/values.yaml
 
 # https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/releases
 initContainers:
   - name: velero-plugin-for-microsoft-azure
     # https://hub.docker.com/r/velero/velero-plugin-for-microsoft-azure/tags
-    image: velero/velero-plugin-for-microsoft-azure:v1.2.1
+    image: velero/velero-plugin-for-microsoft-azure:v1.6.0
     imagePullPolicy: IfNotPresent
     volumeMounts:
       - mountPath: /target
         name: plugins
-
 
 # BackupStorageLocation and VolumeSnapshotLocation
 configuration:
   provider: azure
   backupStorageLocation:
     name: default
-    provider:
     bucket: velero
   volumeSnapshotLocation:
     name: default

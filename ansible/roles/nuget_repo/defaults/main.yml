@@ -25,17 +25,18 @@ nuget_proxy_repo_request_body:
     timeToLive: 1440
   httpClient:
     blocked: false
-    autoBlock: true
+    autoBlock: false
     connection:
       retries:
       userAgentSuffix:
       timeout:
       enableCircularRedirects: false
       enableCookies: false
+      useTrustStore: false
     authentication:
   routingRuleName:
   nugetProxy:
     queryCacheItemMaxAge: 3600
+    nugetVersion: V2
   format: nuget
   type: proxy
-

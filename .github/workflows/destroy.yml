@@ -17,6 +17,12 @@ on:
   workflow_dispatch:
     inputs: {}
 
+# permissions for oidc login
+# https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
 # global environment variables
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 env:
@@ -26,9 +32,8 @@ env:
   # debug
   CI_DEBUG: true
 
-  # azure creds
+  # azure creds (used with OIDC auth)
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
@@ -40,7 +45,7 @@ env:
   ENABLE_TLS_INGRESS: true
   FORCE_TEST_FAIL: false
   K8S_TLS_SECRET_NAME: tls-secret
-  KEY_VAULT_NAME: kv-rush-iz6y
+  KEY_VAULT_NAME: kv-rush-aqy2
   KEY_VAULT_CERT_NAME: wildcard-thehypepipe-co-uk
   KEY_VAULT_RESOURCE_GROUP_NAME: rg-keyvault-acmebot
   # NOTE: "eastus" is cheaper than "uksouth"
@@ -53,95 +58,111 @@ env:
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
   TF_LOG_PATH: terraform.log
-  TF_LOG: TRACE
+  TF_LOG: "ERROR" # https://developer.hashicorp.com/terraform/internals/debugging
   # https://github.com/hashicorp/terraform/releases
-  TF_VERSION: "1.0.10"
+  TF_VERSION: "1.3.7"
   TF_WORKING_DIR: terraform
+  # azurerm provider oidc
+  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_oidc
+  # https://developer.hashicorp.com/terraform/language/settings/backends/azurerm#oidc_request_token
+  ARM_USE_OIDC: "true"
 
   # Env var concatenation is currently not supported at Workflow or Job scope. See workaround below:
   # https://github.community/t5/GitHub-Actions/How-can-we-concatenate-multiple-env-vars-at-workflow-and-job/td-p/48489
 
 jobs:
   destroy:
-
     # always pin versions
     # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
+
+    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
+    environment:
+      name: dev
 
     # only run if owner triggered action
     if: github.actor == github.event.repository.owner.login
 
     steps:
-    # Checkout
-    # Reference the major version of a release
-    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#example-using-versioned-actions
-    - uses: actions/checkout@v2
+      # Checkout
+      # Reference the major version of a release
+      # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#example-using-versioned-actions
+      - uses: actions/checkout@v3
       # specify different branch
       # NOT required as I've changed the default branch to develop
       # with:
       #   ref: develop
 
-    # Env var concatenation
-    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
-    - name: Concatenate env vars (Workaround)
-      run: |
-        chmod -R +x ./scripts/
-        echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
-        echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
-        echo "ARGOCD_FQDN=argocd.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
-        echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
-        echo "TERRAFORM_STORAGE_ACCOUNT=${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001" >> $GITHUB_ENV
-        echo "TERRAFORM_STORAGE_RG=${{ env.PREFIX }}-rg-tfstate-dev-001" >> $GITHUB_ENV
-        echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
-        echo "VELERO_STORAGE_RG=${{ env.PREFIX }}-rg-velero-dev-001" >> $GITHUB_ENV
+      # Env var concatenation
+      # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
+      - name: Concatenate env vars (Workaround)
+        run: |
+          chmod -R +x ./scripts/
+          echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
+          echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" >> $GITHUB_ENV
+          echo "ARGOCD_FQDN=argocd.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
+          echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" >> $GITHUB_ENV
+          echo "TERRAFORM_STORAGE_ACCOUNT=${{ env.PREFIX }}sttfstate${{ env.LOCATION }}001" >> $GITHUB_ENV
+          echo "TERRAFORM_STORAGE_CONTAINER=terraform" >> $GITHUB_ENV
+          echo "TERRAFORM_STORAGE_RG=${{ env.PREFIX }}-rg-tfstate-dev-001" >> $GITHUB_ENV
+          echo "VELERO_STORAGE_ACCOUNT=${{ env.PREFIX }}stbckuksouth001" >> $GITHUB_ENV
 
-    # Login
-    - name: Login to Azure
-      run: ./scripts/azure_login.sh
+      # Login
+      # https://github.com/Azure/login
+      - name: Login via OIDC to Azure Public Cloud (az cli and az powershell)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
 
-    # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform resource destroy tasks
-    - name: Start AKS Cluster
-      continue-on-error: true
-      run: ./scripts/start_aks_cluster.sh
+      # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform resource destroy tasks
+      - name: Start AKS Cluster
+        continue-on-error: true
+        run: ./scripts/start_aks_cluster.sh
 
-    # Prereqs
-    - name: Lookup Storage Key
-      run: ./scripts/storage_key.sh
+      # Prereqs
+      # TODO remove this step
+      # - name: Lookup Storage Key
+      #   run: ./scripts/storage_key.sh
 
-    - name: Replace tokens in Terraform config files
-      run: pwsh -command "./scripts/Replace-Tokens.ps1"
-      env:
-        IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
+      - name: Replace tokens in Terraform config files
+        run: pwsh -command "./scripts/Replace-Tokens.ps1"
+        env:
+          IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
 
-    - name: Create zip file of Function App
-      run: pwsh -command "./function_app/CreateFunctionAppZip.ps1"
+      # Terraform
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
 
-    # Terraform
-    - uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: ${{ env.TF_VERSION }}
+      - name: 💀 Terraform destroy
+        run: |
+          echo 'Running terraform init...'
+          terraform init \
+            -backend-config="resource_group_name=$TERRAFORM_STORAGE_RG" \
+            -backend-config="storage_account_name=$TERRAFORM_STORAGE_ACCOUNT"
 
-    - name: 💀 Terraform destroy
-      run: |
-        terraform init
-        terraform destroy -no-color -auto-approve
-      working-directory: ${{ env.TF_WORKING_DIR }}
+          echo 'Running terraform destroy...'
+          terraform destroy -no-color -auto-approve
+        working-directory: ${{ env.TF_WORKING_DIR }}
 
-    - name: Terraform logs
-      uses: actions/upload-artifact@v2
-      with:
-        name: Terraform logs
-        path: ${{ env.TF_WORKING_DIR }}/${{ env.TF_LOG_PATH }}
-      if: always()
+      - name: Terraform logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: Terraform logs
+          path: ${{ env.TF_WORKING_DIR }}/${{ env.TF_LOG_PATH }}
+        if: always()
 
-    # Cleanup
-    - name: Delete Storage
-      run: ./scripts/storage_delete.sh
+      # Cleanup
+      - name: Delete Storage
+        run: ./scripts/storage_delete.sh
 
-    # Notify
-    - name: Notify slack
-      continue-on-error: true
-      env:
-        SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Destroy complete"
+      # Notify
+      - name: Notify slack
+        continue-on-error: true
+        env:
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: ./scripts/send_slack_message.sh "[devops-lab] Destroy complete"

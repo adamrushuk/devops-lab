@@ -18,26 +18,29 @@ env:
   # debug
   CI_DEBUG: true
 
-  # azure creds
+  # azure creds (used with OIDC auth)
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
 jobs:
   stop_aks_cluster:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
+
+    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
+    environment:
+      name: dev
 
     # only run if owner triggered action
     if: github.actor == github.event.repository.owner.login
 
     steps:
       # Checkout
-      - uses: actions/checkout@v2
-        # specify different branch
-        # NOT required as I've changed the default branch to develop
-        # with:
-        #   ref: develop
+      - uses: actions/checkout@v3
+      # specify different branch
+      # NOT required as I've changed the default branch to develop
+      # with:
+      #   ref: develop
 
       # Init tasks - inc env var concatenation
       - name: Init tasks - inc Env var concatenation (Workaround)
@@ -47,8 +50,14 @@ jobs:
           echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" >> $GITHUB_ENV
 
       # Login
-      - name: Login to Azure
-        run: ./scripts/azure_login.sh
+      # https://github.com/Azure/login
+      - name: Login via OIDC to Azure Public Cloud (az cli and az powershell)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
 
       # Stop
       # Prereqs: https://docs.microsoft.com/en-us/azure/aks/start-stop-cluster
@@ -61,4 +70,4 @@ jobs:
         env:
           SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        run: ./scripts/send_slack_message.sh "[aks-nexus-velero] Stop AKS Cluster complete"
+        run: ./scripts/send_slack_message.sh "[devops-lab] Stop AKS Cluster complete"

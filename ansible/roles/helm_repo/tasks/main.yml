@@ -24,6 +24,5 @@
 - name: Upload Helm Charts to Nexus
   shell:
     cmd: "curl --insecure -v -u {{ api_user }}:{{ admin_password }} {{ api_base_uri }}/repository/{{ helm_repo_request_body.name }}/ --upload-file {{ item.name }}-{{ item.version }}.tgz"
-    warn: false
   with_items:
     - "{{ helm_charts }}"

@@ -10,7 +10,7 @@ data "azurerm_dns_zone" "dns" {
 
 # external-dns managed identity
 resource "azurerm_user_assigned_identity" "external_dns" {
-  resource_group_name = module.aks.node_resource_group
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
   location            = var.location
   name                = "mi-external-dns"
 }
@@ -40,7 +40,7 @@ resource "kubernetes_namespace" "external_dns" {
     delete = "15m"
   }
 
-  depends_on = [module.aks]
+  depends_on = [azurerm_kubernetes_cluster.aks]
 }
 
 # https://www.terraform.io/docs/provisioners/local-exec.html
@@ -67,7 +67,7 @@ resource "null_resource" "azureIdentity_external_dns" {
   }
 
   depends_on = [
-    local_file.kubeconfig,
+    local_sensitive_file.kubeconfig,
     kubernetes_namespace.external_dns,
     helm_release.aad_pod_identity
   ]

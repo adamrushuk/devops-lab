@@ -8,9 +8,6 @@ $ErrorActionPreference = "Stop"
 #endregion
 
 Write-Verbose "Started in folder: [$(Get-Location)]"
-Write-Verbose "Changing directory to test folder..."
-Set-Location "test"
-
 Write-Verbose "STARTED: pwsh test task in current folder: [$(Get-Location)]"
 
 # Install Pester
@@ -18,7 +15,7 @@ $taskMessage = "Installing Pester "
 Write-Verbose "STARTED: $taskMessage..."
 try {
     Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
-    Install-Module -Name "Pester" -Scope "CurrentUser" -Repository "PSGallery" -MinimumVersion 5.1.0 -Verbose
+    Install-Module -Name "Pester" -Scope "CurrentUser" -Repository "PSGallery" -MinimumVersion 5.3.0 -Verbose
 
     Write-Verbose "FINISHED: $taskMessage."
 }
@@ -31,9 +28,9 @@ catch {
 $taskMessage = "Running Pester tests"
 Write-Verbose "STARTED: $taskMessage..."
 try {
-    $testScripts = Get-ChildItem -Path "*.tests.ps1"
-    Invoke-Pester -Script $testScripts -PassThru -OutputFormat "NUnitXml" -OutputFile "pester-test-results.xml" -Verbose -ErrorAction "Stop"
-
+    # $testScripts = Get-ChildItem -Path "*.Tests.ps1"
+    # Invoke-Pester -Script $testScripts -PassThru -OutputFormat "JUnitXml" -OutputFile "pester-test-results.xml" -Verbose -ErrorAction "Stop"
+    Invoke-Pester -Path './tests' -CI -Verbose
     Write-Verbose "FINISHED: $taskMessage."
 }
 catch {

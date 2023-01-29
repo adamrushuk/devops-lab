@@ -1,4 +1,4 @@
-# source: https://github.com/Azure/aad-pod-identity/blob/v1.8.3/charts/aad-pod-identity/values.yaml
+# source: https://github.com/Azure/aad-pod-identity/blob/v1.8.13/charts/aad-pod-identity/values.yaml
 
 # Default values for aad-pod-identity-helm.
 # This is a YAML-formatted file.
@@ -45,7 +45,7 @@ operationMode: "standard"
 
 mic:
   image: mic
-  tag: v1.8.3
+  tag: v1.8.13
 
   # ref: https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#marking-pod-as-critical
   priorityClassName: ""
@@ -143,6 +143,12 @@ mic:
   # cloud configuration used to authenticate with Azure
   cloudConfig: "/etc/kubernetes/azure.json"
 
+  # Configures for a custom cloud per the example here:
+  # https://azure.github.io/aad-pod-identity/docs/configure/custom_cloud/
+  customCloud:
+    enabled: false
+    configPath: "/etc/kubernetes/akscustom.json"
+
   # The maximum retry of UpdateUserMSI call. MIC updates all the identities in a batch. If a single identity contains an error
   # or is invalid, then the entire operation fails. Configuring this flag will make MIC retry by removing the erroneous identities
   # returned in the error
@@ -159,7 +165,7 @@ mic:
 
 nmi:
   image: nmi
-  tag: v1.8.3
+  tag: v1.8.13
 
   # ref: https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#marking-pod-as-critical
   priorityClassName: ""
@@ -198,7 +204,7 @@ nmi:
   affinity: {}
     # nodeAffinity:
     #   preferredDuringSchedulingIgnoredDuringExecution:
-    #     - weight 1
+    #     - weight: 1
     #       preference:
     #         matchExpressions:
     #           - key: kubernetes.azure.com/mode
@@ -237,8 +243,8 @@ nmi:
   blockInstanceMetadata: ""
 
   # https://github.com/Azure/aad-pod-identity/blob/master/docs/readmes/README.featureflags.md#metadata-header-required-flag
-  # default is false
-  metadataHeaderRequired: ""
+  # default is true
+  metadataHeaderRequired: true
 
   # enable running aad-pod-identity on clusters with kubenet
   # default is false
@@ -250,6 +256,9 @@ nmi:
 
   # Set retry-after header in the NMI responses when the identity is still being assigned.
   setRetryAfterHeader: false
+
+  # Enable/Disable deletion of conntrack entries for pre-existing connections to metadata endpoint
+  enableConntrackDeletion: false
 
 rbac:
   enabled: true

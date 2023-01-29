@@ -1,6 +1,8 @@
 # Misc
 .terraform
+.terraform.*
 terraform.tfstate*
+tftest
 localonly
 credentials*
 /temp
