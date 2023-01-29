@@ -6,7 +6,7 @@
 # az aks get-versions --location eastus --output table
 # az aks get-versions --location uksouth --output tsv --query "orchestrators | [?default].orchestratorVersion"
 variable "kubernetes_version" {
-  default = "1.23.12"
+  default = "1.24.6"
 }
 
 # Helm charts
@@ -21,7 +21,7 @@ variable "nginx_chart_version" {
 # https://hub.helm.sh/charts/jetstack/cert-manager
 # helm search repo jetstack/cert-manager
 variable "cert_manager_chart_version" {
-  default = "v1.10.0"
+  default = "v1.11.0"
 }
 
 # https://github.com/vmware-tanzu/helm-charts/releases
@@ -29,17 +29,17 @@ variable "cert_manager_chart_version" {
 # * also update terraform/helm/velero_default_values.yaml
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "2.32.1"
+  default = "3.1.0"
 }
 
 # https://hub.docker.com/r/velero/velero/tags
 variable "velero_image_tag" {
-  default = "v1.9.2"
+  default = "v1.10.0"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
 variable "nexus_image_tag" {
-  default = "3.43.0"
+  default = "3.45.1"
 }
 
 # https://github.com/adamrushuk/charts/releases
@@ -53,13 +53,13 @@ variable "nexus_chart_version" {
 # https://github.com/SparebankenVest/public-helm-charts/blob/master/stable/akv2k8s/Chart.yaml#L5
 # helm search repo spv-charts/akv2k8s
 variable "akv2k8s_chart_version" {
-  default = "2.2.2"
+  default = "2.3.2"
 }
 
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
-  default = "4.1.14"
+  default = "4.1.15"
 }
 
 # https://bitnami.com/stack/external-dns/helm
@@ -67,18 +67,18 @@ variable "aad_pod_identity_chart_version" {
 # helm search repo bitnami/external-dns
 # helm search repo -l bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "6.11.3"
+  default = "6.13.1"
 }
 
 # https://github.com/kubereboot/charts/tree/main/charts/kured
 # helm search repo kubereboot/kured
 variable "kured_chart_version" {
-  default = "4.1.0"
+  default = "4.2.0"
 }
 
-# https://github.com/kubereboot/kured#kubernetes--os-compatibility
+# https://kured.dev/docs/installation/#kubernetes--os-compatibility
 variable "kured_image_tag" {
-  default = "1.11.0"
+  default = "1.12.0"
 }
 
 
@@ -88,13 +88,13 @@ variable "kured_image_tag" {
 # helm search repo -l argo/argo-cd | head -n 20
 # * also update terraform/helm/argocd_default_values.yaml
 variable "argocd_chart_version" {
-  default = "5.13.6"
+  default = "5.19.11"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 # * also update cli version: terraform/files/scripts/argocd_config.sh#L22
 variable "argocd_image_tag" {
-  default = "v2.5.2"
+  default = "v2.5.9"
 }
 #endregion Versions
 

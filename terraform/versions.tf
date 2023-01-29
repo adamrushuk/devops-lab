@@ -11,9 +11,6 @@ terraform {
     use_oidc       = true # or use "ARM_USE_OIDC" env var
     # requires "Storage Blob Data Contributor" on the container
     use_azuread_auth = true
-    # TODO remove
-    # resource_group_name  = "__TERRAFORM_STORAGE_RG__"
-    # storage_account_name = "__TERRAFORM_STORAGE_ACCOUNT__"
   }
 
   # providers (pin all versions)
@@ -23,25 +20,25 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.31.0"
+      version = "~> 3.41.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.30.0"
+      version = "~> 2.33.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.15.0"
+      version = "~> 2.17.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-helm/releases
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.7.1"
+      version = "~> 2.8.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-random/releases
