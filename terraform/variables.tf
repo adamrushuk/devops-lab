@@ -6,7 +6,7 @@
 # az aks get-versions --location eastus --output table
 # az aks get-versions --location uksouth --output tsv --query "orchestrators | [?default].orchestratorVersion"
 variable "kubernetes_version" {
-  default = "1.24.6"
+  default = "1.24.9"
 }
 
 # Helm charts
@@ -29,12 +29,12 @@ variable "cert_manager_chart_version" {
 # * also update terraform/helm/velero_default_values.yaml
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
-  default = "3.1.0"
+  default = "3.1.2"
 }
 
 # https://hub.docker.com/r/velero/velero/tags
 variable "velero_image_tag" {
-  default = "v1.10.0"
+  default = "v1.10.1"
 }
 
 # https://hub.docker.com/r/sonatype/nexus3/tags
@@ -67,18 +67,18 @@ variable "aad_pod_identity_chart_version" {
 # helm search repo bitnami/external-dns
 # helm search repo -l bitnami/external-dns
 variable "external_dns_chart_version" {
-  default = "6.13.1"
+  default = "6.13.2"
 }
 
 # https://github.com/kubereboot/charts/tree/main/charts/kured
 # helm search repo kubereboot/kured
 variable "kured_chart_version" {
-  default = "4.2.0"
+  default = "4.4.1"
 }
 
 # https://kured.dev/docs/installation/#kubernetes--os-compatibility
 variable "kured_image_tag" {
-  default = "1.12.0"
+  default = "1.12.1"
 }
 
 
@@ -88,13 +88,13 @@ variable "kured_image_tag" {
 # helm search repo -l argo/argo-cd | head -n 20
 # * also update terraform/helm/argocd_default_values.yaml
 variable "argocd_chart_version" {
-  default = "5.19.11"
+  default = "5.20.1"
 }
 
 # https://hub.docker.com/r/argoproj/argocd/tags
 # * also update cli version: terraform/files/scripts/argocd_config.sh#L22
 variable "argocd_image_tag" {
-  default = "v2.5.9"
+  default = "v2.5.10"
 }
 #endregion Versions
 
