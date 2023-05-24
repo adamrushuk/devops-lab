@@ -20,31 +20,31 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.42.0"
+      version = "~> 3.57.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.33.0"
+      version = "~> 2.39.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.17.0"
+      version = "~> 2.20.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-helm/releases
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.8.0"
+      version = "~> 2.9.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-random/releases
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.4"
+      version = "~> 3.5"
     }
 
     # https://github.com/hashicorp/terraform-provider-tls/releases
@@ -56,7 +56,7 @@ terraform {
     # https://github.com/hashicorp/terraform-provider-local/releases
     local = {
       source  = "hashicorp/local"
-      version = "~> 2.3"
+      version = "~> 2.4"
     }
 
     # https://github.com/hashicorp/terraform-provider-null/releases

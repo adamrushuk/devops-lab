@@ -5,7 +5,7 @@
 initContainers:
   - name: velero-plugin-for-microsoft-azure
     # https://hub.docker.com/r/velero/velero-plugin-for-microsoft-azure/tags
-    image: velero/velero-plugin-for-microsoft-azure:v1.6.0
+    image: velero/velero-plugin-for-microsoft-azure:v1.6.2
     imagePullPolicy: IfNotPresent
     volumeMounts:
       - mountPath: /target
@@ -13,12 +13,17 @@ initContainers:
 
 # BackupStorageLocation and VolumeSnapshotLocation
 configuration:
-  provider: azure
   backupStorageLocation:
-    name: default
-    bucket: velero
+    - name: default
+      bucket: velero
+      default: true
+      provider: azure
+      credential:
+        name: velero-credentials
+        key: cloud
   volumeSnapshotLocation:
-    name: default
+    - name: default
+      provider: azure
 
 credentials:
   useSecret: true
