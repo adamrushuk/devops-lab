@@ -77,17 +77,17 @@ resource "helm_release" "velero" {
   }
 
   set {
-    name  = "configuration.backupStorageLocation.config.resourceGroup"
+    name  = "configuration.backupStorageLocation[0].config.resourceGroup"
     value = azurerm_resource_group.aks.name
   }
 
   set {
-    name  = "configuration.backupStorageLocation.config.storageAccount"
+    name  = "configuration.backupStorageLocation[0].config.storageAccount"
     value = azurerm_storage_account.velero[0].name
   }
 
   set {
-    name  = "configuration.volumeSnapshotLocation.config.resourceGroup"
+    name  = "configuration.volumeSnapshotLocation[0].config.resourceGroup"
     value = azurerm_resource_group.aks.name
   }
 
