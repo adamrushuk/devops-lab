@@ -38,7 +38,7 @@ terraform {
     # https://github.com/hashicorp/terraform-provider-helm/releases
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.10.0"
+      version = "~> 2.9.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-random/releases
