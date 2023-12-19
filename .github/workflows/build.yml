@@ -64,7 +64,7 @@ env:
   TF_LOG: "ERROR" # TRACE, DEBUG, INFO, WARN or ERROR
   TF_PLAN: "tfplan"
   # https://github.com/hashicorp/terraform/releases
-  TF_VERSION: "1.3.7"
+  TF_VERSION: "1.6.6"
   TF_WORKING_DIR: ./terraform
   # azurerm provider oidc
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_oidc
@@ -77,10 +77,11 @@ env:
 jobs:
   build-and-deploy:
     # always pin versions
-    # view installed software: https://docs.github.com/en/free-pro-team@latest/actions/reference/specifications-for-github-hosted-runners#supported-software
+    # view installed software: https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+    # https://github.com/actions/runner-images?tab=readme-ov-file#available-images
     runs-on: ubuntu-22.04
 
-    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idenvironment
     environment:
       name: dev
       url: "https://argocd.${{ env.ROOT_DOMAIN_NAME }}"
@@ -91,7 +92,7 @@ jobs:
     steps:
       # Checkout
       # https://github.com/marketplace/actions/checkout
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       # specify different branch
       # NOT required as I've changed the default branch to develop
       # with:
@@ -145,7 +146,7 @@ jobs:
 
       # Terraform
       # https://github.com/hashicorp/setup-terraform
-      - uses: hashicorp/setup-terraform@v2
+      - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
@@ -277,7 +278,7 @@ jobs:
   test-windows:
     needs: build-and-deploy
 
-    # https://github.com/actions/virtual-environments
+    # https://github.com/actions/runner-images?tab=readme-ov-file#available-images
     runs-on: windows-2022
 
     # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
@@ -289,7 +290,7 @@ jobs:
 
     steps:
       # Checkout
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Init tasks - inc Env var concatenation
       # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files

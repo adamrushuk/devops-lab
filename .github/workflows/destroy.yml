@@ -87,7 +87,7 @@ jobs:
       # Checkout
       # Reference the major version of a release
       # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#example-using-versioned-actions
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       # specify different branch
       # NOT required as I've changed the default branch to develop
       # with:
@@ -133,7 +133,7 @@ jobs:
           IFTTT_WEBHOOK_KEY: ${{ secrets.IFTTT_WEBHOOK_KEY }}
 
       # Terraform
-      - uses: hashicorp/setup-terraform@v2
+      - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
 

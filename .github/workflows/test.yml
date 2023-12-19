@@ -46,7 +46,7 @@ jobs:
 
     steps:
     # Checkout
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     # Show event info
     - name: Show triggered event data
