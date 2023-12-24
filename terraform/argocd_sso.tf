@@ -90,7 +90,7 @@ data "azurerm_client_config" "current" {}
 resource "null_resource" "argocd_cm" {
   triggers = {
     yaml_contents = filemd5(var.argocd_cm_yaml_path)
-    sp_app_id     = azuread_service_principal.argocd.application_id
+    sp_app_id     = azuread_service_principal.argocd.client_id
   }
 
   provisioner "local-exec" {
@@ -101,7 +101,7 @@ resource "null_resource" "argocd_cm" {
         var.argocd_cm_yaml_path,
         {
           "tenantId"    = data.azurerm_client_config.current.tenant_id
-          "appClientId" = azuread_service_principal.argocd.application_id
+          "appClientId" = azuread_service_principal.argocd.client_id
         }
       )
     }
