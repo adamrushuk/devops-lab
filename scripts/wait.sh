@@ -13,7 +13,7 @@ az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME
 echo -e "FINISHED: $message.\n"
 
 # Testing kubectl
-kubectl version --short
+kubectl version
 
 # Wait
 pod_name=$(kubectl get pod --namespace nexus -l app.kubernetes.io/name=sonatype-nexus -o jsonpath="{.items[0].metadata.name}")

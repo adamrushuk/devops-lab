@@ -20,7 +20,7 @@ az aks get-credentials --resource-group "$AKS_RG_NAME" --name "$AKS_CLUSTER_NAME
 echo "FINISHED: $message."
 
 # Testing kubectl
-kubectl version --short
+kubectl version
 
 # # Apply manifests
 # message="Applying Kubernetes manifests"
