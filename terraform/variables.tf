@@ -15,7 +15,7 @@ variable "kubernetes_version" {
 # helm search repo ingress-nginx/ingress-nginx
 # helm search repo -l ingress-nginx/ingress-nginx | head -5
 variable "nginx_chart_version" {
-  default = "4.8.4"
+  default = "4.9.0"
 }
 
 # https://hub.helm.sh/charts/jetstack/cert-manager
