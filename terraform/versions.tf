@@ -20,31 +20,31 @@ terraform {
     # https://github.com/terraform-providers/terraform-provider-azurerm/releases
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.59.0"
+      version = "~> 3.85.0"
     }
 
     # https://github.com/terraform-providers/terraform-provider-azuread/releases
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 2.39.0"
+      version = "~> 2.47.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-kubernetes/releases
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.20.0"
+      version = "~> 2.24.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-helm/releases
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.9.0"
+      version = "~> 2.12.1"
     }
 
     # https://github.com/hashicorp/terraform-provider-random/releases
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.5"
+      version = "~> 3.6"
     }
 
     # https://github.com/hashicorp/terraform-provider-tls/releases
@@ -68,7 +68,7 @@ terraform {
     # https://registry.terraform.io/providers/hashicorp/archive/latest
     archive = {
       source  = "hashicorp/archive"
-      version = "~> 2.3"
+      version = "~> 2.4"
     }
 
     # TODO: remove template provider as deprecated (superseded by the templatefile function)
