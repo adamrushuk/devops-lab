@@ -26,7 +26,6 @@ variable "cert_manager_chart_version" {
 
 # https://github.com/vmware-tanzu/helm-charts/releases
 # helm search repo vmware-tanzu/velero
-# TODO:upgrade values files
 # * also update terraform/helm/velero_default_values.yaml
 # * also update terraform/helm/velero_values.yaml
 variable "velero_chart_version" {
@@ -57,7 +56,6 @@ variable "akv2k8s_chart_version" {
   default = "2.6.0"
 }
 
-# TODO: remove this after moving to Workload Identity
 # https://github.com/Azure/aad-pod-identity/blob/master/charts/aad-pod-identity/Chart.yaml#L4
 # helm search repo aad-pod-identity/aad-pod-identity
 variable "aad_pod_identity_chart_version" {
@@ -85,7 +83,6 @@ variable "kured_image_tag" {
 
 
 # argo cd
-# TODO: update all values files and code
 # https://github.com/argoproj/argo-helm/blob/master/charts/argo-cd/Chart.yaml#L5
 # helm search repo argo/argo-cd
 # helm search repo -l argo/argo-cd | head -n 20
@@ -94,10 +91,10 @@ variable "argocd_chart_version" {
   default = "5.51.6"
 }
 
-# https://hub.docker.com/r/argoproj/argocd/tags
+# https://quay.io/repository/argoproj/argocd?tab=tags&tag=latest
 # * also update cli version: terraform/files/scripts/argocd_config.sh#L22
 variable "argocd_image_tag" {
-  default = "v2.9."
+  default = "v2.9.3"
 }
 #endregion Versions
 
