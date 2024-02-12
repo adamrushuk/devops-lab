@@ -12,7 +12,6 @@ For this test, I created a `PowerShell Core 7.2 Function App` within a Resource 
 
 ## Usage
 
-
 ```bash
 # init
 cd terraform/examples/terrafy
