@@ -61,7 +61,7 @@ env:
   TF_LOG: "ERROR" # https://developer.hashicorp.com/terraform/internals/debugging
   # https://github.com/hashicorp/terraform/releases
   TF_VERSION: "1.7.3"
-  TF_WORKING_DIR: terraform-vf
+  TF_WORKING_DIR: ./terraform
   # azurerm provider oidc
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_oidc
   # https://developer.hashicorp.com/terraform/language/settings/backends/azurerm#oidc_request_token
