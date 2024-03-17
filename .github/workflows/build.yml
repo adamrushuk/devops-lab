@@ -65,7 +65,7 @@ env:
   TF_PLAN: "tfplan"
   # https://github.com/hashicorp/terraform/releases
   TF_VERSION: "1.7.3"
-  TF_WORKING_DIR: ./terraform-vf
+  TF_WORKING_DIR: ./terraform
   # azurerm provider oidc
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_oidc
   # https://developer.hashicorp.com/terraform/language/settings/backends/azurerm#oidc_request_token
@@ -122,6 +122,12 @@ jobs:
           tenant-id: ${{ secrets.ARM_TENANT_ID }}
           subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           enable-AzPSSession: true
+
+      # This is required when developing after the initial build, and the AKS cluster may have been stopped
+      # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform apply tasks
+      - name: Start AKS Cluster
+        continue-on-error: true
+        run: ./scripts/start_aks_cluster.sh
 
       # Prereqs
       - name: Create Storage Account for Terraform state
@@ -189,6 +195,73 @@ jobs:
         env:
           TF_PLAN: ${{ env.TF_PLAN }}
 
+      # Kubernetes
+      - name: Deploy kubernetes manifests
+        run: ./scripts/k8s_manifests_apply.sh
+
+      - name: Wait for resources to be "Ready"
+        run: ./scripts/wait.sh
+
+      # Ansible
+      - name: Run Ansible playbook
+        run: ./scripts/ansible.sh
+        env:
+          NEXUS_ADMIN_PASSWORD: ${{ secrets.NEXUS_ADMIN_PASSWORD }}
+          NEXUS_USER_PASSWORD: ${{ secrets.NEXUS_USER_PASSWORD }}
+
+      # Docker
+      # https://github.com/Azure/docker-login
+      - name: Docker repo login
+        uses: Azure/docker-login@v1
+        with:
+          login-server: ${{ env.DOCKER_FQDN }}
+          username: ${{ env.NEXUS_USER_USERNAME }}
+          password: ${{ secrets.NEXUS_USER_PASSWORD }}
+
+      - name: Push images to Docker repo
+        run: ./scripts/push_docker_images.sh
+
+      # TODO: Remove once issue has been fixed
+      - name: Fix Function App version
+        run: pwsh -command "./scripts/Fix-FunctionApp.ps1"
+        env:
+          FUNCTION_APP_NAME: "${{ env.PREFIX }}-funcapp"
+          FUNCTION_APP_RG: "${{ env.PREFIX }}-rg-aks-dev-001"
+
+      # Pester tests
+      - name: 🧪 Run Pester tests
+        continue-on-error: true
+        run: pwsh -command "./scripts/Start-Test.ps1"
+
+      # https://github.com/actions/upload-artifact
+      - name: Archive test artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: test/pester-test-results.xml
+        if: always()
+
+      # remove NuGet proxy repo so pester report step doesnt fail
+      - name: Unregister NuGet proxy repo
+        run: pwsh -command "Unregister-PSRepository -Name nuget.org-proxy -Verbose"
+
+      # Shows at the bottom of a run: https://github.com/adamrushuk/devops-lab/runs/1035347513?check_suite_focus=true
+      # https://github.com/zyborg/pester-tests-report
+      # - name: Pester report
+      #   uses: zyborg/pester-tests-report@v1
+      #   with:
+      #     test_results_path: test/pester-test-results.xml
+      #     report_name: pester_tests
+      #     report_title: Pester Tests
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # - uses: dorny/test-reporter@v1.6.0
+      #   with:
+      #     # artifact: test-results             # artifact name
+      #     name: Pester Tests Results           # Name of the check run which will be created
+      #     path: 'test/pester-test-results.xml' # Path to test results (inside artifact .zip)
+      #     reporter: java-junit                 # Format of test results
+
       # Notify
       - name: Notify slack
         continue-on-error: true
@@ -196,3 +269,63 @@ jobs:
           SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: ./scripts/send_slack_message.sh "[devops-lab] Build complete"
+
+  # used for any windows-only tasks
+  test-windows:
+    needs: build-and-deploy
+
+    # https://github.com/actions/runner-images?tab=readme-ov-file#available-images
+    runs-on: windows-2022
+
+    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
+    environment:
+      name: dev
+
+    # only run if owner triggered action
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+      # Checkout
+      - uses: actions/checkout@v4
+
+      # Init tasks - inc Env var concatenation
+      # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
+      - name: Init tasks - inc Env var concatenation (Workaround)
+        # * NOTE: different syntax required for Windows agents
+        run: |
+          echo "AKS_RG_NAME=${{ env.PREFIX }}-rg-aks-dev-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
+          echo "AKS_CLUSTER_NAME=${{ env.PREFIX }}-aks-001" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
+          echo "DNS_DOMAIN_NAME=nexus.${{ env.ROOT_DOMAIN_NAME }}" | Out-File -Append -Encoding utf8 -FilePath "$env:GITHUB_ENV"
+
+      # Login
+      # https://github.com/Azure/login
+      - name: Login via OIDC to Azure Public Cloud (az cli and az powershell)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      # Chocolatey
+      - name: Test Nexus Chocolatey proxy repo
+        run: |
+          choco install velero --source "https://${{ env.DNS_DOMAIN_NAME }}/repository/chocolatey-proxy/"
+
+      # Velero CLI
+      - name: Test Velero CLI
+        #  NOTE: Some functions cast values to a string to perform comparisons
+        # https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#functions
+        # ! WARNING: only single quotes work for boolean comparison
+        if: env.VELERO_ENABLED == 'true'
+        run: |
+          az aks get-credentials --resource-group "${{ env.AKS_RG_NAME }}" --name "${{ env.AKS_CLUSTER_NAME }}" --overwrite-existing --admin
+
+          echo "`nVelero version info:"
+          velero version || true
+
+          echo "`nVelero backup location info:"
+          velero backup-location get
+
+          echo "`nVelero backup info:"
+          velero backup get
