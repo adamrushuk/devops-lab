@@ -13,7 +13,7 @@ resource "azuread_group" "lm1_users" {
   owners                  = [data.azuread_client_config.current.object_id]
   prevent_duplicate_names = true
   security_enabled        = true
-  members                 = data.azuread_users.lm1_users.object_ids
+  members                 = data.azuread_user.lm1_users.object_ids
 }
 
 resource "azuread_group" "lm1_admins" {
@@ -22,7 +22,7 @@ resource "azuread_group" "lm1_admins" {
   prevent_duplicate_names = true
   security_enabled        = true
   assignable_to_role      = true
-  members                 = data.azuread_users.lm1_admins.object_ids
+  members                 = data.azuread_user.lm1_admins.object_ids
 }
 
 resource "azuread_administrative_unit" "lm1" {
@@ -32,7 +32,7 @@ resource "azuread_administrative_unit" "lm1" {
 }
 
 resource "azuread_administrative_unit_member" "lm1_users" {
-  for_each                      = toset(data.azuread_users.lm1_users.object_ids)
+  for_each                      = toset(data.azuread_user.lm1_users.object_ids)
   administrative_unit_object_id = azuread_administrative_unit.lm1.id
   member_object_id              = each.value
 }
