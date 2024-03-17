@@ -1,9 +1,9 @@
-resource "azuread_users" "lm1_users" {
+resource "azuread_user" "lm1_users" {
   user_principal_name = ["localmarket1user@thehypepipe.co.uk"]
   display_name        = "localmarket1user"
 }
 
-resource "azuread_users" "lm1_admins" {
+resource "azuread_user" "lm1_admins" {
   user_principal_name = ["localmarket1admin@thehypepipe.co.uk"]
   display_name        = "localmarket1user"
 }
