@@ -1,6 +1,10 @@
 terraform {
   backend "azurerm" {
-    key = "terraform.tfstate"
+    container_name = "terraform"
+    key            = "terraform.tfstate"
+    use_oidc       = true # or use "ARM_USE_OIDC" env var
+    # requires "Storage Blob Data Contributor" on the container
+    use_azuread_auth = true
   }
   required_providers {
     azuread = {
