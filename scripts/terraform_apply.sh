@@ -6,7 +6,7 @@ set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
 # Change into TF folder location
-pushd ./terraform
+pushd "$TF_WORKING_DIR"
 
 # Apply terraform
 message="Applying Terraform configuration"
