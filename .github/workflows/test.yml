@@ -35,8 +35,8 @@ jobs:
   build:
 
     # always pin versions
-    # # view installed software: https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
-    runs-on: ubuntu-22.04
+    # view installed software: https://docs.github.com/en/actions/concepts/runners/about-github-hosted-runners
+    runs-on: ubuntu-24.04
 
     env:
       MY_JOB_VAR: job
