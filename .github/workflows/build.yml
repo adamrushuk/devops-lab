@@ -79,7 +79,7 @@ jobs:
     # always pin versions
     # view installed software: https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
     # https://github.com/actions/runner-images?tab=readme-ov-file#available-images
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idenvironment
     environment:
@@ -116,7 +116,7 @@ jobs:
       # Login
       # https://github.com/Azure/login
       - name: Login via OIDC to Azure Public Cloud (az cli and az powershell)
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.ARM_CLIENT_ID }}
           tenant-id: ${{ secrets.ARM_TENANT_ID }}
@@ -168,7 +168,7 @@ jobs:
       # https://github.com/bridgecrewio/checkov-action
       - name: Run Checkov security scan
         id: checkov
-        uses: bridgecrewio/checkov-action@master
+        uses: bridgecrewio/checkov-action@v12
         with:
           directory: ${{ env.TF_WORKING_DIR }}
           # check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
@@ -212,7 +212,7 @@ jobs:
       # Docker
       # https://github.com/Azure/docker-login
       - name: Docker repo login
-        uses: Azure/docker-login@v1
+        uses: Azure/docker-login@v2
         with:
           login-server: ${{ env.DOCKER_FQDN }}
           username: ${{ env.NEXUS_USER_USERNAME }}
@@ -235,7 +235,7 @@ jobs:
 
       # https://github.com/actions/upload-artifact
       - name: Archive test artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: test/pester-test-results.xml
@@ -275,7 +275,7 @@ jobs:
     needs: build-and-deploy
 
     # https://github.com/actions/runner-images?tab=readme-ov-file#available-images
-    runs-on: windows-2022
+    runs-on: windows-2025
 
     # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idenvironment
     environment:
@@ -286,6 +286,7 @@ jobs:
 
     steps:
       # Checkout
+      # https://github.com/marketplace/actions/checkout
       - uses: actions/checkout@v4
 
       # Init tasks - inc Env var concatenation
@@ -300,7 +301,7 @@ jobs:
       # Login
       # https://github.com/Azure/login
       - name: Login via OIDC to Azure Public Cloud (az cli and az powershell)
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.ARM_CLIENT_ID }}
           tenant-id: ${{ secrets.ARM_TENANT_ID }}
