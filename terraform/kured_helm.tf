@@ -30,7 +30,6 @@ resource "helm_release" "kured" {
     {
       name  = "image.tag"
       value = var.kured_image_tag
-      type  = "string"
     }
   ]
 

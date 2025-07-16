@@ -53,27 +53,22 @@ resource "helm_release" "argocd" {
     {
       name  = "global.image.tag"
       value = var.argocd_image_tag
-      type  = "string"
     },
     {
       name  = "server.ingress.hosts[0]"
       value = "argocd.${var.dns_zone_name}"
-      type  = "string"
     },
     {
       name  = "server.ingress.tls[0].hosts[0]"
       value = "argocd.${var.dns_zone_name}"
-      type  = "string"
     },
     {
       name  = "server.ingress.tls[0].secretName"
       value = "argocd-ingress-tls"
-      type  = "string"
     },
     {
       name  = "server.config.url"
       value = "https://argocd.${var.dns_zone_name}"
-      type  = "string"
     }
   ]
 

@@ -55,12 +55,10 @@ resource "helm_release" "aad_pod_identity" {
     {
       name  = "nmi.allowNetworkPluginKubenet"
       value = "false"
-      type  = "string"
     },
     {
       name  = "mic.logVerbosity"
-      value = 6
-      type  = "int"
+      value = "6"
     }
   ]
 }

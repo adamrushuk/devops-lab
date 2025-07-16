@@ -91,12 +91,10 @@ resource "helm_release" "akv2k8s" {
     {
       name  = "addAzurePodIdentityException"
       value = "true"
-      type  = "string"
     },
     {
       name  = "controller.logLevel"
       value = "debug"
-      type  = "string"
     }
   ]
 

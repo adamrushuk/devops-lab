@@ -27,7 +27,6 @@ resource "helm_release" "nginx" {
     {
       name  = "controller.admissionWebhooks.enabled"
       value = false
-      type  = "bool"
     }
   ]
 }

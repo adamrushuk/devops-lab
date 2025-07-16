@@ -52,32 +52,26 @@ resource "helm_release" "nexus" {
     {
       name  = "image.tag"
       value = var.nexus_image_tag
-      type  = "string"
     },
     {
       name  = "nexus.baseDomain"
       value = var.nexus_base_domain
-      type  = "string"
     },
     {
       name  = "nexus.certEmail"
       value = var.nexus_cert_email
-      type  = "string"
     },
     {
       name  = "ingress.enabled"
       value = var.nexus_ingress_enabled
-      type  = "bool"
     },
     {
       name  = "ingress.letsencryptEnvironment"
       value = var.nexus_letsencrypt_environment
-      type  = "string"
     },
     {
       name  = "ingress.tls.secretName"
       value = var.nexus_tls_secret_name
-      type  = "string"
     }
   ]
 

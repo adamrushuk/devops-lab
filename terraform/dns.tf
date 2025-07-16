@@ -89,47 +89,38 @@ resource "helm_release" "external_dns" {
     {
       name  = "azure.userAssignedIdentityID"
       value = azurerm_user_assigned_identity.external_dns.client_id
-      type  = "string"
     },
     {
       name  = "logLevel"
       value = "debug"
-      type  = "string"
     },
     {
       name  = "domainFilters[0]"
       value = var.dns_zone_name
-      type  = "string"
     },
     {
       name  = "provider"
       value = "azure"
-      type  = "string"
     },
     {
       name  = "azure.tenantId"
       value = data.azurerm_subscription.current.tenant_id
-      type  = "string"
     },
     {
       name  = "azure.subscriptionId"
       value = data.azurerm_subscription.current.subscription_id
-      type  = "string"
     },
     {
       name  = "azure.resourceGroup"
       value = data.azurerm_resource_group.dns.name
-      type  = "string"
     },
     {
       name  = "azure.useManagedIdentityExtension"
       value = true
-      type  = "bool"
     },
     {
       name  = "podLabels.aadpodidbinding"
       value = "external-dns"
-      type  = "string"
     }
   ]
 

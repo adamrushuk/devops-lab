@@ -75,47 +75,38 @@ resource "helm_release" "velero" {
     {
       name  = "image.tag"
       value = var.velero_image_tag
-      type  = "string"
     },
     {
       name  = "configuration.backupStorageLocation[0].config.resourceGroup"
       value = azurerm_resource_group.aks.name
-      type  = "string"
     },
     {
       name  = "configuration.backupStorageLocation[0].config.storageAccount"
       value = azurerm_storage_account.velero[0].name
-      type  = "string"
     },
     {
       name  = "configuration.volumeSnapshotLocation[0].config.resourceGroup"
       value = azurerm_resource_group.aks.name
-      type  = "string"
     },
     {
       name  = "schedules.fullbackup.schedule"
       value = var.velero_backup_schedule
-      type  = "string"
     },
     {
       name  = "schedules.fullbackup.template.ttl"
       value = var.velero_backup_retention
-      type  = "string"
     },
     {
       name  = "schedules.fullbackup.template.storageLocation"
       value = "default"
-      type  = "string"
     },
     {
       name  = "schedules.fullbackup.template.includedNamespaces"
       value = "{${join(",", var.velero_backup_included_namespaces)}}"
-      type  = "string"
     },
     {
       name  = "podLabels.aadpodidbinding"
       value = "velero"
-      type  = "string"
     }
   ]
 }

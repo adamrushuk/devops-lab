@@ -17,12 +17,10 @@ resource "helm_release" "cert_manager" {
     {
       name  = "global.logLevel"
       value = "3"
-      type  = "string"
     },
     {
       name  = "installCRDs"
       value = "true"
-      type  = "string"
     }
   ]
 }
