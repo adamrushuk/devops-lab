@@ -4,7 +4,7 @@
 # https://cert-manager.io/docs/installation/kubernetes/#installing-with-helm
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release_v2" "cert_manager" {
+resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   name       = "cert-manager"
   namespace  = kubernetes_namespace.ingress.metadata[0].name

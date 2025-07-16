@@ -13,7 +13,7 @@ resource "kubernetes_namespace" "ingress" {
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release_v2" "nginx" {
+resource "helm_release" "nginx" {
   chart      = "ingress-nginx"
   name       = "nginx"
   namespace  = kubernetes_namespace.ingress.metadata[0].name

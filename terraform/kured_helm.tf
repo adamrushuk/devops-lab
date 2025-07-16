@@ -15,7 +15,7 @@ resource "kubernetes_namespace" "kured" {
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release_v2" "kured" {
+resource "helm_release" "kured" {
   chart      = "kured"
   name       = "kured"
   namespace  = kubernetes_namespace.kured.metadata[0].name

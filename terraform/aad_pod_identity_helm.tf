@@ -36,7 +36,7 @@ resource "kubernetes_namespace" "aad_pod_identity" {
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release_v2" "aad_pod_identity" {
+resource "helm_release" "aad_pod_identity" {
   chart      = "aad-pod-identity"
   name       = "aad-pod-identity"
   namespace  = kubernetes_namespace.aad_pod_identity.metadata[0].name

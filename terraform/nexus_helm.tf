@@ -31,13 +31,13 @@ resource "null_resource" "nexus_cert_sync" {
 
   depends_on = [
     local_sensitive_file.kubeconfig,
-    helm_release_v2.akv2k8s,
+    helm_release.akv2k8s,
     kubernetes_namespace.nexus
   ]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release_v2" "nexus" {
+resource "helm_release" "nexus" {
   chart      = "sonatype-nexus"
   name       = "nexus"
   namespace  = kubernetes_namespace.nexus.metadata[0].name
@@ -81,5 +81,5 @@ resource "helm_release_v2" "nexus" {
     }
   ]
 
-  depends_on = [helm_release_v2.nginx]
+  depends_on = [helm_release.nginx]
 }

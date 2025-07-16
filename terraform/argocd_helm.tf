@@ -33,13 +33,13 @@ resource "null_resource" "argocd_cert_sync" {
 
   depends_on = [
     local_sensitive_file.kubeconfig,
-    helm_release_v2.akv2k8s,
+    helm_release.akv2k8s,
     kubernetes_namespace.argocd
   ]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release_v2" "argocd" {
+resource "helm_release" "argocd" {
   chart      = "argo-cd"
   name       = "argocd"
   namespace  = kubernetes_namespace.argocd.metadata[0].name
@@ -102,7 +102,7 @@ resource "null_resource" "argocd_configure" {
 
   depends_on = [
     local_sensitive_file.kubeconfig,
-    helm_release_v2.argocd
+    helm_release.argocd
   ]
 }
 

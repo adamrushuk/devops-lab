@@ -60,7 +60,7 @@ EOT
   depends_on = [kubernetes_namespace.velero]
 }
 
-resource "helm_release_v2" "velero" {
+resource "helm_release" "velero" {
   count      = var.velero_enabled ? 1 : 0
   chart      = "velero"
   name       = "velero"

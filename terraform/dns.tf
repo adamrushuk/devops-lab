@@ -69,13 +69,13 @@ resource "null_resource" "azureIdentity_external_dns" {
   depends_on = [
     local_sensitive_file.kubeconfig,
     kubernetes_namespace.external_dns,
-    helm_release_v2.aad_pod_identity
+    helm_release.aad_pod_identity
   ]
 }
 
 # https://github.com/bitnami/charts/tree/master/bitnami/external-dns
 # https://bitnami.com/stack/external-dns/helm
-resource "helm_release_v2" "external_dns" {
+resource "helm_release" "external_dns" {
   chart      = "external-dns"
   name       = "external-dns"
   namespace  = kubernetes_namespace.external_dns.metadata[0].name
