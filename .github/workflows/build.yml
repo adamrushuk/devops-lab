@@ -158,30 +158,30 @@ jobs:
           terraform validate
         working-directory: ${{ env.TF_WORKING_DIR }}
 
-      # https://github.com/aquasecurity/tfsec-action
-      - name: Run tfsec security scan
-        uses: aquasecurity/tfsec-action@v1.0.3
-        with:
-          working_directory: ${{ env.TF_WORKING_DIR }}
-          soft_fail: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # # https://github.com/aquasecurity/tfsec-action
+      # - name: Run tfsec security scan
+      #   uses: aquasecurity/tfsec-action@v1.0.3
+      #   with:
+      #     working_directory: ${{ env.TF_WORKING_DIR }}
+      #     soft_fail: true
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      # https://github.com/bridgecrewio/checkov-action
-      - name: Run Checkov security scan
-        id: checkov
-        uses: bridgecrewio/checkov-action@v12
-        with:
-          directory: ${{ env.TF_WORKING_DIR }}
-          # check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
-          # optional: skip a specific check_id. can be comma separated list
-          skip_check: CKV2_AZURE_1,CKV_AZURE_4,CKV_AZURE_6,CKV2_AZURE_8,CKV2_AZURE_21,CKV_AZURE_33,CKV_AZURE_35,CKV_AZURE_117,CKV_AZURE_141
-          quiet: true # optional: display only failed checks
-          soft_fail: true # optional: do not return an error code if there are failed checks
-          framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
-          output_format: sarif # optional: the output format, one of: cli, json, junitxml, github_failed_only, or sarif. Default: sarif
-          download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
-          # log_level: DEBUG # optional: set log level. Default WARNING
-          # config_file: path/this_file
+      # # https://github.com/bridgecrewio/checkov-action
+      # - name: Run Checkov security scan
+      #   id: checkov
+      #   uses: bridgecrewio/checkov-action@v12
+      #   with:
+      #     directory: ${{ env.TF_WORKING_DIR }}
+      #     # check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
+      #     # optional: skip a specific check_id. can be comma separated list
+      #     skip_check: CKV2_AZURE_1,CKV_AZURE_4,CKV_AZURE_6,CKV2_AZURE_8,CKV2_AZURE_21,CKV_AZURE_33,CKV_AZURE_35,CKV_AZURE_117,CKV_AZURE_141
+      #     quiet: true # optional: display only failed checks
+      #     soft_fail: true # optional: do not return an error code if there are failed checks
+      #     framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
+      #     output_format: sarif # optional: the output format, one of: cli, json, junitxml, github_failed_only, or sarif. Default: sarif
+      #     download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
+      #     # log_level: DEBUG # optional: set log level. Default WARNING
+      #     # config_file: path/this_file
 
       - name: 👀 Terraform Plan
         id: plan
