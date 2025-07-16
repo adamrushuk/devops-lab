@@ -31,13 +31,13 @@ resource "null_resource" "nexus_cert_sync" {
 
   depends_on = [
     local_sensitive_file.kubeconfig,
-    helm_release.akv2k8s,
+    helm_release_v2.akv2k8s,
     kubernetes_namespace.nexus
   ]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release" "nexus" {
+resource "helm_release_v2" "nexus" {
   chart      = "sonatype-nexus"
   name       = "nexus"
   namespace  = kubernetes_namespace.nexus.metadata[0].name
@@ -48,35 +48,38 @@ resource "helm_release" "nexus" {
 
   values = [file("helm/nexus_values.yaml")]
 
-  set {
-    name  = "image.tag"
-    value = var.nexus_image_tag
-  }
+  set = [
+    {
+      name  = "image.tag"
+      value = var.nexus_image_tag
+      type  = "string"
+    },
+    {
+      name  = "nexus.baseDomain"
+      value = var.nexus_base_domain
+      type  = "string"
+    },
+    {
+      name  = "nexus.certEmail"
+      value = var.nexus_cert_email
+      type  = "string"
+    },
+    {
+      name  = "ingress.enabled"
+      value = var.nexus_ingress_enabled
+      type  = "bool"
+    },
+    {
+      name  = "ingress.letsencryptEnvironment"
+      value = var.nexus_letsencrypt_environment
+      type  = "string"
+    },
+    {
+      name  = "ingress.tls.secretName"
+      value = var.nexus_tls_secret_name
+      type  = "string"
+    }
+  ]
 
-  set {
-    name  = "nexus.baseDomain"
-    value = var.nexus_base_domain
-  }
-
-  set {
-    name  = "nexus.certEmail"
-    value = var.nexus_cert_email
-  }
-
-  set {
-    name  = "ingress.enabled"
-    value = var.nexus_ingress_enabled
-  }
-
-  set {
-    name  = "ingress.letsencryptEnvironment"
-    value = var.nexus_letsencrypt_environment
-  }
-
-  set {
-    name  = "ingress.tls.secretName"
-    value = var.nexus_tls_secret_name
-  }
-
-  depends_on = [helm_release.nginx]
+  depends_on = [helm_release_v2.nginx]
 }

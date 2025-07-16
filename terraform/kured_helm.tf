@@ -15,7 +15,7 @@ resource "kubernetes_namespace" "kured" {
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release" "kured" {
+resource "helm_release_v2" "kured" {
   chart      = "kured"
   name       = "kured"
   namespace  = kubernetes_namespace.kured.metadata[0].name
@@ -26,10 +26,13 @@ resource "helm_release" "kured" {
 
   values = [file("helm/kured_values.yaml")]
 
-  set {
-    name  = "image.tag"
-    value = var.kured_image_tag
-  }
+  set = [
+    {
+      name  = "image.tag"
+      value = var.kured_image_tag
+      type  = "string"
+    }
+  ]
 
   # increase testing period frequency, when testing with "sudo touch /var/run/reboot-required"
   # set {

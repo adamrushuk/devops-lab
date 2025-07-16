@@ -13,7 +13,7 @@ resource "kubernetes_namespace" "ingress" {
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release" "nginx" {
+resource "helm_release_v2" "nginx" {
   chart      = "ingress-nginx"
   name       = "nginx"
   namespace  = kubernetes_namespace.ingress.metadata[0].name
@@ -23,8 +23,11 @@ resource "helm_release" "nginx" {
   atomic     = true
   values     = [file("helm/nginx_values.yaml")]
 
-  set {
-    name  = "controller.admissionWebhooks.enabled"
-    value = false
-  }
+  set = [
+    {
+      name  = "controller.admissionWebhooks.enabled"
+      value = false
+      type  = "bool"
+    }
+  ]
 }

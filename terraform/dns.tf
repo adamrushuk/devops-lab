@@ -69,13 +69,13 @@ resource "null_resource" "azureIdentity_external_dns" {
   depends_on = [
     local_sensitive_file.kubeconfig,
     kubernetes_namespace.external_dns,
-    helm_release.aad_pod_identity
+    helm_release_v2.aad_pod_identity
   ]
 }
 
 # https://github.com/bitnami/charts/tree/master/bitnami/external-dns
 # https://bitnami.com/stack/external-dns/helm
-resource "helm_release" "external_dns" {
+resource "helm_release_v2" "external_dns" {
   chart      = "external-dns"
   name       = "external-dns"
   namespace  = kubernetes_namespace.external_dns.metadata[0].name
@@ -85,52 +85,53 @@ resource "helm_release" "external_dns" {
   atomic     = true
   # values     = [file("helm/NOT_USED.yaml")]
 
-  # specify user-assigned managed identity
-  set {
-    name  = "azure.userAssignedIdentityID"
-    value = azurerm_user_assigned_identity.external_dns.client_id
-  }
-
-  set {
-    name  = "logLevel"
-    value = "debug"
-  }
-
-  set {
-    name  = "domainFilters[0]"
-    value = var.dns_zone_name
-  }
-
-  set {
-    name  = "provider"
-    value = "azure"
-  }
-
-  set {
-    name  = "azure.tenantId"
-    value = data.azurerm_subscription.current.tenant_id
-  }
-
-  set {
-    name  = "azure.subscriptionId"
-    value = data.azurerm_subscription.current.subscription_id
-  }
-
-  set {
-    name  = "azure.resourceGroup"
-    value = data.azurerm_resource_group.dns.name
-  }
-
-  set {
-    name  = "azure.useManagedIdentityExtension"
-    value = true
-  }
-
-  # podbinding for Managed Identity auth
-  set {
-    name  = "podLabels.aadpodidbinding"
-    value = "external-dns"
-  }
+  set = [
+    {
+      name  = "azure.userAssignedIdentityID"
+      value = azurerm_user_assigned_identity.external_dns.client_id
+      type  = "string"
+    },
+    {
+      name  = "logLevel"
+      value = "debug"
+      type  = "string"
+    },
+    {
+      name  = "domainFilters[0]"
+      value = var.dns_zone_name
+      type  = "string"
+    },
+    {
+      name  = "provider"
+      value = "azure"
+      type  = "string"
+    },
+    {
+      name  = "azure.tenantId"
+      value = data.azurerm_subscription.current.tenant_id
+      type  = "string"
+    },
+    {
+      name  = "azure.subscriptionId"
+      value = data.azurerm_subscription.current.subscription_id
+      type  = "string"
+    },
+    {
+      name  = "azure.resourceGroup"
+      value = data.azurerm_resource_group.dns.name
+      type  = "string"
+    },
+    {
+      name  = "azure.useManagedIdentityExtension"
+      value = true
+      type  = "bool"
+    },
+    {
+      name  = "podLabels.aadpodidbinding"
+      value = "external-dns"
+      type  = "string"
+    }
+  ]
 
   depends_on = [
     azurerm_role_assignment.aks_dns_mi_to_rg,

@@ -78,7 +78,7 @@ resource "kubernetes_namespace" "akv2k8s" {
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
 # https://github.com/SparebankenVest/public-helm-charts/tree/master/stable/akv2k8s#configuration
-resource "helm_release" "akv2k8s" {
+resource "helm_release_v2" "akv2k8s" {
   chart      = "akv2k8s"
   name       = "akv2k8s"
   namespace  = kubernetes_namespace.akv2k8s.metadata[0].name
@@ -87,15 +87,18 @@ resource "helm_release" "akv2k8s" {
   timeout    = 600
   atomic     = true
 
-  set {
-    name  = "addAzurePodIdentityException"
-    value = "true"
-  }
+  set = [
+    {
+      name  = "addAzurePodIdentityException"
+      value = "true"
+      type  = "string"
+    },
+    {
+      name  = "controller.logLevel"
+      value = "debug"
+      type  = "string"
+    }
+  ]
 
-  set {
-    name  = "controller.logLevel"
-    value = "debug"
-  }
-
-  depends_on = [helm_release.aad_pod_identity]
+  depends_on = [helm_release_v2.aad_pod_identity]
 }

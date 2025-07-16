@@ -33,13 +33,13 @@ resource "null_resource" "argocd_cert_sync" {
 
   depends_on = [
     local_sensitive_file.kubeconfig,
-    helm_release.akv2k8s,
+    helm_release_v2.akv2k8s,
     kubernetes_namespace.argocd
   ]
 }
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release" "argocd" {
+resource "helm_release_v2" "argocd" {
   chart      = "argo-cd"
   name       = "argocd"
   namespace  = kubernetes_namespace.argocd.metadata[0].name
@@ -49,32 +49,33 @@ resource "helm_release" "argocd" {
   atomic     = true
   values     = [file("${path.module}/files/argocd-values.yaml")]
 
-  set {
-    name  = "global.image.tag"
-    value = var.argocd_image_tag
-  }
-
-  set {
-    name  = "server.ingress.hosts[0]"
-    value = "argocd.${var.dns_zone_name}"
-  }
-
-  set {
-    name  = "server.ingress.tls[0].hosts[0]"
-    value = "argocd.${var.dns_zone_name}"
-  }
-
-  set {
-    name  = "server.ingress.tls[0].secretName"
-    value = "argocd-ingress-tls"
-  }
-
-  # Argo CD's externally facing base URL
-  # used for logout destination and when configuring SSO
-  set {
-    name  = "server.config.url"
-    value = "https://argocd.${var.dns_zone_name}"
-  }
+  set = [
+    {
+      name  = "global.image.tag"
+      value = var.argocd_image_tag
+      type  = "string"
+    },
+    {
+      name  = "server.ingress.hosts[0]"
+      value = "argocd.${var.dns_zone_name}"
+      type  = "string"
+    },
+    {
+      name  = "server.ingress.tls[0].hosts[0]"
+      value = "argocd.${var.dns_zone_name}"
+      type  = "string"
+    },
+    {
+      name  = "server.ingress.tls[0].secretName"
+      value = "argocd-ingress-tls"
+      type  = "string"
+    },
+    {
+      name  = "server.config.url"
+      value = "https://argocd.${var.dns_zone_name}"
+      type  = "string"
+    }
+  ]
 
   depends_on = [
     null_resource.argocd_cert_sync
@@ -101,7 +102,7 @@ resource "null_resource" "argocd_configure" {
 
   depends_on = [
     local_sensitive_file.kubeconfig,
-    helm_release.argocd
+    helm_release_v2.argocd
   ]
 }
 

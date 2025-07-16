@@ -4,7 +4,7 @@
 # https://cert-manager.io/docs/installation/kubernetes/#installing-with-helm
 
 # https://www.terraform.io/docs/providers/helm/r/release.html
-resource "helm_release" "cert_manager" {
+resource "helm_release_v2" "cert_manager" {
   chart      = "cert-manager"
   name       = "cert-manager"
   namespace  = kubernetes_namespace.ingress.metadata[0].name
@@ -13,13 +13,16 @@ resource "helm_release" "cert_manager" {
   timeout    = 600
   atomic     = true
 
-  set {
-    name  = "global.logLevel"
-    value = "3"
-  }
-
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
+  set = [
+    {
+      name  = "global.logLevel"
+      value = "3"
+      type  = "string"
+    },
+    {
+      name  = "installCRDs"
+      value = "true"
+      type  = "string"
+    }
+  ]
 }
