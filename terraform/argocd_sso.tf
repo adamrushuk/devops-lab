@@ -6,8 +6,8 @@
 data "azuread_application_published_app_ids" "well_known" {}
 
 resource "azuread_service_principal" "msgraph" {
-  application_id = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
-  use_existing   = true
+  client_id    = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
+  use_existing = true
 }
 
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
@@ -68,7 +68,7 @@ resource "azuread_application" "argocd" {
 data "azuread_client_config" "current" {}
 
 resource "azuread_service_principal" "argocd" {
-  application_id                = azuread_application.argocd.application_id
+  client_id                     = azuread_application.argocd.application_id
   owners                        = [data.azuread_client_config.current.object_id]
   description                   = "Argo CD Service Principle"
   notes                         = "Operational notes can go here"
@@ -78,9 +78,9 @@ resource "azuread_service_principal" "argocd" {
 
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_password
 resource "azuread_application_password" "argocd" {
-  application_object_id = azuread_application.argocd.id
-  display_name          = "argocd_secret"
-  end_date              = "2099-01-01T01:02:03Z"
+  application_id = azuread_application.argocd.id
+  display_name   = "argocd_secret"
+  end_date       = "2099-01-01T01:02:03Z"
 }
 
 data "azurerm_client_config" "current" {}
