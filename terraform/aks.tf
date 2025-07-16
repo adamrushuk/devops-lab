@@ -92,7 +92,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   # https://docs.microsoft.com/en-us/azure/aks/azure-ad-rbac
   azure_active_directory_role_based_access_control {
-    managed = true
     admin_group_object_ids = [
       azuread_group.aks_admins.id
     ]
@@ -112,13 +111,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#network_plugin
   network_profile {
-    load_balancer_sku  = "basic"
-    outbound_type      = "loadBalancer"
-    network_plugin     = "azure"
-    network_policy     = "azure"
-    service_cidr       = "10.0.0.0/16"
-    dns_service_ip     = "10.0.0.10"
-    docker_bridge_cidr = "172.17.0.1/16"
+    load_balancer_sku = "basic"
+    outbound_type     = "loadBalancer"
+    network_plugin    = "azure"
+    network_policy    = "azure"
+    service_cidr      = "10.0.0.0/16"
+    dns_service_ip    = "10.0.0.10"
   }
 
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#workload_identity_enabled
