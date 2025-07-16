@@ -93,7 +93,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   # https://docs.microsoft.com/en-us/azure/aks/azure-ad-rbac
   azure_active_directory_role_based_access_control {
     admin_group_object_ids = [
-      azuread_group.aks_admins.id
+      azuread_group.aks_admins.object_id
     ]
   }
 
@@ -128,7 +128,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 # Add role to access AKS Resource View
 # https://docs.microsoft.com/en-us/azure/aks/kubernetes-portal
 resource "azurerm_role_assignment" "aks_portal_resource_view" {
-  principal_id         = azuread_group.aks_admins.id
+  principal_id         = azuread_group.aks_admins.object_id
   role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
   scope                = azurerm_kubernetes_cluster.aks.id
 }
@@ -140,8 +140,8 @@ data "azuread_group" "existing_aks_admins" {
 }
 
 resource "azuread_group_member" "existing_aks_admins" {
-  group_object_id  = azuread_group.aks_admins.id
-  member_object_id = data.azuread_group.existing_aks_admins.id
+  group_object_id  = azuread_group.aks_admins.object_id
+  member_object_id = data.azuread_group.existing_aks_admins.object_id
 }
 
 # AKS module
