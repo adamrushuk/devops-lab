@@ -47,6 +47,7 @@ resource "azurerm_service_plan" "func_app" {
 # Application Insights used for logs and monitoring
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_insights
 resource "azurerm_application_insights" "appinsights" {
+  count               = var.aks_container_insights_enabled ? 1 : 0
   name                = "${var.prefix}-funcapp"
   location            = var.location
   resource_group_name = azurerm_resource_group.aks.name
@@ -74,7 +75,7 @@ resource "azurerm_linux_function_app" "func_app" {
 
   site_config {
     # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_function_app#application_insights_key
-    application_insights_key = azurerm_application_insights.appinsights.instrumentation_key
+    application_insights_key = var.aks_container_insights_enabled ? azurerm_application_insights.appinsights[0].instrumentation_key : null
 
     application_stack {
       powershell_core_version = 7.2
