@@ -20,5 +20,5 @@ resource "azuread_group" "lm1_users" {
 
 resource "azuread_administrative_unit_member" "lm1_user_group" {
   administrative_unit_object_id = azuread_administrative_unit.example.id
-  member_object_id              = azuread_group.lm1_users.id
+  member_object_id              = azuread_group.lm1_users.object_id
 }

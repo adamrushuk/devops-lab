@@ -161,7 +161,7 @@ data "azuread_group" "argocd_admins" {
 resource "null_resource" "argocd_rbac_cm" {
   triggers = {
     yaml_contents    = filemd5(var.argocd_rbac_cm_yaml_path)
-    argoAdminGroupId = data.azuread_group.argocd_admins.id
+    argoAdminGroupId = data.azuread_group.argocd_admins.object_id
   }
 
   provisioner "local-exec" {
@@ -171,7 +171,7 @@ resource "null_resource" "argocd_rbac_cm" {
       ARGOCD_RBAC_CM_PATCH_YAML = templatefile(
         var.argocd_rbac_cm_yaml_path,
         {
-          "argoAdminGroupId" = data.azuread_group.argocd_admins.id
+          "argoAdminGroupId" = data.azuread_group.argocd_admins.object_id
         }
       )
     }

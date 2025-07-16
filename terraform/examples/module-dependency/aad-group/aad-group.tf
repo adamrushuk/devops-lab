@@ -8,7 +8,7 @@ resource "azuread_group" "elevated_group" {
 }
 
 output "aad_elevated_group" {
-  value       = azuread_group.elevated_group.id
+  value       = azuread_group.elevated_group.object_id
   description = "Id of the AAD Elevated Ops group for the subscription"
 }
 
