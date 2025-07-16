@@ -16,12 +16,11 @@ resource "azurerm_role_assignment" "aks_mi_aks_node_rg_mi_operator" {
   skip_service_principal_aad_check = true
 }
 
-data "template_file" "azureIdentities" {
-  template = file("${path.module}/files/azureIdentities.yaml.tpl")
-  vars = {
+locals {
+  azureIdentities = templatefile("${path.module}/files/azureIdentities.yaml.tpl", {
     resourceID = azurerm_user_assigned_identity.velero[0].id
     clientID   = azurerm_user_assigned_identity.velero[0].client_id
-  }
+  })
 }
 
 # https://www.terraform.io/docs/providers/kubernetes/r/namespace.html
@@ -49,7 +48,7 @@ resource "helm_release" "aad_pod_identity" {
   values = [
     # see default values: /helm/aad_pod_identity_default_values.yaml
     file("helm/aad_pod_identity_values.yaml"),
-    data.template_file.azureIdentities.rendered
+    local.azureIdentities
   ]
 
   # enable if using Kubenet: https://azure.github.io/aad-pod-identity/docs/configure/aad_pod_identity_on_kubenet/
