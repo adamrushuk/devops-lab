@@ -68,7 +68,7 @@ resource "azuread_application" "argocd" {
 data "azuread_client_config" "current" {}
 
 resource "azuread_service_principal" "argocd" {
-  client_id                     = azuread_application.argocd.application_id
+  client_id                     = azuread_application.argocd.client_id
   owners                        = [data.azuread_client_config.current.object_id]
   description                   = "Argo CD Service Principle"
   notes                         = "Operational notes can go here"
