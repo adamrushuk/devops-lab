@@ -6,7 +6,7 @@
 # az aks get-versions --location eastus --output table
 # az aks get-versions --location uksouth --output tsv --query "values | [?isDefault].version"
 variable "kubernetes_version" {
-  default = "1.27.7"
+  default = "1.32.5"
 }
 
 # Helm charts
