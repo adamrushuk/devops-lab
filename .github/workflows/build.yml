@@ -164,6 +164,7 @@ jobs:
         with:
           working_directory: ${{ env.TF_WORKING_DIR }}
           soft_fail: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       # https://github.com/bridgecrewio/checkov-action
       - name: Run Checkov security scan
