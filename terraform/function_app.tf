@@ -15,7 +15,7 @@ resource "azurerm_storage_account" "func_app" {
 
 resource "azurerm_storage_container" "func_app" {
   name                  = "${var.prefix}-function-apps"
-  storage_account_name  = azurerm_storage_account.func_app.name
+  storage_account_id    = azurerm_storage_account.func_app.id
   container_access_type = "private"
 }
 

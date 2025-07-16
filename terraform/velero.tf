@@ -4,22 +4,22 @@
 # https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure/blob/master/README.md#Create-Azure-storage-account-and-blob-container
 
 resource "azurerm_storage_account" "velero" {
-  count                     = var.velero_enabled ? 1 : 0
-  name                      = var.velero_storage_account_name
-  resource_group_name       = azurerm_resource_group.aks.name
-  location                  = azurerm_resource_group.aks.location
-  account_kind              = "BlobStorage"
-  account_tier              = "Standard"
-  account_replication_type  = "LRS"
-  enable_https_traffic_only = true
-  min_tls_version           = "TLS1_2"
-  tags                      = var.tags
+  count                      = var.velero_enabled ? 1 : 0
+  name                       = var.velero_storage_account_name
+  resource_group_name        = azurerm_resource_group.aks.name
+  location                   = azurerm_resource_group.aks.location
+  account_kind               = "BlobStorage"
+  account_tier               = "Standard"
+  account_replication_type   = "LRS"
+  https_traffic_only_enabled = true
+  min_tls_version            = "TLS1_2"
+  tags                       = var.tags
 }
 
 resource "azurerm_storage_container" "velero" {
   count                 = var.velero_enabled ? 1 : 0
   name                  = "velero"
-  storage_account_name  = azurerm_storage_account.velero[0].name
+  storage_account_id    = azurerm_storage_account.velero[0].id
   container_access_type = "private"
 }
 
