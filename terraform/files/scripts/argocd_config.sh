@@ -62,8 +62,25 @@ echo "Showing Argo CD cluster info..."
 # Save repo private key
 echo -e "$HELM_CHART_REPO_DEPLOY_PRIVATE_KEY" > "$REPO_SSH_PRIVATE_KEY_PATH"
 chmod 600 "$REPO_SSH_PRIVATE_KEY_PATH"
-echo "Showing public key fingerprint..."
+
+# Debug: Show detailed key information
+echo "=== SSH Key Debug Information ==="
+echo "Key file path: $REPO_SSH_PRIVATE_KEY_PATH"
+echo "Key file permissions:"
+ls -la "$REPO_SSH_PRIVATE_KEY_PATH"
+echo ""
+echo "Key fingerprint:"
 ssh-keygen -lf "$REPO_SSH_PRIVATE_KEY_PATH"
+echo ""
+echo "Key type and details:"
+ssh-keygen -l -v -f "$REPO_SSH_PRIVATE_KEY_PATH"
+echo ""
+echo "Checking if key is a certificate (will show validity if it is):"
+ssh-keygen -L -f "$REPO_SSH_PRIVATE_KEY_PATH" 2>/dev/null || echo "Not a certificate-based key"
+echo ""
+echo "Key file creation/modification time:"
+stat "$REPO_SSH_PRIVATE_KEY_PATH" 2>/dev/null || ls -la "$REPO_SSH_PRIVATE_KEY_PATH"
+echo "=== End SSH Key Debug Information ==="
 
 # Add a Git repository via SSH using a private key for authentication
 # [OPTIONAL] use "--insecure-ignore-host-key" during testing with self-signed certs
