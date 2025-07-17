@@ -123,6 +123,15 @@ jobs:
           subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           enable-AzPSSession: true
 
+      # Check Az module version
+      # https://github.com/Azure/powershell/tags
+      - name: Run Azure PowerShell inline script
+        uses: azure/powershell@v2
+        with:
+          inlineScript: |
+            Get-Module -ListAvailable -Name Az
+          azPSVersion: "latest"
+
       # This is required when developing after the initial build, and the AKS cluster may have been stopped
       # Ensure AKS cluster is running, else timeouts will occur on k8s Terraform apply tasks
       - name: Start AKS Cluster
